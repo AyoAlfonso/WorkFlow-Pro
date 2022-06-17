@@ -30,7 +30,7 @@ class  AuthorizationController <  ApplicationController
    @user  = User.find_by(email: @email)
 
     if @user.nil? || @user.provider.nil?
-      return render json: { error: "This user has not added to any SSO list. Please login with email & password",  error_type: "no_auth"}, status: 301
+      return render json: { error: "Your account is not set up for SSO with Google/Microsoft. Please use your email address and password to log in.",  error_type: "no_auth"}, status: 301
     end
 
     if @user.present?
@@ -53,7 +53,7 @@ class  AuthorizationController <  ApplicationController
         @email = params["username"]
         @user = User.find_by(email: @email)
        if @user.nil? || @user.provider.nil?
-        return render json: { error: "This user has not added to any SSO list. Please login with email & password",  error_type: "no_auth"}, status: 301
+        return render json: { error: "Your account is not set up for SSO with Google/Microsoft. Please use your email address and password to log in.",  error_type: "no_auth"}, status: 301
        end
         @user.provider = "microsoft_oauth" if @user.provider == "no_auth"
         @user.save(validate: false)

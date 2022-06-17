@@ -89,7 +89,6 @@ ActiveAdmin.register Company do
             })
             @user.save(validate: false)
           end
-          # binding.pry
           if @existing_user.provider.nil?
             @existing_user.provider = "no_auth"
             @existing_user.save(validate: false)

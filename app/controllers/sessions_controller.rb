@@ -9,14 +9,16 @@ class SessionsController < Devise::SessionsController
 
    if @attempting_user.present?
     if "microsoft_oauth" ==  @attempting_user.provider
-      return render json: { error: "This user registered with Microsoft. Please login with the Microsoft Button", error_type: "microsoft_oauth"}, status: 301
+      return render json: { error: "Your account is set up for SSO with Google/Microsoft. Use the button below to access your account", error_type: "microsoft_oauth"}, status: 301
     end
     if "google_auth" ==  @attempting_user.provider
-      return render json: { error: "This user registered with Google. Please login with the Google Button",  error_type: "google_auth"}, status: 301
-      
+      return render json: { error: "Your account is set up for SSO with Google/Microsoft. Use the button below to access your account",  error_type: "google_auth"}, status: 301
+    end
+    if "no_auth" ==  @attempting_user.provider
+      return render json: { error: "Your account is set up for SSO with Google/Microsoft. Use one of the buttons below to access your account",  error_type: "no_auth_yet"}, status: 301
     end
    end
-   
+
     self.resource = warden.authenticate!(auth_options)
     set_flash_message!(:notice, :signed_in)
     sign_in(resource_name, resource)

@@ -173,6 +173,30 @@ export const LoginForm = observer(
                     {t<string>("profile.loginForm.login")}
                   </Button>
                 </>
+              ) : sessionStore.logginError && sessionStore.logginErrorType == "no_auth_yet" ? (
+                <>
+                  <div>{sessionStore.logginError}</div>
+
+                  <GoogleAuthButton onClick={() => login()}>
+                    <OAuthContent>
+                      <img src={"assets/Google-Transparent-logo_500x500.png"} width="20"></img>
+                    </OAuthContent>
+
+                    <OAuthContent> Sign in with Google </OAuthContent>
+                  </GoogleAuthButton>
+
+                  <MicrosoftAuthButton onClick={() => microsoftLoginHandler(instance)}>
+                    <OAuthContent>
+                      <Image
+                        sx={{
+                          height: 24,
+                        }}
+                        src={require("~/assets/images/ms-transaparent-logo.svg")}
+                      />
+                    </OAuthContent>
+                    <OAuthContent> Sign in with Microsoft </OAuthContent>
+                  </MicrosoftAuthButton>
+                </>
               ) : (
                 <>
                   <div>{sessionStore.logginError}</div>

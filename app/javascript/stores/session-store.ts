@@ -249,6 +249,10 @@ export const SessionStoreModel = types
             self.logginError = response.data.error;
             self.logginErrorType = response.data.errorType;
           }
+          if (response.data.errorType == "no_auth_yet") {
+            self.logginError = response.data.error;
+            self.logginErrorType = response.data.errorType;
+          }
         }
       } catch (error) {
         // error messaging handled by API monitor
