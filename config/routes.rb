@@ -70,8 +70,6 @@ Rails.application.routes.draw do
       end
     end
 
-   resources :check_in_template, only: [:create, :show, :update]
-
     get "/onboarding", to: "companies#get_onboarding_company"
     get "onboarding/:company_id/goals", to: "companies#get_onboarding_goals"
     post "/onboarding/:company_id/goals", to: "companies#create_or_update_onboarding_goals"
@@ -185,7 +183,7 @@ Rails.application.routes.draw do
     #meeting_templates
     resources :meeting_templates, only: [:index]
 
-    resources :check_in_templates, only: [:index]
+    resources :check_in_templates, only: [:index, :create, :show, :update]
 
     #description_templates
     resources :description_templates, only: [:index, :destroy, :show]
