@@ -46,10 +46,10 @@ class Api::CheckInTemplatesController < Api::ApplicationController
         end
       end
 
-      #   notification = Notification.find_or_initialize_by(
-      #   user_id: .id,
-      #   notification_type: v,
-      # )
+        #   notification = Notification.find_or_initialize_by(
+        #   user_id: .id,
+        #   notification_type: v,
+        # )
     
         # unless notification.persisted?
         #   notification.attributes = {
@@ -69,13 +69,8 @@ class Api::CheckInTemplatesController < Api::ApplicationController
 
   private
   def check_in_template_params
-      params.require(:check_in_template).permit(:name, :check_in_type, :description, :participants,
-          :anonymous,
-          :run_once,
-          :date_time_config,
-          :time_zone,
-          :tag,
-          :reminder,check_in_templates_steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :participants])
+      params.require(:check_in_template).permit(:name, :check_in_type, :type, :description, :participants, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder,
+             check_in_templates_steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :participants])
   end
 
   def set_check_in_template
