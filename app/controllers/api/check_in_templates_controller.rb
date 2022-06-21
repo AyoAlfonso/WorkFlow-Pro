@@ -15,7 +15,6 @@ class Api::CheckInTemplatesController < Api::ApplicationController
 
   def create
       @check_in_template = CheckInTemplate.create!({
-          display_format: params[:display_format],
           name: params[:name],
           check_in_type: @params[:check_in_type],
           description: @params[:description],
