@@ -278,9 +278,15 @@ export const QuarterlyGoalModalContent = observer(
                   {editable && (
                     <CreateGoalContainer>
                       <CreateGoalSection
-                        placeholder={t("subInitiative.enterTitle", { title: subInitiativeTitle })}
-                        addButtonText={`${t("subInitiative.add", { title: subInitiativeTitle })}`}
-                        createButtonText={t("subInitiative.addGoal", { title: subInitiativeTitle })}
+                        placeholder={t<string>("subInitiative.enterTitle", {
+                          title: subInitiativeTitle,
+                        })}
+                        addButtonText={`${t<string>("subInitiative.add", {
+                          title: subInitiativeTitle,
+                        })}`}
+                        createButtonText={t<string>("subInitiative.addGoal", {
+                          title: subInitiativeTitle,
+                        })}
                         showCreateGoal={showCreateSubInitiative}
                         setShowCreateGoal={setShowCreateSubInitiative}
                         createAction={subInitiativeStore.create}

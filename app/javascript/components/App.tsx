@@ -59,7 +59,7 @@ import { useEffect } from "react";
 import { getWeekOf } from "~/utils/date-time";
 import { CheckInSuccess } from "./domains/check-in/components/checkin-success";
 import { ForgotPasswordForm } from "./domains/user/forgot-password-form";
-
+import { UpdateProfileForm } from "./domains/user/update-profile-form";
 const Container = styled.div`
   margin-left: 136px;
   margin-right: 40px;
@@ -227,7 +227,15 @@ export const App = observer(
             <GlobalStyles />
             <Toaster position="bottom-right" />
             {loggedIn ? (
-              profile && profile.currentCompanyOnboarded ? (
+              (profile.provider && !profile.lastName) || !profile.firstName ? (
+                <Route
+                  exact
+                  path={"/"}
+                  render={() => {
+                    return <UpdateProfileForm />;
+                  }}
+                />
+              ) : profile && profile.currentCompanyOnboarded ? (
                 <Switch>
                   <Route
                     exact

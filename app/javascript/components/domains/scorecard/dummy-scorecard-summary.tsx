@@ -13,8 +13,8 @@ import { useTranslation } from "react-i18next";
 import { dataState } from "./__tests__/scorecard-data/data-store";
 
 const WeekSummary = ({}): JSX.Element => {
-   const [data, setData] = useState<Object>(null);
-   const [onTrack, setOnTrack] = useState(1);
+  const [data, setData] = useState<Object>(null);
+  const [onTrack, setOnTrack] = useState(1);
   const {
     cavier,
     fadedCavier,
@@ -62,8 +62,7 @@ const WeekSummary = ({}): JSX.Element => {
             </Text>
             <div>
               <Text fontSize={20} bold>
-                <OnTrackCount percentageOnTrack={1/4}>1</OnTrackCount> /{" "}
-                4
+                <OnTrackCount percentageOnTrack={1 / 4}>1</OnTrackCount> / 4
               </Text>
             </div>
             <Text fontSize={11} mt={8}>
@@ -107,8 +106,7 @@ const Arrow = ({ up = true, color }) => {
   );
 };
 
-const QuarterSummary = ({
-}): JSX.Element => {
+const QuarterSummary = ({}): JSX.Element => {
   const [currentWeekPercent, setCurrentWeekPercent] = useState(0);
   const [quarterlyPercent, setQuarterlyPercent] = useState(0);
   const [lastWeekPercent, setLastWeekPercent] = useState<number | null>(null);
@@ -168,7 +166,21 @@ const QuarterSummary = ({
 
   useEffect(() => {
     setData({
-      labels: [ "Mar 7", "Mar 14", "Mar 21", "Mar 28", "Apr 4", "Apr 11", "Apr 18", "Apr 25", "May 2", "May 9", "May 16", "May 23", "May 30", ],
+      labels: [
+        "Mar 7",
+        "Mar 14",
+        "Mar 21",
+        "Mar 28",
+        "Apr 4",
+        "Apr 11",
+        "Apr 18",
+        "Apr 25",
+        "May 2",
+        "May 9",
+        "May 16",
+        "May 23",
+        "May 30",
+      ],
       datasets: [
         {
           label: "Current Quarter",
@@ -183,45 +195,43 @@ const QuarterSummary = ({
     });
   });
   const renderGrade = percentGrade => {
-      return (
-        <>
-          <Text ml={8} mr={16} fontSize={32} color={successGreen} bold>
-            {percentGrade.toFixed(2)}%
-          </Text>
-        </>
-      );
+    return (
+      <>
+        <Text ml={8} mr={16} fontSize={32} color={successGreen} bold>
+          {percentGrade.toFixed(2)}%
+        </Text>
+      </>
+    );
   };
 
   const renderWeekDifference = () => {
-      return (
-        <>
-          {(
-            <>
-              <Arrow up={true} color={successGreen} />
-              <Text color={successGreen} ml={4}>
-                5%
-              </Text>
-            </>
-          )}
-          <Text color={greyActive} ml={8} fontSize={12}>
-            {"compared to last week"}
-          </Text>
-        </>
-      );
+    return (
+      <>
+        {
+          <>
+            <Arrow up={true} color={successGreen} />
+            <Text color={successGreen} ml={4}>
+              5%
+            </Text>
+          </>
+        }
+        <Text color={greyActive} ml={8} fontSize={12}>
+          {"compared to last week"}
+        </Text>
+      </>
+    );
   };
 
   return (
     <QuarterContainer>
       <Header>This Quarter</Header>
-      <Text color={greyActive} fontSize={14} mt={4} mb={9}>
-      </Text>
+      <Text color={greyActive} fontSize={14} mt={4} mb={9}></Text>
       <QuarterInfoContainer>
         <StatsContainer>
           {renderGrade(40)}
           {renderWeekDifference()}
         </StatsContainer>
-        <QuarterLegendContainer>
-        </QuarterLegendContainer>
+        <QuarterLegendContainer></QuarterLegendContainer>
       </QuarterInfoContainer>
       <LineChartContainer>
         {data && <Line data={data} options={chartOptions} height={200} />}
@@ -230,14 +240,12 @@ const QuarterSummary = ({
   );
 };
 
-type ScorecardSummaryProps = {
-};
-export const DummyScorecardSummary = ({
-}: ScorecardSummaryProps): JSX.Element => {
+type ScorecardSummaryProps = {};
+export const DummyScorecardSummary = ({}: ScorecardSummaryProps): JSX.Element => {
   return (
     <Container>
-      <WeekSummary/>
-      <QuarterSummary/>
+      <WeekSummary />
+      <QuarterSummary />
     </Container>
   );
 };
@@ -307,6 +315,7 @@ type TextProps = {
   ml?: number;
   mr?: number;
   bold?: boolean;
+  children?: React.ReactNode | React.ReactNode[];
 };
 
 type OnTrackCountProps = {
@@ -404,4 +413,3 @@ type ArrowIconContainerProps = {
 const ArrowIconContainer = styled.div<ArrowIconContainerProps>`
   transform: rotate(${props => (props.up ? 0 : 180)}deg);
 `;
-

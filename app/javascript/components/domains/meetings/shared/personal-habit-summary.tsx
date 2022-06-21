@@ -33,7 +33,7 @@ export const PersonalHabitSummary = observer(
 
     return (
       <Container>
-        <ContainerHeaderWithText text={t("habits.reviewTitle")} />
+        <ContainerHeaderWithText text={t<string>("habits.reviewTitle")} />
         <HabitsContainer>
           <HabitsSummary />
         </HabitsContainer>

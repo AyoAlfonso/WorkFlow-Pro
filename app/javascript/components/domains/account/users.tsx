@@ -97,7 +97,7 @@ export const Users = observer(
                             }
                           }}
                         >
-                          {t("profile.profileUpdateForm.resend")}
+                          {t<string>("profile.profileUpdateForm.resend")}
                         </Button>
                       ) : (
                         <></>
@@ -137,7 +137,7 @@ export const Users = observer(
     return (
       <StretchContainer>
         <HeaderContainer>
-          <HeaderText>{t("profile.usersManagement.header")}</HeaderText>
+          <HeaderText>{t<string>("profile.usersManagement.header")}</HeaderText>
           <Can
             action={"create-user"}
             data={null}
@@ -151,7 +151,7 @@ export const Users = observer(
                     setInviteTeamModalOpen(true);
                   }}
                 >
-                  {t("company.createUser.inviteYourTeam")}
+                  {t<string>("company.createUser.inviteYourTeam")}
                 </Button>
                 <InviteYourTeamModal
                   modalOpen={inviteTeamModalOpen}

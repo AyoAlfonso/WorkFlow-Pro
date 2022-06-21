@@ -162,7 +162,7 @@ export const ForumAgendaSearch = observer(() => {
     } else {
       return (
         <NoSelectedItemsContainer>
-          <NoSelectedItems text={t("forum.emptyMeetingEntries")} />
+          <NoSelectedItems text={t<string>("forum.emptyMeetingEntries")} />
         </NoSelectedItemsContainer>
       );
     }
@@ -199,7 +199,7 @@ export const ForumAgendaSearch = observer(() => {
     <>
       <Container>
         <CalendarFilter
-          header={t("forum.DateRange")}
+          header={t<string>("forum.DateRange")}
           headerSize="h2"
           headerFontSize="24px"
           dateFilter={dateFilter}

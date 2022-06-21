@@ -22,7 +22,7 @@ export const PersonalVision = ({ personalVision }: IPersonalVisionProps): JSX.El
       <ContentEditableContainer>
         <StyledContentEditable
           innerRef={personalVisionRef}
-          placeholder={t("personal.placeholder")}
+          placeholder={t<string>("personal.placeholder")}
           html={personalVision || ""}
           disabled={false}
           onChange={e => {

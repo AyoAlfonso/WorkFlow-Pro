@@ -34,9 +34,9 @@ export const Meeting = (): JSX.Element => {
   return (
     <StretchContainer>
       <HeaderContainer>
-        <HeaderText>{t("profile.meetingsManagement.header")}</HeaderText>
+        <HeaderText>{t<string>("profile.meetingsManagement.header")}</HeaderText>
       </HeaderContainer>
-      <SubHeader>{t(`profile.customScorecard`)}</SubHeader>
+      <SubHeader>{t<string>(`profile.customScorecard`)}</SubHeader>
       <BodyContainer>{teamsData}</BodyContainer>
     </StretchContainer>
   );

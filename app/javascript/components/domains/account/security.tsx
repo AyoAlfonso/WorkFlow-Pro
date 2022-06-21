@@ -35,11 +35,11 @@ export const Security = (): JSX.Element => {
   return (
     <Container>
       <HeaderContainer>
-        <HeaderText>{t("profile.security")}</HeaderText>
+        <HeaderText>{t<string>("profile.security")}</HeaderText>
       </HeaderContainer>
       <BodyContainer>
         <PersonalInfoContainer>
-          <Label htmlFor="password">{t("profile.securityForm.password")}</Label>
+          <Label htmlFor="password">{t<string>("profile.securityForm.password")}</Label>
           <Input
             name="password"
             type="password"
@@ -47,7 +47,7 @@ export const Security = (): JSX.Element => {
             value={password}
           />
           <Label htmlFor="passwordConfirmation">
-            {t("profile.securityForm.passwordConfirmation")}
+            {t<string>("profile.securityForm.passwordConfirmation")}
           </Label>
           <Input
             name="passwordConfirmation"
@@ -55,7 +55,7 @@ export const Security = (): JSX.Element => {
             onChange={e => setPasswordConfirmation(e.target.value)}
             value={passwordConfirmation}
           />
-          <Text fontSize={1}>{t("profile.securityForm.warningText")}</Text>
+          <Text fontSize={1}>{t<string>("profile.securityForm.warningText")}</Text>
           <SaveButtonContainer>
             <Button
               small
@@ -68,7 +68,7 @@ export const Security = (): JSX.Element => {
                 marginRight: "24px",
               }}
             >
-              {t("profile.securityForm.updatePw")}
+              {t<string>("profile.securityForm.updatePw")}
             </Button>
           </SaveButtonContainer>
         </PersonalInfoContainer>

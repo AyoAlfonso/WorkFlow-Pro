@@ -257,7 +257,7 @@ export const KeyActivityRecord = observer(
                   mx={"auto"}
                   my={"8px"}
                 >
-                  {t("datePicker.clearDate")}
+                  {t<string>("datePicker.clearDate")}
                 </Button>
               </>
             </Popup>

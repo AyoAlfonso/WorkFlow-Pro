@@ -185,7 +185,7 @@ export const PulseSelector = observer(
                   onClick={() => onPulseSave()}
                   disabled={selectedEmotion == 0}
                 >
-                  {t("general.save")}
+                  {t<string>("general.save")}
                 </Button>
               </SaveButtonContainer>
             </ContentsContainer>

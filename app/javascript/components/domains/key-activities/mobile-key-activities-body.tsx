@@ -12,6 +12,9 @@ import { useTranslation } from "react-i18next";
 import { sortByPosition } from "~/utils/sorting";
 import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities/key-activity-record";
 import { Teams } from "../account/teams";
+import { MobileKeyActivitiesList } from "./mobile-key-activities-list";
+
+import { toJS } from "mobx";
 
 interface IMobileKeyActivitiesBodyProps {}
 
@@ -28,13 +31,24 @@ export const MobileKeyActivitiesBody = observer(
     const [showCompletedItems, setShowCompletedItems] = useState<boolean>(false);
     const [currentList, setCurrentList] = useState<string>("Today");
     const [currentTeamId, setCurrentTeamId] = useState<number>(null);
+    const [loading, setLoading] = useState<boolean>(true);
 
     const listRef = useRef<HTMLDivElement>(null);
+    const listName = currentTeamId
+      ? teams.find(group => group.id == currentTeamId)?.name
+      : showCompletedItems
+      ? "Completed"
+      : currentList === "Today"
+      ? "Today's Priorities"
+      : currentList;
+    const selectedFilterGroupId = sessionStore.getScheduledGroupIdByName(currentList);
+    const droppableId = `scheduled-group-activities-${selectedFilterGroupId}`;
+    const completedKeyActivities = keyActivityStore.completedActivities;
 
     useEffect(() => {
       showCompletedItems
-        ? keyActivityStore.fetchCompleteKeyActivities()
-        : keyActivityStore.fetchIncompleteKeyActivities();
+        ? keyActivityStore.fetchCompleteKeyActivities().then(() => setLoading(false))
+        : keyActivityStore.fetchIncompleteKeyActivities().then(() => setLoading(false));
     }, [showCompletedItems]);
 
     useEffect(() => {
@@ -60,16 +74,6 @@ export const MobileKeyActivitiesBody = observer(
       };
     }, [listSelectorOpen]);
 
-    const selectedFilterGroupId = sessionStore.getScheduledGroupIdByName(currentList);
-
-    const completedKeyActivities = keyActivityStore.completedActivities;
-
-    const droppableId = currentList
-      ? `scheduled-group-activities-${selectedFilterGroupId}`
-      : `team-activities-${currentTeamId}`;
-    const splittedDroppableId = droppableId.split("-");
-    const updateId = splittedDroppableId[splittedDroppableId.length - 1];
-
     const filteredKeyActivities = () => {
       if (showCompletedItems) {
         return completedKeyActivities;
@@ -80,13 +84,7 @@ export const MobileKeyActivitiesBody = observer(
       }
     };
 
-    const listName = currentTeamId
-      ? teams.find(group => group.id == currentTeamId)?.name
-      : showCompletedItems
-      ? "Completed"
-      : currentList === "Today"
-      ? "Today's Priorities"
-      : currentList;
+    const currentListOfActivities = filteredKeyActivities();
 
     const renderListSelector = (): JSX.Element => {
       return (
@@ -155,41 +153,16 @@ export const MobileKeyActivitiesBody = observer(
       });
     };
 
-    const keyActivities = filteredKeyActivities();
-
-    const renderKeyActivitiesList = () => {
-      return keyActivities.map((keyActivity, index) => {
-        const draggableId = () => {
-          if (isNaN(parseInt(updateId))) {
-            return `keyActivity-${keyActivity.id}`;
-          } else {
-            return `keyActivity-${keyActivity.id}-${updateId}`;
-          }
-        };
-
-        return (
-          <Draggable
-            draggableId={draggableId()}
-            index={index}
-            key={keyActivity["id"]}
-            type={"keyActivity"}
-          >
-            {provided => (
-              <KeyActivityContainer
-                key={keyActivity["id"]}
-                ref={provided.innerRef}
-                {...provided.draggableProps}
-                {...provided.dragHandleProps}
-              >
-                <KeyActivityRecord
-                  keyActivity={keyActivity}
-                  dragHandleProps={...provided.dragHandleProps}
-                />
-              </KeyActivityContainer>
-            )}
-          </Draggable>
-        );
-      });
+    const renderKeyActivitiesList = (): JSX.Element => {
+      return (
+        <MobileKeyActivitiesList
+          keyActivities={currentListOfActivities}
+          droppableId={droppableId}
+          keyActivityStoreLoading={keyActivityStore.loading}
+          mobile={true}
+          loading={loading}
+        />
+      );
     };
 
     return (
@@ -205,19 +178,9 @@ export const MobileKeyActivitiesBody = observer(
           <AddNewKeyActivityPlus>
             <Icon icon={"Plus"} size={16} iconColor={"primary100"} />
           </AddNewKeyActivityPlus>
-          <AddNewKeyActivityText> {t("keyActivities.addTitle")}</AddNewKeyActivityText>
+          <AddNewKeyActivityText> {t<string>("keyActivities.addTitle")}</AddNewKeyActivityText>
         </AddNewKeyActivityContainer>
-        <Droppable droppableId={droppableId} key={"keyActivity"}>
-          {(provided, snapshot) => (
-            <KeyActivitiesContainer
-              ref={provided.innerRef}
-              isDraggingOver={snapshot.isDraggingOver}
-            >
-              {renderKeyActivitiesList()}
-              {provided.placeholder}
-            </KeyActivitiesContainer>
-          )}
-        </Droppable>
+        {renderKeyActivitiesList()}
       </Container>
     );
   },

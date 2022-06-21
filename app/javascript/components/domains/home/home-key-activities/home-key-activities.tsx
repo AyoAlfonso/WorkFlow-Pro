@@ -231,6 +231,7 @@ export const HomeKeyActivities = observer(
                 droppableId={`todays-activities-${selectedFilterGroupIdToday}`}
                 loading={loading}
                 keyActivityStoreLoading={keyActivityStore.loading}
+                mobile={false}
               />
             </KeyActivitiesListContainer>
           </SingleListContainer>
@@ -271,6 +272,7 @@ export const HomeKeyActivities = observer(
                   "Weekly List",
                 )}`}
                 keyActivityStoreLoading={keyActivityStore.loading}
+                mobile={false}
               />
             </KeyActivitiesListContainer>
           </SingleListContainer>
@@ -310,6 +312,7 @@ export const HomeKeyActivities = observer(
                 loading={loading}
                 droppableId={`todays-activities-${selectedFilterGroupIdToday}`}
                 keyActivityStoreLoading={keyActivityStore.loading}
+                mobile={false}
               />
             </KeyActivitiesListContainer>
           </KeyActivityColumnStyleListContainer>
@@ -331,6 +334,7 @@ export const HomeKeyActivities = observer(
                     : `team-activities-${selectedFilterTeamId}`
                 }
                 keyActivityStoreLoading={keyActivityStore.loading}
+                mobile={false}
               />
             </KeyActivitiesListContainer>
           </KeyActivityColumnStyleListContainer>

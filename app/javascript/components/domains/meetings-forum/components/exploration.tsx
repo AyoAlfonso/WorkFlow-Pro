@@ -52,7 +52,6 @@ export const Exploration = observer(
         issueStore.fetchTeamIssueMeetingEnablements(currentMeeting.id);
       }
       issueStore.fetchTeamIssues(currentMeeting.teamId); //ASSUMPTIONS: must have team id for parking lot
-
     }, [currentMeeting?.teamId]);
 
     if (R.isNil(currentTeam) || R.isNil(currentMeeting)) {
@@ -123,14 +122,13 @@ export const Exploration = observer(
 
     return (
       <>
-      
         {includeExplorationTopic && (
           <>
             <ColumnContainerParent alignItems={"baseline"}>
-              <HeaderText width={"70%"} text={t("meetingForum.exploration.title")} />
+              <HeaderText width={"70%"} text={t<string>("meetingForum.exploration.title")} />
               {company.forumType == "YPO" && (
                 <HeaderSubText onClick={toggleGuideModal}>
-                  {t("meetingForum.exploration.subTitle")}
+                  {t<string>("meetingForum.exploration.subTitle")}
                 </HeaderSubText>
               )}
               {/* <TextDiv color={"primary100"} fontSize={"16px"} ml={"8px"}></TextDiv> */}
@@ -144,20 +142,20 @@ export const Exploration = observer(
           <ForumMeetingGuideModal
             modalOpen={guideModalOpen}
             setModalOpen={setGuideModalOpen}
-            headerText={t("meetingForum.exploration.subTitle")}
+            headerText={t<string>("meetingForum.exploration.subTitle")}
           ></ForumMeetingGuideModal>
         )}
         <ColumnContainerParent>
           <ColumnContainer>
             <HeaderText
-              text={t("meetingForum.scheduledIssues.title", {
+              text={t<string>("meetingForum.scheduledIssues.title", {
                 prefix: includeExplorationTopic ? "2: " : "",
               })}
             />
             <ScheduledIssues teamId={currentMeeting.teamId} upcomingForumMeeting={currentMeeting} />
           </ColumnContainer>
           <ColumnContainer>
-            <HeaderText text={t("meetingForum.parkingLotIssues.title")} />
+            <HeaderText text={t<string>("meetingForum.parkingLotIssues.title")} />
             <ParkingLotIssues
               teamId={currentMeeting.teamId}
               upcomingForumMeeting={currentMeeting}
@@ -218,5 +216,3 @@ const BreadcrumbHeaderText = styled.span`
   margin-top: 15px;
   margin-bottom: 25px;
 `;
-
-

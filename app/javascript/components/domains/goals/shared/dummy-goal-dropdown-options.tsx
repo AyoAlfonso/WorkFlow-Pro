@@ -51,11 +51,14 @@ export const DummyGoalDropdownOptions = ({
     if (itemType == "annualInitiative") {
       if (
         confirm(
-          `Are you sure you want to close this ${t("annualInitiative.messageText", {
+          `Are you sure you want to close this ${t<string>("annualInitiative.messageText", {
             title: annualInitiativeTitle,
-          })}? Closing an Annual Objective will result in closing all of the related ${t("quarterlyGoal.messageText", {
-            title: quarterlyGoalTitle,
-          })}s as well`,
+          })}? Closing an Annual Objective will result in closing all of the related ${t<string>(
+            "quarterlyGoal.messageText",
+            {
+              title: quarterlyGoalTitle,
+            },
+          )}s as well`,
         )
       ) {
         annualInitiativeStore.closeInitiative(itemId).then(() => {
@@ -65,7 +68,7 @@ export const DummyGoalDropdownOptions = ({
     } else if (itemType == "quarterlyGoal") {
       if (
         confirm(
-          `Are you sure you want to close this ${t("quarterlyGoal.messageText", {
+          `Are you sure you want to close this ${t<string>("quarterlyGoal.messageText", {
             title: quarterlyGoalTitle,
           })}`,
         )
@@ -77,7 +80,7 @@ export const DummyGoalDropdownOptions = ({
     } else if (itemType == "subInitiative") {
       if (
         confirm(
-          `Are you sure you want to close this ${t("subInitiative.messageText", {
+          `Are you sure you want to close this ${t<string>("subInitiative.messageText", {
             title: subInitiativeTitle,
           })}`,
         )
@@ -93,7 +96,7 @@ export const DummyGoalDropdownOptions = ({
     if (itemType == "annualInitiative") {
       if (
         confirm(
-          `Are you sure you want to delete this ${t("annualInitiative.messageText", {
+          `Are you sure you want to delete this ${t<string>("annualInitiative.messageText", {
             title: annualInitiativeTitle,
           })}`,
         )

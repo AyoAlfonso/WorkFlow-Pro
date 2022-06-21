@@ -445,6 +445,7 @@ type IButtonProps = {
   variant: string;
   onClick: () => void;
   small: boolean;
+  children: React.ReactNode;
 };
 
 const NextButton = styled(Button)<IButtonProps>`
@@ -472,6 +473,7 @@ type IStopMeetingButton = {
   onClick: () => void;
   small: boolean;
   disabled: boolean;
+  children: React.ReactNode;
 };
 
 const StopButton = styled(Button)<IStopMeetingButton>`

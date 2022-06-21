@@ -45,7 +45,7 @@ export const CheckInWizardLayout = observer(
     const renderVisibilityText = () => (
       <StepText type={"small"}>
         <Icon icon={"Visibility"} size={"15px"} iconColor={"grey80"} />
-        {t("Everyone in your company will see your response")}
+        {t<string>("Everyone in your company will see your response")}
       </StepText>
     );
 

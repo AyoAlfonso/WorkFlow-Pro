@@ -14,11 +14,13 @@ export const UpcomingMessage = ({ fiscalTime, goalType }: IUpcomingMessageProps)
     <Container shadow={true}>
       <HeadingSection>
         <Icon icon={"Deadline-Calendar"} iconColor={"grey100"} size={"24px"} mr={"16px"} />
-        <HeaderText>{t(`This is an upcoming (${fiscalTime}) ${goalType}`)}.</HeaderText>
+        <HeaderText>{t<string>(`This is an upcoming (${fiscalTime}) ${goalType}`)}.</HeaderText>
       </HeadingSection>
       <BodySection>
         <BodyText>
-          {t(`This ${goalType} is set for ${fiscalTime}. Any updates made won't be reflected until the
+          {t<
+            string
+          >(`This ${goalType} is set for ${fiscalTime}. Any updates made won't be reflected until the
           timeframe has begun. Please note that Objectives or initiatives created in the final four
           weeks of each fiscal timeframe will be automatically set to the following fiscal year or
           quarter`)}

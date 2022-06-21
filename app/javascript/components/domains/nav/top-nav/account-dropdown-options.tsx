@@ -120,7 +120,7 @@ export const AccountDropdownOptions = observer(
             }}
           >
             <LeftWorkspaceContainer>
-              <AccountOptionText>{t("profile.switchCompanies")}</AccountOptionText>
+              <AccountOptionText>{t<string>("profile.switchCompanies")}</AccountOptionText>
               <CompanyText type={"small"}>{R.path(["company", "name"], companyStore)}</CompanyText>
             </LeftWorkspaceContainer>
             <RightWorkspaceContainer>
@@ -182,7 +182,7 @@ export const AccountDropdownOptions = observer(
           showCompanyCreationSelector && (
             <CreationOption onClick={() => companyStore.openOnboardingModal(displayFormat)}>
               <CreationSelectionText>
-                {t("onboarding.continue", { format: displayFormat })}
+                {t<string>("onboarding.continue", { format: displayFormat })}
               </CreationSelectionText>
             </CreationOption>
           )
@@ -192,10 +192,10 @@ export const AccountDropdownOptions = observer(
           showCompanyCreationSelector && (
             <>
               <CreationOption onClick={() => companyStore.openOnboardingModal("Company")}>
-                <CreationSelectionText>{t("company.newCompany")}</CreationSelectionText>
+                <CreationSelectionText>{t<string>("company.newCompany")}</CreationSelectionText>
               </CreationOption>
               <CreationOption onClick={() => companyStore.openOnboardingModal("Forum")}>
-                <CreationSelectionText>{t("company.newForum")}</CreationSelectionText>
+                <CreationSelectionText>{t<string>("company.newForum")}</CreationSelectionText>
               </CreationOption>
             </>
           )
@@ -222,7 +222,7 @@ export const AccountDropdownOptions = observer(
         <DropdownSectionContainer>
           <Link to="/account" style={{ textDecoration: "none", padding: "0" }}>
             <AccountOptionText onClick={() => setShowAccountActions(false)}>
-              {t("profile.accountSettings")}
+              {t<string>("profile.accountSettings")}
             </AccountOptionText>
           </Link>
           <GrowthPlanContainer>
@@ -232,7 +232,7 @@ export const AccountDropdownOptions = observer(
                 setShowAccountActions(false);
               }}
             >
-              {t("profile.growthPlan")}
+              {t<string>("profile.growthPlan")}
             </AccountOptionText>
           </GrowthPlanContainer>
         </DropdownSectionContainer>
@@ -253,18 +253,18 @@ export const AccountDropdownOptions = observer(
         <DropdownSectionContainer>
           <Link to="/journals" style={{ textDecoration: "none", padding: "0" }}>
             <AccountOptionText onClick={() => setShowAccountActions(false)}>
-              {t("journals.headerNavTitle")}
+              {t<string>("journals.headerNavTitle")}
             </AccountOptionText>
           </Link>
           <Link to="/notes" style={{ textDecoration: "none", padding: "0" }}>
             <AccountOptionText onClick={() => setShowAccountActions(false)}>
-              {t("notes.headerNavTitle")}
+              {t<string>("notes.headerNavTitle")}
             </AccountOptionText>
           </Link>
           {isAdmin && (
             <Link to="/audit-logs" style={{ textDecoration: "none", padding: "0" }}>
               <AccountOptionText onClick={() => setShowAccountActions(false)}>
-                {t("Audit Logs")}
+                {t<string>("Audit Logs")}
               </AccountOptionText>
             </Link>
           )}
@@ -313,7 +313,7 @@ export const AccountDropdownOptions = observer(
               })
             }
           >
-            {t("profile.logout")}
+            {t<string>("profile.logout")}
           </AccountOptionText>
         </DropdownSectionContainer>
       </Container>

@@ -149,7 +149,7 @@ export const Teams = observer(
     return (
       <StretchContainer>
         <HeaderContainer>
-          <HeaderText>{t("profile.teamsManagement.header")}</HeaderText>
+          <HeaderText>{t<string>("profile.teamsManagement.header")}</HeaderText>
           <Can
             action={"create-team"}
             data={null}
@@ -163,7 +163,7 @@ export const Teams = observer(
                     setCreateTeamModalOpen(true);
                   }}
                 >
-                  {t("company.createTeam.addButton")}
+                  {t<string>("company.createTeam.addButton")}
                 </Button>
                 <CreateNewTeamModal
                   modalOpen={createTeamModalOpen}

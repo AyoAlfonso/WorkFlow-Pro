@@ -52,7 +52,7 @@ export const HabitsCreateHabitForm = ({ onSubmit }: ICreateHabitFormProps): JSX.
           <StyledInput
             type={"text"}
             value={name}
-            placeholder={t("profile.habits.form.placeholder")}
+            placeholder={t<string>("profile.habits.form.placeholder")}
             onChange={({ target: { value } }: React.ChangeEvent<HTMLInputElement>) =>
               setCreateHabitFormState({ ...createHabitFormState, name: value })
             }
@@ -128,7 +128,7 @@ export const HabitsCreateHabitForm = ({ onSubmit }: ICreateHabitFormProps): JSX.
         variant={"primary"}
         small
       >
-        {t("Add Habit")}
+        {t<string>("Add Habit")}
       </Button>
     </StyledForm>
   );

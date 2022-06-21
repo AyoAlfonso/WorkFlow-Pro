@@ -28,7 +28,7 @@ export const EditNotification = observer(
         <HeaderContainer>
           <HeaderTextAndIconContainer>
             <BackHeaderText onClick={() => notificationStore.resetNotificationToEdit()}>
-              {t("profile.notifications")}
+              {t<string>("profile.notifications")}
             </BackHeaderText>
             <ChevronRight icon={"Chevron-Left"} size={"10px"} iconColor={"grey100"} />
             <HeaderText>{getNoticationName(notificationToEdit.notificationType)}</HeaderText>
@@ -62,7 +62,7 @@ export const EditNotification = observer(
               onClick={() => updateNotification(notificationToEdit)}
               mr={"44px"}
             >
-              {t("general.save")}
+              {t<string>("general.save")}
             </Button>
           </SaveButtonContainer>
         </BodyContainer>
@@ -84,7 +84,7 @@ const RenderNotificationTimeOptions = ({ ...props }): JSX.Element => {
 
   return (
     <OptionContainer>
-      <Label htmlFor="time">{t("profile.editNotification.time")}</Label>
+      <Label htmlFor="time">{t<string>("profile.editNotification.time")}</Label>
       <TimePicker
         name="notification-time"
         onChange={e => {
@@ -120,7 +120,7 @@ const RenderNotificationDayOptions = ({ days }: RenderNotificationDayOptionsProp
 
   return (
     <OptionContainer>
-      <Label htmlFor="day">{t("profile.editNotification.day")}</Label>
+      <Label htmlFor="day">{t<string>("profile.editNotification.day")}</Label>
       <Select
         name="day"
         onChange={e => {

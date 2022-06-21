@@ -34,8 +34,8 @@ export const PersonalKeyActivitiesWeekly = observer(
       <KeyActivitiesWrapperContainer width={"100%"}>
         <KeyActivityColumnStyleListContainer>
           <KeyActivitiesSubHeader
-            header={t("keyActivities.weeklyListTitle")}
-            subText={t("keyActivities.weeklyListDescription")}
+            header={t<string>("keyActivities.weeklyListTitle")}
+            subText={t<string>("keyActivities.weeklyListDescription")}
             sortFilterOpen={weeklyFilterDropdownOpen}
             setFilterOpen={setWeeklyFilterDropdownOpen}
             scheduledGroupId={selectedFilterGroupIdWeekly}
@@ -52,13 +52,14 @@ export const PersonalKeyActivitiesWeekly = observer(
                 "Weekly List",
               )}
               droppableId={`scheduled-group-activities-${selectedFilterGroupIdWeekly}`}
+              mobile={false}
             />
           </KeyActivitiesListContainer>
         </KeyActivityColumnStyleListContainer>
         <KeyActivityColumnStyleListContainer>
           <KeyActivitiesSubHeader
-            header={t("keyActivities.backlogTitle")}
-            subText={t("keyActivities.backlogDescription")}
+            header={t<string>("keyActivities.backlogTitle")}
+            subText={t<string>("keyActivities.backlogDescription")}
             sortFilterOpen={backlogFilterDropdownOpen}
             setFilterOpen={setBacklogFilterDropdownOpen}
             scheduledGroupId={selectedFilterGroupIdBacklog}
@@ -75,6 +76,7 @@ export const PersonalKeyActivitiesWeekly = observer(
                 "Backlog",
               )}
               droppableId={`scheduled-group-activities-${selectedFilterGroupIdBacklog}`}
+              mobile={false}
             />
           </KeyActivitiesListContainer>
         </KeyActivityColumnStyleListContainer>

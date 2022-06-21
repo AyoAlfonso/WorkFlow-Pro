@@ -106,7 +106,7 @@ export const DueDatePickerModal = ({
           direction={"vertical"}
           shownDate={new Date()}
           minDate={new Date()}
-          maxDate={addDays(new Date(), 187)}
+          maxDate={addDays(new Date(), 365.4)}
           scroll={{
             enabled: true,
             calendarWidth: 320,
@@ -140,7 +140,7 @@ export const DueDatePickerModal = ({
               setShowDatePicker(false);
             }}
           >
-            {t("datePicker.clearDate")}
+            {t<string>("datePicker.clearDate")}
           </Button>
         </DatePickerModalButtonContainer>
       </>

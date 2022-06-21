@@ -72,7 +72,7 @@ export const ModalWithHeader = ({
             centerHeader={centerHeader}
             onClick={() => {
               setModalOpen(false);
-              onClose();
+              onClose && onClose();
               if (onCloseAction) {
                 onCloseAction();
               }

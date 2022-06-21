@@ -68,14 +68,16 @@ ActiveAdmin.register Company do
         @new_sso_emails = params[:company][:sso_emails_embed].split(",").compact.map(&:strip).reverse.uniq
         @new_sso_emails.each do |email|
           sanitized_email = email.strip
-          if !sanitized_email.empty? && User.find_by_email(sanitized_email).blank?
+          @existing_user =  User.find_by_email(sanitized_email)
+          if !sanitized_email.empty? && @existing_user.blank?
             @user = User.create!({
               email: sanitized_email,
               company_id: @company.id,
               default_selected_company_id: @company.id,
               title: "",
               confirmed_at: Time.now,
-              password: Devise.friendly_token[0,20]
+              password: Devise.friendly_token[0,20],
+              provider: "no_auth"
             })
             @user.assign_attributes({
               user_company_enablements_attributes: [{
@@ -87,11 +89,14 @@ ActiveAdmin.register Company do
             })
             @user.save(validate: false)
           end
-      
+          if @existing_user.provider.nil?
+            @existing_user.provider = "no_auth"
+            @existing_user.save(validate: false)
+          end
         end
       end
 
-       params[:company][:sso_emails_embed] = @new_sso_emails.join(",")
+       params[:company][:sso_emails_embed] = @new_sso_emails&.join(",")
        if @company.update!(params.require(:company).permit(:address,:contact_email,:fiscal_year_start,:name,
                 :logo,
                 :phone_number,

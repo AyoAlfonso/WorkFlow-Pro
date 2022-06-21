@@ -35,6 +35,7 @@ export const UserModel = types
     currentCompanyOnboarded: types.maybeNull(types.boolean),
     questionnaireTypeForPlanning: types.maybeNull(types.string),
     productFeatures: types.maybeNull(ProductFeaturesModel),
+    provider: types.maybeNull(types.string),
     //add avatarurl2x
   })
   .views(self => ({

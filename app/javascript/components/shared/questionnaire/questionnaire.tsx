@@ -112,12 +112,14 @@ export const Questionnaire = observer(
           width={"100%"}
           alignment={"left"}
           headerComponent={
-            <CardHeaderText fontSize={"16px"}>{t("journals.weeklyReflection")}</CardHeaderText>
+            <CardHeaderText fontSize={"16px"}>
+              {t<string>("journals.weeklyReflection")}
+            </CardHeaderText>
           }
         >
           <CardBody>
             <Text fontFamily={"Lato"} fontSize={"14px"} mt={"15px"} textAlign={"center"}>
-              {t("journals.weeklyReflectionCompleted", { userName: userFirstName })}
+              {t<string>("journals.weeklyReflectionCompleted", { userName: userFirstName })}
             </Text>
           </CardBody>
         </Card>

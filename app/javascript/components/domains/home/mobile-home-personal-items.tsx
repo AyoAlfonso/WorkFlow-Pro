@@ -9,6 +9,7 @@ import { MobileKeyActivitiesBody } from "../key-activities/mobile-key-activities
 import { MobileIssuesBody } from "../issues/mobile-issues-body";
 import { HabitsBody } from "../habits";
 import { Journal } from "../journal/journal-widget";
+import * as R from "ramda";
 
 export const MobileHomePersonalItems = observer(
   (): JSX.Element => {
@@ -26,6 +27,21 @@ export const MobileHomePersonalItems = observer(
 
     const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : "");
+    };
+
+    const headerTextString = () => {
+      switch (currentTab) {
+        case 0:
+          return "ToDos";
+        case 1:
+          return company.displayFormat == "Forum" ? "Topics" : "Issues";
+        case 2:
+          return "Journal";
+        case 3:
+          return "Habits";
+        default:
+          return "ToDos";
+      }
     };
 
     useEffect(() => {
@@ -49,27 +65,18 @@ export const MobileHomePersonalItems = observer(
       return () => {
         document.removeEventListener("click", externalEventHandler);
       };
+      setCurrentTab(0);
     }, [showNavOptions]);
 
-    const headerTextString = () => {
-      switch (currentTab) {
-        case 0:
-          return "ToDos";
-        case 1:
-          return company.displayFormat == "Forum" ? "Topics" : "Issues";
-        case 2:
-          return "Journal";
-        case 3:
-          return "Habits";
-        default:
-          return "ToDos";
-      }
+    const renderMobileKeyActivitiesBody = (): JSX.Element => {
+      return <MobileKeyActivitiesBody />;
     };
 
     const renderComponent = () => {
       switch (currentTab) {
         case 0:
-          return <MobileKeyActivitiesBody />;
+          return renderMobileKeyActivitiesBody();
+
         case 1:
           return (
             <MobileIssuesBody
@@ -90,7 +97,7 @@ export const MobileHomePersonalItems = observer(
         case 3:
           return <HabitsBody />;
         default:
-          return <MobileKeyActivitiesBody />;
+          return renderMobileKeyActivitiesBody();
       }
     };
 
@@ -136,7 +143,7 @@ export const MobileHomePersonalItems = observer(
                       setShowNavOptions(false);
                     }}
                   >
-                    ToDos
+                    {company.displayFormat == "Forum" ? "Topics" : "Issues"}
                   </NavigationDropDownItem>
                   <NavigationDropDownItem
                     onClick={() => {
@@ -144,7 +151,7 @@ export const MobileHomePersonalItems = observer(
                       setShowNavOptions(false);
                     }}
                   >
-                    {company.displayFormat == "Forum" ? "Topics" : "Issues"}
+                    ToDos
                   </NavigationDropDownItem>
                   <NavigationDropDownItem
                     onClick={() => {
@@ -180,7 +187,7 @@ export const MobileHomePersonalItems = observer(
             />
           </IconContainer>
         </HeaderContainer>
-        <ComponentContainer>{renderComponent()}</ComponentContainer>
+        <ComponentContainer> {renderComponent()}</ComponentContainer>
       </Container>
     );
   },
@@ -252,8 +259,7 @@ const NavContainer = styled.div`
   position: relative;
 `;
 
-const ComponentContainer = styled.div`
-`;
+const ComponentContainer = styled.div``;
 
 const ChevronUp = styled(Icon)`
   transform: rotate(180deg);

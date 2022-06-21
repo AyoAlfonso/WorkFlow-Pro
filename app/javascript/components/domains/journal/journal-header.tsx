@@ -36,7 +36,7 @@ export const JournalHeader = ({
     setQuestionnaireVariant("");
     window.openWidget && window.openWidget();
   };
-  
+
   return (
     <>
       <AccordianContainer>
@@ -49,7 +49,7 @@ export const JournalHeader = ({
           />
           <AccordionHeaderText expanded={expanded} accordionPanel={"panel0"}>
             {" "}
-            {t("journals.title")}{" "}
+            {t<string>("journals.title")}{" "}
           </AccordionHeaderText>
         </HeaderContainerNoBorder>
         <EndButtonContainer>
@@ -61,15 +61,12 @@ export const JournalHeader = ({
                 }
               }}
             >
-              {t("journals.viewEntries")}
+              {t<string>("journals.viewEntries")}
             </EndButton>
           </Link>
         </EndButtonContainer>
       </AccordianContainer>
-      <StyledModal
-        isOpen={questionnaireVariant !== ""}
-        transitionSpeed={1000}
-      >
+      <StyledModal isOpen={questionnaireVariant !== ""} transitionSpeed={1000}>
         {questionnaireVariant !== "" ? (
           <SurveyBot
             variant={questionnaireVariant}

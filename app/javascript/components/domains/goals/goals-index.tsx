@@ -158,7 +158,7 @@ export const GoalsIndex = observer(
           return personalGoals;
       }
     };
-    
+
     const renderCreateCompanyAnnualInitiativeSection = (type): JSX.Element => {
       const showCreateAnnualInitiative =
         type == "company" ? showCreateCompanyAnnualInitiative : showCreatePersonalAnnualInitiative;
@@ -183,9 +183,9 @@ export const GoalsIndex = observer(
 
       const doubleYearString =
         weeksToNextFiscalYear < 4
-          ? `FY${(companyStore.company.yearForCreatingAnnualInitiatives + 1).toString().slice(-2)}/${(
-              companyStore.company.yearForCreatingAnnualInitiatives + 2
-            )
+          ? `FY${(companyStore.company.yearForCreatingAnnualInitiatives + 1)
+              .toString()
+              .slice(-2)}/${(companyStore.company.yearForCreatingAnnualInitiatives + 2)
               .toString()
               .slice(-2)}`
           : `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}/${(
@@ -200,11 +200,13 @@ export const GoalsIndex = observer(
       return (
         <CreateGoalSection
           type={type}
-          placeholder={t("annualInitiative.enterTitle", { title: annualInitiativeTitle })}
-          addButtonText={`${t("annualInitiative.add", {
+          placeholder={t<string>("annualInitiative.enterTitle", { title: annualInitiativeTitle })}
+          addButtonText={`${t<string>("annualInitiative.add", {
             title: annualInitiativeTitle,
           })} (${createGoalYearString})`}
-          createButtonText={t("annualInitiative.addInitiative", { title: annualInitiativeTitle })}
+          createButtonText={t<string>("annualInitiative.addInitiative", {
+            title: annualInitiativeTitle,
+          })}
           showCreateGoal={showCreateAnnualInitiative}
           setShowCreateGoal={setShowCreateAnnualInitiative}
           createAction={annualInitiativeStore.create}

@@ -44,7 +44,7 @@ export const AvatarModal = ({
       modalOpen={modalOpen}
       centerHeader={true}
       setModalOpen={setModalOpen}
-      headerText={t("profile.updateProfileAvatar")}
+      headerText={t<string>("profile.updateProfileAvatar")}
       overflow="hidden"
       boxSizing="border-box"
     >
@@ -68,7 +68,7 @@ export const AvatarModal = ({
           style={{ width: "auto", display: "inline-block" }}
           onClick={() => setModalOpen(!modalOpen)}
         >
-          {t("general.cancel")}
+          {t<string>("general.cancel")}
         </Button>
         <Button
           small
@@ -80,7 +80,7 @@ export const AvatarModal = ({
             setModalOpen(!modalOpen);
           }}
         >
-          {t("general.save")}
+          {t<string>("general.save")}
         </Button>
       </ButtonContainer>
     </ModalWithHeader>
