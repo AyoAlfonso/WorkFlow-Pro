@@ -8,7 +8,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   skip_after_action :verify_authorized, only: [:get_onboarding_company, :create_or_update_onboarding_goals, :get_onboarding_goals, :create_or_update_onboarding_key_activities, :get_onboarding_key_activities, :create_or_update_onboarding_team]
 
   def index
-    @check_in_templates = policy_scope(CheckInTemplate.all)
+    @check_in_templates = policy_scope(CheckInTemplate.all) ##squash the  check-in template  
     render json: @check_in_templates.as_json(only: [:id, :name, :check_in_type, :description], include: {
                   check_in_templates_steps: {  only: [:id, :step_type, :order_index, :name, :instructions, :component_to_render, :check_in_template_id]}})
   end
@@ -17,6 +17,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
       @check_in_template = CheckInTemplate.create!({
           name: params[:name],
           check_in_type: @params[:check_in_type],
+          type: @params[:type],
           description: @params[:description],
           participants: params[:participants],
           anonymous: params[:anonymous],

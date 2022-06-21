@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_21_114956) do
+ActiveRecord::Schema.define(version: 2022_06_21_194226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,6 +120,7 @@ ActiveRecord::Schema.define(version: 2022_06_21_114956) do
     t.jsonb "date_time_config"
     t.integer "time_zone", default: 0
     t.jsonb "reminder"
+    t.integer "type", default: 0
   end
 
   create_table "check_in_templates_steps", force: :cascade do |t|
