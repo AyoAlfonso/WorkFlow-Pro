@@ -104,8 +104,6 @@ export const Company = observer(
       });
     };
 
-    const ceoORAdmin = currentUser.role == RoleCEO || currentUser.role == RoleAdministrator;
-
     const save = () => {
       const promises: Array<Promise<any>> = [
         companyStore.updateCompany(
