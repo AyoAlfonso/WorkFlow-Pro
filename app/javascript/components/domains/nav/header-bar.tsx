@@ -200,7 +200,7 @@ export const HeaderBar = observer(
               <StyledHeading type={"h1"}>
                 <HeaderText location={location} />
               </StyledHeading>
-              {locationPath[1] === "check-in" && (
+              {locationPath[1] === "check-in" && locationPath[2] !== "insights" && (
                 <CheckInButtonContainer>
                   <Button
                     variant="primary"

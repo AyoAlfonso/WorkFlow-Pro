@@ -63,6 +63,8 @@ import { CheckIn } from "./domains/check-in/checkin-index";
 import { NewCheckIn } from "./domains/check-in/new-checkin-index";
 import { NewCheckinLayout } from "./domains/check-in/new-checkin-layout";
 import { CheckInBuilderLayout } from "./domains/check-in/checkin-builder-layout";
+import { CheckinInsights } from "./domains/check-in/checkin-insights";
+import CheckinInsightsIndex from "./domains/check-in/checkin-insights-index";
 
 const Container = styled.div`
   margin-left: 136px;
@@ -255,6 +257,7 @@ export const App = observer(
                       "/meetings/section_2",
                       "/meetings/section_2/:team_id",
                       "/check-in",
+                      "/check-in/insights/:id",
                       // "/static-planner",
                       // "/static-goals",
                       // "/static-scorecards",
@@ -325,7 +328,14 @@ export const App = observer(
                         )}
 
                         {profile.productFeatures && profile.productFeatures.checkIn && (
-                          <Route exact path="/check-in" component={CheckIn} />
+                          <>
+                            <Route exact path="/check-in" component={CheckIn} />
+                            <Route
+                              exact
+                              path="/check-in/insights/:id"
+                              component={CheckinInsightsIndex}
+                            />
+                          </>
                         )}
                       </Container>
                     </>

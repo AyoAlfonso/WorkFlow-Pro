@@ -751,5 +751,9 @@ export class Api {
   async getAuditLogs(params) {
     return this.client.get(`/audit_logs/${params}`);
   }
+
+  async createCheckinTemplate(checkinTemplate) {
+    return this.client.post(`/check-in-templates`, checkinTemplate);
+  }
   //async setJWT(jwt) {}
 }
