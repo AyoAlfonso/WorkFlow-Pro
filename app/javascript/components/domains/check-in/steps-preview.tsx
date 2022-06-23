@@ -32,118 +32,194 @@ export const StepsPreview = ({ step }: StepsPreviewProps): JSX.Element => {
   const [showOpenIssues, setShowOpenIssues] = useState<boolean>(true);
 
   const renderComponent = () => {
-    switch (step?.stepType) {
+    switch (step?.name) {
       case "Open-ended":
-        return <OpenEndedPreview question={step.question} />;
+        return (
+          <Container>
+            <OpenEndedPreview question={step.question} />
+          </Container>
+        );
       case "Numeric":
-        return <NumericalStep question={step.question} />;
+        return (
+          <Container>
+            <NumericalStep question={step.question} />
+          </Container>
+        );
       case "Sentiment":
-        return <SelectionScale question={step.question} type="sentiment" />;
+        return (
+          <Container>
+            <SelectionScale question={step.question} type="sentiment" />;
+          </Container>
+        );
+
       case "Agreement Scale":
-        return <SelectionScale question={step.question} />;
+        return (
+          <Container>
+            <SelectionScale question={step.question} />;
+          </Container>
+        );
       case "Yes/No":
-        return <YesNoPreview question={step.question} />;
+        return (
+          <Container>
+            <YesNoPreview question={step.question} />;
+          </Container>
+        );
       case "ToDos":
         switch (step.variant) {
           case "Today's Priorities":
-            return <HomeKeyActivities todayOnly={true} width={"100%"} />;
+            return (
+              <Container>
+                <HomeKeyActivities todayOnly={true} width={"100%"} />;
+              </Container>
+            );
           case "Weekly List":
-            return <HomeKeyActivities weeklyOnly={true} width={"100%"} />;
+            return (
+              <Container>
+                <HomeKeyActivities weeklyOnly={true} width={"100%"} />;
+              </Container>
+            );
           case "Weekly List + Key Results":
             return (
-              <>
+              <OverflowContainer>
                 <DesktopContainer>
                   <Milestones showWeekly />
                 </DesktopContainer>
                 <MobileContainer>
                   <MobileTodosInitiatives />
                 </MobileContainer>
-              </>
+              </OverflowContainer>
             );
           case "Weekly List + Milestones":
             return (
-              <>
+              <OverflowContainer>
                 <DesktopContainer>
                   <Milestones showWeekly />
                 </DesktopContainer>
                 <MobileContainer>
                   <MobileTodosInitiatives />
                 </MobileContainer>
-              </>
+              </OverflowContainer>
             );
           case "Weekly List + Master List":
             return (
-              <>
+              <OverflowContainer>
                 <DesktopContainer>
                   <PersonalKeyActivitiesWeekly />
                 </DesktopContainer>
                 <MobileContainer>
                   <MobileKeyActivitiesBody WeeklyMaster={true} />
                 </MobileContainer>
-              </>
+              </OverflowContainer>
             );
           case "Today's Priorities + Weekly List":
             return (
-              <>
+              <OverflowContainer>
                 <DesktopContainer>
                   <DailyPlanning hideListSelector={true} />
                 </DesktopContainer>
                 <MobileContainer>
                   <MobileKeyActivitiesBody TodayWeekly={true} />
                 </MobileContainer>
-              </>
+              </OverflowContainer>
             );
           case "Outstanding ToDos":
-            return <OutstandingTodos />;
+            return (
+              <Container>
+                <OutstandingTodos />;
+              </Container>
+            );
           default:
             return <></>;
         }
       case "Initiatives":
         switch (step.variant) {
           case "Key Results":
-            return <WeeklyKeyResults />;
+            return (
+              <Container>
+                <WeeklyKeyResults />;
+              </Container>
+            );
           case "Milestones":
-            return <WeeklyMilestones />;
+            return (
+              <Container>
+                <WeeklyMilestones />;
+              </Container>
+            );
           default:
             return <></>;
         }
       case "Objectives":
-        return <PersonalGoals />;
+        return (
+          <Container>
+            <PersonalGoals />;
+          </Container>
+        );
       case "Issues":
         return (
-          <IssuesBody
-            showOpenIssues={showOpenIssues}
-            setShowOpenIssues={setShowOpenIssues}
-            noShadow
-          />
+          <Container>
+            <IssuesBody
+              showOpenIssues={showOpenIssues}
+              setShowOpenIssues={setShowOpenIssues}
+              noShadow
+            />
+          </Container>
         );
       case "KPIs":
-        return <KpiComponent />;
+        return (
+          <Container>
+            <KpiComponent />;
+          </Container>
+        );
       case "Habits":
-        return <HabitsBody />;
+        return (
+          <Container>
+            <HabitsBody />;
+          </Container>
+        );
       case "Conversation Starter":
-        return <ConversationStarter />;
+        return (
+          <Container>
+            <ConversationStarter />;
+          </Container>
+        );
       case "Weekly Review":
-        return <WeeklyReview />;
+        return (
+          <Container>
+            <WeeklyReview />;
+          </Container>
+        );
       case "Weekly Reflection":
-        return <CheckinReflection variant={QuestionnaireTypeConstants.weeklyReflection} />;
+        return (
+          <Container>
+            <CheckinReflection variant={QuestionnaireTypeConstants.weeklyReflection} />;
+          </Container>
+        );
       case "Monthly Reflection":
-        return <CheckinReflection variant={QuestionnaireTypeConstants.monthlyReflection} />;
+        return (
+          <Container>
+            <CheckinReflection variant={QuestionnaireTypeConstants.monthlyReflection} />;
+          </Container>
+        );
       case "Evening Reflection":
-        return <CheckinReflection variant={QuestionnaireTypeConstants.eveningReflection} />;
+        return (
+          <Container>
+            <CheckinReflection variant={QuestionnaireTypeConstants.eveningReflection} />;
+          </Container>
+        );
       default:
         return <></>;
     }
   };
-  return <Container>{renderComponent()}</Container>;
+  return <>{renderComponent()}</>;
 };
 
 const Container = styled.div`
   margin-right: 1px;
+`;
+
+const OverflowContainer = styled.div`
+  margin-right: 1px;
   overflow: auto;
-  // pointer-events: none;
-  // width: 100%;
-  // overflow-x: auto;
   overscroll-behavior: contain;
 `;
 

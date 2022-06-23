@@ -47,7 +47,6 @@ export const DeliverySection = ({
   const ShowOnlyTime = cadence == "Every Weekday" || cadence == "Daily";
   const showDateTime = cadence == "Once" || cadence == "Monthly" || cadence == "Quarterly";
   const showDayTime = cadence == "Weekly" || cadence == "Bi-weekly";
-  const [input, setInput] = useState<string>("1");
   // console.log(reminderObject);
   return (
     <Container>
@@ -114,8 +113,8 @@ export const DeliverySection = ({
               type="radio"
               id="accountTime"
               name="accountTime"
-              value="accountTimeZone"
-              checked={timezone === "accountTimeZone"}
+              value="company"
+              checked={timezone === "company"}
               onChange={e => setTimezone(e.target.value)}
             />
           </RadioContainer>
@@ -126,8 +125,8 @@ export const DeliverySection = ({
               type="radio"
               id="userTime"
               name="userTime"
-              value="userTimeZone"
-              checked={timezone === "userTimeZone"}
+              value="user"
+              checked={timezone === "user"}
               onChange={e => setTimezone(e.target.value)}
             />
           </RadioContainer>

@@ -32,7 +32,7 @@ export const StepPreviewCard = ({
   const { companyStore } = useMst();
   const isForum = companyStore.company?.displayFormat == "Forum";
 
-  const { stepType, iconName, orderIndex, question, variant } = step;
+  const { name, iconName, orderIndex, question, variant } = step;
 
   const handleChange = (e: any) => {
     const steps = [...selectedSteps];
@@ -49,15 +49,15 @@ export const StepPreviewCard = ({
     }
   };
 
-  const formatVariant = sr => {
+  const formatVariant = str => {
     if (isForum) {
       return "My Topics";
     } else {
-      return sr;
+      return str;
     }
   }
   
-  const formattedStepName = stepType == "Issues" ? formatIssue(stepType) : stepType;
+  const formattedStepName = name == "Issues" ? formatIssue(name) : name;
 
   const formattedVariant = variant == "My Issues" ? formatVariant(variant) : variant;
 

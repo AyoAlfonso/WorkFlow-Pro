@@ -28,17 +28,32 @@ export const CheckInTemplateStoreModel = types
     getCheckIn: flow(function*(checkInName) {
       try {
         const response: ApiResponse<any> = yield self.environment.api.getCheckInTemplates();
-        const checkIn = {...response.data.find(meeting => meeting.name === checkInName), currentStep: 0};
+        const checkIn = {
+          ...response.data.find(meeting => meeting.name === checkInName),
+          currentStep: 0,
+        };
         self.currentCheckIn = checkIn;
       } catch {
         // caught by Api Monitor
       }
     }),
+    createCheckinTemplate: flow(function*(checkInTemplate) {
+        const response: ApiResponse<any> = yield self.environment.api.createCheckinTemplate(
+          checkInTemplate,
+        );
+        if (response.ok) {
+          showToast(ToastMessageConstants.SUCCESS, "Check-in template created successfully");
+          return true;
+        } else {
+          showToast(ToastMessageConstants.ERROR, "Error creating check-in template, please try again");
+          return false;
+        }
+    }),
   }))
   .actions(self => ({
     updateCurrentCheckIn(checkInObj) {
       self.currentCheckIn = checkInObj;
-    }
+    },
   }))
   .actions(self => ({
     load: flow(function*() {

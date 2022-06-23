@@ -12,24 +12,37 @@ import { Droppable, DragDropContext } from "react-beautiful-dnd";
 
 export interface SelectedStepType {
   stepType: string;
+  name: string;
   iconName: string;
   question?: string;
+  instructions: string;
   orderIndex: number;
+  componentToRender: string;
   variant?: string;
 }
 
-export const StepsSelectorPage = (): JSX.Element => {
-  const [selectedSteps, setSelectedSteps] = useState<Array<SelectedStepType>>([]);
+interface StepsSelectorPageProps {
+  selectedSteps: Array<SelectedStepType>;
+  setSelectedSteps: React.Dispatch<React.SetStateAction<Array<SelectedStepType>>>;
+}
+
+export const StepsSelectorPage = ({
+  selectedSteps,
+  setSelectedSteps,
+}: StepsSelectorPageProps): JSX.Element => {
   const [showStepsModal, setShowStepsModal] = useState<boolean>(false);
   const [stepToPreview, setStepToPreview] = useState<SelectedStepType>({
     stepType: "",
+    name: "",
     iconName: "",
+    instructions: "",
     question: "",
+    componentToRender: "",
     orderIndex: 0,
   });
   const [isChanging, setIsChanging] = useState<boolean>(false);
   const [todoModalOpen, setTodoModalOpen] = useState<boolean>(false);
-  const todoStep = widgetArray.find(step => step.stepName === "ToDos");
+  const todoStep = widgetArray.find(step => step.name === "ToDos");
 
   const deleteStep = step => {
     let orderIndex = 0;

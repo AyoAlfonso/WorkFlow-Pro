@@ -18,80 +18,108 @@ interface TodoComponentSelectorModalProps {
   selectedSteps?: Array<SelectedStepType>;
 }
 
-export const TodoComponentSelectorModal = observer(({
-  todoModalOpen,
-  setTodoModalOpen,
-  step,
-  setSelectedSteps,
-  stepToPreview,
-  setIsChanging,
-  isChanging,
-  selectedSteps,
-}: TodoComponentSelectorModalProps): JSX.Element => {
-  const { companyStore } = useMst();
-  const isKeyResults = companyStore.company?.objectivesKeyType === "KeyResults";
+export const TodoComponentSelectorModal = observer(
+  ({
+    todoModalOpen,
+    setTodoModalOpen,
+    step,
+    setSelectedSteps,
+    stepToPreview,
+    setIsChanging,
+    isChanging,
+    selectedSteps,
+  }: TodoComponentSelectorModalProps): JSX.Element => {
+    const { companyStore } = useMst();
+    const isKeyResults = companyStore.company?.objectivesKeyType === "KeyResults";
 
-  const todoList = [
-    "Today's Priorities",
-    "Weekly List",
-    `Weekly List + ${isKeyResults ? "Key Results" : "Milestones"}`,
-    "Weekly List + Master List",
-    "Today's Priorities + Weekly List",
-    "Outstanding ToDos",
-  ];
+    const todoList = [
+      { variant: "Today's Priorities", instructions: "Review and update your Today's Priorities." },
+      { variant: "Weekly List", instructions: "Review and update your Weekly List of ToDos." },
+      {
+        variant: `Weekly List + ${isKeyResults ? "Key Results" : "Milestones"}`,
+        instructions: `Review your ${
+          isKeyResults ? "Key Results" : "Milestones"
+        }. Add ToDos to help you make progress towards each one.`,
+      },
+      {
+        variant: "Weekly List + Master List",
+        instructions:
+          "Review your Master List of ToDos. Are there any items that need to be moved to your Weekly List? Drag and drop them over.",
+      },
+      {
+        variant: "Today's Priorities + Weekly List",
+        instructions:
+          "Review your Weekly List. Are there any items that you need to accomplish today? Drag and drop them over on your Today's Priorities.",
+      },
+      {
+        variant: "Outstanding ToDos",
+        instructions:
+          "Review how yesterday went--are there any remaining ToDos that needs to be moved to today?",
+      },
+    ];
 
-  return (
-    <StyledModal isOpen={todoModalOpen} onBackgroundClick={() => setTodoModalOpen(false)}>
-      <Container>
-        <HeaderContainer>
-          <HeaderText>Select a step type</HeaderText>
-          <IconContainer onClick={() => setTodoModalOpen(false)}>
-            <Icon icon={"Close"} size={"14px"} iconColor={"grey80"} />
-          </IconContainer>
-        </HeaderContainer>
-        <DescriptionContainer>
-          <Icon icon={"Tasks"} mr="0.5em" size={"64px"} iconColor={"primary100"} />
-          <DescriptionTextContainer>
-            <TodosText>ToDos</TodosText>
-            <DescriptionText>
-              Pick from any of the ToDo components to play your day/week
-            </DescriptionText>
-          </DescriptionTextContainer>
-        </DescriptionContainer>
-        {todoList.map((todo, index) => (
-          <ToDoComponentContainer
-            onClick={() => {
-              if (isChanging) {
-                const steps = selectedSteps;
-                const stepIndex = steps.findIndex(step => step.orderIndex == stepToPreview.orderIndex);
-                steps[stepIndex].stepType = step.stepName;
-                steps[stepIndex].iconName = step.iconName;
-                steps[stepIndex].variant = todo;
-                setSelectedSteps(steps);
-                setIsChanging(false);
-                setTodoModalOpen(false);
-              } else {
-                setSelectedSteps(steps => [
-                  ...steps,
-                  {
-                    stepType: step.stepName,
-                    iconName: step.iconName,
-                    variant: todo,
-                    orderIndex: steps.length + 1,
-                  },
-                ]);
-                setTodoModalOpen(false);
-              }
-            }}
-            key={`option-${index}`}
-          >
-            <TodosText>{todo}</TodosText>
-          </ToDoComponentContainer>
-        ))}
-      </Container>
-    </StyledModal>
-  );
-});
+    return (
+      <StyledModal isOpen={todoModalOpen} onBackgroundClick={() => setTodoModalOpen(false)}>
+        <Container>
+          <HeaderContainer>
+            <HeaderText>Select a step type</HeaderText>
+            <IconContainer onClick={() => setTodoModalOpen(false)}>
+              <Icon icon={"Close"} size={"14px"} iconColor={"grey80"} />
+            </IconContainer>
+          </HeaderContainer>
+          <DescriptionContainer>
+            <Icon icon={"Tasks"} mr="0.5em" size={"64px"} iconColor={"primary100"} />
+            <DescriptionTextContainer>
+              <TodosText>ToDos</TodosText>
+              <DescriptionText>
+                Pick from any of the ToDo components to play your day/week
+              </DescriptionText>
+            </DescriptionTextContainer>
+          </DescriptionContainer>
+          {todoList.map((todo, index) => (
+            <ToDoComponentContainer
+              onClick={() => {
+                if (isChanging) {
+                  const steps = [...selectedSteps];
+                  const stepIndex = steps.findIndex(
+                    step => step.orderIndex == stepToPreview.orderIndex,
+                  );
+                  steps[stepIndex].stepType = step.stepType;
+                  steps[stepIndex].iconName = step.iconName;
+                  steps[stepIndex].name = step.name;
+                  steps[stepIndex].instructions = todo.instructions;
+                  steps[stepIndex].question = step.question;
+                  steps[stepIndex].variant = todo.variant;
+                  steps[stepIndex].componentToRender = step.name;
+                  setSelectedSteps(steps);
+                  setIsChanging(false);
+                  setTodoModalOpen(false);
+                } else {
+                  setSelectedSteps(steps => [
+                    ...steps,
+                    {
+                      stepType: step.stepType,
+                      name: step.name,
+                      iconName: step.iconName,
+                      instructions: todo.instructions,
+                      variant: todo.variant,
+                      componentToRender: step.name,
+                      orderIndex: steps.length + 1,
+                    },
+                  ]);
+                  setTodoModalOpen(false);
+                }
+              }}
+              key={`option-${index}`}
+            >
+              <TodosText>{todo.variant}</TodosText>
+            </ToDoComponentContainer>
+          ))}
+        </Container>
+      </StyledModal>
+    );
+  },
+);
 
 const StyledModal = Modal.styled`
   width: 700px;

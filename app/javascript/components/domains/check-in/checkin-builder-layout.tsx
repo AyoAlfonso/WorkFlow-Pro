@@ -10,15 +10,81 @@ import { Button } from "~/components/shared/button";
 import { Icon } from "~/components/shared";
 import { CheckinBuilderSteps } from "./checkin-builder-steps";
 import { CheckinBuilderAgenda } from "./components/check-in-builder-agenda";
+import { useMst } from "~/setup/root";
+import moment from "moment";
 
-interface ICheckInBuilderLayoutProps {}
+interface SelectedStepType {
+  stepType: string;
+  name: string;
+  iconName: string;
+  question?: string;
+  instructions: string;
+  orderIndex: number;
+  componentToRender: string;
+  variant?: string;
+}
+
+export interface ParticipantsProps {
+  id: number;
+  type: string;
+  defaultAvatarColor: string;
+  avatarUrl?: string;
+  name: string | null;
+  lastName?: string;
+  executive?: number;
+}
 
 export const CheckInBuilderLayout = observer(
-  (props: ICheckInBuilderLayoutProps): JSX.Element => {
+  (): JSX.Element => {
     const [currentStep, setCurrentStep] = useState(0);
-    const [checkinName, setCheckinName] = useState<string>("New Check-in")
+    const [checkinName, setCheckinName] = useState<string>("New Check-in");
+    const [selectedSteps, setSelectedSteps] = useState<Array<SelectedStepType>>([]);
+    const [participants, setParticipants] = useState<Array<ParticipantsProps>>([]);
+    const [responseViewers, setResponseViewers] = useState("All Participants");
+    const [cadence, setCadence] = useState<string>("Every Weekday");
+    const [checkinTime, setCheckinTime] = useState<string>("09:00 AM");
+    const [checkinDay, setCheckinDay] = useState<string>("Monday");
+    const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+    const [timezone, setTimeZone] = useState<string>("user");
+    const [reminderUnit, setReminderUnit] = useState<string>("Hour(s)");
+    const [anonymousResponse, setAnonymousResponse] = useState<boolean>(false);
+    const [reminderValue, setReminderValue] = useState("1");
+    const [selectedResponseViewers, setSelectedResponseViewers] = useState<
+      Array<ParticipantsProps>
+    >([]);
+    const [checkinType, setCheckinType] = useState<string>("Team");
+    const [checkinDescription, setCheckinDescription] = useState<string>("");
+
+    const { companyStore, sessionStore } = useMst();
+    const isForum = companyStore.company?.displayFormat == "Forum";
 
     const history = useHistory();
+
+    const company = companyStore && {
+      id: companyStore.company?.id,
+      type: "company",
+      defaultAvatarColor: "cautionYellow",
+      avatarUrl: companyStore.company?.logoUrl,
+      name: companyStore.company?.name,
+    };
+
+    const currentUser = sessionStore && {
+      id: sessionStore.profile?.id,
+      type: "user",
+      defaultAvatarColor: sessionStore.profile?.defaultAvatarColor,
+      avatarUrl: sessionStore.profile?.avatarUrl,
+      name: sessionStore.profile?.firstName,
+      lastName: sessionStore.profile?.lastName,
+    };
+
+    const viewers =
+      responseViewers === "All Participants"
+        ? participants
+        : responseViewers == `Entire ${isForum ? "Forum" : "Company"}`
+        ? [company]
+        : responseViewers == "Just Me"
+        ? [currentUser]
+        : selectedResponseViewers;
 
     const steps = [
       {
@@ -42,7 +108,59 @@ export const CheckInBuilderLayout = observer(
         orderIndex: 2,
       },
     ];
-    
+
+    const showDateTime = cadence == "Once" || cadence == "Monthly" || cadence == "Quarterly";
+    const showDayTime = cadence == "Weekly" || cadence == "Bi-weekly";
+    console.log({
+      name: checkinName,
+      steps: selectedSteps,
+      participants: participants,
+      anonymous: anonymousResponse,
+      type: "dynamic",
+      checkInType: checkinType,
+      description: checkinDescription,
+      timeZone: timezone,
+      responseViewers: viewers,
+      runOnce: cadence == "Once" && selectedDate,
+      dateTimeConfig: {
+        cadence: cadence,
+        time: moment(checkinTime, ["hh:mm A"]).format("HH:mm"),
+        date: showDateTime ? selectedDate : "",
+        day: showDayTime ? checkinDay : "",
+      },
+      reminder: {
+        unit: reminderUnit,
+        value: reminderValue,
+      },
+      tags: ["global", "custom"],
+    });
+
+    const createCheckin = () => {
+      const checkin = {
+        name: checkinName,
+        steps: selectedSteps,
+        participants: participants,
+        anonymous: anonymousResponse,
+        type: "dynamic",
+        checkInType: checkinType,
+        description: checkinDescription,
+        timeZone: timezone,
+        responseViewers: viewers,
+        runOnce: cadence == "Once" && selectedDate,
+        dateTimeConfig: {
+          cadence: cadence,
+          time: moment(checkinTime, ["hh:mm A"]).format("HH:mm"),
+          date: showDateTime ? selectedDate : "",
+          day: showDayTime ? checkinDay : "",
+        },
+        reminder: {
+          unit: reminderUnit,
+          value: reminderValue,
+        },
+        tags: ["global", "custom"],
+      };
+    };
+
     const title = () => R.path([currentStep, "name"], steps);
 
     const description = () => R.path([currentStep, "description"], steps);
@@ -52,6 +170,34 @@ export const CheckInBuilderLayout = observer(
         checkinName={checkinName}
         setCheckinName={setCheckinName}
         step={steps[currentStep]}
+        setSelectedSteps={setSelectedSteps}
+        selectedSteps={selectedSteps}
+        selectedItems={participants}
+        setSelectedItems={setParticipants}
+        setResponseViewers={setResponseViewers}
+        responseViewers={responseViewers}
+        cadence={cadence}
+        setCadence={setCadence}
+        checkinTime={checkinTime}
+        setCheckinTime={setCheckinTime}
+        checkinDay={checkinDay}
+        setCheckinDay={setCheckinDay}
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+        timezone={timezone}
+        setTimezone={setTimeZone}
+        reminderUnit={reminderUnit}
+        setReminderUnit={setReminderUnit}
+        anonymousResponse={anonymousResponse}
+        setAnonymousResponse={setAnonymousResponse}
+        reminderValue={reminderValue}
+        setReminderValue={setReminderValue}
+        selectedResponseItems={selectedResponseViewers}
+        setSelectedResponseItems={setSelectedResponseViewers}
+        checkinType={checkinType}
+        setCheckinType={setCheckinType}
+        description={checkinDescription}
+        setDescription={setCheckinDescription}
       />
     );
 

@@ -31,7 +31,7 @@ export const WeeklyCheckIn = observer(
     useEffect(() => {
       validateWeekOf(weekOf, history, id);
 
-      checkInTemplateStore.fetchCheckInTemplates();
+      // checkInTemplateStore.fetchCheckInTemplates();
 
       companyStore.load().then(() => {
         if (companyStore.company?.objectivesKeyType === "KeyResults") {
@@ -58,7 +58,7 @@ export const WeeklyCheckIn = observer(
           small
           disabled={false}
         >
-          Publish Check-in
+          Complete
         </StopButton>
       );
     };

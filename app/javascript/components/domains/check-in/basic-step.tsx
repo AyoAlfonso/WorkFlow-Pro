@@ -6,9 +6,20 @@ import { Label, Input, Select } from "~/components/shared/input";
 interface BasicStepProps {
   checkinName: string;
   setCheckinName: React.Dispatch<React.SetStateAction<string>>;
+  checkinType: string;
+  setCheckinType: React.Dispatch<React.SetStateAction<string>>;
+  description: string;
+  setDescription: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export const BasicStep = ({ checkinName, setCheckinName }: BasicStepProps): JSX.Element => {
+export const BasicStep = ({
+  checkinName,
+  setCheckinName,
+  checkinType,
+  setCheckinType,
+  description,
+  setDescription,
+}: BasicStepProps): JSX.Element => {
   const checkinTypes = ["Team", "Personal", "Company"];
   return (
     <Container>
@@ -22,7 +33,7 @@ export const BasicStep = ({ checkinName, setCheckinName }: BasicStepProps): JSX.
       </FormGroup>
       <FormGroup>
         <Label>Type</Label>
-        <Select onChange={e => console.log(e.target.value)} value={"Team"}>
+        <Select onChange={e => setCheckinType(e.target.value)} value={checkinType}>
           {checkinTypes.map((type, index) => (
             <option key={`option-${index}`} value={type}>
               {type}
@@ -32,7 +43,11 @@ export const BasicStep = ({ checkinName, setCheckinName }: BasicStepProps): JSX.
       </FormGroup>
       <FormGroup>
         <Label>Description</Label>
-        <TextField placeholder="Add a description" />
+        <TextField
+          placeholder="Add a description"
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+        />
       </FormGroup>
     </Container>
   );

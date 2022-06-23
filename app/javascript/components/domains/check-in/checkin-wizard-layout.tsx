@@ -30,6 +30,8 @@ export const CheckInWizardLayout = observer(
     const { t } = useTranslation();
     const history = useHistory();
 
+    const stepName = checkIn?.currentStepDetails.name;
+
     const meetingTitle = () => R.path(["name"], checkIn);
 
     const meetingDescription = () => R.path(["currentStepDetails", "instructions"], checkIn);
@@ -57,7 +59,7 @@ export const CheckInWizardLayout = observer(
 
     const renderStepsForMobile = () => (
       <QuestionText type={"small"}>
-        {`Question ${checkIn.currentStep + 1} / ${numberOfSteps}`}
+        {`Step ${checkIn.currentStep + 1} / ${numberOfSteps}`}
       </QuestionText>
     );
 
@@ -82,7 +84,7 @@ export const CheckInWizardLayout = observer(
               onClick={() => onNextButtonClick(checkIn.currentStep + 1)}
               disabled={checkIn.currentStep >= numberOfSteps}
             >
-              Next Question
+              Next Step
             </NextButton>
           ) : (
             stopMeetingButton
@@ -105,6 +107,7 @@ export const CheckInWizardLayout = observer(
           onCloseButtonClick={closeButtonClick}
           stepsForMobile={renderStepsForMobile()}
           textUnderMobileButton={renderVisibilityText()}
+          stepTitle={stepName}
         />
       </Container>
     );

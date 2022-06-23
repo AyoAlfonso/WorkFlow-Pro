@@ -20,6 +20,8 @@ const Container = styled.div`
   box-shadow: 0px 3px 6px #00000029;
   border-radius: 8px;
   height: 200px;
+  position: relative;
+  z-index: 10;
 `;
 
 const QuestionText = styled.span`

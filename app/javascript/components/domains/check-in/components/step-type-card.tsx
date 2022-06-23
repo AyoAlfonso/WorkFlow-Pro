@@ -19,88 +19,113 @@ interface StepTypeCardProps {
   setTodoModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const StepTypeCard = observer(({
-  step,
-  setSelectedSteps,
-  setShowStepsModal,
-  setIsChanging,
-  isChanging,
-  stepToPreview,
-  selectedSteps,
-  setTodoModalOpen,
-}: StepTypeCardProps): JSX.Element => {
-  const { companyStore } = useMst();
-  const isKeyResults = companyStore.company?.objectivesKeyType === "KeyResults";
-  const isForum = companyStore.company?.displayFormat == "Forum"
+export const StepTypeCard = observer(
+  ({
+    step,
+    setSelectedSteps,
+    setShowStepsModal,
+    setIsChanging,
+    isChanging,
+    stepToPreview,
+    selectedSteps,
+    setTodoModalOpen,
+  }: StepTypeCardProps): JSX.Element => {
+    const { companyStore } = useMst();
+    const isKeyResults = companyStore.company?.objectivesKeyType === "KeyResults";
+    const isForum = companyStore.company?.displayFormat == "Forum";
+    const issuesInstructions = `Capture any ${
+      isForum ? "Topics" : "Issues"
+    } that you want to keep track of.`;
 
-  const { t } = useTranslation();
-  const { iconName, stepName, description, question, iconColor, variant } = step;
+    const { t } = useTranslation();
+    const {
+      iconName,
+      name,
+      description,
+      question,
+      iconColor,
+      variant,
+      stepType,
+      instructions,
+    } = step;
 
-  const initiativeVariant = isKeyResults ? "Key Results" : "Milestones";
+    const initiativeVariant = isKeyResults ? "Key Results" : "Milestones";
 
-  const handleClick = () => {
-    if (isChanging && stepName == "ToDos") {
-      setShowStepsModal && setShowStepsModal(false);
-      setTodoModalOpen(true);
-    } else if (isChanging) {
-      const steps = selectedSteps;
-      const stepIndex = steps.findIndex(step => step.orderIndex == stepToPreview.orderIndex);
-      steps[stepIndex].stepType = stepName;
-      steps[stepIndex].iconName = iconName;
-      setSelectedSteps(steps);
-      setIsChanging(false);
-      setShowStepsModal(false);
-    } else if (stepName == "ToDos") {
-      setShowStepsModal && setShowStepsModal(false);
-      setTodoModalOpen(true);
-    } else if (stepName == "Initiatives") {
-      setSelectedSteps(steps => [
-        ...steps,
-        {
-          stepType: stepName,
-          iconName: iconName,
-          variant: initiativeVariant,
-          orderIndex: steps.length + 1,
-        },
-      ]);
-      setShowStepsModal && setShowStepsModal(false);
-    } else {
-      setSelectedSteps(steps => [
-        ...steps,
-        {
-          stepType: stepName,
-          iconName: iconName,
-          question: question,
-          variant: variant,
-          orderIndex: steps.length + 1,
-        },
-      ]);
-      setShowStepsModal && setShowStepsModal(false);
-    }
-  };
+    const handleClick = () => {
+      if (isChanging && name == "ToDos") {
+        setShowStepsModal && setShowStepsModal(false);
+        setTodoModalOpen(true);
+      } else if (isChanging) {
+        const steps = [...selectedSteps];
+        const stepIndex = steps.findIndex(step => step.orderIndex == stepToPreview.orderIndex);
+        steps[stepIndex].stepType = stepType;
+        steps[stepIndex].iconName = iconName;
+        steps[stepIndex].name = name;
+        steps[stepIndex].instructions = name == "Issues" ? issuesInstructions : instructions;
+        steps[stepIndex].variant = variant;
+        steps[stepIndex].question = question;
+        steps[stepIndex].componentToRender = name;
+        setSelectedSteps(steps);
+        setIsChanging(false);
+        setShowStepsModal(false);
+      } else if (name == "ToDos") {
+        setShowStepsModal && setShowStepsModal(false);
+        setTodoModalOpen(true);
+      } else if (name == "Initiatives") {
+        setSelectedSteps(steps => [
+          ...steps,
+          {
+            stepType: stepType,
+            name: name,
+            iconName: iconName,
+            instructions: instructions,
+            variant: initiativeVariant,
+            componentToRender: name,
+            orderIndex: steps.length + 1,
+          },
+        ]);
+        setShowStepsModal && setShowStepsModal(false);
+      } else {
+        setSelectedSteps(steps => [
+          ...steps,
+          {
+            stepType: stepType,
+            name: name,
+            iconName: iconName,
+            question: question,
+            instructions: name ==  "Issues" ? issuesInstructions : instructions,
+            variant: variant,
+            componentToRender: name,
+            orderIndex: steps.length + 1,
+          },
+        ]);
+        setShowStepsModal && setShowStepsModal(false);
+      }
+    };
 
-  const formatIssue = str => {
-    if (isForum) {
-      return "Topics"
-    } else {
-      return str
-    }
-  }
+    const formatIssue = str => {
+      if (isForum) {
+        return "Topics";
+      } else {
+        return str;
+      }
+    };
 
-  const formattedStepName = stepName == "Issues" ? formatIssue(stepName) : stepName;
+    const formattedStepName = name == "Issues" ? formatIssue(name) : name;
 
-  return (
-    <Container onClick={handleClick}>
-      <IconContainer>
-        <Icon icon={iconName} size="64px" iconColor={iconColor} />
-      </IconContainer>
-      <TextContainer>
-        <StepName>{t(`${formattedStepName}`)}</StepName>
-        <Description>{t(`${description}`)}</Description>
-      </TextContainer>
-    </Container>
-  );
-});
+    return (
+      <Container onClick={handleClick}>
+        <IconContainer>
+          <Icon icon={iconName} size="64px" iconColor={iconColor} />
+        </IconContainer>
+        <TextContainer>
+          <Name>{t(`${formattedStepName}`)}</Name>
+          <Description>{t(`${description}`)}</Description>
+        </TextContainer>
+      </Container>
+    );
+  },
+);
 
 const Container = styled.div`
   background: ${props => props.theme.colors.white};
@@ -122,7 +147,7 @@ const IconContainer = styled.div``;
 
 const TextContainer = styled.div``;
 
-const StepName = styled.span`
+const Name = styled.span`
   display: block;
   color: ${props => props.theme.colors.black};
   text-align: left;

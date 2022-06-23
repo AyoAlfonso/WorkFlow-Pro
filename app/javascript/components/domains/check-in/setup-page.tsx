@@ -7,22 +7,66 @@ import { RoleNormalUser } from "~/lib/constants";
 import { Label } from "~/components/shared/input";
 import { MultiEntitySelectionDropdownList } from "./components/multi-entity-select";
 import { Responses } from "./components/checkin-responses";
+import { ParticipantsProps } from "./checkin-builder-layout";
 
-export const SetupPage = (): JSX.Element => {
-  const [teams, setTeams] = useState<Array<any>>([]);
-  const [company, setCompany] = useState(null);
-  const [companyUsers, setCompanyUsers] = useState<Array<any>>([]);
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [responseViewers, setResponseViewers] = useState("All Participants");
-  const [anonymousResponse, setAnonymousResponse] = useState(false);
-  const [selectedResponseItems, setSelectedResponseItems] = useState([]);
-  const [cadence, setCadence] = useState<string>("Every Weekday");
-  const [checkinTime, setCheckinTime] = useState<string>("09:00 AM");
-  const [checkinDay, setCheckinDay] = useState<string>("Monday");
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [timezone, setTimeZone] = useState("userTimeZone");
-  const [reminderUnit, setReminderUnit] = useState("Hour(s)");
-  const [reminderValue, setReminderValue] = useState("1");
+interface SetupPageProps {
+  selectedItems: Array<ParticipantsProps>;
+  setSelectedItems: React.Dispatch<React.SetStateAction<Array<ParticipantsProps>>>;
+  setResponseViewers: React.Dispatch<React.SetStateAction<string>>;
+  responseViewers: string;
+  cadence: string;
+  setCadence: React.Dispatch<React.SetStateAction<string>>;
+  checkinTime: string;
+  setCheckinTime: React.Dispatch<React.SetStateAction<string>>;
+  checkinDay: string;
+  setCheckinDay: React.Dispatch<React.SetStateAction<string>>;
+  timezone: string;
+  setTimezone: React.Dispatch<React.SetStateAction<string>>;
+  reminderUnit: string;
+  setReminderUnit: React.Dispatch<React.SetStateAction<string>>;
+  selectedDate: Date;
+  setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
+  anonymousResponse: boolean;
+  setAnonymousResponse: React.Dispatch<React.SetStateAction<boolean>>;
+  reminderValue: string;
+  setReminderValue: React.Dispatch<React.SetStateAction<string>>;
+  selectedResponseItems: Array<ParticipantsProps>;
+  setSelectedResponseItems: React.Dispatch<React.SetStateAction<Array<ParticipantsProps>>>;
+}
+
+export const SetupPage = ({
+  selectedItems,
+  setSelectedItems,
+  responseViewers,
+  setResponseViewers,
+  cadence,
+  setCadence,
+  checkinTime,
+  setCheckinTime,
+  checkinDay,
+  setCheckinDay,
+  timezone,
+  setTimezone,
+  reminderUnit,
+  setReminderUnit,
+  selectedDate,
+  setSelectedDate,
+  anonymousResponse,
+  setAnonymousResponse,
+  reminderValue,
+  setReminderValue,
+  selectedResponseItems,
+  setSelectedResponseItems,
+}: SetupPageProps): JSX.Element => {
+  const [teams, setTeams] = useState<Array<ParticipantsProps>>([]);
+  const [company, setCompany] = useState<ParticipantsProps>({
+    id: 0,
+    name: "",
+    type: "",
+    defaultAvatarColor: "",
+    avatarUrl: "",
+  });
+  const [companyUsers, setCompanyUsers] = useState<Array<ParticipantsProps>>([]);
 
   const { userStore, teamStore, companyStore, sessionStore } = useMst();
   const currentUser = sessionStore.profile;
@@ -118,7 +162,7 @@ export const SetupPage = (): JSX.Element => {
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
           timezone={timezone}
-          setTimezone={setTimeZone}
+          setTimezone={setTimezone}
           reminderUnit={reminderUnit}
           setReminderUnit={setReminderUnit}
           reminderValue={reminderValue}
@@ -129,9 +173,9 @@ export const SetupPage = (): JSX.Element => {
         <SectionHeader>Responses</SectionHeader>
         <Responses
           setResponseViewers={setResponseViewers}
+          responseViewers={responseViewers}
           anonymousResponse={anonymousResponse}
           setAnonymousResponse={setAnonymousResponse}
-          responseViewers={responseViewers}
         />
         {responseViewers == "Custom" && (
           <MultiEntitySelectionDropdownList
