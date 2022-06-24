@@ -21,11 +21,11 @@ export const RallyingCry = ({ rallyingCry }: IRallyingCryProps): JSX.Element => 
 
   return (
     <VisionContainer>
-      <VisionTitle>{t("company.rallyingCry")}</VisionTitle>
+      <VisionTitle>{t<string>("company.rallyingCry")}</VisionTitle>
       <ContentEditableContainer>
         <StyledContentEditable
           innerRef={rallyingCryRef}
-          placeholder={t("company.rallyingCryPlaceholder")}
+          placeholder={t<string>("company.rallyingCryPlaceholder")}
           html={rallyingCry}
           disabled={!editable}
           onChange={e => {

@@ -329,7 +329,7 @@ const QuarterSummary = ({
             </>
           )}
           <Text color={greyActive} ml={8} fontSize={12}>
-            {t("scorecards.latestWeekComparison")}
+            {t<string>("scorecards.latestWeekComparison")}
           </Text>
         </>
       );
@@ -340,7 +340,7 @@ const QuarterSummary = ({
     <QuarterContainer>
       <Header>This Quarter</Header>
       <Text color={greyActive} fontSize={14} mt={4} mb={9}>
-        {/* {t("scorecards.quarterlyGraphTitle")} */}
+        {/* {t<string>("scorecards.quarterlyGraphTitle")} */}
       </Text>
       <QuarterInfoContainer>
         <StatsContainer>

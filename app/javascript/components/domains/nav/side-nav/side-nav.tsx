@@ -130,6 +130,7 @@ interface INavMenuIconProps {
   disableOnActive?: boolean;
   icon: string;
   showSubMenuIcon?: boolean;
+  children?: React.ReactNode | React.ReactNode[];
 }
 
 const NavMenuIcon: React.FunctionComponent<INavMenuIconProps> = ({
@@ -262,7 +263,7 @@ export const SideNavNoMst = (
             icon={"Team"}
             currentPathName={currentPathName}
           >
-            {t("navigation.team")}
+            {t<string>("navigation.team")}
           </StyledNavLinkChildrenActive>
         );
       case 1:
@@ -272,7 +273,7 @@ export const SideNavNoMst = (
             icon={"Team"}
             currentPathName={currentPathName}
           >
-            {t("navigation.team")}
+            {t<string>("navigation.team")}
           </StyledNavLinkChildrenActive>
         );
       default:
@@ -285,7 +286,7 @@ export const SideNavNoMst = (
                 disableOnActive={false}
                 showSubMenuIcon={true}
               >
-                {t("navigation.team")}
+                {t<string>("navigation.team")}
               </NavMenuIcon>
             }
             navOpen={teamNavChildOpen}
@@ -331,7 +332,7 @@ export const SideNavNoMst = (
             icon={"Team"}
             currentPathName={currentPathName}
           >
-            {t("navigation.meeting")}
+            {t<string>("navigation.meeting")}
           </StyledProgrammaticLinkChildrenActive>
         );
       default:
@@ -339,7 +340,7 @@ export const SideNavNoMst = (
           <SideNavChildPopup
             trigger={
               <NavMenuIcon icon={"Team"} active={false} disableOnActive={false}>
-                {t("navigation.meeting")}
+                {t<string>("navigation.meeting")}
               </NavMenuIcon>
             }
             navOpen={startMeetingNavChildOpen}
@@ -382,7 +383,7 @@ export const SideNavNoMst = (
 
       {/* {company && showPyn ? (
         <StyledNavLinkChildrenActive to="/" icon={"Planner"} currentPathName={currentPathName}>
-          {t("navigation.planner")}
+          {t<string>("navigation.planner")}
         </StyledNavLinkChildrenActive>
       ) : (
         <StyledNavLinkChildrenActive
@@ -390,13 +391,13 @@ export const SideNavNoMst = (
           icon={"Planner"}
           currentPathName={currentPathName}
         >
-          {t("navigation.planner")}
+          {t<string>("navigation.planner")}
         </StyledNavLinkChildrenActive>
       )} */}
 
       {showPyn && (
         <StyledNavLinkChildrenActive to="/" icon={"Planner"} currentPathName={currentPathName}>
-          {t("navigation.planner")}
+          {t<string>("navigation.planner")}
         </StyledNavLinkChildrenActive>
       )}
 
@@ -406,7 +407,7 @@ export const SideNavNoMst = (
           icon={"Team"}
           currentPathName={currentPathName}
         >
-          {t("navigation.team")}
+          {t<string>("navigation.team")}
         </StyledNavLinkChildrenActive>
       )} */}
 
@@ -418,17 +419,13 @@ export const SideNavNoMst = (
         <> </>
       )}
 
-
-  
-
-
       {/* {company && showGoal ? (
         <StyledNavLinkChildrenActive
           to="/goals"
           icon={"New-Goals"}
           currentPathName={currentPathName}
         >
-          {t("navigation.goals")}
+          {t<string>("navigation.goals")}
         </StyledNavLinkChildrenActive>
       ) : (
         <StyledNavLinkChildrenActive
@@ -436,7 +433,7 @@ export const SideNavNoMst = (
           icon={"New-Goals"}
           currentPathName={currentPathName}
         >
-          {t("navigation.goals")}
+          {t<string>("navigation.goals")}
         </StyledNavLinkChildrenActive>
       )} */}
 
@@ -446,7 +443,7 @@ export const SideNavNoMst = (
           icon={"New-Goals"}
           currentPathName={currentPathName}
         >
-          {t("navigation.goals")}
+          {t<string>("navigation.goals")}
         </StyledNavLinkChildrenActive>
       )}
 
@@ -456,7 +453,7 @@ export const SideNavNoMst = (
           icon={"Scorecard_New"}
           currentPathName={currentPathName}
         >
-          {t("navigation.scorecards")}
+          {t<string>("navigation.scorecards")}
         </StyledNavLinkChildrenActive>
       ) : (
         <></>
@@ -465,7 +462,7 @@ export const SideNavNoMst = (
         //   icon={"Scorecard_New"}
         //   currentPathName={currentPathName}
         // >
-        //   {t("navigation.scorecards")}
+        //   {t<string>("navigation.scorecards")}
         // </StyledNavLinkChildrenActive>
       )}
 
@@ -475,7 +472,7 @@ export const SideNavNoMst = (
           // to={`/weekly-check-in/${userId}/${getWeekOf()}`}
           icon={"Check-in-page"}
         >
-          {t("navigation.checkin")}
+          {t<string>("navigation.checkin")}
         </StyledNavLinkChildrenActive>
       ) : (
         <></>
@@ -484,7 +481,7 @@ export const SideNavNoMst = (
         //   icon={"Check-in-page"}
         //   currentPathName={currentPathName}
         // >
-        //   {t("navigation.checkin")}
+        //   {t<string>("navigation.checkin")}
         // </StyledNavLinkChildrenActive>
       )}
 
@@ -503,7 +500,7 @@ export const SideNavNoMst = (
               disableOnActive={false}
               showSubMenuIcon={true}
             >
-              {t("navigation.company")}
+              {t<string>("navigation.company")}
             </NavMenuIcon>
           }
           navOpen={companyNavChildOpen}
@@ -512,7 +509,7 @@ export const SideNavNoMst = (
         >
           <SideNavChildLink
             to="/company/accountability"
-            linkText={t("company.accountabilityChart")}
+            linkText={t<string>("company.accountabilityChart")}
           />
           {/* <SideNavChildLink to="/company/strategic_plan" linkText={`The ${company.name} Plan`} /> */}
           <SideNavChildLink

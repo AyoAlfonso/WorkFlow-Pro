@@ -104,13 +104,13 @@ export const InitiativeHeader = ({
       {item.closedAt && (
         <ClosedStatusBannerContainer>
           {itemType == "quarterlyGoal"
-            ? t("quarterlyGoal.cardClosed", {
+            ? t<string>("quarterlyGoal.cardClosed", {
                 title: sessionStore.companyStaticData[1].value,
               })
-            : t("subInitiative.cardClosed", {
+            : t<string>("subInitiative.cardClosed", {
                 title: sessionStore.companyStaticData[2].value,
               })}
-          . {t("quarterlyGoal.createdOn")} {moment(item.createdAt).format("MMM Do, YYYY")}.
+          . {t<string>("quarterlyGoal.createdOn")} {moment(item.createdAt).format("MMM Do, YYYY")}.
           <AnnualInitiativeActionContainer>
             <DropdownOptions
               editable={editable}
@@ -193,6 +193,10 @@ export const InitiativeHeader = ({
   );
 };
 
+type ClosedStatusBannerContainerProps = {
+  children?: React.ReactNode | React.ReactNode[];
+};
+
 const HeaderContainer = styled.div`
   margin-bottom: 24px;
 `;
@@ -265,7 +269,7 @@ const YearText = styled(Text)`
   white-space: nowrap;
 `;
 
-const ClosedStatusBannerContainer = styled.div`
+const ClosedStatusBannerContainer = styled.div<ClosedStatusBannerContainerProps>`
   background-image: repeating-linear-gradient(
     150deg,
     #feecea,

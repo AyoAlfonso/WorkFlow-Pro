@@ -313,11 +313,15 @@ export const AnnualInitiativeModalContent = memo(
               {editable && (
                 <CreateGoalContainer>
                   <CreateGoalSection
-                    placeholder={t("quarterlyGoal.enterTitle", { title: quarterlyGoalTitle })}
-                    addButtonText={`${t("quarterlyGoal.add", { title: quarterlyGoalTitle })} (Q${
-                      companyStore.company.quarterForCreatingQuarterlyGoals
-                    })`}
-                    createButtonText={t("quarterlyGoal.addGoal", { title: quarterlyGoalTitle })}
+                    placeholder={t<string>("quarterlyGoal.enterTitle", {
+                      title: quarterlyGoalTitle,
+                    })}
+                    addButtonText={`${t<string>("quarterlyGoal.add", {
+                      title: quarterlyGoalTitle,
+                    })} (Q${companyStore.company.quarterForCreatingQuarterlyGoals})`}
+                    createButtonText={t<string>("quarterlyGoal.addGoal", {
+                      title: quarterlyGoalTitle,
+                    })}
                     showCreateGoal={showCreateQuarterlyGoal}
                     setShowCreateGoal={setShowCreateQuarterlyGoal}
                     createAction={quarterlyGoalStore.create}
@@ -359,10 +363,10 @@ export const AnnualInitiativeModalContent = memo(
         <>
           {annualInitiative.closedAt && (
             <ClosedStatusBannerContainer>
-              {t("annualInitiative.cardClosed", {
+              {t<string>("annualInitiative.cardClosed", {
                 title: sessionStore.companyStaticData[0].value,
               })}
-              . {t("annualInitiative.createdOn")} {`FY${annualInitiative.fiscalYear}`}.
+              . {t<string>("annualInitiative.createdOn")} {`FY${annualInitiative.fiscalYear}`}.
               <AnnualInitiativeActionContainer>
                 {renderDropdownOptions()}
                 <CloseIconContainer onClick={() => setAnnualInitiativeModalOpen(false)}>

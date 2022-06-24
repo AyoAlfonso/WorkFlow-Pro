@@ -66,6 +66,7 @@ import { CheckInBuilderLayout } from "./domains/check-in/checkin-builder-layout"
 import { CheckinInsights } from "./domains/check-in/checkin-insights";
 import CheckinInsightsIndex from "./domains/check-in/checkin-insights-index";
 
+import { UpdateProfileForm } from "./domains/user/update-profile-form";
 const Container = styled.div`
   margin-left: 136px;
   margin-right: 40px;
@@ -233,7 +234,15 @@ export const App = observer(
             <GlobalStyles />
             <Toaster position="bottom-right" />
             {loggedIn ? (
-              profile && profile.currentCompanyOnboarded ? (
+              (profile.provider && !profile.lastName) || !profile.firstName ? (
+                <Route
+                  exact
+                  path={"/"}
+                  render={() => {
+                    return <UpdateProfileForm />;
+                  }}
+                />
+              ) : profile && profile.currentCompanyOnboarded ? (
                 <Switch>
                   <Route
                     exact

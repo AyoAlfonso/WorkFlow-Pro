@@ -9,7 +9,7 @@ export const TodaysPrioritiesContainer = (): JSX.Element => {
 
   return (
     <TodayPrioritiesHeaderContainer>
-      <ContainerHeaderWithText text={t("keyActivities.prioritiesTitle")} />
+      <ContainerHeaderWithText text={t<string>("keyActivities.prioritiesTitle")} />
       <TodaysPrioritiesBody />
     </TodayPrioritiesHeaderContainer>
   );

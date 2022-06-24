@@ -88,7 +88,7 @@ export const JournalBody = observer(
           {...defaultJournalButtonProps}
           iconName={"AM-Check-in"}
           iconColor={"cautionYellow"}
-          text={t("journals.createMyDay")}
+          text={t<string>("journals.createMyDay")}
           onClick={() => {
             if (todaysDateFull !== selectedDateFilter) {
               meetingStore.createPersonalDailyMeeting().then(({ meeting }) => {
@@ -106,7 +106,7 @@ export const JournalBody = observer(
             {...defaultJournalButtonProps}
             iconName={"AM-Check-in"}
             iconColor={"cautionYellow"}
-            text={t("journals.createMyDay")}
+            text={t<string>("journals.createMyDay")}
             onClick={() =>
               setQuestionnaireVariant(QuestionnaireTypeConstants.createMyDay, selectedDateFilter)
             }
@@ -116,7 +116,7 @@ export const JournalBody = observer(
             {...defaultJournalButtonProps}
             iconName={"PM-Check-in"}
             iconColor={"primary40"}
-            text={t("journals.eveningReflection")}
+            text={t<string>("journals.eveningReflection")}
             onClick={() =>
               setQuestionnaireVariant(
                 QuestionnaireTypeConstants.eveningReflection,
@@ -130,7 +130,7 @@ export const JournalBody = observer(
               {...defaultJournalButtonProps}
               iconName={"Weekly"}
               iconColor={"primaryActive"}
-              text={t("journals.weeklyReflection")}
+              text={t<string>("journals.weeklyReflection")}
               onClick={() =>
                 setQuestionnaireVariant(
                   QuestionnaireTypeConstants.weeklyReflection,
@@ -145,7 +145,7 @@ export const JournalBody = observer(
               {...defaultJournalButtonProps}
               iconName={"EoM"}
               iconColor={"fuschiaBlue"}
-              text={t("journals.monthlyReflection")}
+              text={t<string>("journals.monthlyReflection")}
               onClick={() =>
                 setQuestionnaireVariant(
                   QuestionnaireTypeConstants.monthlyReflection,
@@ -155,7 +155,7 @@ export const JournalBody = observer(
               disabled={loading}
             />
           )}
-          <FooterText color={"greyActive"}>{t("journals.footer")}</FooterText>
+          <FooterText color={"greyActive"}>{t<string>("journals.footer")}</FooterText>
         </ButtonContainer>
       </AccordionDetailsContainer>
     );

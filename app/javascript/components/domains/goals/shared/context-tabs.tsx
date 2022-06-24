@@ -258,7 +258,7 @@ export const ContextTabs = observer(
                 open={showTooltip}
                 enterDelay={500}
                 leaveDelay={200}
-                title={<span>{t("keyElement.dateToolTip")}</span>}
+                title={<span>{t<string>("keyElement.dateToolTip")}</span>}
               >
                 <DateDiv
                   onMouseEnter={() => {

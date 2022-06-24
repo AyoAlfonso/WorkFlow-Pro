@@ -238,7 +238,7 @@ export const TeamOverview = observer(
                 borderBottomWidth: "1px",
               }}
             >
-              {t(`${overviewType}.teamSnapshotTitle`)}
+              {t<string>(`${overviewType}.teamSnapshotTitle`)}
             </OverviewTabs>
             {overviewType == "teams" && currentTeam.customScorecard ? (
               <OverviewTabs
@@ -247,7 +247,7 @@ export const TeamOverview = observer(
                   borderBottomWidth: "1px",
                 }}
               >
-                {t(`${overviewType}.customScorecard`)}
+                {t<string>(`${overviewType}.customScorecard`)}
               </OverviewTabs>
             ) : (
               <></>
@@ -261,27 +261,27 @@ export const TeamOverview = observer(
           )}
         </LeftContainer>
         <ToolsWrapper>
-          <ToolsHeader type={"h2"}>{t("tools.title")}</ToolsHeader>
+          <ToolsHeader type={"h2"}>{t<string>("tools.title")}</ToolsHeader>
           <StyledOverviewAccordion expanded={false} onChange={handleToolsChange("")} elevation={0}>
             {overviewType === "teams" && (
               <FutureTeamMeetingsContainer
-                titleText={t(`${overviewType}.teamMeetingsTitle`)}
+                titleText={t<string>(`${overviewType}.teamMeetingsTitle`)}
                 buttonText={"Team Meeting"}
                 handleMeetingClick={handleMeetingClick}
               />
             )}
             {overviewType === "forum" && (
               <FutureTeamMeetingsContainer
-                titleText={t(`${overviewType}.teamMeetingsTitle`)}
-                buttonText={t("forum.forumMeeting")}
+                titleText={t<string>(`${overviewType}.teamMeetingsTitle`)}
+                buttonText={t<string>("forum.forumMeeting")}
                 handleMeetingClick={handleForumMeetingClick}
               />
             )}
           </StyledOverviewAccordion>
           {overviewType === "forum" && (
             <TeamForumManagementContainer
-              titleText={t(`${overviewType}.teamMeetingsTitle`)}
-              buttonText={t("forum.scheduledTopics")}
+              titleText={t<string>(`${overviewType}.teamMeetingsTitle`)}
+              buttonText={t<string>("forum.scheduledTopics")}
               handleMeetingClick={handleMeetingManagementClick}
               useIcon={false}
             />
@@ -289,8 +289,8 @@ export const TeamOverview = observer(
 
           {overviewType === "forum" && (
             <TeamForumManagementContainer
-              titleText={t(`${overviewType}.teamMeetingsTitle`)}
-              buttonText={t("forum.topicsVault")}
+              titleText={t<string>(`${overviewType}.teamMeetingsTitle`)}
+              buttonText={t<string>("forum.topicsVault")}
               handleMeetingClick={handleForumTopicsClick}
               useIcon={false}
             />
@@ -298,8 +298,8 @@ export const TeamOverview = observer(
 
           {overviewType === "forum" && (
             <TeamForumManagementContainer
-              titleText={t(`${overviewType}.teamMeetingsTitle`)}
-              buttonText={t("forum.meetingManagement")}
+              titleText={t<string>(`${overviewType}.teamMeetingsTitle`)}
+              buttonText={t<string>("forum.meetingManagement")}
               handleMeetingClick={handleMeetingAgendaNotesClick}
               useIcon={false}
             />
@@ -313,7 +313,7 @@ export const TeamOverview = observer(
             >
               <TeamIssuesContainer
                 teamId={team_id}
-                title={t(`${overviewType}.teamIssuesTitle`)}
+                title={t<string>(`${overviewType}.teamIssuesTitle`)}
                 expanded={expanded}
                 handleChange={handleToolsChange}
               />
@@ -328,7 +328,7 @@ export const TeamOverview = observer(
             >
               <TeamPulsePanel
                 team={currentTeam}
-                title={t(`${overviewType}.teamsPulseTitle`)}
+                title={t<string>(`${overviewType}.teamsPulseTitle`)}
                 expanded={expanded}
                 handleChange={handleToolsChange}
               />

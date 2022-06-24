@@ -145,14 +145,16 @@ export const Objectives = observer(
     return (
       <StretchContainer>
         <HeaderContainer>
-          <HeaderText>{t("profile.objectives.header")}</HeaderText>
+          <HeaderText>{t<string>("profile.objectives.header")}</HeaderText>
         </HeaderContainer>
         <Section>
-          <SubHeader>{t("profile.objectives.general.header")}</SubHeader>
+          <SubHeader>{t<string>("profile.objectives.general.header")}</SubHeader>
           <LayoutOptions>
-            <Label htmlFor="objectives_page_layout">{t("company.objectivesPageLayout")}</Label>
+            <Label htmlFor="objectives_page_layout">
+              {t<string>("company.objectivesPageLayout")}
+            </Label>
             <LayoutOptionContainer>
-              <LayoutOptionText>{t("company.layoutOptions.coreFour")}</LayoutOptionText>
+              <LayoutOptionText>{t<string>("company.layoutOptions.coreFour")}</LayoutOptionText>
               <FormGroup row>
                 <Switch
                   checked={showCoreFour}
@@ -174,7 +176,9 @@ export const Objectives = observer(
               </FormGroup>
             </LayoutOptionContainer>
             <LayoutOptionContainer>
-              <LayoutOptionText>{t("company.layoutOptions.personalGoals")}</LayoutOptionText>
+              <LayoutOptionText>
+                {t<string>("company.layoutOptions.personalGoals")}
+              </LayoutOptionText>
               <FormGroup row>
                 <Switch
                   checked={showPersonalGoals}
@@ -185,7 +189,7 @@ export const Objectives = observer(
               </FormGroup>
             </LayoutOptionContainer>
           </LayoutOptions>
-          <Label htmlFor="rallying">{t("company.rallyingCry")}</Label>
+          <Label htmlFor="rallying">{t<string>("company.rallyingCry")}</Label>
           <Input
             name="rallyingCry"
             onChange={e => {
@@ -195,9 +199,11 @@ export const Objectives = observer(
           />
         </Section>
         <Section>
-          <SubHeader>{t("profile.objectives.statusUpdate.header")}</SubHeader>
+          <SubHeader>{t<string>("profile.objectives.statusUpdate.header")}</SubHeader>
           <>
-            <Label htmlFor="objectives_key_type">{t("profile.objectives.statusUpdate.type")}</Label>
+            <Label htmlFor="objectives_key_type">
+              {t<string>("profile.objectives.statusUpdate.type")}
+            </Label>
             <Select
               onChange={e => {
                 e.preventDefault();
@@ -218,8 +224,8 @@ export const Objectives = observer(
           </>
         </Section>
         <Section>
-          <SubHeader>{t("profile.objectives.coreFour.header")}</SubHeader>
-          <WYSIWYGLabel htmlFor="core1Content">{t("core.core1")}</WYSIWYGLabel>
+          <SubHeader>{t<string>("profile.objectives.coreFour.header")}</SubHeader>
+          <WYSIWYGLabel htmlFor="core1Content">{t<string>("core.core1")}</WYSIWYGLabel>
           <ReactQuill
             className="custom-trix-class"
             theme="snow"
@@ -231,7 +237,7 @@ export const Objectives = observer(
             onChange={setCore1Content}
           />
 
-          <WYSIWYGLabel htmlFor="core_2">{t("core.core2")}</WYSIWYGLabel>
+          <WYSIWYGLabel htmlFor="core_2">{t<string>("core.core2")}</WYSIWYGLabel>
           <ReactQuill
             className="custom-trix-class"
             theme="snow"
@@ -243,7 +249,7 @@ export const Objectives = observer(
             onChange={setCore2Content}
           />
 
-          <WYSIWYGLabel htmlFor="core_3">{t("core.core3")}</WYSIWYGLabel>
+          <WYSIWYGLabel htmlFor="core_3">{t<string>("core.core3")}</WYSIWYGLabel>
           <ReactQuill
             className="custom-trix-class"
             theme="snow"
@@ -255,7 +261,7 @@ export const Objectives = observer(
             onChange={setCore3Content}
           />
 
-          <WYSIWYGLabel htmlFor="core_4">{t("core.core4")}</WYSIWYGLabel>
+          <WYSIWYGLabel htmlFor="core_4">{t<string>("core.core4")}</WYSIWYGLabel>
           <ReactQuill
             className="custom-trix-class"
             theme="snow"
@@ -268,7 +274,7 @@ export const Objectives = observer(
           />
         </Section>
         <Section>
-          <SubHeader>{t("profile.objectives.terminology.header")}</SubHeader>
+          <SubHeader>{t<string>("profile.objectives.terminology.header")}</SubHeader>
           <CompanyStaticDataSection>
             <CompanyStaticDataArea>
               <Label htmlFor="annualInitiative">Annual Objective</Label>
@@ -313,7 +319,7 @@ export const Objectives = observer(
               marginRight: "24px",
             }}
           >
-            {t("general.save")}
+            {t<string>("general.save")}
           </Button>
         </SaveButtonContainer>
       </StretchContainer>

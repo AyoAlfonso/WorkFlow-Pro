@@ -101,8 +101,8 @@ export const WeeklyMilestones = observer(
           <>{renderMilestones()}</>
         ) : (
           <EmptyState
-            heading={t("weeklyCheckIn.milestones.emptyText")}
-            infoText={t("weeklyCheckIn.milestones.create")}
+            heading={t<string>("weeklyCheckIn.milestones.emptyText")}
+            infoText={t<string>("weeklyCheckIn.milestones.create")}
           />
         )}
       </>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_29_193153) do
+ActiveRecord::Schema.define(version: 2022_06_21_194226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -113,6 +113,17 @@ ActiveRecord::Schema.define(version: 2022_05_29_193153) do
     t.text "description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.jsonb "participants"
+    t.boolean "anonymous"
+    t.datetime "run_once"
+    t.string "tag", default: [], array: true
+    t.jsonb "date_time_config"
+    t.integer "time_zone", default: 0
+    t.jsonb "reminder"
+    t.integer "owner_type", default: 0
+    t.jsonb "viewers"
+    t.bigint "company_id"
+    t.index ["company_id"], name: "index_check_in_templates_on_company_id"
   end
 
   create_table "check_in_templates_steps", force: :cascade do |t|
@@ -169,6 +180,7 @@ ActiveRecord::Schema.define(version: 2022_05_29_193153) do
     t.jsonb "preferences", default: {}, null: false
     t.datetime "deleted_at"
     t.integer "organisational_forum_type"
+    t.text "sso_emails_embed"
     t.index ["deleted_at"], name: "index_companies_on_deleted_at"
     t.index ["preferences"], name: "index_companies_on_preferences", where: "(deleted_at IS NULL)"
   end
@@ -346,27 +358,28 @@ ActiveRecord::Schema.define(version: 2022_05_29_193153) do
     t.string "description"
     t.datetime "closed_at"
     t.bigint "created_by_id"
+    t.bigint "user_id"
+    t.bigint "company_id"
+    t.bigint "team_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.date "fiscal_year_start"
-    t.date "week_of"
-    t.integer "unit_type", default: 0
-    t.integer "status", default: 0
+    t.integer "unit_type"
+    t.integer "target_value", default: 0
     t.boolean "is_deleted", default: false
     t.boolean "greater_than", default: true
     t.jsonb "viewers"
     t.bigint "owned_by_id"
     t.float "needs_attention_threshold"
-    t.float "target_value"
     t.string "title"
     t.integer "parent_type"
     t.integer "parent_kpi", default: [], array: true
-    t.bigint "company_id"
     t.datetime "deleted_at"
     t.index ["company_id"], name: "index_key_performance_indicators_on_company_id", where: "(deleted_at IS NULL)"
     t.index ["created_by_id"], name: "index_key_performance_indicators_on_created_by_id", where: "(deleted_at IS NULL)"
     t.index ["deleted_at"], name: "index_key_performance_indicators_on_deleted_at"
     t.index ["owned_by_id"], name: "index_key_performance_indicators_on_owned_by_id", where: "(deleted_at IS NULL)"
+    t.index ["team_id"], name: "index_key_performance_indicators_on_team_id"
+    t.index ["user_id"], name: "index_key_performance_indicators_on_user_id"
   end
 
   create_table "meeting_templates", force: :cascade do |t|
@@ -802,6 +815,9 @@ ActiveRecord::Schema.define(version: 2022_05_29_193153) do
   add_foreign_key "key_activities", "companies"
   add_foreign_key "key_activities", "meetings"
   add_foreign_key "key_activities", "users"
+  add_foreign_key "key_performance_indicators", "companies"
+  add_foreign_key "key_performance_indicators", "teams"
+  add_foreign_key "key_performance_indicators", "users"
   add_foreign_key "meetings", "meeting_templates"
   add_foreign_key "meetings", "teams"
   add_foreign_key "meetings", "users", column: "hosted_by_id"

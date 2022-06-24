@@ -80,8 +80,8 @@ export const KpiComponent = observer(
         <>
           {!kpis.length ? (
             <EmptyState
-              heading={t("weeklyCheckIn.kpi.emptyText")}
-              infoText={t("weeklyCheckIn.kpi.create")}
+              heading={t<string>("weeklyCheckIn.kpi.emptyText")}
+              infoText={t<string>("weeklyCheckIn.kpi.create")}
             />
           ) : (
             <>

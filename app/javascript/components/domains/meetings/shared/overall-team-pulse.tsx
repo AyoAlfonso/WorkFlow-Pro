@@ -31,7 +31,7 @@ export const OverallTeamPulse = ({ value }: IOverallTeamPulseProps): JSX.Element
       <RatingContainer>
         <RatingText>{value.toFixed(1)} / 5</RatingText>
       </RatingContainer>
-      <LastSevenDays> {t("company.lastSevenDays")}</LastSevenDays>
+      <LastSevenDays> {t<string>("company.lastSevenDays")}</LastSevenDays>
     </Container>
   );
 };

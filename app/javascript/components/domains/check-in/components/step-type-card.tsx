@@ -119,8 +119,8 @@ export const StepTypeCard = observer(
           <Icon icon={iconName} size="64px" iconColor={iconColor} />
         </IconContainer>
         <TextContainer>
-          <Name>{t(`${formattedStepName}`)}</Name>
-          <Description>{t(`${description}`)}</Description>
+          <Name>{t<string>(`${formattedStepName}`)}</Name>
+          <Description>{t<string>(`${description}`)}</Description>
         </TextContainer>
       </Container>
     );

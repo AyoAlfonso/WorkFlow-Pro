@@ -23,7 +23,7 @@ export const SelectedMeetingNotes = observer(({ selectedMeetingId }: ISelectedMe
   return (
     <Container>
       <NotesHeader>
-        <Heading type={"h4"}>{t("meeting.sideOptions.notes")}</Heading>
+        <Heading type={"h4"}>{t<string>("meeting.sideOptions.notes")}</Heading>
       </NotesHeader>
       <Notes meeting={selectedMeeting} height={"550px"} hideSideBorders={true} />
     </Container>

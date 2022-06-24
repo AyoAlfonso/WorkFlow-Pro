@@ -139,10 +139,10 @@ export const Section1ForumMeetings = observer(
           </YearPlanContainer>
           <ForumSectionContainer>
             <ColumnContainer>
-              <SubHeaderText>{t("forum.explorationTopic.whoTitle")}</SubHeaderText>
+              <SubHeaderText>{t<string>("forum.explorationTopic.whoTitle")}</SubHeaderText>
             </ColumnContainer>
             <ColumnContainer>
-              <SubHeaderText>{t("forum.explorationTopic.topicTitle")}</SubHeaderText>
+              <SubHeaderText>{t<string>("forum.explorationTopic.topicTitle")}</SubHeaderText>
             </ColumnContainer>
           </ForumSectionContainer>
         </SubHeaderContainer>

@@ -59,9 +59,9 @@ export const GoalDropdownOptions = ({
     if (itemType == "annualInitiative") {
       if (
         confirm(
-          `Are you sure you want to close this ${t("annualInitiative.messageText", {
+          `Are you sure you want to close this ${t<string>("annualInitiative.messageText", {
             title: annualInitiativeTitle,
-          })}? Closing an Annual Objective will result in closing all of the related ${t(
+          })}? Closing an Annual Objective will result in closing all of the related ${t<string>(
             "quarterlyGoal.messageText",
             {
               title: quarterlyGoalTitle,
@@ -76,7 +76,7 @@ export const GoalDropdownOptions = ({
     } else if (itemType == "quarterlyGoal") {
       if (
         confirm(
-          `Are you sure you want to close this ${t("quarterlyGoal.messageText", {
+          `Are you sure you want to close this ${t<string>("quarterlyGoal.messageText", {
             title: quarterlyGoalTitle,
           })}`,
         )
@@ -88,7 +88,7 @@ export const GoalDropdownOptions = ({
     } else if (itemType == "subInitiative") {
       if (
         confirm(
-          `Are you sure you want to close this ${t("subInitiative.messageText", {
+          `Are you sure you want to close this ${t<string>("subInitiative.messageText", {
             title: subInitiativeTitle,
           })}`,
         )
@@ -105,7 +105,7 @@ export const GoalDropdownOptions = ({
       if (quarter < 4) {
         if (
           confirm(
-            `Are you sure you want to duplicate this ${t("quarterlyGoal.messageText", {
+            `Are you sure you want to duplicate this ${t<string>("quarterlyGoal.messageText", {
               title: quarterlyGoalTitle,
             })}?`,
           )
@@ -115,7 +115,7 @@ export const GoalDropdownOptions = ({
           });
 
           quarterlyGoalStore.closeGoal(itemId).then(() => {
-          closeModal();
+            closeModal();
           });
           setShowDropdownOptions(false);
         }
@@ -128,13 +128,13 @@ export const GoalDropdownOptions = ({
 
   const closeAndDuplicateQuarterly = () => {
     duplicateQuarterly();
-  }
+  };
 
   const deleteInitiative = () => {
     if (itemType == "annualInitiative") {
       if (
         confirm(
-          `Are you sure you want to delete this ${t("annualInitiative.messageText", {
+          `Are you sure you want to delete this ${t<string>("annualInitiative.messageText", {
             title: annualInitiativeTitle,
           })}`,
         )
@@ -170,7 +170,7 @@ export const GoalDropdownOptions = ({
     }
   };
 
-  if ((itemType == "quarterlyGoal") && quarter) {
+  if (itemType == "quarterlyGoal" && quarter) {
     return (
       <Container ref={optionsRef}>
         <OptionContainer onClick={() => closeInitiative()}>
@@ -180,10 +180,14 @@ export const GoalDropdownOptions = ({
           <OptionText> Close {itemText} </OptionText>
         </OptionContainer>
         <OptionContainer onClick={() => closeAndDuplicateQuarterly()}>
-         <IconContainer>
-           <StyledIcon icon={"Duplicate"} size={"15px"} />
-         </IconContainer>
-         <OptionText> {"Carry Over to Q"}{quarterText()}</OptionText>
+          <IconContainer>
+            <StyledIcon icon={"Duplicate"} size={"15px"} />
+          </IconContainer>
+          <OptionText>
+            {" "}
+            {"Carry Over to Q"}
+            {quarterText()}
+          </OptionText>
         </OptionContainer>
         <OptionContainer onClick={() => deleteInitiative()}>
           <IconContainer>

@@ -12,7 +12,8 @@ import { useTranslation } from "react-i18next";
 import { sortByPosition } from "~/utils/sorting";
 import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities/key-activity-record";
 import { Teams } from "../account/teams";
-import { KeyActivitiesList } from "./key-activities-list";
+import { MobileKeyActivitiesList } from "./mobile-key-activities-list";
+
 import { toJS } from "mobx";
 
 interface IMobileKeyActivitiesBodyProps {
@@ -33,13 +34,18 @@ export const MobileKeyActivitiesBody = observer(
     const [showCompletedItems, setShowCompletedItems] = useState<boolean>(false);
     const [currentList, setCurrentList] = useState<string>(WeeklyMaster ? "Weekly List" : "Today");
     const [currentTeamId, setCurrentTeamId] = useState<number>(null);
+    const [loading, setLoading] = useState<boolean>(true);
 
     const listRef = useRef<HTMLDivElement>(null);
+    
+    const selectedFilterGroupId = sessionStore.getScheduledGroupIdByName(currentList);
+    const droppableId = `scheduled-group-activities-${selectedFilterGroupId}`;
+    const completedKeyActivities = keyActivityStore.completedActivities;
 
     useEffect(() => {
       showCompletedItems
-        ? keyActivityStore.fetchCompleteKeyActivities()
-        : keyActivityStore.fetchIncompleteKeyActivities();
+        ? keyActivityStore.fetchCompleteKeyActivities().then(() => setLoading(false))
+        : keyActivityStore.fetchIncompleteKeyActivities().then(() => setLoading(false));
     }, [showCompletedItems]);
 
     useEffect(() => {
@@ -63,13 +69,7 @@ export const MobileKeyActivitiesBody = observer(
       return () => {
         document.removeEventListener("click", externalEventHandler);
       };
-    }, []);
-
-    const selectedFilterGroupId = sessionStore.getScheduledGroupIdByName(currentList);
-
-    const completedKeyActivities = keyActivityStore.completedActivities;
-
-    const droppableId = `scheduled-group-activities-${selectedFilterGroupId}`;
+    }, [listSelectorOpen]);
 
     const filteredKeyActivities = () => {
       if (showCompletedItems) {
@@ -90,6 +90,7 @@ export const MobileKeyActivitiesBody = observer(
       : currentList === "Backlog"
       ? "Master List"
       : currentList;
+    const currentListOfActivities = filteredKeyActivities();
 
     const renderListSelector = (): JSX.Element => {
       return (
@@ -168,13 +169,15 @@ export const MobileKeyActivitiesBody = observer(
         );
       });
     };
-    const keyActivities = filteredKeyActivities();
+
     const renderKeyActivitiesList = (): JSX.Element => {
       return (
-        <KeyActivitiesList
-          keyActivities={keyActivities}
+        <MobileKeyActivitiesList
+          keyActivities={currentListOfActivities}
           droppableId={droppableId}
           keyActivityStoreLoading={keyActivityStore.loading}
+          mobile={true}
+          loading={loading}
         />
       );
     };
@@ -192,7 +195,7 @@ export const MobileKeyActivitiesBody = observer(
           <AddNewKeyActivityPlus>
             <Icon icon={"Plus"} size={16} iconColor={"primary100"} />
           </AddNewKeyActivityPlus>
-          <AddNewKeyActivityText> {t("keyActivities.addTitle")}</AddNewKeyActivityText>
+          <AddNewKeyActivityText> {t<string>("keyActivities.addTitle")}</AddNewKeyActivityText>
         </AddNewKeyActivityContainer>
         {renderKeyActivitiesList()}
       </Container>

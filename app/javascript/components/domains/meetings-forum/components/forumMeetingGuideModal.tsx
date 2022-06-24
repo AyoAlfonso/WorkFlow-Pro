@@ -100,7 +100,7 @@ export const ForumMeetingGuideModal = ({
             setModalOpen(!modalOpen);
           }}
         >
-          {t("meetingForum.exploration.done")}
+          {t<string>("meetingForum.exploration.done")}
         </StyledButton>
       </ButtonContainer>
     </ModalWithHeader>
@@ -173,7 +173,7 @@ const GuideItemNumber = styled.div<GuideItemNumberType>`
 `;
 
 const GuideHiddenItem = styled.div`
-   margin: 16px 8px;
+  margin: 16px 8px;
   color: white;
   width: 18px;
   display: inline-block;

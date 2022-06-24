@@ -50,8 +50,8 @@ export const HeaderBar = observer(
     const { t } = useTranslation();
     const history = useHistory();
 
-    const mobileNavMenuRef = useRef(null)
-    const profileNavRef = useRef(null)
+    const mobileNavMenuRef = useRef(null);
+    const profileNavRef = useRef(null);
 
     const userId = sessionStore.profile.id;
     const issuesTitle =
@@ -227,7 +227,7 @@ export const HeaderBar = observer(
                     setCreateKeyActivityModalOpen(false);
                   }}
                 >
-                  {`${t("keyActivities.name")}s`}
+                  {`${t<string>("keyActivities.name")}s`}
                 </KeyActivitiesButton>
               </KeyActivitiesButtonContainer>
               <IssuesButtonContainer>

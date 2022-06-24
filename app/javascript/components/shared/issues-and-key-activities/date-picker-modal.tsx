@@ -151,7 +151,7 @@ export const DueDatePickerModal = ({
                 setShowDatePicker(false);
               }}
             >
-              {t("datePicker.clearDate")}
+              {t<string>("datePicker.clearDate")}
             </Button>
           )}
         </DatePickerModalButtonContainer>

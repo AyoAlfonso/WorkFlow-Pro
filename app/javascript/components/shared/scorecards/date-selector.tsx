@@ -51,13 +51,13 @@ export const DueDateSelector = ({
               onClick={() => {
                 setShowDatePicker(!showDatePicker);
               }}
-              dateSelected={!R.isNil(selectedDueDate)}
+              dateSelected={!R.isNil(selectedDueDate) as boolean}
             >
               <Icon icon={"Deadline-Calendar"} iconColor={"inherit"} size={"16px"} mr={"8px"} />
 
               <TextContainer>
-                {R.isNil(selectedDueDate)
-                  ? t("datePicker.dueDate")
+                {(R.isNil(selectedDueDate) as boolean)
+                  ? t<string>("datePicker.dueDate")
                   : moment(selectedDueDate).format("MMM Do, YYYY")}
               </TextContainer>
             </DueDateButtonContainer>

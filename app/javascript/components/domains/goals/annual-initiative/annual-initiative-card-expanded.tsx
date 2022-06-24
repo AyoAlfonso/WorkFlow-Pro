@@ -40,9 +40,9 @@ export const AnnualInitiativeCardExpanded = observer(
     const renderEmptyState = () => {
       return annualInitiative.quarterlyGoals.length <= 0 ? (
         <EmptyStateContainer>
-          <EmptyStateHeader>{t("annualInitiative.emptyHeader")}</EmptyStateHeader>
-          <EmptyStateText>{t("annualInitiative.emptyText")}</EmptyStateText>
-          <EmptyStateCta>{t("annualInitiative.emptyCta")}</EmptyStateCta>
+          <EmptyStateHeader>{t<string>("annualInitiative.emptyHeader")}</EmptyStateHeader>
+          <EmptyStateText>{t<string>("annualInitiative.emptyText")}</EmptyStateText>
+          <EmptyStateCta>{t<string>("annualInitiative.emptyCta")}</EmptyStateCta>
         </EmptyStateContainer>
       ) : null;
     };
@@ -100,11 +100,11 @@ export const AnnualInitiativeCardExpanded = observer(
         return (
           <CreateGoalContainer show={createQuarterlyGoalArea}>
             <CreateGoalSection
-              placeholder={t("quarterlyGoal.enterTitle", { title: quarterlyGoalTitle })}
-              addButtonText={`${t("quarterlyGoal.add", { title: quarterlyGoalTitle })} (Q${
+              placeholder={t<string>("quarterlyGoal.enterTitle", { title: quarterlyGoalTitle })}
+              addButtonText={`${t<string>("quarterlyGoal.add", { title: quarterlyGoalTitle })} (Q${
                 companyStore.company.quarterForCreatingQuarterlyGoals
               })`}
-              createButtonText={t("quarterlyGoal.addGoal", { title: quarterlyGoalTitle })}
+              createButtonText={t<string>("quarterlyGoal.addGoal", { title: quarterlyGoalTitle })}
               showCreateGoal={createQuarterlyGoalArea}
               setShowCreateGoal={setCreateQuarterlyGoalArea}
               createAction={quarterlyGoalStore.create}

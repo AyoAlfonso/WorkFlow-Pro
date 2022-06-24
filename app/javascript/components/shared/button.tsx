@@ -19,10 +19,11 @@ interface IButtonProps extends StyledSystemProps {
   onClick: () => void | void;
   disabled?: boolean;
   small?: boolean;
-  style?: object;
+  style?: any;
   fontOverride?: string;
   color?: any;
   fontSize?: string;
+  children?: React.ReactNode;
   // width?:any
 }
 

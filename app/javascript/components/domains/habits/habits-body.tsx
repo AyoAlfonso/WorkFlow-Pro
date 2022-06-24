@@ -43,7 +43,7 @@ export const HabitsBody = observer(
     const [showIndividualHabit, setShowIndividualHabit] = useState<boolean>(false);
     const [selectedHabitId, setSelectedHabitId] = useState<number>(null);
     const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
-    const [showHabitModal, setShowHabitModal] = useState<boolean>(false)
+    const [showHabitModal, setShowHabitModal] = useState<boolean>(false);
 
     useEffect(() => {
       const handleResize = () => {
@@ -76,9 +76,7 @@ export const HabitsBody = observer(
     ));
 
     const dayDates = daysToRender.map((day, index) => (
-      <HabitsTableHeaderCell key={index}>
-        {moment(day).format("DD")}
-      </HabitsTableHeaderCell>
+      <HabitsTableHeaderCell key={index}>{moment(day).format("DD")}</HabitsTableHeaderCell>
     ));
 
     return showIndividualHabit ? (
@@ -117,7 +115,7 @@ export const HabitsBody = observer(
         <ModalWithHeader
           modalOpen={showHabitModal}
           setModalOpen={setShowHabitModal}
-          headerText={t("profile.habits.new")}
+          headerText={t<string>("profile.habits.new")}
           width={"90%"}
         >
           <HabitsCreateHabitForm onSubmit={() => setShowHabitModal(false)} />

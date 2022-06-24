@@ -93,7 +93,7 @@ export const DateSelector = ({
             mx={"auto"}
             my={"8px"}
           >
-            {t("datePicker.clearDate")}
+            {t<string>("datePicker.clearDate")}
           </Button>
         </>
       </Popup>

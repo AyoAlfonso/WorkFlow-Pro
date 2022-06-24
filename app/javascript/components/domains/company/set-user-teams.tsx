@@ -17,7 +17,7 @@ export const SetUserTeams = ({ teams, setTeams }: ISetUserTeamsProps): JSX.Eleme
   return (
     <MultiSelect
       selections={toJS(teamStore.teams)}
-      label={t("profile.profileUpdateForm.teams")}
+      label={t<string>("profile.profileUpdateForm.teams")}
       selectedOptions={teams}
       setSelectedOptions={setTeams}
       displayFieldName={"name"}

@@ -65,8 +65,8 @@ export const DueDateSelector = ({
               <Icon icon={"Deadline-Calendar"} iconColor={"inherit"} size={"16px"} mr={"8px"} />
 
               <TextContainer>
-                {R.isNil(selectedDueDate)
-                  ? t("datePicker.dueDate")
+                {(R.isNil(selectedDueDate) as boolean)
+                  ? t<string>("datePicker.dueDate")
                   : moment(selectedDueDate).format("MMM Do, YYYY")}
               </TextContainer>
             </DueDateButtonContainer>
@@ -99,7 +99,7 @@ export const DueDateSelector = ({
               mx={"auto"}
               my={"8px"}
             >
-              {t("datePicker.clearDate")}
+              {t<string>("datePicker.clearDate")}
             </Button>
           </>
         </Popup>

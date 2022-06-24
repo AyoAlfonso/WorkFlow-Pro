@@ -118,8 +118,8 @@ export const WeeklyKeyResults = observer(
           <>{renderKeyElements()}</>
         ) : (
           <EmptyState
-            heading={t("weeklyCheckIn.keyResults.emptyText")}
-            infoText={t("weeklyCheckIn.keyResults.create")}
+            heading={t<string>("weeklyCheckIn.keyResults.emptyText")}
+            infoText={t<string>("weeklyCheckIn.keyResults.create")}
           />
         )}
       </>

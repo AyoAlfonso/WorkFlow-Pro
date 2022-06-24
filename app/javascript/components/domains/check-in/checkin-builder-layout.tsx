@@ -55,7 +55,7 @@ export const CheckInBuilderLayout = observer(
     const [checkinType, setCheckinType] = useState<string>("Team");
     const [checkinDescription, setCheckinDescription] = useState<string>("");
 
-    const { companyStore, sessionStore } = useMst();
+    const { companyStore, sessionStore, checkInTemplateStore } = useMst();
     const isForum = companyStore.company?.displayFormat == "Forum";
 
     const history = useHistory();
@@ -141,8 +141,8 @@ export const CheckInBuilderLayout = observer(
         steps: selectedSteps,
         participants: participants,
         anonymous: anonymousResponse,
-        type: "dynamic",
-        checkInType: checkinType,
+        checkInType: "dynamic",
+        ownerType: checkinType.toLowerCase(),
         description: checkinDescription,
         timeZone: timezone,
         viewers: viewers,
@@ -159,6 +159,10 @@ export const CheckInBuilderLayout = observer(
         },
         tags: ["global", "custom"],
       };
+
+      checkInTemplateStore.createCheckinTemplate(checkin).then(() => {
+        history.push("/check-in");
+      });
     };
 
     const title = () => R.path([currentStep, "name"], steps);
@@ -209,14 +213,7 @@ export const CheckInBuilderLayout = observer(
 
     const finishCheckIn = () => {
       return (
-        <StopButton
-          variant={"primary"}
-          onClick={() => {
-            history.push(`/check-in/templates`);
-          }}
-          small
-          disabled={false}
-        >
+        <StopButton variant={"primary"} onClick={createCheckin} small disabled={false}>
           Publish
         </StopButton>
       );

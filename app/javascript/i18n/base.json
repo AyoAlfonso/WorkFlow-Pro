@@ -52,6 +52,7 @@
           "emailSent": "An email has been sent. Please click the link when you get it."
         },
         "profileUpdateForm": {
+          
           "email": "E-mail",
           "firstName": "First Name",
           "lastName": "Last Name",

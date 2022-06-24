@@ -213,10 +213,10 @@ export const NoSelectedItems = ({ text }: INoSelectedItems): JSX.Element => {
     <NoEntrySelectedContainer>
       <Icon icon={"Empty-Pockets"} size={"86px"} iconColor={"grey40"} mb={"20px"} />
       <Text fontSize={"18px"} fontWeight={600} fontFamily={"Exo"}>
-        {t("journals.selectEntry")}
+        {t<string>("journals.selectEntry")}
       </Text>
       <Text fontSize={"12px"} fontWeight={400} color={"grey40"}>
-        {t("journals.emptyList")}
+        {t<string>("journals.emptyList")}
       </Text>
       <Text fontSize={"12px"} fontWeight={400} color={"grey40"}>
         {text}

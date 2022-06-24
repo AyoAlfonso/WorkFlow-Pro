@@ -12,7 +12,7 @@ export const HomePersonalStatus = observer(
 
     return (
       <Container>
-        <ToolsHeader>{t("tools.title")}</ToolsHeader>
+        <ToolsHeader>{t<string>("tools.title")}</ToolsHeader>
       </Container>
     );
   },

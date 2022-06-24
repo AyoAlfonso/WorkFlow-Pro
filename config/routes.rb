@@ -11,7 +11,6 @@ Rails.application.routes.draw do
                sessions: "sessions",
                registrations: "registrations",
                invitations: "invitations",
-               omniauth_callbacks: 'authorization' 
              }, skip: [:confirmations, :passwords]
 
   devise_scope :user do
@@ -69,12 +68,14 @@ Rails.application.routes.draw do
         patch "logo", to: "companies#update_logo"
       end
     end
+
     get "/onboarding", to: "companies#get_onboarding_company"
     get "onboarding/:company_id/goals", to: "companies#get_onboarding_goals"
     post "/onboarding/:company_id/goals", to: "companies#create_or_update_onboarding_goals"
     get "/onboarding/:company_id/key_activities/", to: "companies#get_onboarding_key_activities"
     post "/onboarding/:company_id/key_activities", to: "companies#create_or_update_onboarding_key_activities"
     post "/onboarding/:company_id/team", to: "companies#create_or_update_onboarding_team"
+    
     # issues
     resources :issues, only: [:index, :create, :update, :destroy]
     get "/issues/issues_for_meeting", to: "issues#issues_for_meeting"
@@ -88,7 +89,6 @@ Rails.application.routes.draw do
 
     # team_issue_meeting_enablements
     resources :team_issue_meeting_enablements, only: [:index]
-
    
     #key activities
     resources :key_activities, only: [:index, :create, :update, :destroy] do
@@ -182,7 +182,8 @@ Rails.application.routes.draw do
     #meeting_templates
     resources :meeting_templates, only: [:index]
 
-    resources :check_in_templates, only: [:index]
+    resources :check_in_templates, only: [:index, :create, :show, :update]
+    post "check_in_templates/run/:id", to: "check_in_templates#run_now"
 
     #description_templates
     resources :description_templates, only: [:index, :destroy, :show]
@@ -216,9 +217,14 @@ Rails.application.routes.draw do
     get "/notes", to: "summaries#meetings_by_date"
   end
 
+  scope path: :auth do
+   post "microsoft_oauth2/callback", to: "authorization#microsoft_oauth2"
+   post "go_oauth2/callback", to: "authorization#google_oauth2"
+  end
   scope module: :integrations, path: :integrations do
     #pabbly_subscriptions
     post "/pabbly_subscriptions", to: "pabbly_subscriptions#create_company_and_user"
+
   end
 
   root "react_app#index"

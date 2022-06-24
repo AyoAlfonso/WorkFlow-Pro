@@ -80,7 +80,7 @@ export const MobileAccountDropdownOptions = observer(
             }}
           >
             <LeftWorkspaceContainer>
-              <AccountOptionText>{t("profile.switchCompanies")}</AccountOptionText>
+              <AccountOptionText>{t<string>("profile.switchCompanies")}</AccountOptionText>
               <CompanyText type={"small"}>{R.path(["company", "name"], companyStore)}</CompanyText>
             </LeftWorkspaceContainer>
             <RightWorkspaceContainer>
@@ -175,7 +175,7 @@ export const MobileAccountDropdownOptions = observer(
               })
             }
           >
-            {t("profile.logout")}
+            {t<string>("profile.logout")}
           </AccountOptionText>
         </DropdownSectionContainer>
       </>

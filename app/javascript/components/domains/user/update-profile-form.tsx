@@ -23,28 +23,27 @@ const LogoHeaderDiv = styled.div`
   text-align: center;
 `;
 
-export const ForgotPasswordForm = observer(
+export const UpdateProfileForm = observer(
   (): JSX.Element => {
     const { sessionStore } = useMst();
-    const [email, setEmail] = useState("");
-    const [emailSent, setEmailSent] = useState<boolean>(false);
+    const [firstName, setFirstName] = useState<string>(sessionStore.profile.firstName);
+    const [lastName, setLastName] = useState<string>(sessionStore.profile.lastName);
     const [loading, setLoading] = useState<boolean>(false);
     const { t } = useTranslation();
 
-    const validateEmail = email => {
-      const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(email);
-    };
-
-    const resetPasswordFlow = () => {
+    const updateUserProfile = () => {
       setLoading(true);
-      if (validateEmail(email)) {
-        sessionStore.resetPassword(email).then(() => {
-          setLoading(false);
-          setEmailSent(true);
-        });
+      if (firstName && lastName) {
+        sessionStore
+          .updateUser(
+            { firstName, lastName },
+            { note: "Edited " + t("profile.editProfile") + " on onboarding module" },
+          )
+          .then(() => {
+            setLoading(false);
+          });
       } else {
-        showToast("Please enter a valid email address", ToastMessageConstants.ERROR);
+        showToast("Please enter all required fields ", ToastMessageConstants.ERROR);
         setLoading(false);
       }
     };
@@ -71,33 +70,46 @@ export const ForgotPasswordForm = observer(
         >
           <img src={"/assets/LynchPyn-Logo_Horizontal-Blue"} width="120"></img>
           <Text color={"black"} fontSize={3}>
-            {t<string>("profile.forgotPasswordForm.recoverPassword")}
+            Update Your Profile
           </Text>
-          {emailSent ? (
-            <SentEmailText>{t<string>("profile.forgotPasswordForm.emailSent")}</SentEmailText>
-          ) : (
-            <>
-              <Label htmlFor="email">{t<string>("profile.loginForm.email")}</Label>
-              <Input
-                name="email"
-                onChange={e => setEmail(e.target.value)}
-                onKeyDown={key => {
-                  if (key.keyCode == 13) {
-                    resetPasswordFlow;
-                  }
-                }}
-              />
-              <Button
-                small
-                variant={"primary"}
-                style={{ width: "100%", marginTop: "25px", marginBottom: "5px" }}
-                disabled={!email || loading}
-                onClick={resetPasswordFlow}
-              >
-                {t<string>("profile.forgotPasswordForm.emailMe")}
-              </Button>
-            </>
-          )}
+
+          <>
+            <Label htmlFor="firstName">{t<string>("profile.profileUpdateForm.firstName")}</Label>
+            <Input
+              name="firstName"
+              onChange={e => setFirstName(e.target.value)}
+              value={firstName}
+            />
+            <Label htmlFor="lastName">{t<string>("profile.profileUpdateForm.lastName")}</Label>
+            <Input name="lastName" onChange={e => setLastName(e.target.value)} value={lastName} />
+
+            {/* <Select
+              name="timezone"
+              onChange={e => {
+                setTimezone(e.target.value);
+              }}
+              value={timezone}
+              width={"100%"}
+            >
+              {R.map(
+                (zone: string) => (
+                  <option key={zone} value={zone}>
+                    {zone}
+                  </option>
+                ),
+                staticData.timezones,
+              )}
+            </Select> */}
+            <Button
+              small
+              variant={"primary"}
+              style={{ width: "100%", marginTop: "25px", marginBottom: "5px" }}
+              disabled={!firstName || loading || !lastName}
+              onClick={updateUserProfile}
+            >
+              {t<string>("profile.profileUpdateForm.save")}
+            </Button>
+          </>
         </Box>
       </Flex>
     );

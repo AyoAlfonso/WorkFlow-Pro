@@ -22,7 +22,7 @@ export const HabitsHeader = ({ expanded }: IHabitsHeaderProps): JSX.Element => {
       <ModalWithHeader
         modalOpen={habitsModalOpen}
         setModalOpen={setHabitsModalOpen}
-        headerText={t("profile.habits.new")}
+        headerText={t<string>("profile.habits.new")}
         width={"35rem"}
       >
         <HabitsCreateHabitForm onSubmit={() => setHabitsModalOpen(false)} />
@@ -37,7 +37,7 @@ export const HabitsHeader = ({ expanded }: IHabitsHeaderProps): JSX.Element => {
           />
           <AccordionHeaderText expanded={expanded} accordionPanel={"panel1"}>
             {" "}
-            {t("habits.title")}{" "}
+            {t<string>("habits.title")}{" "}
           </AccordionHeaderText>
         </HeaderContainerNoBorder>
         <IconContainerWithPadding

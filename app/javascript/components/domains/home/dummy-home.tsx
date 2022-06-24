@@ -32,7 +32,6 @@ import { Checkbox, Label } from "@rebass/forms";
 import { baseTheme } from "~/themes/base";
 import ContentEditable from "react-contenteditable";
 
-
 export const DummyHome = (): JSX.Element => {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState<string>("");
@@ -51,18 +50,14 @@ export const DummyHome = (): JSX.Element => {
   const instanceType = company && company.accessForum ? "forum" : "teams";
 
   const renderPlanAndReflect = (): JSX.Element => {
-      return (
-        <PlanAndReflectContainer>
-          <SelectionText type={"small"}>
-            Plan
-          </SelectionText>
-          <SeprationDot />
-          <SelectionText type={"small"}>
-            Reflect
-          </SelectionText>
-        </PlanAndReflectContainer>
-      );
-    };
+    return (
+      <PlanAndReflectContainer>
+        <SelectionText type={"small"}>Plan</SelectionText>
+        <SeprationDot />
+        <SelectionText type={"small"}>Reflect</SelectionText>
+      </PlanAndReflectContainer>
+    );
+  };
 
   return (
     <Overlay>
@@ -71,23 +66,20 @@ export const DummyHome = (): JSX.Element => {
           <IconWrapper>
             <Icon icon={"Planner"} size={160} iconColor={"#005FFE"} />
           </IconWrapper>
-          <Boldtext>
-            Get the information you need to drive success in your business
-          </Boldtext>
-          <Subtext>
-            Upgrade to a higher tier to get access to Pyns
-          </Subtext>
+          <Boldtext>Get the information you need to drive success in your business</Boldtext>
+          <Subtext>Upgrade to a higher tier to get access to Pyns</Subtext>
           <Talktous
-          onClick={(e) => {
-            e.preventDefault();
-            window.location.href='http://go.lynchpyn.com/upgrade';
-          }}>
+            onClick={e => {
+              e.preventDefault();
+              window.location.href = "http://go.lynchpyn.com/upgrade";
+            }}
+          >
             Talk to Us
           </Talktous>
         </Upgradetextcontainer>
       </Wrapper>
       <Container>
-      <KeyActivitiesWrapperContainer>
+        <KeyActivitiesWrapperContainer>
           <KeyActivityColumnStyleListContainer>
             <HeaderContainer>
               <>
@@ -98,87 +90,88 @@ export const DummyHome = (): JSX.Element => {
                   {renderPlanAndReflect()}
                 </HeaderRowContainer>
                 <HeaderRowContainer>
-                  <KeyActivityListSubHeaderContainer>September 1st</KeyActivityListSubHeaderContainer>
-                     <SortContainer>
-                      <Icon icon={"Sort"} size={12} iconColor="grey100" />
-                    </SortContainer>
+                  <KeyActivityListSubHeaderContainer>
+                    September 1st
+                  </KeyActivityListSubHeaderContainer>
+                  <SortContainer>
+                    <Icon icon={"Sort"} size={12} iconColor="grey100" />
+                  </SortContainer>
                 </HeaderRowContainer>
               </>
             </HeaderContainer>
             <KeyActivitiesListContainer>
               <CreateKeyActivityButtonContainer>
                 <AddNewKeyActivityPlus>
-                  <Icon icon={"Plus"} size={16}/>
+                  <Icon icon={"Plus"} size={16} />
                 </AddNewKeyActivityPlus>
-                <AddNewKeyActivityText> {t("keyActivities.addTitle")}</AddNewKeyActivityText>
+                <AddNewKeyActivityText>
+                  {" "}
+                  {t<string>("keyActivities.addTitle")}
+                </AddNewKeyActivityText>
               </CreateKeyActivityButtonContainer>
               <KeyActivitiesListStyleContainer>
-                    <KeyActivitiesContainer>
-                      <KeyActivityContainer>
-                      <PynContainer>
-                        <Label
+                <KeyActivitiesContainer>
+                  <KeyActivityContainer>
+                    <PynContainer>
+                      <Label
+                        sx={{
+                          width: "auto",
+                          marginTop: "auto",
+                          marginBottom: "auto",
+                        }}
+                      >
+                        <Checkbox
+                          checked={false}
+                          onChange={e => {}}
                           sx={{
-                            width: "auto",
-                            marginTop: "auto",
-                            marginBottom: "auto",
+                            color: baseTheme.colors.primary100,
                           }}
-                        >
-                          <Checkbox
-                            checked={false}
-                            onChange={e => {
-                            }}
-                            sx={{
-                              color: baseTheme.colors.primary100,
-                            }}
-                          />
-                        </Label>
-                        <StyledContentEditable
-                          innerRef={pynRef}
-                          html={"pyn"}
-                          onChange={e => {
-                          }}
-                          style={{ cursor: "text" }}
-                          onKeyDown={key => {
-                            if (key.keyCode == 13) {
-                              pynRef.current.blur();
-                            }
-                          }}
-                          placeholder={"New pyn..."}
                         />
-                      </PynContainer>
-                      <PynContainer>
-                        <Label
+                      </Label>
+                      <StyledContentEditable
+                        innerRef={pynRef}
+                        html={"pyn"}
+                        onChange={e => {}}
+                        style={{ cursor: "text" }}
+                        onKeyDown={key => {
+                          if (key.keyCode == 13) {
+                            pynRef.current.blur();
+                          }
+                        }}
+                        placeholder={"New pyn..."}
+                      />
+                    </PynContainer>
+                    <PynContainer>
+                      <Label
+                        sx={{
+                          width: "auto",
+                          marginTop: "auto",
+                          marginBottom: "auto",
+                        }}
+                      >
+                        <Checkbox
+                          checked={false}
+                          onChange={e => {}}
                           sx={{
-                            width: "auto",
-                            marginTop: "auto",
-                            marginBottom: "auto",
+                            color: baseTheme.colors.primary100,
                           }}
-                        >
-                          <Checkbox
-                            checked={false}
-                            onChange={e => {
-                            }}
-                            sx={{
-                              color: baseTheme.colors.primary100,
-                            }}
-                          />
-                        </Label>
-                        <StyledContentEditable
-                          innerRef={pynRef}
-                          html={"example task"}
-                          onChange={e => {
-                          }}
-                          style={{ cursor: "text" }}
-                          onKeyDown={key => {
-                            if (key.keyCode == 13) {
-                              pynRef.current.blur();
-                            }
-                          }}
-                          placeholder={"New pyn..."}
                         />
-                      </PynContainer>
-                      </KeyActivityContainer>
-                    </KeyActivitiesContainer>
+                      </Label>
+                      <StyledContentEditable
+                        innerRef={pynRef}
+                        html={"example task"}
+                        onChange={e => {}}
+                        style={{ cursor: "text" }}
+                        onKeyDown={key => {
+                          if (key.keyCode == 13) {
+                            pynRef.current.blur();
+                          }
+                        }}
+                        placeholder={"New pyn..."}
+                      />
+                    </PynContainer>
+                  </KeyActivityContainer>
+                </KeyActivitiesContainer>
               </KeyActivitiesListStyleContainer>
             </KeyActivitiesListContainer>
           </KeyActivityColumnStyleListContainer>
@@ -192,103 +185,105 @@ export const DummyHome = (): JSX.Element => {
                   {renderPlanAndReflect()}
                 </HeaderRowContainer>
                 <HeaderRowContainer>
-                  <KeyActivityListSubHeaderContainer>September 2nd</KeyActivityListSubHeaderContainer>
-                     <SortContainer>
-                      <Icon icon={"Sort"} size={12} iconColor="grey100" />
-                    </SortContainer>
+                  <KeyActivityListSubHeaderContainer>
+                    September 2nd
+                  </KeyActivityListSubHeaderContainer>
+                  <SortContainer>
+                    <Icon icon={"Sort"} size={12} iconColor="grey100" />
+                  </SortContainer>
                 </HeaderRowContainer>
               </>
             </HeaderContainer>
             <KeyActivitiesListContainer>
               <CreateKeyActivityButtonContainer>
                 <AddNewKeyActivityPlus>
-                  <Icon icon={"Plus"} size={16}/>
+                  <Icon icon={"Plus"} size={16} />
                 </AddNewKeyActivityPlus>
-                <AddNewKeyActivityText> {t("keyActivities.addTitle")}</AddNewKeyActivityText>
+                <AddNewKeyActivityText>
+                  {" "}
+                  {t<string>("keyActivities.addTitle")}
+                </AddNewKeyActivityText>
               </CreateKeyActivityButtonContainer>
               <KeyActivitiesListStyleContainer>
-                    <KeyActivitiesContainer>
-                      <KeyActivityContainer>
-                      <PynContainer>
-                        <Label
+                <KeyActivitiesContainer>
+                  <KeyActivityContainer>
+                    <PynContainer>
+                      <Label
+                        sx={{
+                          width: "auto",
+                          marginTop: "auto",
+                          marginBottom: "auto",
+                        }}
+                      >
+                        <Checkbox
+                          checked={false}
+                          onChange={e => {}}
                           sx={{
-                            width: "auto",
-                            marginTop: "auto",
-                            marginBottom: "auto",
+                            color: baseTheme.colors.primary100,
                           }}
-                        >
-                          <Checkbox
-                            checked={false}
-                            onChange={e => {
-                            }}
-                            sx={{
-                              color: baseTheme.colors.primary100,
-                            }}
-                          />
-                        </Label>
-                        <StyledContentEditable
-                          innerRef={pynRef}
-                          html={"pyn"}
-                          onChange={e => {
-                          }}
-                          style={{ cursor: "text" }}
-                          onKeyDown={key => {
-                            if (key.keyCode == 13) {
-                              pynRef.current.blur();
-                            }
-                          }}
-                          placeholder={"New pyn..."}
                         />
-                      </PynContainer>
-                      </KeyActivityContainer>
-                    </KeyActivitiesContainer>
+                      </Label>
+                      <StyledContentEditable
+                        innerRef={pynRef}
+                        html={"pyn"}
+                        onChange={e => {}}
+                        style={{ cursor: "text" }}
+                        onKeyDown={key => {
+                          if (key.keyCode == 13) {
+                            pynRef.current.blur();
+                          }
+                        }}
+                        placeholder={"New pyn..."}
+                      />
+                    </PynContainer>
+                  </KeyActivityContainer>
+                </KeyActivitiesContainer>
               </KeyActivitiesListStyleContainer>
             </KeyActivitiesListContainer>
           </KeyActivityColumnStyleListContainer>
         </KeyActivitiesWrapperContainer>
-      <ToolsWrapper>
-        <ToolsHeader type={"h2"} mt={0}>
-          Tools
-        </ToolsHeader>
-        <AccordionSummaryInverse>
-          <HeaderContainerNoBorder>
-            <div style={{ width: "30px" }} />
-            <AccordionHeaderText expanded={"notMatching"} accordionPanel={"team"} inverse={true}>
-              Plan
-            </AccordionHeaderText>
-          </HeaderContainerNoBorder>
-          <IconContainerWithPadding>
-            <Icon icon={"Plan"} size={16} iconColor={"white"} />
-          </IconContainerWithPadding>
-        </AccordionSummaryInverse>
-        <StyledOverviewAccordion
-          expanded={expanded === "panel0"}
-          onChange={handleChange("panel0")}
-          elevation={0}
-        >
-          <HeaderContainerNoBorder>
-          <Icon
-            icon={"Chevron-Down"}
-            size={15}
-            style={{ paddingRight: "15px" }}
-            iconColor={"grey60"}
-          />
-          <AccordionHeaderText expanded={expanded} accordionPanel={"panel0"}>
-            {" "}
-            {"journals"}{" "}
-          </AccordionHeaderText>
-        </HeaderContainerNoBorder>
-        </StyledOverviewAccordion>
-      </ToolsWrapper>
-      {instanceType === "forum" && <LynchPynBadge />}
-    </Container>
+        <ToolsWrapper>
+          <ToolsHeader type={"h2"} mt={0}>
+            Tools
+          </ToolsHeader>
+          <AccordionSummaryInverse>
+            <HeaderContainerNoBorder>
+              <div style={{ width: "30px" }} />
+              <AccordionHeaderText expanded={"notMatching"} accordionPanel={"team"} inverse={true}>
+                Plan
+              </AccordionHeaderText>
+            </HeaderContainerNoBorder>
+            <IconContainerWithPadding>
+              <Icon icon={"Plan"} size={16} iconColor={"white"} />
+            </IconContainerWithPadding>
+          </AccordionSummaryInverse>
+          <StyledOverviewAccordion
+            expanded={expanded === "panel0"}
+            onChange={handleChange("panel0")}
+            elevation={0}
+          >
+            <HeaderContainerNoBorder>
+              <Icon
+                icon={"Chevron-Down"}
+                size={15}
+                style={{ paddingRight: "15px" }}
+                iconColor={"grey60"}
+              />
+              <AccordionHeaderText expanded={expanded} accordionPanel={"panel0"}>
+                {" "}
+                {"journals"}{" "}
+              </AccordionHeaderText>
+            </HeaderContainerNoBorder>
+          </StyledOverviewAccordion>
+        </ToolsWrapper>
+        {instanceType === "forum" && <LynchPynBadge />}
+      </Container>
     </Overlay>
   );
 };
 
 const Overlay = styled.div`
   position: relative;
-
 `;
 
 const Wrapper = styled.div`
@@ -298,7 +293,7 @@ const Wrapper = styled.div`
 `;
 
 const Upgradetextcontainer = styled.div`
-  width:100%;
+  width: 100%;
   text-align: center;
   border-top: 1px solid white;
 `;
@@ -330,19 +325,19 @@ const Subtext = styled.div`
 const Talktous = styled.div`
   width: 120px;
   height: 28px;
-  background: #005FFE 0% 0% no-repeat padding-box;
-  border: 1px solid #005FFE;
+  background: #005ffe 0% 0% no-repeat padding-box;
+  border: 1px solid #005ffe;
   border-radius: 4px;
   opacity: 1;
   font-family: lato;
   font-weight: bold;
   font-size: 12px;
-  color: #FFFFFF;
+  color: #ffffff;
   display: inline-block;
   padding-top: 11px;
   line-spacing: 24;
- `;
-  
+`;
+
 const Container = styled.div`
   display: flex;
   height: inherit;
@@ -397,7 +392,6 @@ const SortContainer = styled.div`
 const KeyActivitiesListContainer = styled.div`
   height: 100%;
 `;
-
 
 const CreateKeyActivityButtonContainer = styled(HomeContainerBorders)`
   display: flex;

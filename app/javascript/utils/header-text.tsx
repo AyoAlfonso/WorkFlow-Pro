@@ -58,7 +58,7 @@ export const HeaderText = observer(
                   {currentTeam?.name}
                 </BackHeaderText>
                 <ChevronRight icon={"Chevron-Left"} size={"24px"} iconColor={"grey100"} />
-                <BreadcrumbHeaderText> {t("forum.scheduledTopics")} </BreadcrumbHeaderText>
+                <BreadcrumbHeaderText> {t<string>("forum.scheduledTopics")} </BreadcrumbHeaderText>
               </SubHeaderContainer>
             ) : (
               <> {t("forum.annualHub")} </>
@@ -72,7 +72,7 @@ export const HeaderText = observer(
                   {currentTeam?.name}
                 </BackHeaderText>
                 <ChevronRight icon={"Chevron-Left"} size={"24px"} iconColor={"grey100"} />
-                <BreadcrumbHeaderText> {t("forum.topicsVault")} </BreadcrumbHeaderText>
+                <BreadcrumbHeaderText> {t<string>("forum.topicsVault")} </BreadcrumbHeaderText>
               </SubHeaderContainer>
             ) : (
               <> {t("forum.upcomingHub")} </>
@@ -84,7 +84,7 @@ export const HeaderText = observer(
                   {currentTeam?.name}
                 </BackHeaderText>
                 <ChevronRight icon={"Chevron-Left"} size={"24px"} iconColor={"grey100"} />
-                <BreadcrumbHeaderText> {t("forum.meetingManagement")}</BreadcrumbHeaderText>
+                <BreadcrumbHeaderText> {t<string>("forum.meetingManagement")}</BreadcrumbHeaderText>
               </SubHeaderContainer>
             ) : (
               <> {t("forum.meetingAgenda")} </>
@@ -119,6 +119,10 @@ export const HeaderText = observer(
     }
   },
 );
+type BreadcrumbHeaderTextProps = {
+  children?: React.ReactNode | React.ReactNode[];
+};
+
 const BreadcrumbHeaderText = styled.span`
   display: inline-block;
   font-size: 32px;
@@ -126,7 +130,7 @@ const BreadcrumbHeaderText = styled.span`
   margin-top: 15px;
   margin-bottom: 25px;
 `;
-const BackHeaderText = styled(BreadcrumbHeaderText)`
+const BackHeaderText = styled(BreadcrumbHeaderText)<BreadcrumbHeaderTextProps>`
   color: ${props => props.theme.colors.grey100};
   margin-right: 0.5em;
   cursor: pointer;

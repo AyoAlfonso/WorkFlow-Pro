@@ -5,7 +5,6 @@ import { Text } from "~/components/shared/text";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 
-
 export interface ITextStepProps {
   step: IStep;
 }
@@ -13,7 +12,7 @@ export interface ITextStepProps {
 export const TextStep = ({ step }: ITextStepProps): JSX.Element => {
   const { t } = useTranslation();
   if (R.isNil(step.descriptionTextContent)) {
-    return <Text>{t("meeting.missingStep")}</Text>;
+    return <Text>{t<string>("meeting.missingStep")}</Text>;
   }
 
   return (

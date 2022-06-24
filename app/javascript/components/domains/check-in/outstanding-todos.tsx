@@ -23,7 +23,7 @@ export const OutstandingTodos = observer(
         <Container>
           <KeyActivitiesHeader title={t("keyActivities.outstandingTitle")} />
           <KeyActivityListSubHeaderContainer>
-            {t("keyActivities.yesterdayUnfinishedText")}
+            {t<string>("keyActivities.yesterdayUnfinishedText")}
           </KeyActivityListSubHeaderContainer>
           {remainingPyns.map(ka => (
             <KeyActivityRecord keyActivity={ka} />

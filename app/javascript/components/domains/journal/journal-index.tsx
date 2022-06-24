@@ -129,7 +129,7 @@ export const JournalIndex = observer(
 
     const renderSelectedEntry = () => {
       return R.isNil(selectedItem) ? (
-        <NoSelectedItems text={t("journals.startAdding")} />
+        <NoSelectedItems text={t<string>("journals.startAdding")} />
       ) : (
         <>
           <EntryHeadingContainer>{renderSelectedEntryHeading(selectedItem)}</EntryHeadingContainer>
@@ -140,7 +140,7 @@ export const JournalIndex = observer(
             headerComponent={
               <EntryCardHeaderContainer>
                 <Text fontSize={"12px"} fontWeight={600}>
-                  {t("journals.journalEntry")}
+                  {t<string>("journals.journalEntry")}
                 </Text>
                 <ActionButtonsContainer>
                   {editMode && (
