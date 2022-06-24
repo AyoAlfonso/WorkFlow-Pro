@@ -184,6 +184,7 @@ Rails.application.routes.draw do
 
     resources :check_in_templates, only: [:index, :create, :show, :update]
     post "check_in_templates/run/:id", to: "check_in_templates#run_now"
+    post "check_in_templates/publish/:id", to: "check_in_templates#publish_now"
     get "general_check_in/:user_id",  to: "check_in_templates#general_check_in"
 
     #description_templates

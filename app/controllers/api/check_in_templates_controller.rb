@@ -8,7 +8,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   skip_after_action :verify_authorized, only: [:get_onboarding_company, :create_or_update_onboarding_goals, :get_onboarding_goals, :create_or_update_onboarding_key_activities, :get_onboarding_key_activities, :create_or_update_onboarding_team]
 
   def index
-    @check_in_templates = policy_scope(CheckInTemplate) ##squash the  check-in template  
+    @check_in_templates = policy_scope(CheckInTemplate) ##squash the  check-in template  and run migration
     render json: @check_in_templates.as_json(only: [:id, :name, :check_in_type, :owner_type, :description, :participants, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder], include: {
                   check_in_templates_steps: {  only: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :variant, :question]}})
   end
@@ -30,10 +30,11 @@ class Api::CheckInTemplatesController < Api::ApplicationController
           reminder: params[:reminder]
        })
 
+      #  binding.pry
       @step_atrributes = params[:check_in_template][:check_in_templates_steps_attributes]
       if @step_atrributes.present?
-        @check_in_templates_steps = @step_atrributes.values
-        @check_in_templates_steps.each do |step|
+        # @check_in_templates_steps = @step_atrributes
+        @step_atrributes.each do |step|
           CheckInTemplatesStep.create!({
             step_type: step[:step_type],
             order_index: step[:order_index],
@@ -42,35 +43,43 @@ class Api::CheckInTemplatesController < Api::ApplicationController
             duration: step[:duration],
             component_to_render: step[:component_to_render],
             check_in_template_id: @check_in_template.id,
-            image: step[:image],
-            override_key: step[:override_key],
+            # image: step[:image],
+            # override_key: step[:override_key],
             variant: step[:variant],
             question:step[:question]
           })
         end
       end
+    # @check_in_template = policy_scope(CheckInTemplate.find(@check_in_template.id).optimized)
     authorize @check_in_template
-    render json: { templates: @check_in_template, status: :ok }
+    render json: { template: @check_in_template, status: :ok }
   end
 
   def update
      @company.update!(check_in_template_params)
   end
 
-  def run
+  def run_now
+    # PERSIST
+    # cadence 
+    # respondent 
     
    #returns newly check_in/ data    
   end
 
-  def general_check_in
-    
+  def publish_now
+   #returns newly check_in/ data    
+  end
 
+  def general_check_in
+   #API active list
+   #streak
   end
 
   private
   def check_in_template_params
       params.require(:check_in_template).permit(:name, :check_in_type, :owner_type, :description, :participants, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder,
-             check_in_templates_steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :variant, :question])
+             :check_in_templates_steps_attributes [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :variant, :question])
   end
 
   def set_check_in_template
@@ -79,7 +88,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def show
-      render json: { templates: @check_in_template, status: :ok }
+      render json: { template: @check_in_template, status: :ok }
   end
 
   def record_activities

@@ -1,5 +1,5 @@
 class CheckInTemplate < ApplicationRecord
-  has_many :check_in_templates_steps
+  has_many :check_in_templates_steps, dependent: :destroy
 
   enum check_in_type: {
     weekly_check_in: 0,
@@ -7,6 +7,7 @@ class CheckInTemplate < ApplicationRecord
   }
 
   scope :sort_by_company, ->(company) { where(company_id: company.id) }
+  scope :optimized, -> { includes([:check_in_templates_steps ]) }
 
    enum owner_type: {
     company: 0,
@@ -14,9 +15,16 @@ class CheckInTemplate < ApplicationRecord
     personal:2
   }
 
+
+  def as_json(options = [])
+    super({
+       include: {check_in_templates_steps: { methods: ["step_type", "order_index", "name", "instructions", "duration","component_to_render","check_in_template_id", "variant", "question" ] }
+        }})
+  end
+
   # enum time_zone: {
-  #   user:0,
-  #   company:1,
+  #   user: 0,
+  #   company: 1,
   # }
 
   # Validation
