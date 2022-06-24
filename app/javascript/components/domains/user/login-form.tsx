@@ -46,6 +46,7 @@ export const LoginForm = observer(
           ...loginRequest,
         };
         instance.acquireTokenPopup(request).then(response => {
+          console.log(response?.account);
           if (response?.account) {
             sessionStore.logInWithProvider("microsoft_oauth2", response?.account);
           } else {

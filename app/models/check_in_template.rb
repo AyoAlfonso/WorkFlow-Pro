@@ -6,7 +6,9 @@ class CheckInTemplate < ApplicationRecord
     dynamic: 1,
   }
 
-   enum type: {
+  scope :sort_by_company, ->(company) { where(company_id: company.id) }
+
+   enum owner_type: {
     company: 0,
     team:1,
     personal:2

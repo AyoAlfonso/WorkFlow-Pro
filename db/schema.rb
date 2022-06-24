@@ -120,7 +120,10 @@ ActiveRecord::Schema.define(version: 2022_06_21_194226) do
     t.jsonb "date_time_config"
     t.integer "time_zone", default: 0
     t.jsonb "reminder"
-    t.integer "type", default: 0
+    t.integer "owner_type", default: 0
+    t.jsonb "viewers"
+    t.bigint "company_id"
+    t.index ["company_id"], name: "index_check_in_templates_on_company_id"
   end
 
   create_table "check_in_templates_steps", force: :cascade do |t|

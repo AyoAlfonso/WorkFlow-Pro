@@ -183,6 +183,7 @@ Rails.application.routes.draw do
     resources :meeting_templates, only: [:index]
 
     resources :check_in_templates, only: [:index, :create, :show, :update]
+    post "check_in_templates/run/:id", to: "check_in_templates#run_now"
 
     #description_templates
     resources :description_templates, only: [:index, :destroy, :show]

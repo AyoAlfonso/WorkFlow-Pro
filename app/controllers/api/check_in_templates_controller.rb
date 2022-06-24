@@ -14,11 +14,14 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def create
+    binding.pry
       @check_in_template = CheckInTemplate.create!({
           name: params[:name],
-          check_in_type: @params[:check_in_type],
-          type: @params[:type],
-          description: @params[:description],
+          check_in_type: params[:check_in_type],
+          owner_type: params[:owner_type],
+          company_id: current_company.id,
+          description: params[:description],
+          viewers: params[:viewers],
           participants: params[:participants],
           anonymous: params[:anonymous],
           run_once: params[:run_once],
@@ -42,9 +45,20 @@ class Api::CheckInTemplatesController < Api::ApplicationController
             check_in_template_id: @check_in_template.id,
             image: step[:image],
             override_key: step[:override_key],
+            variant: step[:variant],
+            question:step[:question]
           })
         end
       end
+    authorize @check_in_template
+    render json: { templates: @check_in_template, status: :ok }
+  end
+
+  def update
+     @company.update!(check_in_template_params)
+  end
+
+  def run
 
         #   notification = Notification.find_or_initialize_by(
         #   user_id: .id,
@@ -59,18 +73,11 @@ class Api::CheckInTemplatesController < Api::ApplicationController
         #   notification.save
         # end
 
-    authorize @check_in_template
-    render json: { templates: @check_in_template, status: :ok }
   end
-
-  def update
-     @company.update!(check_in_template_params)
-  end
-
   private
   def check_in_template_params
-      params.require(:check_in_template).permit(:name, :check_in_type, :type, :description, :participants, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder,
-             check_in_templates_steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :participants])
+      params.require(:check_in_template).permit(:name, :check_in_type, :owner_type, :description, :participants, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder,
+             check_in_templates_steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :variant, :question])
   end
 
   def set_check_in_template
