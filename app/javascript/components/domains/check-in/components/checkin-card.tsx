@@ -1,14 +1,16 @@
 import React from "react";
 import styled from "styled-components";
+import { useHistory } from "react-router-dom";
 import { Button } from "~/components/shared/button";
 import { Icon } from "~/components/shared/icon";
 
 export const CheckInCard = (): JSX.Element => {
+  const history = useHistory();
   return (
     <Container>
       <TitleContainer>
         <Title>✍🏾 Weekly Check-In</Title>
-        <IconContainer>
+        <IconContainer onClick={() => history.push(`/check-in/insights/2`)}>
           <Icon icon={"Settings"} size="18px" iconColor={"greyActive"} />
         </IconContainer>
       </TitleContainer>

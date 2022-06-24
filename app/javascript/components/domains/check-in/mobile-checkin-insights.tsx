@@ -13,6 +13,7 @@ import {
   StepIconContainer,
   StepText,
 } from "./checkin-insights";
+import DateSelector from "./components/date-selector";
 import InitiativeInsights from "./components/initiatives-insights";
 import JournalInsights from "./components/journal-insights";
 import { KpiInsights } from "./components/kpi-insights";
@@ -24,6 +25,8 @@ import { YesNoInsights } from "./components/yes-no-insights";
 
 const MobileCheckinInsights = (): JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
+  const [date, setDate] = useState<Date>(new Date());
+  
   return (
     <Container>
       <HeaderContainer>
@@ -76,6 +79,7 @@ const MobileCheckinInsights = (): JSX.Element => {
           </SideBar>
         )}
       </HeaderContainer>
+      <DateSelector date={date} setDate={setDate} />
       <ParticipationInsights /> <br />
       <OpenEndedInsights /> <br />
       <NumericalStepInsights /> <br />

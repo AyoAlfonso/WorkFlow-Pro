@@ -120,7 +120,7 @@ export const CheckInBuilderLayout = observer(
       checkInType: checkinType,
       description: checkinDescription,
       timeZone: timezone,
-      responseViewers: viewers,
+      viewers: viewers,
       runOnce: cadence == "Once" && selectedDate,
       dateTimeConfig: {
         cadence: cadence,
@@ -145,7 +145,7 @@ export const CheckInBuilderLayout = observer(
         checkInType: checkinType,
         description: checkinDescription,
         timeZone: timezone,
-        responseViewers: viewers,
+        viewers: viewers,
         runOnce: cadence == "Once" && selectedDate,
         dateTimeConfig: {
           cadence: cadence,

@@ -93,6 +93,8 @@ const OverviewTabsContainer = styled.div`
   display: flex;
   flex-direction: row;
   margin-bottom: 24px;
+  width: 100%;
+  overflow: auto;
 `;
 
 type IOverviewTab = {
@@ -119,6 +121,7 @@ const OverviewTab = styled("span")<IOverviewTab>`
   border-bottom-color: ${props => props.theme.colors.primary100};
   border-bottom-style: solid;
   cursor: pointer;
+  white-space: nowrap;
   @media only screen and (max-width: 768px) {
     margin-bottom: 1em;
   }

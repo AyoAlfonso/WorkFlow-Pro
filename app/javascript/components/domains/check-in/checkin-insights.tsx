@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Icon, Text } from "~/components/shared";
+import DateSelector from "./components/date-selector";
 import InitiativeInsights from "./components/initiatives-insights";
 import JournalInsights from "./components/journal-insights";
 import { KpiInsights } from "./components/kpi-insights";
@@ -11,6 +12,7 @@ import { SelectionScaleInsights } from "./components/selection-scale-insights";
 import { YesNoInsights } from "./components/yes-no-insights";
 
 export const CheckinInsights = (): JSX.Element => {
+  const [date, setDate] = useState<Date>(new Date());
   return (
     <Container>
       <SideBar>
@@ -54,6 +56,7 @@ export const CheckinInsights = (): JSX.Element => {
       </SideBar>
       <InsightsContainer>
         <CheckinName>Weekly Check-in</CheckinName>
+        <DateSelector date={date} setDate={setDate} />
         <ContentContainer>
           <LeftContainer>
             <OpenEndedInsights /> <br />

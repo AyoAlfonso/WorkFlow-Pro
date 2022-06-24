@@ -1,5 +1,7 @@
 import * as React from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
+import { Icon } from "~/components/shared";
 import { Button } from "~/components/shared/button";
 
 interface CheckInTemplateCardProps {
@@ -13,9 +15,48 @@ export const CheckInTemplateCard = ({
   description,
   tags,
 }: CheckInTemplateCardProps): JSX.Element => {
+  const [showOptions, setShowOptions] = useState<boolean>(false);
+
+  const optionsRef = useRef(null);
+
+  useEffect(() => {
+    const externalEventHandler = e => {
+      if (!showOptions) return;
+
+      const node = optionsRef.current;
+
+      if (node && node.contains(e.target)) {
+        return;
+      }
+      setShowOptions(false);
+    };
+
+    if (showOptions) {
+      document.addEventListener("click", externalEventHandler);
+    } else {
+      document.removeEventListener("click", externalEventHandler);
+    }
+
+    return () => {
+      document.removeEventListener("click", externalEventHandler);
+    };
+  }, [showOptions]);
+
   return (
     <Container>
-      <Title>{name}</Title>
+      <HeaderContainer>
+        <Title>{name}</Title>
+        <OptionsIconContainer ref={optionsRef}>
+          <IconContainer onClick={() => setShowOptions(!showOptions)}>
+            <StyledOptionIcon icon={"Options"} size={"13px"} iconColor={"grey80"} />
+          </IconContainer>
+          {showOptions && (
+            <OptionsContainer>
+              <Option>Make a copy</Option>
+            </OptionsContainer>
+          )}
+        </OptionsIconContainer>
+      </HeaderContainer>
       <Description>{description}</Description>
       <BottomRow>
         <ButtonsContainer>
@@ -61,7 +102,48 @@ const Container = styled.div`
   height: 150px;
   padding: 1em 1.5em;
   position: relative;
-  margin-right: 
+  margin-right: ;
+`;
+
+const HeaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const OptionsIconContainer = styled.div`
+  position: relative;
+`;
+
+const IconContainer = styled.div`
+  cursor: pointer;
+`;
+
+const StyledOptionIcon = styled(Icon)`
+  transform: rotate(90deg);
+  pointer-events: none;
+`;
+
+const OptionsContainer = styled.div`
+  position: absolute;
+  padding: 0.5em 0;
+  z-index: 10;
+  border-radius: 0.5em;
+  background-color: ${props => props.theme.colors.white};
+  box-shadow: 0px 3px 6px #00000029;
+  width: max-content;
+  right: 0;
+`;
+
+const Option = styled.div`
+  padding: 0.5em 1em;
+  font-size: 0.75em;
+  cursor: pointer;
+  color: ${props => props.theme.colors.black};
+
+  &:hover {
+    background: ${props => props.theme.colors.backgroundGrey};
+  }
 `;
 
 const Title = styled.span`
