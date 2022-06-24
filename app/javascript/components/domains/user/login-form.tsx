@@ -125,7 +125,7 @@ export const LoginForm = observer(
                     </OAuthContent>
                     <OAuthContent> Sign in with Google </OAuthContent>
                   </GoogleAuthButton>
-                  <MicrosoftAuthButton onClick={() => microsoftLoginHandler(instance)}>
+                  {/* <MicrosoftAuthButton onClick={() => microsoftLoginHandler(instance)}>
                     <OAuthContent>
                       <Image
                         sx={{
@@ -135,7 +135,7 @@ export const LoginForm = observer(
                       />
                     </OAuthContent>
                     <OAuthContent> Sign in with Microsoft </OAuthContent>
-                  </MicrosoftAuthButton>
+                  </MicrosoftAuthButton> */}
                 </>
               ) : (
                 <>
@@ -150,7 +150,7 @@ export const LoginForm = observer(
                       <OAuthContent> Sign in with Google </OAuthContent>
                     </GoogleAuthButton>
                   ) : null}
-                  {sessionStore.logginError && sessionStore.logginErrorType == "microsoft_oauth" ? (
+                  {/* {sessionStore.logginError && sessionStore.logginErrorType == "microsoft_oauth" ? (
                     <MicrosoftAuthButton onClick={() => microsoftLoginHandler(instance)}>
                       <OAuthContent>
                         <Image
@@ -162,7 +162,7 @@ export const LoginForm = observer(
                       </OAuthContent>
                       <OAuthContent> Sign in with Microsoft </OAuthContent>
                     </MicrosoftAuthButton>
-                  ) : null}
+                  ) : null} */}
                 </>
               )}
 
