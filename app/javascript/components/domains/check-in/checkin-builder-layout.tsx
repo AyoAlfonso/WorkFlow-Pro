@@ -203,7 +203,7 @@ export const CheckInBuilderLayout = observer(
 
     const closeButtonClick = () => {
       if (confirm(`Are you sure you want to exit?`)) {
-        history.push(`/check-in`);
+        history.push(`/check-in/templates`);
       }
     };
 
@@ -212,7 +212,7 @@ export const CheckInBuilderLayout = observer(
         <StopButton
           variant={"primary"}
           onClick={() => {
-            history.push(`/check-in`);
+            history.push(`/check-in/templates`);
           }}
           small
           disabled={false}

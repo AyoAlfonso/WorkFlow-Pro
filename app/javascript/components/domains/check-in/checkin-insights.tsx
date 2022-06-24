@@ -75,7 +75,7 @@ export const CheckinInsights = (): JSX.Element => {
   );
 };
 
-const LeftContainer = styled.div``
+const LeftContainer = styled.div``;
 
 const Container = styled.div`
   height: 100%;
@@ -116,7 +116,7 @@ const CheckinName = styled(Text)`
   font-weight: bold;
   margin: 0;
   margin-bottom: 1em;
-`
+`;
 
 export const SideBarHeader = styled(Text)`
   font-size: 16px;

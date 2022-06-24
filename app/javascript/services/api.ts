@@ -755,5 +755,9 @@ export class Api {
   async createCheckinTemplate(checkinTemplate) {
     return this.client.post(`/check-in-templates`, checkinTemplate);
   }
+
+  async runCheckin(id) {
+    return this.client.post(`/check_in_templates/run/${id}`);
+  }
   //async setJWT(jwt) {}
 }

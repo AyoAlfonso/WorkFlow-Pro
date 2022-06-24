@@ -40,7 +40,7 @@ export const CheckInWizardLayout = observer(
 
     const closeButtonClick = () => {
       if (confirm(`Are you sure you want to exit this weekly check-in?`)) {
-        history.push(`/`);
+        history.push(`/check-in`);
       }
     };
 
