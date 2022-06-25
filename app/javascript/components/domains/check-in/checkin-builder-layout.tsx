@@ -111,34 +111,11 @@ export const CheckInBuilderLayout = observer(
 
     const showDateTime = cadence == "Once" || cadence == "Monthly" || cadence == "Quarterly";
     const showDayTime = cadence == "Weekly" || cadence == "Bi-weekly";
-    console.log({
-      name: checkinName,
-      steps: selectedSteps,
-      participants: participants,
-      anonymous: anonymousResponse,
-      type: "dynamic",
-      checkInType: checkinType,
-      description: checkinDescription,
-      timeZone: timezone,
-      viewers: viewers,
-      runOnce: cadence == "Once" && selectedDate,
-      dateTimeConfig: {
-        cadence: cadence,
-        time: moment(checkinTime, ["hh:mm A"]).format("HH:mm"),
-        date: showDateTime ? selectedDate : "",
-        day: showDayTime ? checkinDay : "",
-      },
-      reminder: {
-        unit: reminderUnit,
-        value: reminderValue,
-      },
-      tags: ["global", "custom"],
-    });
 
     const createCheckin = () => {
       const checkin = {
         name: checkinName,
-        steps: selectedSteps,
+        checkInTemplateStepsAttributes: selectedSteps,
         participants: participants,
         anonymous: anonymousResponse,
         checkInType: "dynamic",
@@ -157,11 +134,11 @@ export const CheckInBuilderLayout = observer(
           unit: reminderUnit,
           value: reminderValue,
         },
-        tags: ["global", "custom"],
+        tag: ["global", "custom"],
       };
 
       checkInTemplateStore.createCheckinTemplate(checkin).then(() => {
-        history.push("/check-in");
+        history.push("/check-in/templates");
       });
     };
 
@@ -238,7 +215,7 @@ export const CheckInBuilderLayout = observer(
               small
               variant={"primary"}
               onClick={() => setCurrentStep(currentStep + 1)}
-              disabled={currentStep >= 3}
+              disabled={currentStep == 1 && !selectedSteps.length}
             >
               Next
             </NextButton>

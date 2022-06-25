@@ -38,16 +38,19 @@ export const CheckInTemplateStoreModel = types
       }
     }),
     createCheckinTemplate: flow(function*(checkInTemplate) {
-        const response: ApiResponse<any> = yield self.environment.api.createCheckinTemplate(
-          checkInTemplate,
+      const response: ApiResponse<any> = yield self.environment.api.createCheckinTemplate(
+        checkInTemplate,
+      );
+      if (response.ok) {
+        showToast("Check-in template created successfully", ToastMessageConstants.SUCCESS);
+        return true;
+      } else {
+        showToast(
+          "Error creating check-in template, please try again",
+          ToastMessageConstants.ERROR,
         );
-        if (response.ok) {
-          showToast(ToastMessageConstants.SUCCESS, "Check-in template created successfully");
-          return true;
-        } else {
-          showToast(ToastMessageConstants.ERROR, "Error creating check-in template, please try again");
-          return false;
-        }
+        return false;
+      }
     }),
   }))
   .actions(self => ({

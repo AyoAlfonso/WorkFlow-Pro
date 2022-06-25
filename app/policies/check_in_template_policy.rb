@@ -21,10 +21,11 @@ class CheckInTemplatePolicy < ApplicationPolicy
 
 
   class Scope
-    attr_reader :user, :scope
+    attr_reader :user, :scope, :company
 
     def initialize(context, scope)
       @user = context.user
+      @company = context.company
       @scope = scope
     end
 

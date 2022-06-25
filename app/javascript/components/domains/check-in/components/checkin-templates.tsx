@@ -1,39 +1,37 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
+import { useMst } from "~/setup/root";
 import { baseTheme } from "~/themes";
 import { useHistory } from "react-router-dom";
 import { CheckInTemplateCard } from "./checkin-template-card";
+import { Loading } from "~/components/shared";
+import { toJS } from "mobx";
 
 export const CheckinTemplates = (): JSX.Element => {
-  const [activeTab, setActiveTab] = useState("All");
+  const [activeTab, setActiveTab] = useState<string>("All");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const history = useHistory();
+  const { checkInTemplateStore } = useMst();
 
-  const checkins = [
-    {
-      name: "☕️ Daily Standup",
-      description:
-        "Keep your whole team in the loop with updates on daily progress and possible blockers",
-      tags: ["Team"],
-    },
-    {
-      name: "✍🏾 Weekly Check-in",
-      description:
-        "A weekly check-in to reflect on what went well and what could be improved. Decide what to focus on next.",
-      tags: ["Team"],
-    },
-    {
-      name: "🪞 Evening Reflection",
-      description: "Taking time to reflect on your day and getting ready for the day ahead",
-      tags: ["Personal"],
-    },
-    {
-      name: "eNPS",
-      description: "Measure how do employees really feel about their work",
-      tags: ["Custom", "Company"],
-    },
-  ];
+  const { checkInTemplates } = checkInTemplateStore;
 
+  useEffect(() => {
+    checkInTemplateStore.fetchCheckInTemplates().then(() => {
+      setIsLoading(false);
+    });
+  }, []);
+
+  const renderLoading = () => (
+    <LoadingContainer>
+      <Loading />
+    </LoadingContainer>
+  );
+
+  if (isLoading) {
+    return renderLoading();
+  }
+  
   return (
     <Container>
       <StyledHeader>Check-in Templates</StyledHeader>
@@ -62,12 +60,12 @@ export const CheckinTemplates = (): JSX.Element => {
         </OverviewTab>
       </OverviewTabsContainer>
       <CheckInTemplateCardsContainer>
-        {checkins.map((checkin, index) => (
+        {checkInTemplates.map((checkin, index) => (
           <CheckInTemplateCard
             key={`checkin-${index}`}
             name={checkin.name}
             description={checkin.description}
-            tags={checkin.tags}
+            tags={[checkin.ownerType, checkin.checkInType == "dynamic" ? "Custom" : ""]}
           />
         ))}
       </CheckInTemplateCardsContainer>
@@ -78,7 +76,6 @@ export const CheckinTemplates = (): JSX.Element => {
 const Container = styled.div`
   background: ${props => props.theme.colors.white};
   padding: 1em;
-  height: 100%;
 `;
 
 const StyledHeader = styled.span`
@@ -132,4 +129,13 @@ const CheckInTemplateCardsContainer = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   // flex-wrap: wrap;
   gap: 1em 2em;
+`;
+
+const LoadingContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 `;

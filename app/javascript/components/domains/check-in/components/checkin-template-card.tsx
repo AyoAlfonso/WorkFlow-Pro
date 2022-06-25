@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { Icon } from "~/components/shared";
 import { Button } from "~/components/shared/button";
+import { baseTheme } from "~/themes";
 
 interface CheckInTemplateCardProps {
   name: string;
@@ -85,7 +86,7 @@ export const CheckInTemplateCard = ({
         </ButtonsContainer>
         <TagsContainer>
           {tags.map((tag, index) => (
-            <Tag key={`${tag}-${index}`}>{tag}</Tag>
+            <Tag color={tag == "Custom" ? baseTheme.colors.primary100 : ""} key={`${tag}-${index}`}>{tag.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}</Tag>
           ))}
         </TagsContainer>
       </BottomRow>
@@ -97,9 +98,7 @@ const Container = styled.div`
   background: ${props => props.theme.colors.white};
   box-shadow: 0px 3px 6px #00000029;
   border-radius: 1em;
-  // width: 40%;
-  // max-width: 440px;
-  height: 150px;
+  height: 140px;
   padding: 1em 1.5em;
   position: relative;
   margin-right: ;
@@ -179,12 +178,18 @@ const ButtonsContainer = styled.div`
 const TagsContainer = styled.div`
   display: flex;
 `;
-const Tag = styled.span`
+
+type TagProps = {
+  color?: string;
+}
+
+const Tag = styled.span<TagProps>`
   display: inline-block;
   padding: 0.5em;
-  color: ${props => props.theme.colors.grey100};
+  color: ${props => (props.color ? props.color : props.theme.colors.grey100)};
   background-color: ${props => props.theme.colors.grey20};
   font-size: 0.75em;
   margin-right: 0.75em;
   border-radius: 4px;
+  font-weight: bold;
 `;
