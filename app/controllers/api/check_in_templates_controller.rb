@@ -90,7 +90,6 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def run_now
-    # binding.pry
     if(@check_in_template.check_in_type == "dynamic") 
       check_in_artifact = CheckInArtifact.new(check_in_template: @check_in_template, owned_by: current_user)
       check_in_artifact.save!(start_time: DateTime.now.utc.beginning_of_day)
@@ -99,10 +98,13 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def general_check_in
-    check_in_artifacts =  CheckInArtifact.where(owned_by: current_user, skip: false).incomplete
-    @check_in_artifacts_for_day = check_in_artifacts.for_day_of_date(params[:on_day])
-    @check_in_artifacts_for_week = check_in_artifacts.for_week_of_date(params[:on_week])
-    @check_in_artifacts_for_month =  check_in_artifacts.for_month_of_date(params[:on_month])
+    check_in_artifacts = CheckInArtifact.where(owned_by: current_user, skip: false).incomplete
+    @check_in_artifacts_for_day = check_in_artifacts
+    # .for_day_of_date(params[:on_day])
+    @check_in_artifacts_for_week = check_in_artifacts
+    # .for_week_of_date(params[:on_week])
+    @check_in_artifacts_for_month =  check_in_artifacts
+    # .for_month_of_date(params[:on_month])
     render "api/check_in_artifacts/general_check_in_artifacts"
   end
 
