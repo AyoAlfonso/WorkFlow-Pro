@@ -67,8 +67,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
 
   schedule = IceCube::Schedule.new(Time.current - 7.days)
   single_occurence_schedule = IceCube::Schedule.new(Time.new(Date.current.year, 1,1))
-  run_once  =  if @check_in_template.run_once.present? Time.parse(@check_in_template.run_once) ||  Time.parse(@check_in_template.date_time_config["date"]) 
-              end
+  run_once = if @check_in_template.run_once.present? Time.parse(@check_in_template.run_once) ||  Time.parse(@check_in_template.date_time_config["date"]);  end
  
     begin
       case date_time_config["cadence"] 
@@ -112,7 +111,10 @@ class Api::CheckInTemplatesController < Api::ApplicationController
       check_in_artifact.update(skip: params[:skip], end_time: Time.now )
       CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: DateTime.now.utc.beginning_of_day, end_time: DateTime.now.utc.end_of_day )
     end
-    
+  end
+
+  def show
+      render json: { template: @check_in_template, status: :ok }
   end
 
   def destroy
@@ -123,7 +125,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   private
   def check_in_template_params
       params.require(:check_in_template).permit(:name, :check_in_type, :owner_type, :description, :participants, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder,
-             :check_in_templates_steps_attributes [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :variant, :question])
+           :check_in_templates_steps_attributes [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :variant, :question])
   end
 
   def set_check_in_template
@@ -131,11 +133,6 @@ class Api::CheckInTemplatesController < Api::ApplicationController
       authorize @check_in_template
   end
 
-  
-
-  def show
-      render json: { template: @check_in_template, status: :ok }
-  end
 
   def record_activities
         record_activity(params[:note], nil, params[:id])
