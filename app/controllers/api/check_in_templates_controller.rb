@@ -8,7 +8,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   skip_after_action :verify_authorized, only: [:get_onboarding_company, :create_or_update_onboarding_goals, :get_onboarding_goals, :create_or_update_onboarding_key_activities, :get_onboarding_key_activities, :create_or_update_onboarding_team]
 
   def index
-    @check_in_templates = policy_scope(CheckInTemplate) ##squash the  check-in template  and run migration
+    @check_in_templates = policy_scope(CheckInTemplate)
     render json: @check_in_templates.as_json(only: [:id, :name, :check_in_type, :owner_type, :description, :participants, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder], include: {
                   check_in_templates_steps: {  only: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :variant, :question]}})
   end
@@ -59,7 +59,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   def publish_now
     date_time_config = @check_in_template.date_time_config
     check_in_artifact = CheckInArtifact.new(check_in_template_id: @check_in_template.id, owned_by: current_user)
-    
+
     notification = Notification.find_or_initialize_by(
         user_id: current_user.id,
         notification_type: 7,
@@ -90,19 +90,20 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def run_now
+    # binding.pry
     if(@check_in_template.check_in_type == "dynamic") 
-      check_in_artifact = CheckInArtifact.new(check_in_template_id: @check_in_template.id, owned_by: current_user)
+      check_in_artifact = CheckInArtifact.new(check_in_template: @check_in_template, owned_by: current_user)
       check_in_artifact.save!(start_time: DateTime.now.utc.beginning_of_day)
     end
-     render json: { template: @check_in_template, check_in_artifact: check_in_artifact, status: :ok }
+    render json: {check_in_artifact: check_in_artifact, status: :ok }
   end
 
   def general_check_in
-  check_in_artifacts =  CheckInArtifact.where(owned_by: current_user, skip: false).incomplete
-  @check_in_artifacts_for_day = check_in_artifacts.for_day_of_date(params[:on_day])
-  @check_in_artifacts_for_week = check_in_artifacts.for_week_of_date(params[:on_week])
-  @check_in_artifacts_for_month =  check_in_artifacts.for_month_of_date(params[:on_month])
-  render "api/check_in_artifacts/general_check_in_artifacts"
+    check_in_artifacts =  CheckInArtifact.where(owned_by: current_user, skip: false).incomplete
+    @check_in_artifacts_for_day = check_in_artifacts.for_day_of_date(params[:on_day])
+    @check_in_artifacts_for_week = check_in_artifacts.for_week_of_date(params[:on_week])
+    @check_in_artifacts_for_month =  check_in_artifacts.for_month_of_date(params[:on_month])
+    render "api/check_in_artifacts/general_check_in_artifacts"
   end
 
   def artifact
@@ -132,7 +133,6 @@ class Api::CheckInTemplatesController < Api::ApplicationController
       @check_in_template = CheckInTemplate.find(params[:id])
       authorize @check_in_template
   end
-
 
   def record_activities
         record_activity(params[:note], nil, params[:id])

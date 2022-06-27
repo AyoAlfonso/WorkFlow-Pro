@@ -17,22 +17,14 @@ class CheckInArtifact < ApplicationRecord
        include: [
         check_in_template: {
           except: [:created_at, :updated_at],
-        },
-      ],
+          include: {
+          check_in_templates_steps: {
+             except: [:created_at, :updated_at]
+            },
+          }
+        }],
      })
   end
-
-  # enum time_zone: {
-  #   user: 0,
-  #   company: 1,
-  # }
-
-  # Validation
-  # check for reminder should only accept one key at a time
-  # check for date_time_config
-
-
-  accepts_nested_attributes_for :check_in_templates_steps, allow_destroy: true
 
   scope :with_name, ->(name) { where(name: name) }
 end

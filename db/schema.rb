@@ -109,15 +109,16 @@ ActiveRecord::Schema.define(version: 2022_06_27_160517) do
 
   create_table "check_in_artifacts", force: :cascade do |t|
     t.bigint "owned_by_id"
-    t.bigint "check_in_template_id_id"
+    t.bigint "check_in_template_id"
     t.boolean "skip", default: false
     t.boolean "boolean", default: false
     t.datetime "end_time"
     t.datetime "start_time"
+    t.datetime "deleted_at"
     t.jsonb "questions"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["check_in_template_id_id"], name: "index_check_in_artifacts_on_check_in_template_id_id"
+    t.index ["check_in_template_id"], name: "index_check_in_artifacts_on_check_in_template_id"
     t.index ["owned_by_id"], name: "index_check_in_artifacts_on_owned_by_id"
   end
 
