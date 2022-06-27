@@ -67,7 +67,8 @@ class Api::CheckInTemplatesController < Api::ApplicationController
 
   schedule = IceCube::Schedule.new(Time.current - 7.days)
   single_occurence_schedule = IceCube::Schedule.new(Time.new(Date.current.year, 1,1))
-  run_once  =  if @check_in_template.run_once.present? Time.parse(@check_in_template.run_once) ||  Time.parse(@check_in_template.date_time_config["date"])
+  run_once  =  if @check_in_template.run_once.present? Time.parse(@check_in_template.run_once) ||  Time.parse(@check_in_template.date_time_config["date"]) 
+              end
  
     begin
       case date_time_config["cadence"] 
