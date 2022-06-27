@@ -1,0 +1,1 @@
+json.extract! artifact, :id, :check_in_template_id, :skip, :end_time, :owned_by_id, :owned_by, :start_time

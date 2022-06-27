@@ -6,10 +6,15 @@ class CheckInTemplate < ApplicationRecord
     dynamic: 1,
   }
 
-  scope :sort_by_company, ->(company) { where(company_id: company.id) }
+  scope :sort_by_company, ->(company) { where(company_id: [nil, company.id]) }
   scope :optimized, -> { includes([:check_in_templates_steps ]) }
-
-   enum owner_type: {
+  scope :incomplete, -> { where(end_time: nil) }
+  scope :for_day_of_date, ->(start_time) { where("(start_time >= ? AND start_time <= ?) OR start_time IS NULL", start_time.beginning_of_day, start_time.end_of_day) }
+  scope :for_week_of_date, ->(start_time) { where("(start_time >= ? AND start_time <= ?) OR start_time IS NULL", start_time.beginning_of_week, start_time.end_of_week) }
+  scope :for_month_of_date, ->(start_time) { where("(start_time >= ? AND start_time <= ?) OR start_time IS NULL", start_time.beginning_of_month, start_time.end_of_month) }
+  scope :for_week_of_date_started_only, ->(start_time) { where("(start_time >= ? AND start_time <= ?)", start_time.beginning_of_week, start_time.end_of_week) }
+  
+  enum owner_type: {
     company: 0,
     team:1,
     personal:2
