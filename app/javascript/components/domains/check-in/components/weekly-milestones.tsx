@@ -18,15 +18,19 @@ import { MilestoneCard } from "../../goals/milestone/milestone-card";
 import { EmptyState } from "./empty-state";
 import { getWeekOf } from "~/utils/date-time";
 
+interface WeeklyMilestonesProps {
+  disabled?: boolean;
+}
+
 export const WeeklyMilestones = observer(
-  (props): JSX.Element => {
+  ({ disabled }: WeeklyMilestonesProps): JSX.Element => {
     const { sessionStore, milestoneStore } = useMst();
     const { t } = useTranslation();
 
     const { weekOf } = useParams();
     const { milestonesForWeeklyCheckin } = milestoneStore;
 
-    const currentWeekOf = weekOf || getWeekOf()
+    const currentWeekOf = weekOf || getWeekOf();
 
     useEffect(() => {
       milestoneStore.getMilestonesForWeeklyCheckin(currentWeekOf);
@@ -34,12 +38,12 @@ export const WeeklyMilestones = observer(
 
     const renderHeading = (): JSX.Element => {
       return (
-        <Container>
+        <SectionContainer>
           <StyledHeader>
             What's the status on your Milestones from week of{" "}
             <u>{moment(weekOf).format("MMMM D")}</u>?
           </StyledHeader>
-        </Container>
+        </SectionContainer>
       );
     };
 
@@ -71,7 +75,7 @@ export const WeeklyMilestones = observer(
             <>
               {renderHeading()}
               {milestonesForWeeklyCheckin?.map(milestone => (
-                <Container key={milestone.id}>
+                <SectionContainer key={milestone.id}>
                   <AvatarContainer>
                     {renderUserAvatar()}
                     <StyledText>
@@ -88,7 +92,7 @@ export const WeeklyMilestones = observer(
                       fromWeeklyCheckIn={true}
                     />
                   </MilestoneContainer>
-                </Container>
+                </SectionContainer>
               ))}
             </>
           )}
@@ -96,7 +100,7 @@ export const WeeklyMilestones = observer(
       );
     };
     return (
-      <>
+      <Container disabled={disabled}>
         {!R.isEmpty(milestonesForWeeklyCheckin) ? (
           <>{renderMilestones()}</>
         ) : (
@@ -105,12 +109,20 @@ export const WeeklyMilestones = observer(
             infoText={t<string>("weeklyCheckIn.milestones.create")}
           />
         )}
-      </>
+      </Container>
     );
   },
 );
 
-const Container = styled.div`
+type ContainerProps = {
+  disabled?: boolean;
+};
+
+const Container = styled.div<ContainerProps>`
+  pointer-events: ${props => (props.disabled ? "none" : "auto")};
+`;
+
+const SectionContainer = styled.div`
   border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
   padding-left: 16px;
   padding-right: 16px;

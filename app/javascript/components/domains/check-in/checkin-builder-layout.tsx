@@ -115,7 +115,7 @@ export const CheckInBuilderLayout = observer(
     const createCheckin = () => {
       const checkin = {
         name: checkinName,
-        checkInTemplateStepsAttributes: selectedSteps,
+        checkInTemplatesStepsAttributes: selectedSteps,
         participants: participants,
         anonymous: anonymousResponse,
         checkInType: "dynamic",
@@ -190,7 +190,7 @@ export const CheckInBuilderLayout = observer(
 
     const finishCheckIn = () => {
       return (
-        <StopButton variant={"primary"} onClick={createCheckin} small disabled={false}>
+        <StopButton disabled={currentStep == 2 && !participants.length} variant={"primary"} onClick={createCheckin} small>
           Publish
         </StopButton>
       );

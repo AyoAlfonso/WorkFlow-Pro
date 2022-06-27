@@ -3,18 +3,23 @@ import styled from "styled-components";
 
 interface OpenEndedPreviewProps {
   question: string;
+  disabled?: boolean;
 }
 
-export const OpenEndedPreview = ({ question }: OpenEndedPreviewProps): JSX.Element => {
+export const OpenEndedPreview = ({ question, disabled }: OpenEndedPreviewProps): JSX.Element => {
   return (
-    <Container>
+    <Container disabled={disabled}>
       <QuestionText>{question}</QuestionText>
       <TextField placeholder="Add response" />
     </Container>
   );
 };
 
-const Container = styled.div`
+type ContainerProps = {
+  disabled: boolean;
+}
+
+const Container = styled.div<ContainerProps>`
   background: ${props => props.theme.colors.white};
   padding: 1em;
   box-shadow: 0px 3px 6px #00000029;
@@ -22,6 +27,7 @@ const Container = styled.div`
   height: 200px;
   position: relative;
   z-index: 10;
+  pointer-events: ${props => (props.disabled ? "none" : "auto")};
 `;
 
 const QuestionText = styled.span`

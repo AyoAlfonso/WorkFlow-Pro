@@ -17,8 +17,12 @@ import { toJS } from "mobx";
 import { useTranslation } from "react-i18next";
 import { EmptyState } from "./empty-state";
 
+interface KpiProps {
+  disabled?: boolean;
+}
+
 export const KpiComponent = observer(
-  (props): JSX.Element => {
+  ({ disabled }: KpiProps): JSX.Element => {
     const { keyPerformanceIndicatorStore, scorecardStore, sessionStore, companyStore } = useMst();
     const { createScorecardLog } = keyPerformanceIndicatorStore;
     const { kpis } = scorecardStore;
@@ -137,9 +141,21 @@ export const KpiComponent = observer(
       );
     };
 
-    return <>{loading ? <>{renderLoading()}</> : <>{renderKPIs()}</>}</>;
+    return (
+      <Wrapper disabled={disabled}>
+        {loading ? <>{renderLoading()}</> : <>{renderKPIs()}</>}
+      </Wrapper>
+    );
   },
 );
+
+type ContainerProps = {
+  disabled?: boolean;
+};
+
+const Wrapper = styled.div<ContainerProps>`
+  pointer-events: ${props => (props.disabled ? "none" : "auto")};
+`;
 
 const Container = styled.div`
   border-bottom: 1px solid ${props => props.theme.colors.borderGrey};

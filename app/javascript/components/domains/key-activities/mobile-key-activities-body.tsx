@@ -19,10 +19,11 @@ import { toJS } from "mobx";
 interface IMobileKeyActivitiesBodyProps {
   TodayWeekly?: boolean;
   WeeklyMaster?: boolean;
+  disabled?: boolean;
 }
 
 export const MobileKeyActivitiesBody = observer(
-  ({ TodayWeekly, WeeklyMaster }: IMobileKeyActivitiesBodyProps): JSX.Element => {
+  ({ TodayWeekly, WeeklyMaster, disabled }: IMobileKeyActivitiesBodyProps): JSX.Element => {
     const { keyActivityStore, sessionStore } = useMst();
     const { t } = useTranslation();
 
@@ -37,7 +38,7 @@ export const MobileKeyActivitiesBody = observer(
     const [loading, setLoading] = useState<boolean>(true);
 
     const listRef = useRef<HTMLDivElement>(null);
-    
+
     const selectedFilterGroupId = sessionStore.getScheduledGroupIdByName(currentList);
     const droppableId = `scheduled-group-activities-${selectedFilterGroupId}`;
     const completedKeyActivities = keyActivityStore.completedActivities;
@@ -107,18 +108,19 @@ export const MobileKeyActivitiesBody = observer(
           {listSelectorOpen && (
             <ListDropdownContainer>
               {renderFilterGroupOptions()}
-              {!TodayWeekly || !WeeklyMaster && (
-                <ListOption
-                  onClick={() => {
-                    setShowCompletedItems(true);
-                    setListSelectorOpen(false);
-                    setCurrentList("");
-                    setCurrentTeamId(null);
-                  }}
-                >
-                  Completed
-                </ListOption>
-              )}
+              {!TodayWeekly ||
+                (!WeeklyMaster && (
+                  <ListOption
+                    onClick={() => {
+                      setShowCompletedItems(true);
+                      setListSelectorOpen(false);
+                      setCurrentList("");
+                      setCurrentTeamId(null);
+                    }}
+                  >
+                    Completed
+                  </ListOption>
+                ))}
             </ListDropdownContainer>
           )}
         </ListSelectorContainer>
@@ -183,7 +185,7 @@ export const MobileKeyActivitiesBody = observer(
     };
 
     return (
-      <Container>
+      <Container disabled={disabled}>
         <CreateKeyActivityModal
           createKeyActivityModalOpen={createKeyActivityModalOpen}
           setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
@@ -207,10 +209,15 @@ const ChevronUp = styled(Icon)`
   transform: rotate(180deg);
 `;
 
-const Container = styled.div`
+type ContainerProps = {
+  disabled?: boolean;
+};
+
+const Container = styled.div<ContainerProps>`
   ${color}
   position: relative;
   padding: 0px 0px 6px 0px;
+  pointer-events: ${props => (props.disabled ? "none" : "auto")};
   display: none @media (min-width: 768px) {
     display: block;
   }

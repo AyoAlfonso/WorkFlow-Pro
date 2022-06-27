@@ -41,8 +41,13 @@ export const TextStepDiv = styled.div`
   }
 `;
 
-export const TextStepContainer = styled.div`
+type TextStepContainerProps = {
+  disabled?: boolean;
+};
+
+export const TextStepContainer = styled.div<TextStepContainerProps>`
   display: flex;
   width: 100%;
   height: 100%;
+  pointer-events: ${props => (props.disabled ? "none" : "auto")};
 `;

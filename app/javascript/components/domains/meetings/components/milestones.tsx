@@ -13,11 +13,12 @@ import { Avatar } from "~/components/shared";
 
 interface IMilestoneProps {
   meetingType?: string;
-  showWeekly?: boolean
+  showWeekly?: boolean;
+  disabled?: boolean;
 }
 
 export const Milestones = observer(
-  ({ meetingType, showWeekly }: IMilestoneProps): JSX.Element => {
+  ({ meetingType, showWeekly, disabled }: IMilestoneProps): JSX.Element => {
     const { milestoneStore, keyElementStore, userStore, companyStore } = useMst();
     const { keyElementsForWeeklyCheckin } = keyElementStore;
 
@@ -108,7 +109,7 @@ export const Milestones = observer(
     };
 
     return (
-      <ColumnContainerParent>
+      <ColumnContainerParent disabled={disabled}>
         <ColumnContainer>
           {meetingType == "personal_weekly" || showWeekly ? (
             <HomeKeyActivities weeklyOnly={true} width={"100%"} />

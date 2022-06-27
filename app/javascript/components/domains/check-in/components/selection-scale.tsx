@@ -7,13 +7,14 @@ import { agreementScale, sentimentScale } from "../data/selection-scale-data";
 interface SelectionScaleProps {
   question: string;
   type?: string;
+  disabled?: boolean;
 }
 
-export const SelectionScale = ({ question, type }: SelectionScaleProps): JSX.Element => {
+export const SelectionScale = ({ question, type, disabled }: SelectionScaleProps): JSX.Element => {
   const [selected, setSelected] = useState<number>(0);
 
   return (
-    <Container>
+    <Container disabled={disabled}>
       <QuestionText>{question}</QuestionText>
       <OptionsContainer>
         {type == "sentiment"
@@ -50,12 +51,17 @@ export const SelectionScale = ({ question, type }: SelectionScaleProps): JSX.Ele
   );
 };
 
-const Container = styled.div`
+type ContaineProps = {
+  disabled?: boolean;
+}
+
+const Container = styled.div<ContaineProps>`
   background: ${props => props.theme.colors.white};
   padding: 1em;
   box-shadow: 0px 3px 6px #00000029;
   border-radius: 8px;
   height: 140px;
+  pointer-events: ${props => (props.disabled ? "none" : "auto")};
 `;
 
 const QuestionText = styled.span`

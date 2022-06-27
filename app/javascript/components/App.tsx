@@ -67,6 +67,7 @@ import { CheckinInsights } from "./domains/check-in/checkin-insights";
 import CheckinInsightsIndex from "./domains/check-in/checkin-insights-index";
 
 import { UpdateProfileForm } from "./domains/user/update-profile-form";
+import CheckInWizard from "./domains/check-in/checkin";
 const Container = styled.div`
   margin-left: 136px;
   margin-right: 40px;
@@ -377,6 +378,8 @@ export const App = observer(
                     <Route exact path="/check-in/success" component={CheckInSuccess} />
                     <Route exact path="/check-in/templates" component={NewCheckinLayout} />
                     <Route exact path="/check-in/build" component={CheckInBuilderLayout} />
+
+                    <Route exact path="/check-in/run/:id" component={CheckInWizard} />
                   </>
                 </Switch>
               ) : (

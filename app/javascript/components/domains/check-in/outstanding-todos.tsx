@@ -11,15 +11,18 @@ import {
   KeyActivityListSubHeaderContainer,
 } from "~/components/domains/key-activities/key-activities-list";
 
+interface OutstandingTodosProps {
+  disabled?: boolean;
+}
+
 export const OutstandingTodos = observer(
-  (): JSX.Element => {
+  ({ disabled }: OutstandingTodosProps): JSX.Element => {
     const { keyActivityStore } = useMst();
     const { t } = useTranslation();
 
-
     const remainingPyns = keyActivityStore.todaysPrioritiesFromPreviousDays;
     return (
-      <KeyActivitiesWrapperContainer width={"100%"}>
+      <KeyActivitiesWrapperContainer width={"100%"} disabled={disabled}>
         <Container>
           <KeyActivitiesHeader title={t("keyActivities.outstandingTitle")} />
           <KeyActivityListSubHeaderContainer>
@@ -36,4 +39,4 @@ export const OutstandingTodos = observer(
 
 export const Container = styled.div`
   width: 100%;
-`
+`;

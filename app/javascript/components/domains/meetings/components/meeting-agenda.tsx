@@ -78,7 +78,9 @@ export const MeetingAgenda = observer(
                 {meeting.meetingType == "personal_weekly" && step.name == "Milestones"
                   ? `${getStepLabelForObjectiveKeyType()} ${step.duration &&
                       `(${step.duration} minutes)`}`
-                  : `${step.name} ${step.duration ? `(${step.duration} minutes)` : ''}`}
+                  : step.variant
+                  ? step.variant
+                  : `${step.name} ${step.duration ? `(${step.duration} minutes)` : ""}`}
               </StyledText>
               {renderExplorationTopicOwner(step)}
             </StepTopicContainer>

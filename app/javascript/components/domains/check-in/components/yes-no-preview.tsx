@@ -4,11 +4,12 @@ import { Button } from "~/components/shared";
 
 interface YesNoPreviewProps {
   question: string;
+  disabled?: boolean;
 }
 
-export const YesNoPreview = ({ question }: YesNoPreviewProps): JSX.Element => {
+export const YesNoPreview = ({ question, disabled }: YesNoPreviewProps): JSX.Element => {
   return (
-    <Container>
+    <Container disabled={disabled}>
       <QuestionText>{question}</QuestionText>
       <ButtonsContainer>
         <YesButton variant={"primary"} onClick={() => console.log("log")} small>
@@ -22,12 +23,17 @@ export const YesNoPreview = ({ question }: YesNoPreviewProps): JSX.Element => {
   );
 };
 
-const Container = styled.div`
+type ContainerProps = {
+  disabled?: boolean;
+}
+
+const Container = styled.div<ContainerProps>`
   background: ${props => props.theme.colors.white};
   padding: 1em;
   box-shadow: 0px 3px 6px #00000029;
   border-radius: 8px;
   height: 140px;
+  pointer-events: ${props => (props.disabled ? "none" : "auto")};
 `;
 
 const QuestionText = styled.span`

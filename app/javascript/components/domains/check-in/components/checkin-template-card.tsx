@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
+import { useHistory } from "react-router-dom";
 import { Icon } from "~/components/shared";
 import { Button } from "~/components/shared/button";
 import { baseTheme } from "~/themes";
@@ -9,16 +10,20 @@ interface CheckInTemplateCardProps {
   name: string;
   description: string;
   tags: Array<string>;
+  id: number;
 }
 
 export const CheckInTemplateCard = ({
   name,
   description,
   tags,
+  id,
 }: CheckInTemplateCardProps): JSX.Element => {
   const [showOptions, setShowOptions] = useState<boolean>(false);
 
   const optionsRef = useRef(null);
+
+  const history = useHistory();
 
   useEffect(() => {
     const externalEventHandler = e => {
@@ -77,7 +82,7 @@ export const CheckInTemplateCard = ({
             mr="1em"
             width="70px"
             fontSize="12px"
-            onClick={() => console.log("log")}
+            onClick={() => history.push(`/check-in/run/${id}`)}
             small
             style={{ whiteSpace: "nowrap" }}
           >
@@ -102,6 +107,7 @@ const Container = styled.div`
   padding: 1em 1.5em;
   position: relative;
   margin-right: ;
+  // max-width: 350px;
 `;
 
 const HeaderContainer = styled.div`

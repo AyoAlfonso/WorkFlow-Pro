@@ -7,6 +7,7 @@ import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import * as R from "ramda";
 import { StepModel } from "~/models/step";
+import { toJS } from "mobx";
 
 export const CheckInTemplateStoreModel = types
   .model("CheckInTemplateStoreModel")
@@ -15,7 +16,6 @@ export const CheckInTemplateStoreModel = types
     currentCheckIn: types.maybeNull(CheckInTemplateModel),
   })
   .extend(withEnvironment())
-  .views(self => ({}))
   .actions(self => ({
     fetchCheckInTemplates: flow(function*() {
       try {
@@ -57,6 +57,11 @@ export const CheckInTemplateStoreModel = types
     updateCurrentCheckIn(checkInObj) {
       self.currentCheckIn = checkInObj;
     },
+    findCheckinTemplate(id) {
+      const checkin = toJS(self.checkInTemplates).find(checkin => checkin.id == id);
+      const currentCheckIn = {...checkin, currentStep: 1};
+      self.currentCheckIn = currentCheckIn;
+    }
   }))
   .actions(self => ({
     load: flow(function*() {

@@ -66,7 +66,7 @@ export const CheckInWizardLayout = observer(
     const actionButtons = () => {
       return (
         <>
-          {checkIn?.currentStep > 0 && (
+          {checkIn?.currentStep > 1 && (
             <LeftButtonContainer>
               <BackButton
                 small
@@ -77,7 +77,7 @@ export const CheckInWizardLayout = observer(
               </BackButton>
             </LeftButtonContainer>
           )}
-          {checkIn.currentStep + 1 < numberOfSteps ? (
+          {checkIn.currentStep + 1 <= numberOfSteps ? (
             <NextButton
               small
               variant={"primary"}

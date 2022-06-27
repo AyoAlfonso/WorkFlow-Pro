@@ -11,8 +11,12 @@ import { KeyElement } from "../../goals/shared/key-element";
 import { CreateKeyActivityModal } from "../../key-activities/create-key-activity-modal";
 import { KeyActivitiesList } from "../../key-activities/key-activities-list";
 
+interface MobileTodosInitiativesProps {
+  disabled?: boolean;
+}
+
 export const MobileTodosInitiatives = observer(
-  (): JSX.Element => {
+  ({ disabled }: MobileTodosInitiativesProps): JSX.Element => {
     const [listSelectorOpen, setListSelectorOpen] = useState<boolean>(false);
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
     const [showCompletedItems, setShowCompletedItems] = useState<boolean>(false);
@@ -211,7 +215,7 @@ export const MobileTodosInitiatives = observer(
     }
 
     return (
-      <Container>
+      <Container disabled={disabled}>
         <CreateKeyActivityModal
           createKeyActivityModalOpen={createKeyActivityModalOpen}
           setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
@@ -236,10 +240,15 @@ const ChevronUp = styled(Icon)`
   transform: rotate(180deg);
 `;
 
-const Container = styled.div`
+type ContainerProps = {
+  disabled?: boolean;
+};
+
+const Container = styled.div<ContainerProps>`
   ${color}
   position: relative;
   padding: 0px 0px 6px 0px;
+  pointer-events: ${props => (props.disabled ? "none" : "auto")};
   display: none @media (min-width: 768px) {
     display: block;
   }

@@ -11,6 +11,7 @@ import { toJS } from "mobx";
 export const CheckinTemplates = (): JSX.Element => {
   const [activeTab, setActiveTab] = useState<string>("All");
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [checkInTemplatesState, setCheckInTemplatesState] = useState<any[]>([]);
   const history = useHistory();
   const { checkInTemplateStore } = useMst();
 
@@ -18,6 +19,7 @@ export const CheckinTemplates = (): JSX.Element => {
 
   useEffect(() => {
     checkInTemplateStore.fetchCheckInTemplates().then(() => {
+      setCheckInTemplatesState(toJS(checkInTemplates));
       setIsLoading(false);
     });
   }, []);
@@ -31,26 +33,35 @@ export const CheckinTemplates = (): JSX.Element => {
   if (isLoading) {
     return renderLoading();
   }
-  
+
+  const tabArray = ["All", "Team", "Company", "Personal", "Custom"];
+
+  const filterTabs = (tab: string) => {
+    setActiveTab(tab);
+    if (tab === "All") {
+      setCheckInTemplatesState(toJS(checkInTemplates));
+    } else if (tab == "Custom") {
+      const filteredTemplates = toJS(checkInTemplates).filter(
+        template => template.checkInType == "dynamic",
+      );
+      setCheckInTemplatesState(filteredTemplates);
+    } else {
+      const filteredTemplates = toJS(checkInTemplates).filter(
+        template => template.ownerType == tab.toLowerCase(),
+      );
+      setCheckInTemplatesState(filteredTemplates);
+    }
+  };
+
   return (
     <Container>
       <StyledHeader>Check-in Templates</StyledHeader>
       <OverviewTabsContainer>
-        <OverviewTab active={activeTab === "All"} onClick={() => setActiveTab("All")}>
-          All
-        </OverviewTab>
-        <OverviewTab active={activeTab === "Team"} onClick={() => setActiveTab("Team")}>
-          Team
-        </OverviewTab>
-        <OverviewTab active={activeTab === "Company"} onClick={() => setActiveTab("Company")}>
-          Company
-        </OverviewTab>
-        <OverviewTab active={activeTab === "Personal"} onClick={() => setActiveTab("Personal")}>
-          Personal
-        </OverviewTab>
-        <OverviewTab active={activeTab === "Custom"} onClick={() => setActiveTab("Custom")}>
-          Custom
-        </OverviewTab>
+        {tabArray.map(tab => (
+          <OverviewTab active={activeTab === tab} onClick={() => filterTabs(tab)}>
+            {tab}
+          </OverviewTab>
+        ))}
         <OverviewTab
           color={baseTheme.colors.primary100}
           active={activeTab === "Build"}
@@ -60,10 +71,11 @@ export const CheckinTemplates = (): JSX.Element => {
         </OverviewTab>
       </OverviewTabsContainer>
       <CheckInTemplateCardsContainer>
-        {checkInTemplates.map((checkin, index) => (
+        {checkInTemplatesState.map((checkin, index) => (
           <CheckInTemplateCard
             key={`checkin-${index}`}
             name={checkin.name}
+            id={checkin.id}
             description={checkin.description}
             tags={[checkin.ownerType, checkin.checkInType == "dynamic" ? "Custom" : ""]}
           />

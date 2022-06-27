@@ -7,8 +7,6 @@ import { Text } from "~/components/shared/text";
 import { Button } from "~/components/shared/button";
 import { getWeekOf } from "~/utils/date-time";
 
-const SuccessLogo = require("~/assets/images/LynchPyn_success.gif");
-
 export const CheckInSuccess = observer(
   (): JSX.Element => {
     const { sessionStore } = useMst();
@@ -21,7 +19,7 @@ export const CheckInSuccess = observer(
         const width = window.innerWidth > 768;
         if (width) {
           setTimeout(() => {
-            history.push("/");
+            history.push("/check-in");
           }, 3000);
         }
       };
@@ -31,7 +29,7 @@ export const CheckInSuccess = observer(
     return (
       <Container>
         <ImageContainer>
-          <Image src={SuccessLogo} />
+          <Image src={require("~/assets/images/LynchPyn_success.gif")} />
         </ImageContainer>
         <HeaderText>Published!</HeaderText>
         <InfoText>Your updates have been saved.</InfoText>

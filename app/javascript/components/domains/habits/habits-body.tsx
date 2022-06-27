@@ -20,8 +20,12 @@ import {
 } from "./habits-styles";
 import { Icon, ModalWithHeader } from "~/components/shared";
 
+interface IHabitsBodyProps {
+  disabled?: boolean;
+}
+
 export const HabitsBody = observer(
-  (): JSX.Element => {
+  ({ disabled }: IHabitsBodyProps): JSX.Element => {
     const {
       habitStore,
       habitStore: { habits, lastFourDays, lastFewDays },
@@ -88,7 +92,7 @@ export const HabitsBody = observer(
         />
       </HomeContainerBorders>
     ) : (
-      <>
+      <Container disabled={disabled}>
         <AddNewHabitContainer onClick={() => setShowHabitModal(true)}>
           <AddNewHabitPlus>
             <Icon icon={"Plus"} size={16} iconColor={"primary100"} />
@@ -120,10 +124,18 @@ export const HabitsBody = observer(
         >
           <HabitsCreateHabitForm onSubmit={() => setShowHabitModal(false)} />
         </ModalWithHeader>
-      </>
+      </Container>
     );
   },
 );
+
+type ContainerProps = {
+  disabled?: boolean;
+}
+
+const Container = styled.div<ContainerProps>`
+  pointer-events: ${props => (props.disabled ? "none" : "auto")};
+`;
 
 const AccordionDetailsContainer = styled(AccordionDetails)`
   border-radius: 10px;

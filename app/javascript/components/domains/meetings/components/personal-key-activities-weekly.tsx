@@ -15,8 +15,12 @@ import { KeyActivitiesSubHeader } from "../../key-activities/key-activities-sub-
 
 import { useTranslation } from "react-i18next";
 
+interface PersonalKeyActivitiesWeeklyProps {
+  disabled?: boolean;
+}
+
 export const PersonalKeyActivitiesWeekly = observer(
-  (props: {}): JSX.Element => {
+  ({ disabled }: PersonalKeyActivitiesWeeklyProps): JSX.Element => {
     const {
       keyActivityStore,
       sessionStore,
@@ -31,7 +35,7 @@ export const PersonalKeyActivitiesWeekly = observer(
     const selectedFilterGroupIdBacklog = sessionStore.getScheduledGroupIdByName("Backlog");
 
     return (
-      <KeyActivitiesWrapperContainer width={"100%"}>
+      <KeyActivitiesWrapperContainer width={"100%"} disabled={disabled}>
         <KeyActivityColumnStyleListContainer>
           <KeyActivitiesSubHeader
             header={t<string>("keyActivities.weeklyListTitle")}

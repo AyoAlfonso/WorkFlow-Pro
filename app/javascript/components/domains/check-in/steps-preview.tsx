@@ -36,32 +36,32 @@ export const StepsPreview = ({ step }: StepsPreviewProps): JSX.Element => {
       case "Open-ended":
         return (
           <Container>
-            <OpenEndedPreview question={step.question} />
+            <OpenEndedPreview question={step.question} disabled />
           </Container>
         );
       case "Numeric":
         return (
           <Container>
-            <NumericalStep question={step.question} />
+            <NumericalStep question={step.question} disabled />
           </Container>
         );
       case "Sentiment":
         return (
           <Container>
-            <SelectionScale question={step.question} type="sentiment" />;
+            <SelectionScale question={step.question} type="sentiment" disabled />;
           </Container>
         );
 
       case "Agreement Scale":
         return (
           <Container>
-            <SelectionScale question={step.question} />;
+            <SelectionScale question={step.question} disabled />;
           </Container>
         );
       case "Yes/No":
         return (
           <Container>
-            <YesNoPreview question={step.question} />;
+            <YesNoPreview question={step.question} disabled />;
           </Container>
         );
       case "ToDos":
@@ -69,23 +69,23 @@ export const StepsPreview = ({ step }: StepsPreviewProps): JSX.Element => {
           case "Today's Priorities":
             return (
               <Container>
-                <HomeKeyActivities todayOnly={true} width={"100%"} />;
+                <HomeKeyActivities todayOnly={true} width={"100%"} disabled />;
               </Container>
             );
           case "Weekly List":
             return (
               <Container>
-                <HomeKeyActivities weeklyOnly={true} width={"100%"} />;
+                <HomeKeyActivities weeklyOnly={true} width={"100%"} disabled />;
               </Container>
             );
           case "Weekly List + Key Results":
             return (
               <OverflowContainer>
                 <DesktopContainer>
-                  <Milestones showWeekly />
+                  <Milestones showWeekly disabled />
                 </DesktopContainer>
                 <MobileContainer>
-                  <MobileTodosInitiatives />
+                  <MobileTodosInitiatives disabled />
                 </MobileContainer>
               </OverflowContainer>
             );
@@ -93,10 +93,10 @@ export const StepsPreview = ({ step }: StepsPreviewProps): JSX.Element => {
             return (
               <OverflowContainer>
                 <DesktopContainer>
-                  <Milestones showWeekly />
+                  <Milestones showWeekly disabled />
                 </DesktopContainer>
                 <MobileContainer>
-                  <MobileTodosInitiatives />
+                  <MobileTodosInitiatives disabled />
                 </MobileContainer>
               </OverflowContainer>
             );
@@ -104,10 +104,10 @@ export const StepsPreview = ({ step }: StepsPreviewProps): JSX.Element => {
             return (
               <OverflowContainer>
                 <DesktopContainer>
-                  <PersonalKeyActivitiesWeekly />
+                  <PersonalKeyActivitiesWeekly disabled />
                 </DesktopContainer>
                 <MobileContainer>
-                  <MobileKeyActivitiesBody WeeklyMaster={true} />
+                  <MobileKeyActivitiesBody WeeklyMaster={true} disabled />
                 </MobileContainer>
               </OverflowContainer>
             );
@@ -115,17 +115,17 @@ export const StepsPreview = ({ step }: StepsPreviewProps): JSX.Element => {
             return (
               <OverflowContainer>
                 <DesktopContainer>
-                  <DailyPlanning hideListSelector={true} />
+                  <DailyPlanning hideListSelector={true} disabled />
                 </DesktopContainer>
                 <MobileContainer>
-                  <MobileKeyActivitiesBody TodayWeekly={true} />
+                  <MobileKeyActivitiesBody TodayWeekly={true} disabled />
                 </MobileContainer>
               </OverflowContainer>
             );
           case "Outstanding ToDos":
             return (
               <Container>
-                <OutstandingTodos />;
+                <OutstandingTodos disabled />;
               </Container>
             );
           default:
@@ -136,13 +136,13 @@ export const StepsPreview = ({ step }: StepsPreviewProps): JSX.Element => {
           case "Key Results":
             return (
               <Container>
-                <WeeklyKeyResults />;
+                <WeeklyKeyResults disabled />;
               </Container>
             );
           case "Milestones":
             return (
               <Container>
-                <WeeklyMilestones />;
+                <WeeklyMilestones disabled />;
               </Container>
             );
           default:
@@ -151,7 +151,7 @@ export const StepsPreview = ({ step }: StepsPreviewProps): JSX.Element => {
       case "Objectives":
         return (
           <Container>
-            <PersonalGoals />;
+            <PersonalGoals disabled />;
           </Container>
         );
       case "Issues":
@@ -161,49 +161,50 @@ export const StepsPreview = ({ step }: StepsPreviewProps): JSX.Element => {
               showOpenIssues={showOpenIssues}
               setShowOpenIssues={setShowOpenIssues}
               noShadow
+              disabled
             />
           </Container>
         );
       case "KPIs":
         return (
           <Container>
-            <KpiComponent />;
+            <KpiComponent disabled />;
           </Container>
         );
       case "Habits":
         return (
           <Container>
-            <HabitsBody />;
+            <HabitsBody disabled />;
           </Container>
         );
       case "Conversation Starter":
         return (
           <Container>
-            <ConversationStarter />;
+            <ConversationStarter disabled />;
           </Container>
         );
       case "Weekly Review":
         return (
           <Container>
-            <WeeklyReview />;
+            <WeeklyReview disabled />;
           </Container>
         );
       case "Weekly Reflection":
         return (
           <Container>
-            <CheckinReflection variant={QuestionnaireTypeConstants.weeklyReflection} />;
+            <CheckinReflection variant={QuestionnaireTypeConstants.weeklyReflection} disabled />;
           </Container>
         );
       case "Monthly Reflection":
         return (
           <Container>
-            <CheckinReflection variant={QuestionnaireTypeConstants.monthlyReflection} />;
+            <CheckinReflection variant={QuestionnaireTypeConstants.monthlyReflection} disabled />;
           </Container>
         );
       case "Evening Reflection":
         return (
           <Container>
-            <CheckinReflection variant={QuestionnaireTypeConstants.eveningReflection} />;
+            <CheckinReflection variant={QuestionnaireTypeConstants.eveningReflection} disabled />;
           </Container>
         );
       default:
