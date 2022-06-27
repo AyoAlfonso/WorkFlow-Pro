@@ -90,9 +90,9 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   def run_now
     if(@check_in_template.check_in_type == "dynamic") 
       check_in_artifact = CheckInArtifact.new(check_in_template_id: @check_in_template.id, owned_by: current_user)
-      check_in_artifact.save!(start_time: DateTime.now.utc.beginning_of_day, end_time: DateTime.now.utc.end_of_day)
-      # check_in_artifact.save(validate: false)  
+      check_in_artifact.save!(start_time: DateTime.now.utc.beginning_of_day)
     end
+     render json: { template: @check_in_template, status: :ok }
   end
 
   def general_check_in

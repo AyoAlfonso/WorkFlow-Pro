@@ -1,5 +1,6 @@
 class CheckInTemplate < ApplicationRecord
-  has_many :check_in_templates_steps, dependent: :destroy
+  acts_as_paranoid column: :deleted_at
+  include HasOwner
 
   enum check_in_type: {
     weekly_check_in: 0,
@@ -8,12 +9,9 @@ class CheckInTemplate < ApplicationRecord
 
   scope :sort_by_company, ->(company) { where(company_id: [nil, company.id]) }
   scope :optimized, -> { includes([:check_in_templates_steps ]) }
-  scope :incomplete, -> { where(end_time: nil) }
-  scope :for_day_of_date, ->(start_time) { where("(start_time >= ? AND start_time <= ?) OR start_time IS NULL", start_time.beginning_of_day, start_time.end_of_day) }
-  scope :for_week_of_date, ->(start_time) { where("(start_time >= ? AND start_time <= ?) OR start_time IS NULL", start_time.beginning_of_week, start_time.end_of_week) }
-  scope :for_month_of_date, ->(start_time) { where("(start_time >= ? AND start_time <= ?) OR start_time IS NULL", start_time.beginning_of_month, start_time.end_of_month) }
-  scope :for_week_of_date_started_only, ->(start_time) { where("(start_time >= ? AND start_time <= ?)", start_time.beginning_of_week, start_time.end_of_week) }
-  
+
+  has_many :check_in_templates_steps, dependent: :destroy
+
   enum owner_type: {
     company: 0,
     team:1,
