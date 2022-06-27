@@ -52,7 +52,8 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def update
-     @check_in_template.update!(check_in_template_params)
+    @check_in_template.update!(check_in_template_params)
+    render json: { template: @check_in_template, status: :ok }
   end
 
   def publish_now
@@ -67,24 +68,25 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   schedule = IceCube::Schedule.new(Time.current - 7.days)
   single_occurence_schedule = IceCube::Schedule.new(Time.new(Date.current.year, 1,1))
   run_once  =  if @check_in_template.run_once.present? Time.parse(@check_in_template.run_once) ||  Time.parse(@check_in_template.date_time_config["date"])
-  begin
-    case date_time_config["cadence"] 
-      when "weekly"; rule = schedule.add_recurrence_rule(IceCube::Rule.weekly.day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).to_h
-      when "bi-weekly"; rule = schedule.add_recurrence_rule(IceCube::Rule.weekly(2).day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).to_h
-      when "daily"; rule = schedule.add_recurrence_rule(IceCube::Rule.daily.hour_of_day(10).minute_of_hour(0)).to_h
-      when "monthly"; rule = schedule.add_recurrence_rule(IceCube::Rule.monthly.day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).to_h
-      when "yearly";  rule = single_occurence_schedule.add_recurrence_rule(IceCube::Rule.yearly.day_of_month(run_once.month).hour_of_day(run_once.hour).minute_of_hour(run_once.min).count(1)).to_h
+ 
+    begin
+      case date_time_config["cadence"] 
+        when "weekly"; rule = schedule.add_recurrence_rule(IceCube::Rule.weekly.day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).to_h
+        when "bi-weekly"; rule = schedule.add_recurrence_rule(IceCube::Rule.weekly(2).day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).to_h
+        when "daily"; rule = schedule.add_recurrence_rule(IceCube::Rule.daily.hour_of_day(10).minute_of_hour(0)).to_h
+        when "monthly"; rule = schedule.add_recurrence_rule(IceCube::Rule.monthly.day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).to_h
+        when "yearly";  rule = single_occurence_schedule.add_recurrence_rule(IceCube::Rule.yearly.day_of_month(run_once.month).hour_of_day(run_once.hour).minute_of_hour(run_once.min).count(1)).to_h
+      end
     end
-
-  unless notification.persisted?
-    notification.attributes = {
-      rule: rule,
-      method: :enabled,
-    }
-    notification.save!
-    next_start =  Time.new(rule.next_occurrence.year, rule.next_occurrence.month, rule.next_occurrence.day, rule.next_occurrence.hour)
-    check_in_artifact.save!(start_time: next_start, end_time: DateTime.now.utc.end_of_day)
-
+    unless notification.persisted?
+      notification.attributes = {
+        rule: rule,
+        method: :enabled,
+      }
+      notification.save!
+      next_start =  Time.new(rule.next_occurrence.year, rule.next_occurrence.month, rule.next_occurrence.day, rule.next_occurrence.hour)
+      check_in_artifact.save!(start_time: next_start, end_time: DateTime.now.utc.end_of_day)
+    end
   end
 
   def run_now
@@ -92,7 +94,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
       check_in_artifact = CheckInArtifact.new(check_in_template_id: @check_in_template.id, owned_by: current_user)
       check_in_artifact.save!(start_time: DateTime.now.utc.beginning_of_day)
     end
-     render json: { template: @check_in_template, status: :ok }
+     render json: { template: @check_in_template, check_in_artifact: check_in_artifact, status: :ok }
   end
 
   def general_check_in
@@ -103,13 +105,13 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   render "api/check_in_artifacts/general_check_in_artifacts"
   end
 
-  def artifact_check_in
+  def artifact
    check_in_artifact = CheckInArtifact.find(params[:id])
     if(params[:skip])
       check_in_artifact.update(skip: params[:skip], end_time: Time.now )
       CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: DateTime.now.utc.beginning_of_day, end_time: DateTime.now.utc.end_of_day )
     end
-
+    
   end
 
   def destroy
@@ -137,4 +139,4 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   def record_activities
         record_activity(params[:note], nil, params[:id])
   end 
-end 
+end

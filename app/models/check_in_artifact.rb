@@ -4,10 +4,10 @@ class CheckInArtifact < ApplicationRecord
 
   scope :optimized, -> { includes([:check_in_templates_steps ]) }
   scope :incomplete, -> { where(end_time: nil) }
-  scope :for_day_of_date, ->(start_time) { where("(start_time >= ? AND start_time <= ?) OR start_time IS NULL", start_time.beginning_of_day, start_time.end_of_day) }
-  scope :for_week_of_date, ->(start_time) { where("(start_time >= ? AND start_time <= ?) OR start_time IS NULL", start_time.beginning_of_week, start_time.end_of_week) }
-  scope :for_month_of_date, ->(start_time) { where("(start_time >= ? AND start_time <= ?) OR start_time IS NULL", start_time.beginning_of_month, start_time.end_of_month) }
-  scope :for_week_of_date_started_only, ->(start_time) { where("(start_time >= ? AND start_time <= ?)", start_time.beginning_of_week, start_time.end_of_week) }
+  scope :for_day_of_date, ->(end_time) { where("(end_time >= ? AND end_time <= ?) OR end_time IS NULL", end_time.beginning_of_day, end_time.end_of_day) }
+  scope :for_week_of_date, ->(end_time) { where("(end_time >= ? AND end_time <= ?) OR end_time IS NULL", end_time.beginning_of_week, end_time.end_of_week) }
+  scope :for_month_of_date, ->(end_time) { where("(end_time >= ? AND end_time <= ?) OR end_time IS NULL", end_time.beginning_of_month, end_time.end_of_month) }
+  scope :for_week_of_date_started_only, ->(end_time) { where("(end_time >= ? AND end_time <= ?)", end_time.beginning_of_week, end_time.end_of_week) }
   scope :owned_by_user, ->(user) { where(owned_by_id: user) }
 
   belongs_to :check_in_template
