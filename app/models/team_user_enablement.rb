@@ -8,4 +8,5 @@ class TeamUserEnablement < ApplicationRecord
     self.class.where('user_id != ? AND team_id = ?', self.user_id, self.team_id).update_all("team_manager = 'false'")
     self.class.where('user_id = ? AND team_id = ?', self.user_id, self.team_id).update(team_manager: true)
   end
+
 end

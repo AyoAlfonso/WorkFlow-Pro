@@ -1,15 +1,18 @@
 class CheckInTemplate < ApplicationRecord
-  has_many :check_in_templates_steps, dependent: :destroy
+  acts_as_paranoid column: :deleted_at
+  include HasOwner
 
   enum check_in_type: {
     weekly_check_in: 0,
     dynamic: 1,
   }
 
-  scope :sort_by_company, ->(company) { where(company_id: company.id) }
+  scope :sort_by_company, ->(company) { where(company_id: [nil, company.id]) }
   scope :optimized, -> { includes([:check_in_templates_steps ]) }
 
-   enum owner_type: {
+  has_many :check_in_templates_steps, dependent: :destroy
+
+  enum owner_type: {
     company: 0,
     team:1,
     personal:2

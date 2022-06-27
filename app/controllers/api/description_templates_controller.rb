@@ -19,7 +19,6 @@ class Api::DescriptionTemplatesController < Api::ApplicationController
   end
 
   def show
-    # render "api/description_template/show"
     render json: { template: @template, status: :ok }
   end
 

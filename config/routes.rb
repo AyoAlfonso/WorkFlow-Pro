@@ -182,10 +182,11 @@ Rails.application.routes.draw do
     #meeting_templates
     resources :meeting_templates, only: [:index]
 
-    resources :check_in_templates, only: [:index, :create, :show, :update]
+    resources :check_in_templates, only: [:index, :create, :show, :update, :destroy]
     post "check_in_templates/run/:id", to: "check_in_templates#run_now"
     post "check_in_templates/publish/:id", to: "check_in_templates#publish_now"
-    get "general_check_in/:user_id",  to: "check_in_templates#general_check_in"
+    get "general_check_in",  to: "check_in_templates#general_check_in"
+    patch "check_in_templates/artifact/:id",  to: "check_in_templates#artifact" #can be used to skip an artifact, and update the artifact 
 
     #description_templates
     resources :description_templates, only: [:index, :destroy, :show]
