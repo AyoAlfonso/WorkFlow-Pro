@@ -98,7 +98,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def general_check_in
-    check_in_artifacts = CheckInArtifact.owned_by_user(current_user).active.incomplete
+    check_in_artifacts = CheckInArtifact.owned_by_user(current_user).not_skipped.incomplete
     @check_in_artifacts_for_day = check_in_artifacts
     # .for_day_of_date(params[:on_day])
     # @check_in_artifacts_for_week = check_in_artifacts
@@ -121,6 +121,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
    single_occurence_schedule = IceCube::Schedule.new(Time.new(Date.current.year, 1,1))
    run_once = if @check_in_template.run_once.present? Time.parse(@check_in_template.run_once) ||  Time.parse(@check_in_template.date_time_config["date"]);  end
   
+   # //
     begin
       case date_time_config["cadence"] 
         when "weekly"; rule = schedule.add_recurrence_rule(IceCube::Rule.weekly.day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).to_h
@@ -142,7 +143,8 @@ class Api::CheckInTemplatesController < Api::ApplicationController
       check_in_artifact.update(end_time: Time.now)
       CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: next_start)
     end
-
+ 
+    #//log artifact
   authorize check_in_artifact
   render json: {check_in_artifact: check_in_artifact, status: :ok }
   end
