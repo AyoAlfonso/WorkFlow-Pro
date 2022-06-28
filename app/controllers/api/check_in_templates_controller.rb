@@ -85,7 +85,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
       }
       notification.save!
       next_start =  Time.new(rule.next_occurrence.year, rule.next_occurrence.month, rule.next_occurrence.day, rule.next_occurrence.hour)
-      check_in_artifact.save!(start_time: next_start, end_time: DateTime.now.utc.end_of_day)
+      check_in_artifact.save!(start_time: next_start, end_time: rule.next_occurrence )
     end
   end
 
@@ -115,9 +115,12 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   def artifact
    check_in_artifact = CheckInArtifact.find(params[:id])
     if(params[:skip])
-      check_in_artifact.update(skip: params[:skip], end_time: Time.now )
+      check_in_artifact.update(skip: params[:skip])
       CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: DateTime.now.utc.beginning_of_day, end_time: DateTime.now.utc.end_of_day )
     end
+  check_in_artifact.update!(check_in_artifact_params)
+  authorize check_in_artifact
+  render json: {check_in_artifact: check_in_artifact, status: :ok }
   end
 
   def show
@@ -130,6 +133,11 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   private
+  def check_in_artifact_params
+      params.require(:check_in_template).permit(:name, :check_in_type, :owner_type, :description, :participants, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder,
+           :check_in_templates_steps_attributes [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :variant, :question])
+  end
+
   def check_in_template_params
       params.require(:check_in_template).permit(:name, :check_in_type, :owner_type, :description, :participants, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder,
            :check_in_templates_steps_attributes [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :variant, :question])
