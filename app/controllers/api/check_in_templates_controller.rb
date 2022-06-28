@@ -118,7 +118,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
       check_in_artifact.update(skip: params[:skip])
       CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: DateTime.now.utc.beginning_of_day, end_time: DateTime.now.utc.end_of_day )
     end
-  check_in_artifact.update!(check_in_artifact_params)
+  # check_in_artifact.update!(check_in_artifact_params)
   authorize check_in_artifact
   render json: {check_in_artifact: check_in_artifact, status: :ok }
   end
@@ -134,7 +134,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
 
   private
   def check_in_artifact_params
-      params.require(:check_in_template).permit(:name, :check_in_type, :owner_type, :description, :participants, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder,
+      params.require(:check_in_artifact).permit(:name, :check_in_type, :owner_type, :description, :participants, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder,
            :check_in_templates_steps_attributes [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :variant, :question])
   end
 
