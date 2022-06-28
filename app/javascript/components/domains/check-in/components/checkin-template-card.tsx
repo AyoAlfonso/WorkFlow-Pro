@@ -48,6 +48,8 @@ export const CheckInTemplateCard = ({
     };
   }, [showOptions]);
 
+  const filteredTags = tags.filter(tag => tag);
+
   return (
     <Container>
       <HeaderContainer>
@@ -90,8 +92,10 @@ export const CheckInTemplateCard = ({
           </Button>
         </ButtonsContainer>
         <TagsContainer>
-          {tags.map((tag, index) => (
-            <Tag color={tag == "Custom" ? baseTheme.colors.primary100 : ""} key={`${tag}-${index}`}>{tag.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}</Tag>
+          {filteredTags.map((tag, index) => (
+            <Tag color={tag == "Custom" ? baseTheme.colors.primary100 : ""} key={`${tag}-${index}`}>
+              {tag.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}
+            </Tag>
           ))}
         </TagsContainer>
       </BottomRow>
@@ -198,4 +202,8 @@ const Tag = styled.span<TagProps>`
   margin-right: 0.75em;
   border-radius: 4px;
   font-weight: bold;
+
+  &:last-child {
+    margin-right: 0;
+  }
 `;

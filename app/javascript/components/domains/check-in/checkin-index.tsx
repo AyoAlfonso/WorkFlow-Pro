@@ -11,21 +11,28 @@ import { YesNoPreview } from "./components/yes-no-preview";
 import { SelectionScale } from "./components/selection-scale";
 import { NumericalStep } from "./components/numerical-step";
 import { TodoComponentSelectorModal } from "./components/todo-component-selector-modal";
+import { Loading } from "~/components/shared";
 
 export const CheckIn = observer(
   (): JSX.Element => {
     const [activeTab, setActiveTab] = useState("active");
     const [selection, setSelection] = useState("");
-    const [open, setOpen] = useState(true)
+    const [loading, setLoading] = useState(true)
 
-    const {checkInTemplateStore, sessionStore} = useMst();
+    const {checkInTemplateStore} = useMst();
 
-    const userId = sessionStore.profile?.id
+    const {checkIns} = checkInTemplateStore;
 
     useEffect(() => {
-      checkInTemplateStore.getCheckIns(userId);
-    }, [userId])
-console.log(checkInTemplateStore.checkIns)
+      checkInTemplateStore.getCheckIns().then(() => {
+        setLoading(false)
+      });
+    }, [])
+    
+    if (loading) {
+      return <Loading />
+    }
+    
     return (
       <Container>
         <TopContainer>
@@ -46,15 +53,10 @@ console.log(checkInTemplateStore.checkIns)
           </SelectContainer>
         </TopContainer>
         <CheckinsContainer>
-          <CheckInCard />
+          {checkIns.map(checkIn => (
+            <CheckInCard checkin={checkIn} />
+          ))}
         </CheckinsContainer>
-        {/* <StepOptionsModal modalOpen={open} setModalOpen={setOpen} />
-        <OpenEndedPreview question="What are you working on?" />
-        <StepPreviewCard stepType="Open-ended" iconName="Open-Ended" />
-        <YesNoPreview question="Are you working on a project?" />
-        <SelectionScale type="sentiment" question="How was your day?" />
-        <NumericalStep question="How productive were you today?" /> */}
-        {/* <TodoComponentSelectorModal modalOpen={open} setModalOpen={setOpen} /> */}
       </Container>
     );
   },

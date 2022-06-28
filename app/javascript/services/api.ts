@@ -759,8 +759,12 @@ export class Api {
     return this.client.post(`/check_in_templates/run/${id}`);
   }
 
-  async getCheckins(userId) {
-    return this.client.get(`/general_check_in/${userId}`);
+  async getCheckins() {
+    return this.client.get(`/general_check_in`);
+  }
+
+  async submitResponse(responseObject) {
+    return this.client.patch(`/general_check_in`, responseObject);
   }
   //async setJWT(jwt) {}
 }

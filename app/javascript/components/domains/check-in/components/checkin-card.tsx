@@ -3,19 +3,28 @@ import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { Button } from "~/components/shared/button";
 import { Icon } from "~/components/shared/icon";
+import { ICheckInArtifact } from "~/models/check-in-artifacts";
 
-export const CheckInCard = (): JSX.Element => {
+interface CheckInCardProps {
+  checkin: ICheckInArtifact;
+}
+
+export const CheckInCard = ({ checkin }: CheckInCardProps): JSX.Element => {
   const history = useHistory();
+
+  const { checkInTemplate } = checkin;
+
+  const {name, ownerType, id} = checkInTemplate
   return (
     <Container>
       <TitleContainer>
-        <Title>✍🏾 Weekly Check-In</Title>
+        <Title>{name}</Title>
         <IconContainer onClick={() => history.push(`/check-in/insights/2`)}>
           <Icon icon={"Settings"} size="18px" iconColor={"greyActive"} />
         </IconContainer>
       </TitleContainer>
       <InfoContainer>
-        <Tag>Team</Tag>
+        <Tag>{ownerType.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}</Tag>
         <DueDate>Due: Friday, May 20th </DueDate>
         <EntryBadge>{` • Entry Needed`}</EntryBadge>
       </InfoContainer>
@@ -26,7 +35,7 @@ export const CheckInCard = (): JSX.Element => {
             mr="1em"
             width="80px"
             fontSize="12px"
-            onClick={() => console.log("log")}
+            onClick={() => history.push(`/check-in/run/${id}`)}
             small
             style={{ whiteSpace: "nowrap" }}
           >

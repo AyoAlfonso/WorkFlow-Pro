@@ -8,13 +8,14 @@ import { ToastMessageConstants } from "~/constants/toast-types";
 import * as R from "ramda";
 import { StepModel } from "~/models/step";
 import { toJS } from "mobx";
+import { CheckInArtifactsModel } from "~/models/check-in-artifacts";
 
 export const CheckInTemplateStoreModel = types
   .model("CheckInTemplateStoreModel")
   .props({
     checkInTemplates: types.array(CheckInTemplateModel),
     currentCheckIn: types.maybeNull(CheckInTemplateModel),
-    checkIns: types.frozen()
+    checkIns: types.array(CheckInArtifactsModel)
   })
   .extend(withEnvironment())
   .actions(self => ({
@@ -38,11 +39,10 @@ export const CheckInTemplateStoreModel = types
         // caught by Api Monitor
       }
     }),
-    getCheckIns: flow(function* (id) {
+    getCheckIns: flow(function* () {
       try {
-        const response: ApiResponse<any> = yield self.environment.api.getCheckins(id);
-        const checkIns = response.data.filter(meeting => meeting.id === id);
-        self.checkIns = checkIns;
+        const response: ApiResponse<any> = yield self.environment.api.getCheckins();
+        self.checkIns = response.data.checkInArtifacts;
       } catch {
         // showToast("Something went wrong", ToastMessageConstants.ERROR);
         // caught by Api Monitor
