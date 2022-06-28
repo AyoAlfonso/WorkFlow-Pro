@@ -41,7 +41,7 @@ export const WeeklyMilestones = observer(
         <SectionContainer>
           <StyledHeader>
             What's the status on your Milestones from week of{" "}
-            <u>{moment(weekOf).format("MMMM D")}</u>?
+            <u>{moment(currentWeekOf).format("MMMM D")}</u>?
           </StyledHeader>
         </SectionContainer>
       );

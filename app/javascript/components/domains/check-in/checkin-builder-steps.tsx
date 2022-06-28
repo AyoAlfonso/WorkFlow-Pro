@@ -142,6 +142,7 @@ const BodyContainer = styled.div`
   display: flex;
   width: -webkit-fill-available;
   width: -moz-available;
+  justify-content: center;
 `;
 
 const StepComponentContainer = styled.div`
@@ -150,6 +151,9 @@ const StepComponentContainer = styled.div`
   // margin-left: 8px;
   @media only screen and (max-width: 768px) {
     margin-left: 0;
+  }
+  @media only screen and (min-width: 1200px) {
+    width: -webkit-fill-available;
   }
 `;
 

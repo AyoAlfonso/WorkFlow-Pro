@@ -137,8 +137,10 @@ export const CheckInBuilderLayout = observer(
         tag: ["global", "custom"],
       };
 
-      checkInTemplateStore.createCheckinTemplate(checkin).then(() => {
-        history.push("/check-in/templates");
+      checkInTemplateStore.createCheckinTemplate(checkin).then(id => {
+        checkInTemplateStore.publishCheckinTemplate(id).then(() => {
+          history.push("/check-in/templates");
+        });
       });
     };
 
@@ -190,7 +192,12 @@ export const CheckInBuilderLayout = observer(
 
     const finishCheckIn = () => {
       return (
-        <StopButton disabled={currentStep == 2 && !participants.length} variant={"primary"} onClick={createCheckin} small>
+        <StopButton
+          disabled={currentStep == 2 && !participants.length}
+          variant={"primary"}
+          onClick={createCheckin}
+          small
+        >
           Publish
         </StopButton>
       );

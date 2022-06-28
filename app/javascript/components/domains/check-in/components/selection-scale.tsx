@@ -60,7 +60,7 @@ const Container = styled.div<ContaineProps>`
   padding: 1em;
   box-shadow: 0px 3px 6px #00000029;
   border-radius: 8px;
-  height: 140px;
+  // height: 140px;
   pointer-events: ${props => (props.disabled ? "none" : "auto")};
 `;
 

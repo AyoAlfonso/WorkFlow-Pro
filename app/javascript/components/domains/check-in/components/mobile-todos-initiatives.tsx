@@ -93,6 +93,7 @@ export const MobileTodosInitiatives = observer(
     const weeklyKeyActivities = keyActivityStore.incompleteKeyActivitiesByScheduledGroupName(
       "Weekly List",
     );
+    console.log(weeklyKeyActivities);
 
     const droppableId = `scheduled-group-activities-${selectedFilterGroupId}`;
 

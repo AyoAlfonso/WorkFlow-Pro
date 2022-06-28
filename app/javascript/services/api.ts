@@ -763,8 +763,12 @@ export class Api {
     return this.client.get(`/general_check_in`);
   }
 
-  async submitResponse(responseObject) {
-    return this.client.patch(`/general_check_in`, responseObject);
+  async updateCheckinArtifact(id, value) {
+    return this.client.patch(`/check_in_templates/artifact/${id}`, value);
+  }
+
+  async publishCheckin(id) {
+    return this.client.post(`/check_in_templates/publish/${id}`, {});
   }
   //async setJWT(jwt) {}
 }

@@ -56,7 +56,7 @@ export const CheckinStep = observer(
             case "Habits":
               return (
                 <Container>
-                  <HabitsBody />;
+                  <HabitsBody />
                 </Container>
               );
             case "WeeklyMilestones":
@@ -72,20 +72,20 @@ export const CheckinStep = observer(
             case "Sentiment":
               return (
                 <Container>
-                  <SelectionScale question={step.question} type="sentiment" />;
+                  <SelectionScale question={step.question} type="sentiment" />
                 </Container>
               );
 
             case "Agreement Scale":
               return (
                 <Container>
-                  <SelectionScale question={step.question} />;
+                  <SelectionScale question={step.question} />
                 </Container>
               );
             case "Yes/No":
               return (
                 <Container>
-                  <YesNoPreview question={step.question} />;
+                  <YesNoPreview question={step.question} />
                 </Container>
               );
             case "Initiatives":
@@ -93,13 +93,13 @@ export const CheckinStep = observer(
                 case "Key Results":
                   return (
                     <Container>
-                      <WeeklyKeyResults />;
+                      <WeeklyKeyResults />
                     </Container>
                   );
                 case "Milestones":
                   return (
                     <Container>
-                      <WeeklyMilestones />;
+                      <WeeklyMilestones />
                     </Container>
                   );
                 default:
@@ -108,7 +108,7 @@ export const CheckinStep = observer(
             case "Objectives":
               return (
                 <Container>
-                  <PersonalGoals />;
+                  <PersonalGoals />
                 </Container>
               );
             case "Issues":
@@ -124,31 +124,31 @@ export const CheckinStep = observer(
             case "Conversation Starter":
               return (
                 <Container>
-                  <ConversationStarter />;
+                  <ConversationStarter />
                 </Container>
               );
             case "Weekly Review":
               return (
                 <Container>
-                  <WeeklyReview />;
+                  <WeeklyReview />
                 </Container>
               );
             case "Weekly Reflection":
               return (
                 <Container>
-                  <CheckinReflection variant={QuestionnaireTypeConstants.weeklyReflection} />;
+                  <CheckinReflection variant={QuestionnaireTypeConstants.weeklyReflection} />
                 </Container>
               );
             case "Monthly Reflection":
               return (
                 <Container>
-                  <CheckinReflection variant={QuestionnaireTypeConstants.monthlyReflection} />;
+                  <CheckinReflection variant={QuestionnaireTypeConstants.monthlyReflection} />
                 </Container>
               );
             case "Evening Reflection":
               return (
                 <Container>
-                  <CheckinReflection variant={QuestionnaireTypeConstants.eveningReflection} />;
+                  <CheckinReflection variant={QuestionnaireTypeConstants.eveningReflection} />
                 </Container>
               );
             case "ToDos":
@@ -156,13 +156,13 @@ export const CheckinStep = observer(
                 case "Today's Priorities":
                   return (
                     <Container>
-                      <HomeKeyActivities todayOnly={true} width={"100%"} />;
+                      <HomeKeyActivities todayOnly={true} width={"100%"} />
                     </Container>
                   );
                 case "Weekly List":
                   return (
                     <Container>
-                      <HomeKeyActivities weeklyOnly={true} width={"100%"} />;
+                      <HomeKeyActivities weeklyOnly={true} width={"100%"} />
                     </Container>
                   );
                 case "Weekly List + Key Results":
@@ -212,7 +212,7 @@ export const CheckinStep = observer(
                 case "Outstanding ToDos":
                   return (
                     <Container>
-                      <OutstandingTodos />;
+                      <OutstandingTodos />
                     </Container>
                   );
                 default:
@@ -256,6 +256,10 @@ const StepComponentContainer = styled.div`
   @media only screen and (max-width: 768px) {
     margin-left: 0;
   }
+  @media only screen and (min-width: 1600px) {
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 const Container = styled.div`
@@ -264,6 +268,10 @@ const Container = styled.div`
 
   @media only screen and (min-width: 1600px) {
     max-width: 1024px;
+  }
+
+  @media only screen and (min-width: 1600px) {
+    flex: 1;
   }
 `;
 

@@ -19,7 +19,7 @@ export const CheckInTemplateStoreModel = types
   })
   .extend(withEnvironment())
   .actions(self => ({
-    fetchCheckInTemplates: flow(function*() {
+    fetchCheckInTemplates: flow(function* () {
       try {
         const response: ApiResponse<any> = yield self.environment.api.getCheckInTemplates();
         self.checkInTemplates = response.data;
@@ -27,7 +27,7 @@ export const CheckInTemplateStoreModel = types
         // caught by Api Monitor
       }
     }),
-    getCheckIn: flow(function*(checkInName) {
+    getCheckIn: flow(function* (checkInName) {
       try {
         const response: ApiResponse<any> = yield self.environment.api.getCheckInTemplates();
         const checkIn = {
@@ -48,16 +48,44 @@ export const CheckInTemplateStoreModel = types
         // caught by Api Monitor
       }
     }),
-    createCheckinTemplate: flow(function*(checkInTemplate) {
+    createCheckinTemplate: flow(function* (checkInTemplate) {
       const response: ApiResponse<any> = yield self.environment.api.createCheckinTemplate(
         checkInTemplate,
       );
       if (response.ok) {
         showToast("Check-in template created successfully", ToastMessageConstants.SUCCESS);
-        return true;
+        return response.data.template.id;
       } else {
         showToast(
           "Error creating check-in template, please try again",
+          ToastMessageConstants.ERROR,
+        );
+        return false;
+      }
+    }),
+    publishCheckinTemplate: flow(function* (id) {
+      const response: ApiResponse<any> = yield self.environment.api.publishCheckin(id);
+      if (response.ok) {
+        return true;
+      } else {
+        showToast(
+          "Error publishing check-in template, please try again",
+          ToastMessageConstants.ERROR,
+        );
+        return false;
+      }
+    }),
+    updateCheckinArtifact: flow(function* (id, value) {
+      const response: ApiResponse<any> = yield self.environment.api.updateCheckinArtifact(
+        id,
+        value,
+      );
+      if (response.ok) {
+        showToast("Check-in updated successfully", ToastMessageConstants.SUCCESS);
+        return true;
+      } else {
+        showToast(
+          "Something went wrong, please try again",
           ToastMessageConstants.ERROR,
         );
         return false;

@@ -11,7 +11,7 @@ import { Loading } from "~/components/shared/loading";
 import { Button } from "~/components/shared/button";
 import moment from "moment";
 import { HeaderBar } from "../nav";
-import { validateWeekOf } from "~/utils/date-time";
+import { getWeekOf, validateWeekOf } from "~/utils/date-time";
 
 interface WeeklyCheckInProps {}
 
@@ -28,8 +28,10 @@ export const WeeklyCheckIn = observer(
 
     const { weekOf } = useParams();
 
+    const currentWeekOf = weekOf || getWeekOf()
+
     useEffect(() => {
-      validateWeekOf(weekOf, history, id);
+      validateWeekOf(currentWeekOf, history, id);
 
       // checkInTemplateStore.fetchCheckInTemplates();
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import * as R from "ramda";
 import { useMst } from "~/setup/root";
 import { observer } from "mobx-react";
@@ -12,6 +12,7 @@ import { toJS } from "mobx";
 
 const CheckInWizard = observer(
   (): JSX.Element => {
+    const [isLoading, setLoading] = useState<boolean>(true);
     const { checkInTemplateStore } = useMst();
 
     const { currentCheckIn } = checkInTemplateStore;
@@ -25,6 +26,7 @@ const CheckInWizard = observer(
     useEffect(() => {
       checkInTemplateStore.fetchCheckInTemplates().then(() => {
         checkInTemplateStore.findCheckinTemplate(id);
+        setLoading(false);
       });
     }, []);
 
@@ -55,7 +57,7 @@ const CheckInWizard = observer(
 
     return (
       <>
-        {R.isNil(checkIn) ? (
+        {isLoading ? (
           renderLoading()
         ) : (
           <>
