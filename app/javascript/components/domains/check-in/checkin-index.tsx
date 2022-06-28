@@ -17,6 +17,15 @@ export const CheckIn = observer(
     const [activeTab, setActiveTab] = useState("active");
     const [selection, setSelection] = useState("");
     const [open, setOpen] = useState(true)
+
+    const {checkInTemplateStore, sessionStore} = useMst();
+
+    const userId = sessionStore.profile?.id
+
+    useEffect(() => {
+      checkInTemplateStore.getCheckIns(userId);
+    }, [userId])
+console.log(checkInTemplateStore.checkIns)
     return (
       <Container>
         <TopContainer>

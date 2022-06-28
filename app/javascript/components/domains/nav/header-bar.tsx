@@ -180,169 +180,171 @@ export const HeaderBar = observer(
     return (
       <Wrapper>
         <Container>
-          <HeaderItemsContainer>
-            <MobileLeftContainer>
-              <BurgerIconContainer
-                showBackground={showSideNav}
-                onClick={() => {
-                  setShowProfileNav(false);
-                  setShowSideNav(!showSideNav);
-                }}
-              >
-                {" "}
-                <Icon icon={showSideNav ? "Close" : "Burger"} size={"24px"} iconColor={"white"} />
-              </BurgerIconContainer>
-              <LynchpynLogoContainer onClick={() => history.push("/")}>
-                <img color="white" src={"/assets/LynchPyn-Logo_Favicon_White"} width="32"></img>
-              </LynchpynLogoContainer>
-            </MobileLeftContainer>
-            <ActionsContainer>
-              <StyledHeading type={"h1"}>
-                <HeaderText location={location} />
-              </StyledHeading>
-              {locationPath[1] === "check-in" && locationPath[2] !== "insights" && (
-                <CheckInButtonContainer>
-                  <Button
-                    variant="primary"
-                    style={{ display: "flex" }}
-                    onClick={() => history.push("/check-in/templates")}
-                    width="max-content"
-                    small
-                  >
-                    <Icon icon={"Plus"} size={"16px"} iconColor={"white"} mr="0.5em" />
-                    New Check-in
-                  </Button>
-                </CheckInButtonContainer>
-              )}
-            </ActionsContainer>
-            <PersonalInfoContainer ref={accountActionRef}>
-              <KeyActivitiesButtonContainer>
-                <KeyActivitiesButton
+          <ContentWrapper>
+            <HeaderItemsContainer>
+              <MobileLeftContainer>
+                <BurgerIconContainer
+                  showBackground={showSideNav}
                   onClick={() => {
-                    setShowKeyActivities(!showKeyActivities);
+                    setShowProfileNav(false);
+                    setShowSideNav(!showSideNav);
+                  }}
+                >
+                  {" "}
+                  <Icon icon={showSideNav ? "Close" : "Burger"} size={"24px"} iconColor={"white"} />
+                </BurgerIconContainer>
+                <LynchpynLogoContainer onClick={() => history.push("/")}>
+                  <img color="white" src={"/assets/LynchPyn-Logo_Favicon_White"} width="32"></img>
+                </LynchpynLogoContainer>
+              </MobileLeftContainer>
+              <ActionsContainer>
+                <StyledHeading type={"h1"}>
+                  <HeaderText location={location} />
+                </StyledHeading>
+                {locationPath[1] === "check-in" && locationPath[2] !== "insights" && (
+                  <CheckInButtonContainer>
+                    <Button
+                      variant="primary"
+                      style={{ display: "flex" }}
+                      onClick={() => history.push("/check-in/templates")}
+                      width="max-content"
+                      small
+                    >
+                      <Icon icon={"Plus"} size={"16px"} iconColor={"white"} mr="0.5em" />
+                      New Check-in
+                    </Button>
+                  </CheckInButtonContainer>
+                )}
+              </ActionsContainer>
+              <PersonalInfoContainer ref={accountActionRef}>
+                <KeyActivitiesButtonContainer>
+                  <KeyActivitiesButton
+                    onClick={() => {
+                      setShowKeyActivities(!showKeyActivities);
+                      setShowIssues(false);
+                      setShowAccountActions(false);
+                      setShowCompanyOptions(false);
+                      setCreateIssueModalOpen(false);
+                      setCreateKeyActivityModalOpen(false);
+                    }}
+                  >
+                    {`${t<string>("keyActivities.name")}s`}
+                  </KeyActivitiesButton>
+                </KeyActivitiesButtonContainer>
+                <IssuesButtonContainer>
+                  <IssuesButton
+                    onClick={() => {
+                      setShowIssues(!showIssues);
+                      setShowKeyActivities(false);
+                      setShowAccountActions(false);
+                      setShowCompanyOptions(false);
+                      setCreateIssueModalOpen(false);
+                      setCreateKeyActivityModalOpen(false);
+                    }}
+                  >
+                    {issuesTitle}
+                  </IssuesButton>
+                </IssuesButtonContainer>
+                <PulseSelectorWrapper
+                  onClick={() => {
+                    setShowKeyActivities(false);
                     setShowIssues(false);
                     setShowAccountActions(false);
                     setShowCompanyOptions(false);
                     setCreateIssueModalOpen(false);
                     setCreateKeyActivityModalOpen(false);
                   }}
-                >
-                  {`${t<string>("keyActivities.name")}s`}
-                </KeyActivitiesButton>
-              </KeyActivitiesButtonContainer>
-              <IssuesButtonContainer>
-                <IssuesButton
+                />
+                <PersonalInfoDisplayContainer
                   onClick={() => {
-                    setShowIssues(!showIssues);
+                    setShowAccountActions(!showAccountActions);
                     setShowKeyActivities(false);
-                    setShowAccountActions(false);
+                    setShowIssues(false);
                     setShowCompanyOptions(false);
                     setCreateIssueModalOpen(false);
                     setCreateKeyActivityModalOpen(false);
                   }}
                 >
-                  {issuesTitle}
-                </IssuesButton>
-              </IssuesButtonContainer>
-              <PulseSelectorWrapper
+                  <DesktopAvatar>{renderUserAvatar(48)}</DesktopAvatar>
+                </PersonalInfoDisplayContainer>
+                {renderKeyActivitiesPopup()}
+                {renderIssuesPopup()}
+                {renderActionDropdown()}
+              </PersonalInfoContainer>
+
+              <MobileAvatar
                 onClick={() => {
-                  setShowKeyActivities(false);
-                  setShowIssues(false);
-                  setShowAccountActions(false);
-                  setShowCompanyOptions(false);
-                  setCreateIssueModalOpen(false);
-                  setCreateKeyActivityModalOpen(false);
-                }}
-              />
-              <PersonalInfoDisplayContainer
-                onClick={() => {
-                  setShowAccountActions(!showAccountActions);
-                  setShowKeyActivities(false);
-                  setShowIssues(false);
-                  setShowCompanyOptions(false);
-                  setCreateIssueModalOpen(false);
-                  setCreateKeyActivityModalOpen(false);
+                  setShowSideNav(false);
+                  setShowProfileNav(!showProfileNav);
                 }}
               >
-                <DesktopAvatar>{renderUserAvatar(48)}</DesktopAvatar>
-              </PersonalInfoDisplayContainer>
-              {renderKeyActivitiesPopup()}
-              {renderIssuesPopup()}
-              {renderActionDropdown()}
-            </PersonalInfoContainer>
+                {renderUserAvatar(32)}
+              </MobileAvatar>
+            </HeaderItemsContainer>
+            {/* {showSideNav && ( */}
+            <MobileNavMenu showSideNav={showSideNav} ref={mobileNavMenuRef}>
+              <MobileMenuOption
+                showSideNav={showSideNav}
+                onClick={() => {
+                  history.push("/");
+                  setShowSideNav(false);
+                }}
+              >
+                <Icon
+                  icon={"Planner"}
+                  mr="1em"
+                  size={"24px"}
+                  iconColor={baseTheme.colors.primary100}
+                />
+                Planner
+              </MobileMenuOption>
+              <MobileMenuOption
+                showSideNav={showSideNav}
+                onClick={() => {
+                  history.push(`/weekly-check-in/${userId}/${getWeekOf()}`);
 
-            <MobileAvatar
-              onClick={() => {
-                setShowSideNav(false);
-                setShowProfileNav(!showProfileNav);
-              }}
-            >
-              {renderUserAvatar(32)}
-            </MobileAvatar>
-          </HeaderItemsContainer>
-          {/* {showSideNav && ( */}
-          <MobileNavMenu showSideNav={showSideNav} ref={mobileNavMenuRef}>
-            <MobileMenuOption
-              showSideNav={showSideNav}
-              onClick={() => {
-                history.push("/");
-                setShowSideNav(false);
-              }}
-            >
-              <Icon
-                icon={"Planner"}
-                mr="1em"
-                size={"24px"}
-                iconColor={baseTheme.colors.primary100}
+                  setShowSideNav(false);
+                }}
+              >
+                <Icon
+                  icon={"Check-in-page"}
+                  mr="1em"
+                  size={"24px"}
+                  iconColor={baseTheme.colors.primary100}
+                />
+                Check-In
+              </MobileMenuOption>
+            </MobileNavMenu>
+            <MobileProfileNav showProfileNav={showProfileNav} ref={profileNavRef}>
+              <MobileAccountDropdownOptions
+                accountActionRef={accountActionRef}
+                setShowAccountActions={setShowAccountActions}
+                setInviteTeamModalOpen={setInviteTeamModalOpen}
+                setShowProfileNav={setShowProfileNav}
               />
-              Planner
-            </MobileMenuOption>
-            <MobileMenuOption
-              showSideNav={showSideNav}
-              onClick={() => {
-                history.push(`/weekly-check-in/${userId}/${getWeekOf()}`);
+            </MobileProfileNav>
 
-                setShowSideNav(false);
-              }}
-            >
-              <Icon
-                icon={"Check-in-page"}
-                mr="1em"
-                size={"24px"}
-                iconColor={baseTheme.colors.primary100}
+            <CreateIssueModal
+              createIssueModalOpen={createIssueModalOpen}
+              setCreateIssueModalOpen={setCreateIssueModalOpen}
+            />
+            <CreateKeyActivityModal
+              createKeyActivityModalOpen={createKeyActivityModalOpen}
+              setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
+              defaultSelectedGroupId={sessionStore.getScheduledGroupIdByName("Weekly List")}
+            />
+            {inviteUserModalOpen && (
+              <InviteUserModal
+                inviteUserModalOpen={inviteUserModalOpen}
+                setInviteUserModalOpen={setInviteUserModalOpen}
               />
-              Check-In
-            </MobileMenuOption>
-          </MobileNavMenu>
-          <MobileProfileNav showProfileNav={showProfileNav} ref={profileNavRef}>
-            <MobileAccountDropdownOptions
-              accountActionRef={accountActionRef}
-              setShowAccountActions={setShowAccountActions}
-              setInviteTeamModalOpen={setInviteTeamModalOpen}
-              setShowProfileNav={setShowProfileNav}
-            />
-          </MobileProfileNav>
+            )}
 
-          <CreateIssueModal
-            createIssueModalOpen={createIssueModalOpen}
-            setCreateIssueModalOpen={setCreateIssueModalOpen}
-          />
-          <CreateKeyActivityModal
-            createKeyActivityModalOpen={createKeyActivityModalOpen}
-            setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
-            defaultSelectedGroupId={sessionStore.getScheduledGroupIdByName("Weekly List")}
-          />
-          {inviteUserModalOpen && (
-            <InviteUserModal
-              inviteUserModalOpen={inviteUserModalOpen}
-              setInviteUserModalOpen={setInviteUserModalOpen}
+            <InviteYourTeamModal
+              modalOpen={inviteTeamModalOpen}
+              setModalOpen={setInviteTeamModalOpen}
             />
-          )}
-
-          <InviteYourTeamModal
-            modalOpen={inviteTeamModalOpen}
-            setModalOpen={setInviteTeamModalOpen}
-          />
+          </ContentWrapper>
         </Container>
       </Wrapper>
     );
@@ -484,6 +486,18 @@ const Container = styled.div`
   }
 `;
 
+const ContentWrapper = styled.div`
+  padding-top: 0.5em;
+  @media only screen and (min-width: 1600px) {
+    max-width: 1024px;
+    margin: 0 auto;
+  }
+  @media only screen and (min-width: 2048px) {
+    max-width: 50%;
+    margin: 0 auto;
+  }
+`;
+
 const Wrapper = styled.div`
   background-color: white;
   height: 64px;
@@ -500,6 +514,9 @@ const Wrapper = styled.div`
     align-items: center;
     background-color: ${props => props.theme.colors.mipBlue};
   }
+  @media only screen and (min-width: 1600px) {
+    margin-left: 0px;
+  }
 `;
 
 const ActionsContainer = styled.div`
@@ -510,6 +527,9 @@ const ActionsContainer = styled.div`
     margin-right: auto;
     max-width: 60%;
     display: flex;
+  }
+  @media only screen and (min-width: 1600px) {
+    margin-left: 0px;
   }
 `;
 
@@ -674,6 +694,9 @@ const PersonalInfoContainer = styled.div`
     padding-right: 0px;
     display: none;
     pointer-events: none;
+  }
+  @media only screen and (min-width: 1600px) {
+    padding-right: 0px;
   }
 `;
 

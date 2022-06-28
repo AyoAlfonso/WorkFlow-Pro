@@ -34,6 +34,8 @@ export const CheckInWizardLayout = observer(
 
     const meetingTitle = () => R.path(["name"], checkIn);
 
+    const isWeeklyCheckin = checkIn.name == "Weekly Check-in" || checkIn.name == "Weekly Check in";
+
     const meetingDescription = () => R.path(["currentStepDetails", "instructions"], checkIn);
 
     const meetingComponent = () => <CheckinStep checkin={checkIn} />;
@@ -66,18 +68,20 @@ export const CheckInWizardLayout = observer(
     const actionButtons = () => {
       return (
         <>
-          {checkIn?.currentStep > 1 && (
-            <LeftButtonContainer>
-              <BackButton
-                small
-                variant={"primaryOutline"}
-                onClick={() => onNextButtonClick(checkIn.currentStep - 1)}
-              >
-                <StyledBackIcon icon={"Move2"} size={"15px"} iconColor={"primary100"} />
-              </BackButton>
-            </LeftButtonContainer>
-          )}
-          {checkIn.currentStep + 1 <= numberOfSteps ? (
+          {(isWeeklyCheckin && checkIn?.currentStep > 0) ||
+            (checkIn?.currentStep > 1 && (
+              <LeftButtonContainer>
+                <BackButton
+                  small
+                  variant={"primaryOutline"}
+                  onClick={() => onNextButtonClick(checkIn.currentStep - 1)}
+                >
+                  <StyledBackIcon icon={"Move2"} size={"15px"} iconColor={"primary100"} />
+                </BackButton>
+              </LeftButtonContainer>
+            ))}
+          {(isWeeklyCheckin && checkIn?.currentStep + 1 < numberOfSteps) ||
+          checkIn.currentStep + 1 <= numberOfSteps ? (
             <NextButton
               small
               variant={"primary"}

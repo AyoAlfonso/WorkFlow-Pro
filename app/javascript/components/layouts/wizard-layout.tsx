@@ -239,6 +239,9 @@ const DescriptionContainer = styled.div`
   @media only screen and (max-width: 768px) {
     display: none;
   }
+  @media only screen and (min-width: 1400px) {
+    max-width: 500px;
+  }
 `;
 
 const DescriptionBody = styled.div`
@@ -269,6 +272,14 @@ const BodyContainer = styled.div<BodyContainerProps>`
   @media only screen and (max-width: 768px) {
     width: 100%;
     padding: 0;
+  }
+  @media only screen and (min-width: 1600px) {
+    max-width: 1024px;
+    margin: 0 auto;
+  }
+  @media only screen and (min-width: 2048px) {
+    max-width: 50%;
+    margin: 0 auto;
   }
 `;
 

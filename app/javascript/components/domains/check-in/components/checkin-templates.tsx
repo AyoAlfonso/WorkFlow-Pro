@@ -77,7 +77,7 @@ export const CheckinTemplates = (): JSX.Element => {
             name={checkin.name}
             id={checkin.id}
             description={checkin.description}
-            tags={[checkin.ownerType, checkin.checkInType == "dynamic" ? "Custom" : ""]}
+            tags={[checkin.ownerType, checkin.checkInType == "dynamic" ? "Custom" : '']}
           />
         ))}
       </CheckInTemplateCardsContainer>
@@ -133,6 +133,14 @@ const OverviewTab = styled("span")<IOverviewTab>`
   white-space: nowrap;
   @media only screen and (max-width: 768px) {
     margin-bottom: 1em;
+  }
+
+  @media only screen and (max-width: 1200px) {
+    padding: 0 5px;
+  }
+
+  &: last-child {
+    margin-right: 0;
   }
 `;
 

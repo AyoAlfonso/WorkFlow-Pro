@@ -14,6 +14,7 @@ export const CheckInTemplateStoreModel = types
   .props({
     checkInTemplates: types.array(CheckInTemplateModel),
     currentCheckIn: types.maybeNull(CheckInTemplateModel),
+    checkIns: types.frozen()
   })
   .extend(withEnvironment())
   .actions(self => ({
@@ -34,6 +35,16 @@ export const CheckInTemplateStoreModel = types
         };
         self.currentCheckIn = checkIn;
       } catch {
+        // caught by Api Monitor
+      }
+    }),
+    getCheckIns: flow(function* (id) {
+      try {
+        const response: ApiResponse<any> = yield self.environment.api.getCheckins(id);
+        const checkIns = response.data.filter(meeting => meeting.id === id);
+        self.checkIns = checkIns;
+      } catch {
+        // showToast("Something went wrong", ToastMessageConstants.ERROR);
         // caught by Api Monitor
       }
     }),

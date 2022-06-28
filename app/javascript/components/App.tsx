@@ -79,6 +79,16 @@ const Container = styled.div`
     margin: 0;
     padding-top: 64px;
   }
+
+  @media only screen and (min-width: 1600px) {
+    max-width: 1024px;
+    margin: 0 auto;
+  }
+
+  @media only screen and (min-width: 2048px) {
+    max-width: 50%;
+    margin: 0 auto;
+  }
 `;
 
 export interface IAppProps {
