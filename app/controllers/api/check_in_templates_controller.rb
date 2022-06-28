@@ -57,7 +57,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def publish_now
-    # binding.pry
+        # binding.pry
     date_time_config = @check_in_template.date_time_config
     check_in_artifacts = [];
 
@@ -69,16 +69,16 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   schedule = IceCube::Schedule.new(Time.current - 7.days)
   single_occurence_schedule = IceCube::Schedule.new(Time.new(Date.current.year, 1,1))
   run_once =  Time.parse(@check_in_template.date_time_config["date"])
-  
-    begin
-      case date_time_config["cadence"] 
-        when "Weekly"; rule = schedule.add_recurrence_rule(IceCube::Rule.weekly.day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).first.to_h
-        when "Bi-weekly"; rule = schedule.add_recurrence_rule(IceCube::Rule.weekly(2).day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).first.to_h
-        when "Daily"; rule = schedule.add_recurrence_rule(IceCube::Rule.daily.hour_of_day(10).minute_of_hour(0))[0].first.to_h
-        when "Monthly"; rule = schedule.add_recurrence_rule(IceCube::Rule.monthly.day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).first.to_h
-        when "Once";  rule = single_occurence_schedule.add_recurrence_rule(IceCube::Rule.yearly.day_of_month(run_once.month).hour_of_day(run_once.hour).minute_of_hour(run_once.min)).first.to_h
+  rule = nil
+    # begin
+    rule = case date_time_config["cadence"]
+        when "Weekly"; schedule.add_recurrence_rule(IceCube::Rule.weekly.day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).first.to_hash
+        when "Bi-weekly";  schedule.add_recurrence_rule(IceCube::Rule.weekly(2).day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).first.to_hash
+        when "Daily"; schedule.add_recurrence_rule(IceCube::Rule.daily.hour_of_day(10).minute_of_hour(0)).first.to_hash
+        when "Monthly"; schedule.add_recurrence_rule(IceCube::Rule.monthly.day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).first.to_hash
+        when "Once"; single_occurence_schedule.add_recurrence_rule(IceCube::Rule.yearly.day_of_month(run_once.month).hour_of_day(run_once.hour).minute_of_hour(run_once.min)).first.to_hash
       end
-    end
+    # end
     unless notification.persisted?
       notification.attributes = {
         rule: rule,
@@ -97,7 +97,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     end
 
    @check_in_template.viewers.each do |viewer|
-     if(viewer["type"]  == "user")
+      if(viewer["type"]  == "user")
        check_in_artifact = CheckInArtifact.new(check_in_template_id: @check_in_template.id, owned_by_id: viewer["id"])
        check_in_artifact.save!(start_time: next_start )
        check_in_artifacts << check_in_artifact
@@ -111,7 +111,6 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     if(@check_in_template.check_in_type == "dynamic") 
       check_in_artifact = CheckInArtifact.new(check_in_template: @check_in_template, owned_by: current_user)
       check_in_artifact.save!(start_time: DateTime.now.utc.beginning_of_day)
-   
     end
     render json: {check_in_artifact: check_in_artifact, status: :ok }
   end
@@ -131,6 +130,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def artifact
+
    check_in_artifact = CheckInArtifact.find(params[:id])
    @check_in_template = CheckInTemplate.find(check_in_artifact.check_in_template_id)
    date_time_config = @check_in_template.date_time_config
