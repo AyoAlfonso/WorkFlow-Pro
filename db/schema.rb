@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_27_155915) do
+ActiveRecord::Schema.define(version: 2022_06_27_160517) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,6 +105,21 @@ ActiveRecord::Schema.define(version: 2022_06_27_155915) do
     t.index ["created_by_id"], name: "index_annual_initiatives_on_created_by_id", where: "(deleted_at IS NULL)"
     t.index ["deleted_at"], name: "index_annual_initiatives_on_deleted_at"
     t.index ["owned_by_id"], name: "index_annual_initiatives_on_owned_by_id", where: "(deleted_at IS NULL)"
+  end
+
+  create_table "check_in_artifacts", force: :cascade do |t|
+    t.bigint "owned_by_id"
+    t.bigint "check_in_template_id"
+    t.boolean "skip", default: false
+    t.boolean "boolean", default: false
+    t.datetime "end_time"
+    t.datetime "start_time"
+    t.datetime "deleted_at"
+    t.jsonb "questions"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["check_in_template_id"], name: "index_check_in_artifacts_on_check_in_template_id"
+    t.index ["owned_by_id"], name: "index_check_in_artifacts_on_owned_by_id"
   end
 
   create_table "check_in_templates", force: :cascade do |t|
