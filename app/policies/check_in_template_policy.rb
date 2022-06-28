@@ -15,6 +15,7 @@ class CheckInTemplatePolicy < ApplicationPolicy
     user_is_company_admin_of_current_company?
   end
 
+
   def show?
     user_is_part_of_this_company?(@company)
   end

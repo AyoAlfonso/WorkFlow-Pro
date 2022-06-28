@@ -9,7 +9,8 @@ class CheckInArtifact < ApplicationRecord
   scope :for_month_of_date, ->(end_time) { where("(end_time >= ? AND end_time <= ?) OR end_time IS NULL", end_time.beginning_of_month, end_time.end_of_month) }
   scope :for_week_of_date_started_only, ->(end_time) { where("(end_time >= ? AND end_time <= ?)", end_time.beginning_of_week, end_time.end_of_week) }
   scope :owned_by_user, ->(user) { where(owned_by_id: user) }
-
+  scope :active, ->  { where(skip: false) }
+  
   belongs_to :check_in_template
 
   def as_json(options = [])
