@@ -98,14 +98,18 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def general_check_in
-    check_in_artifacts = CheckInArtifact.where(owned_by: current_user, skip: false).incomplete
+    # binding.pry
+    check_in_artifacts = CheckInArtifact.owned_by_user(current_user).active.incomplete
     @check_in_artifacts_for_day = check_in_artifacts
     # .for_day_of_date(params[:on_day])
-    @check_in_artifacts_for_week = check_in_artifacts
+    # @check_in_artifacts_for_week = check_in_artifacts
     # .for_week_of_date(params[:on_week])
-    @check_in_artifacts_for_month =  check_in_artifacts
+    # @check_in_artifacts_for_month =  check_in_artifacts
     # .for_month_of_date(params[:on_month])
-    render "api/check_in_artifacts/general_check_in_artifacts"
+     authorize @check_in_artifacts_for_day
+    render json: {check_in_artifacts: @check_in_artifacts_for_day, status: :ok }
+
+    # render "api/check_in_artifacts/general_check_in_artifacts"
   end
 
   def artifact
