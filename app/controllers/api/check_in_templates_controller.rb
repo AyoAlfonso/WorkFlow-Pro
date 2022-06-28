@@ -57,8 +57,9 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def publish_now
+    # binding.pry
     date_time_config = @check_in_template.date_time_config
-    check_in_artifact = CheckInArtifact.new(check_in_template_id: @check_in_template.id, owned_by: current_user)
+    check_in_artifacts = [];
 
     notification = Notification.find_or_initialize_by(
         user_id: current_user.id,
@@ -67,39 +68,57 @@ class Api::CheckInTemplatesController < Api::ApplicationController
 
   schedule = IceCube::Schedule.new(Time.current - 7.days)
   single_occurence_schedule = IceCube::Schedule.new(Time.new(Date.current.year, 1,1))
-  run_once = if @check_in_template.run_once.present? Time.parse(@check_in_template.run_once) ||  Time.parse(@check_in_template.date_time_config["date"]);  end
- 
+  run_once =  Time.parse(@check_in_template.date_time_config["date"])
+  # rule
+  
     begin
       case date_time_config["cadence"] 
         when "weekly"; rule = schedule.add_recurrence_rule(IceCube::Rule.weekly.day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).to_h
         when "bi-weekly"; rule = schedule.add_recurrence_rule(IceCube::Rule.weekly(2).day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).to_h
         when "daily"; rule = schedule.add_recurrence_rule(IceCube::Rule.daily.hour_of_day(10).minute_of_hour(0)).to_h
         when "monthly"; rule = schedule.add_recurrence_rule(IceCube::Rule.monthly.day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).to_h
-        when "yearly";  rule = single_occurence_schedule.add_recurrence_rule(IceCube::Rule.yearly.day_of_month(run_once.month).hour_of_day(run_once.hour).minute_of_hour(run_once.min).count(1)).to_h
+        # when "once";  rule = single_occurence_schedule.add_recurrence_rule(IceCube::Rule.yearly.day_of_month(run_once.month).hour_of_day(run_once.hour).minute_of_hour(run_once.min)).to_h
       end
     end
     unless notification.persisted?
       notification.attributes = {
         rule: rule,
-        method: :enabled,
+        method: :email,
       }
       notification.save!
       next_start =  Time.new(rule.next_occurrence.year, rule.next_occurrence.month, rule.next_occurrence.day, rule.next_occurrence.hour)
-      check_in_artifact.save!(start_time: next_start, end_time: rule.next_occurrence )
     end
+  
+    @check_in_template.participants.each do |person|
+     if(person["type"] == "user")
+       check_in_artifact = CheckInArtifact.new(check_in_template_id: @check_in_template.id, owned_by_id: person["id"])
+       check_in_artifact.save!(start_time: next_start )
+      check_in_artifacts << check_in_artifact
+      end
+    end
+
+   @check_in_template.viewers.each do |viewer|
+      if(viewer["type"]  == "user")
+       check_in_artifact = CheckInArtifact.new(check_in_template_id: @check_in_template.id, owned_by_id: viewer["id"])
+       check_in_artifact.save!(start_time: next_start )
+       check_in_artifacts << check_in_artifact
+      end
+   end
+
+  render json: {check_in_artifacts: check_in_artifacts, status: :ok }
   end
 
   def run_now
     if(@check_in_template.check_in_type == "dynamic") 
       check_in_artifact = CheckInArtifact.new(check_in_template: @check_in_template, owned_by: current_user)
       check_in_artifact.save!(start_time: DateTime.now.utc.beginning_of_day)
+   
     end
     render json: {check_in_artifact: check_in_artifact, status: :ok }
   end
 
   def general_check_in
-    # binding.pry
-    check_in_artifacts = CheckInArtifact.owned_by_user(current_user).active.incomplete
+    check_in_artifacts = CheckInArtifact.owned_by_user(current_user).not_skipped.incomplete
     @check_in_artifacts_for_day = check_in_artifacts
     # .for_day_of_date(params[:on_day])
     # @check_in_artifacts_for_week = check_in_artifacts
@@ -114,11 +133,36 @@ class Api::CheckInTemplatesController < Api::ApplicationController
 
   def artifact
    check_in_artifact = CheckInArtifact.find(params[:id])
+   @check_in_template = CheckInTemplate.find(check_in_artifact.check_in_template_id)
+   date_time_config = @check_in_template.date_time_config
+
+   schedule = IceCube::Schedule.new(Time.current)
+   single_occurence_schedule = IceCube::Schedule.new(Time.new(Date.current.year, 1,1))
+   run_once = if @check_in_template.run_once.present? Time.parse(@check_in_template.run_once) ||  Time.parse(@check_in_template.date_time_config["date"]);  end
+  
+    begin
+      case date_time_config["cadence"] 
+        when "weekly"; rule = schedule.add_recurrence_rule(IceCube::Rule.weekly.day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).to_h
+        when "bi-weekly"; rule = schedule.add_recurrence_rule(IceCube::Rule.weekly(2).day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).to_h
+        when "daily"; rule = schedule.add_recurrence_rule(IceCube::Rule.daily.hour_of_day(10).minute_of_hour(0)).to_h
+        when "monthly"; rule = schedule.add_recurrence_rule(IceCube::Rule.monthly.day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).to_h
+        when "yearly";  rule = single_occurence_schedule.add_recurrence_rule(IceCube::Rule.yearly.day_of_month(run_once.month).hour_of_day(run_once.hour).minute_of_hour(run_once.min).count(1)).to_h
+      end
+    end
+
+    next_start =  Time.new(rule.next_occurrence.year, rule.next_occurrence.month, rule.next_occurrence.day, rule.next_occurrence.hour)
+
     if(params[:skip])
       check_in_artifact.update(skip: params[:skip])
-      CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: DateTime.now.utc.beginning_of_day, end_time: DateTime.now.utc.end_of_day )
+      CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: next_start , end_time: Time.now )
     end
-  # check_in_artifact.update!(check_in_artifact_params)
+
+    if(params[:end_now])
+      check_in_artifact.update(end_time: Time.now)
+      CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: next_start)
+    end
+ 
+    #//log artifact
   authorize check_in_artifact
   render json: {check_in_artifact: check_in_artifact, status: :ok }
   end
@@ -133,14 +177,14 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   private
-  def check_in_artifact_params
-      params.require(:check_in_artifact).permit(:name, :check_in_type, :owner_type, :description, :participants, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder,
-           :check_in_templates_steps_attributes [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :variant, :question])
-  end
+  # def check_in_artifact_params
+  #     params.require(:check_in_artifact).permit(:name, :check_in_type, :owner_type, :description, :participants, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder,
+  #          :check_in_templates_steps_attributes [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :variant, :question])
+  # end
 
   def check_in_template_params
       params.require(:check_in_template).permit(:name, :check_in_type, :owner_type, :description, :participants, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder,
-           :check_in_templates_steps_attributes [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :variant, :question])
+         :check_in_templates_steps_attributes [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :variant, :question], viewers: [:id, :type])
   end
 
   def set_check_in_template

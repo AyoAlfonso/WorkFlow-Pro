@@ -12,9 +12,8 @@ class CheckInTemplatePolicy < ApplicationPolicy
   end
 
   def publish_now?
-    user_is_company_admin_of_current_company?
+    user_is_part_of_this_company?(@company)
   end
-
 
   def show?
     user_is_part_of_this_company?(@company)
