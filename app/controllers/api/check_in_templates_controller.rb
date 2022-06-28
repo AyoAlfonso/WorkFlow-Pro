@@ -69,15 +69,14 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   schedule = IceCube::Schedule.new(Time.current - 7.days)
   single_occurence_schedule = IceCube::Schedule.new(Time.new(Date.current.year, 1,1))
   run_once =  Time.parse(@check_in_template.date_time_config["date"])
-  # rule
   
     begin
       case date_time_config["cadence"] 
-        when "weekly"; rule = schedule.add_recurrence_rule(IceCube::Rule.weekly.day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).to_h
-        when "bi-weekly"; rule = schedule.add_recurrence_rule(IceCube::Rule.weekly(2).day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).to_h
-        when "daily"; rule = schedule.add_recurrence_rule(IceCube::Rule.daily.hour_of_day(10).minute_of_hour(0)).to_h
-        when "monthly"; rule = schedule.add_recurrence_rule(IceCube::Rule.monthly.day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).to_h
-        # when "once";  rule = single_occurence_schedule.add_recurrence_rule(IceCube::Rule.yearly.day_of_month(run_once.month).hour_of_day(run_once.hour).minute_of_hour(run_once.min)).to_h
+        when "Weekly"; rule = schedule.add_recurrence_rule(IceCube::Rule.weekly.day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).first.to_h
+        when "Bi-weekly"; rule = schedule.add_recurrence_rule(IceCube::Rule.weekly(2).day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).first.to_h
+        when "Daily"; rule = schedule.add_recurrence_rule(IceCube::Rule.daily.hour_of_day(10).minute_of_hour(0))[0].first.to_h
+        when "Monthly"; rule = schedule.add_recurrence_rule(IceCube::Rule.monthly.day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).first.to_h
+        when "Once";  rule = single_occurence_schedule.add_recurrence_rule(IceCube::Rule.yearly.day_of_month(run_once.month).hour_of_day(run_once.hour).minute_of_hour(run_once.min)).first.to_h
       end
     end
     unless notification.persisted?
@@ -90,22 +89,22 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     end
   
     @check_in_template.participants.each do |person|
-     if(person["type"] == "user")
-       check_in_artifact = CheckInArtifact.new(check_in_template_id: @check_in_template.id, owned_by_id: person["id"])
-       check_in_artifact.save!(start_time: next_start )
-      check_in_artifacts << check_in_artifact
+      if(person["type"] == "user")
+        check_in_artifact = CheckInArtifact.new(check_in_template_id: @check_in_template.id, owned_by_id: person["id"])
+        check_in_artifact.save!(start_time: next_start )
+        check_in_artifacts << check_in_artifact
       end
     end
 
    @check_in_template.viewers.each do |viewer|
-      if(viewer["type"]  == "user")
+     if(viewer["type"]  == "user")
        check_in_artifact = CheckInArtifact.new(check_in_template_id: @check_in_template.id, owned_by_id: viewer["id"])
        check_in_artifact.save!(start_time: next_start )
        check_in_artifacts << check_in_artifact
       end
-   end
+    end
 
-  render json: {check_in_artifacts: check_in_artifacts, status: :ok }
+   render json: {check_in_artifacts: check_in_artifacts, status: :ok }
   end
 
   def run_now
