@@ -57,7 +57,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def publish_now
-        # binding.pry
+    binding.pry
     date_time_config = @check_in_template.date_time_config
     check_in_artifacts = [];
 
@@ -72,35 +72,51 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   rule = nil
     # begin
     rule = case date_time_config["cadence"]
-        when "Weekly"; schedule.add_recurrence_rule(IceCube::Rule.weekly.day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).first.to_hash
-        when "Bi-weekly";  schedule.add_recurrence_rule(IceCube::Rule.weekly(2).day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).first.to_hash
-        when "Daily"; schedule.add_recurrence_rule(IceCube::Rule.daily.hour_of_day(10).minute_of_hour(0)).first.to_hash
-        when "Monthly"; schedule.add_recurrence_rule(IceCube::Rule.monthly.day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).first.to_hash
-        when "Once"; single_occurence_schedule.add_recurrence_rule(IceCube::Rule.yearly.day_of_month(run_once.month).hour_of_day(run_once.hour).minute_of_hour(run_once.min)).first.to_hash
+        when "Weekly"; schedule.add_recurrence_rule(IceCube::Rule.weekly.day(:monday).hour_of_day(10).minute_of_hour(0)).first
+        when "Bi-weekly"; schedule.add_recurrence_rule(IceCube::Rule.weekly(2).day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).first
+        when "Daily"; schedule.add_recurrence_rule(IceCube::Rule.daily.hour_of_day(10).minute_of_hour(0)).first
+        when "Monthly"; schedule.add_recurrence_rule(IceCube::Rule.monthly.day(date_time_config["day"]).hour_of_day(10).minute_of_hour(0)).first
+        when "Once"; single_occurence_schedule.add_recurrence_rule(IceCube::Rule.yearly.day_of_month(run_once.month).hour_of_day(run_once.hour).minute_of_hour(run_once.min)).first
       end
     # end
-    unless notification.persisted?
+    # unless notification.persisted?
       notification.attributes = {
-        rule: rule,
+        rule: rule.to_hash,
         method: :email,
       }
       notification.save!
-      next_start =  Time.new(rule.next_occurrence.year, rule.next_occurrence.month, rule.next_occurrence.day, rule.next_occurrence.hour)
-    end
-  
-    @check_in_template.participants.each do |person|
-      if(person["type"] == "user")
-        check_in_artifact = CheckInArtifact.new(check_in_template_id: @check_in_template.id, owned_by_id: person["id"])
+      next_start = date_time_config["cadence"] == "Once" ?  Time.now : Time.new(rule.next_occurrence.year, rule.next_occurrence.month, rule.next_occurrence.day, rule.next_occurrence.hour)
+    if(next_start.present?)
+      @check_in_template.participants.each do |person|
+        if(person["type"] == "user")
+          check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: person["id"])
+          check_in_artifact.save!(start_time: next_start )
+          check_in_artifacts << check_in_artifact
+        end
+      end
+
+    @check_in_template.viewers.each do |viewer|
+        if(viewer["type"]  == "user")
+        check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: viewer["id"])
         check_in_artifact.save!(start_time: next_start )
         check_in_artifacts << check_in_artifact
-      end
-    end
+        end
 
-   @check_in_template.viewers.each do |viewer|
-      if(viewer["type"]  == "user")
-       check_in_artifact = CheckInArtifact.new(check_in_template_id: @check_in_template.id, owned_by_id: viewer["id"])
-       check_in_artifact.save!(start_time: next_start )
-       check_in_artifacts << check_in_artifact
+        if(viewer["type"]  == "team")
+          Team.find(viewer["id"]).team_user_enablements.pluck(:user_id).each do |user|
+              check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
+              check_in_artifact.save!(start_time: next_start)
+              check_in_artifacts << check_in_artifact
+          end
+        end
+
+        if(viewer["type"] == "company")
+          Company.find(viewer["id"]).user_company_enablements.pluck(:user_id).each do |user|
+            check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
+            check_in_artifact.save!(start_time: next_start)
+            check_in_artifacts << check_in_artifact
+          end
+        end
       end
     end
 

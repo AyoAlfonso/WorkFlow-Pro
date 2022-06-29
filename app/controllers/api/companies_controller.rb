@@ -48,14 +48,9 @@ class Api::CompaniesController < Api::ApplicationController
   def update
     @company.update!(company_params)
     if params[:company][:logo].present?
-      # if @company.logo_url.present?
-      #   @company.logo.purge
-      # end
       decoded_image = Base64.decode64(params[:company][:logo][0][:data].split(",")[1])
       image_io = StringIO.new(decoded_image)
       @company.logo.attach(io: image_io, filename: params[:company][:logo][0][:file][:path], content_type: "image/jpeg") if params[:company][:logo][0][:file][:path].present?
-    # elsif params[:company][:logo].blank?
-    #   @company.logo.purge
     end
   render json: @company.as_json(only: ["id", "name", "phone_number", "rallying_cry", "fiscal_year_start", "timezone", "preferences", "display_format", "forum_type", "organisational_forum_type", "objectives_key_type"],
                                   methods: ["accountability_chart_content", "strategic_plan_content", "sso_emails_content", "logo_url", "current_fiscal_week", "current_fiscal_quarter", "quarter_for_creating_quarterly_goals", "current_fiscal_year", "year_for_creating_annual_initiatives", "fiscal_year_range", "current_quarter_start_date", "next_quarter_start_date", "forum_meetings_year_range", "forum_intro_video", "forum_types", "objectives_key_types"],
