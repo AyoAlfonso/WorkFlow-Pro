@@ -73,7 +73,8 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   minute_as_int = IceCube::RuleHelper.minute_of_hour_as_int(date_time_config)
 
   single_occurence_schedule = IceCube::Schedule.new(Time.new(Date.current.year, 1,1))
-  run_once =  Time.parse(@check_in_template.date_time_config["date"])
+  run_once =  @check_in_template.run_once.to_datetime  if @check_in_template.run_once.present?
+
     begin
       case date_time_config["cadence"] 
         when "weekly"
@@ -82,7 +83,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
            schedule.add_recurrence_rule(IceCube::Rule.weekly(2).day(day_as_int).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
         when "daily" 
            schedule.add_recurrence_rule(IceCube::Rule.daily.hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
-        when "Monthly"
+        when "monthly"
           schedule.add_recurrence_rule(IceCube::Rule.monthly.day(day_as_int).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
         when "once"
           single_occurence_schedule.add_recurrence_rule(IceCube::Rule.yearly.day_of_month(run_once.month).hour_of_day(run_once.hour).minute_of_hour(run_once.min))
@@ -93,7 +94,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
         method: :email,
       }
       notification.save!
-      next_start = date_time_config["cadence"] == "Once" ? Time.now : Time.new(schedule.first.year, schedule.first.month, schedule.first.day, schedule.first.hour)
+      next_start = date_time_config["cadence"] == "once" ? Time.now : Time.new(schedule.first.year, schedule.first.month, schedule.first.day, schedule.first.hour)
     if(next_start.present?)
       @check_in_template.participants.each do |person|
         if(person["type"] == "user")

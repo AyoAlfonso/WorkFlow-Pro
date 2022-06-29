@@ -144,7 +144,7 @@ export const CheckInBuilderLayout = observer(
         description: checkinDescription,
         timeZone: timezone,
         viewers: viewers,
-        runOnce: cadence == "Once" && selectedDate,
+        runOnce: cadence == "Once" ? selectedDate : "",
         dateTimeConfig: {
           cadence: formatCadence(),
           time: moment(checkinTime, ["hh:mm A"]).format("HH:mm"),
