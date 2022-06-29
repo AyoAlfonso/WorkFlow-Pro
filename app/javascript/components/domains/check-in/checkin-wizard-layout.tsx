@@ -30,7 +30,7 @@ export const CheckInWizardLayout = observer(
     const { t } = useTranslation();
     const history = useHistory();
 
-    const stepName = checkIn?.currentStepDetails.name;
+    const stepName = checkIn?.currentStepDetails?.name;
 
     const meetingTitle = () => R.path(["name"], checkIn);
 
