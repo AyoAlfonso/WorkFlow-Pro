@@ -1,7 +1,7 @@
 // https://github.com/luke-wilson/basic-react-timepicker
 import React from "react";
 import { Select } from "~/components/shared/input";
-const moment = require("moment");
+import moment from "moment";
 
 export interface ITimePickerProps {
   onChange?: any;

@@ -7,17 +7,19 @@ import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import * as R from "ramda";
 import { StepModel } from "~/models/step";
+import { toJS } from "mobx";
+import { CheckInArtifactsModel } from "~/models/check-in-artifacts";
 
 export const CheckInTemplateStoreModel = types
   .model("CheckInTemplateStoreModel")
   .props({
     checkInTemplates: types.array(CheckInTemplateModel),
     currentCheckIn: types.maybeNull(CheckInTemplateModel),
+    checkIns: types.array(CheckInArtifactsModel)
   })
   .extend(withEnvironment())
-  .views(self => ({}))
   .actions(self => ({
-    fetchCheckInTemplates: flow(function*() {
+    fetchCheckInTemplates: flow(function* () {
       try {
         const response: ApiResponse<any> = yield self.environment.api.getCheckInTemplates();
         self.checkInTemplates = response.data;
@@ -25,19 +27,79 @@ export const CheckInTemplateStoreModel = types
         // caught by Api Monitor
       }
     }),
-    getCheckIn: flow(function*(checkInName) {
+    getCheckIn: flow(function* (checkInName) {
       try {
         const response: ApiResponse<any> = yield self.environment.api.getCheckInTemplates();
-        const checkIn = {...response.data.find(meeting => meeting.name === checkInName), currentStep: 0};
+        const checkIn = {
+          ...response.data.find(meeting => meeting.name === checkInName),
+          currentStep: 0,
+        };
         self.currentCheckIn = checkIn;
       } catch {
         // caught by Api Monitor
+      }
+    }),
+    getCheckIns: flow(function* () {
+      try {
+        const response: ApiResponse<any> = yield self.environment.api.getCheckins();
+        self.checkIns = response.data.checkInArtifacts;
+      } catch {
+        // showToast("Something went wrong", ToastMessageConstants.ERROR);
+        // caught by Api Monitor
+      }
+    }),
+    createCheckinTemplate: flow(function* (checkInTemplate) {
+      const response: ApiResponse<any> = yield self.environment.api.createCheckinTemplate(
+        checkInTemplate,
+      );
+      if (response.ok) {
+        showToast("Check-in template created successfully", ToastMessageConstants.SUCCESS);
+        return response.data.template.id;
+      } else {
+        showToast(
+          "Error creating check-in template, please try again",
+          ToastMessageConstants.ERROR,
+        );
+        return false;
+      }
+    }),
+    publishCheckinTemplate: flow(function* (id) {
+      const response: ApiResponse<any> = yield self.environment.api.publishCheckin(id);
+      if (response.ok) {
+        return true;
+      } else {
+        showToast(
+          "Error publishing check-in template, please try again",
+          ToastMessageConstants.ERROR,
+        );
+        return false;
+      }
+    }),
+    updateCheckinArtifact: flow(function* (id, value) {
+      const response: ApiResponse<any> = yield self.environment.api.updateCheckinArtifact(
+        id,
+        value,
+      );
+      if (response.ok) {
+        showToast("Check-in updated successfully", ToastMessageConstants.SUCCESS);
+        return true;
+      } else {
+        showToast(
+          "Something went wrong, please try again",
+          ToastMessageConstants.ERROR,
+        );
+        return false;
       }
     }),
   }))
   .actions(self => ({
     updateCurrentCheckIn(checkInObj) {
       self.currentCheckIn = checkInObj;
+    },
+    findCheckinTemplate(id) {
+      const checkin = toJS(self.checkInTemplates).find(checkin => checkin.id == id);
+      const currentCheckIn = {...checkin, currentStep: 1};
+      self.currentCheckIn = currentCheckIn;
     }
   }))
   .actions(self => ({

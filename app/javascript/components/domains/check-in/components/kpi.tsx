@@ -16,9 +16,14 @@ import moment from "moment";
 import { toJS } from "mobx";
 import { useTranslation } from "react-i18next";
 import { EmptyState } from "./empty-state";
+import { getWeekOf } from "~/utils/date-time";
+
+interface KpiProps {
+  disabled?: boolean;
+}
 
 export const KpiComponent = observer(
-  (props): JSX.Element => {
+  ({ disabled }: KpiProps): JSX.Element => {
     const { keyPerformanceIndicatorStore, scorecardStore, sessionStore, companyStore } = useMst();
     const { createScorecardLog } = keyPerformanceIndicatorStore;
     const { kpis } = scorecardStore;
@@ -30,6 +35,8 @@ export const KpiComponent = observer(
     const id = profile?.id;
 
     const { weekOf } = useParams();
+
+    const currentWeekOf = weekOf || getWeekOf();
 
     let valueForComment;
     const [value, setValue] = useState(undefined);
@@ -63,7 +70,8 @@ export const KpiComponent = observer(
       return (
         <Container>
           <StyledHeader>
-            What's the status on your KPIs from week of <u>{moment(weekOf).format("MMMM D")}</u>?
+            What's the status on your KPIs from week of{" "}
+            <u>{moment(currentWeekOf).format("MMMM D")}</u>?
           </StyledHeader>
         </Container>
       );
@@ -137,9 +145,21 @@ export const KpiComponent = observer(
       );
     };
 
-    return <>{loading ? <>{renderLoading()}</> : <>{renderKPIs()}</>}</>;
+    return (
+      <Wrapper disabled={disabled}>
+        {loading ? <>{renderLoading()}</> : <>{renderKPIs()}</>}
+      </Wrapper>
+    );
   },
 );
+
+type ContainerProps = {
+  disabled?: boolean;
+};
+
+const Wrapper = styled.div<ContainerProps>`
+  pointer-events: ${props => (props.disabled ? "none" : "auto")};
+`;
 
 const Container = styled.div`
   border-bottom: 1px solid ${props => props.theme.colors.borderGrey};

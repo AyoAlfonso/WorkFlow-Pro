@@ -390,13 +390,13 @@ export const Meeting = () => {
       <ContainerDiv>
         <h1>Text Step</h1>
         <Container>
-          <TextStep step={teamMeeting.steps[3]} />
+          {/* <TextStep step={teamMeeting.steps[3]} /> */}
         </Container>
       </ContainerDiv>
       <ContainerDiv>
         <h1>Image Step</h1>
         <Container>
-          <ImageStep step={teamMeeting.steps[0]} />
+          {/* <ImageStep step={teamMeeting.steps[0]} /> */}
         </Container>
       </ContainerDiv>
       <ContainerDiv>

@@ -9,8 +9,12 @@ import { toJS } from "mobx";
 
 import { TextStepDiv, TextStepContainer } from "~/components/domains/meetings/shared/text-step";
 
+interface ConversationStarterProps {
+  disabled?: boolean;
+}
+
 export const ConversationStarter = observer(
-  (): JSX.Element => {
+  ({ disabled }: ConversationStarterProps): JSX.Element => {
     const { t } = useTranslation();
     const { sessionStore } = useMst();
     const convoStarters = toJS(sessionStore.staticData.conversationStarters);
@@ -20,7 +24,7 @@ export const ConversationStarter = observer(
         : { body: "What's the most interesting thing you've done lately?" };
 
     return (
-      <TextStepContainer>
+      <TextStepContainer disabled={disabled}>
         <TextStepDiv>{randomConvoStarter.body}</TextStepDiv>
       </TextStepContainer>
     );

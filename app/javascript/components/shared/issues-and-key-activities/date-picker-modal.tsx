@@ -12,10 +12,14 @@ import { Button } from "~/components/shared/button";
 interface IDueDatePickerModalProps {
   selectedDueDate: Date;
   setSelectedDueDate: React.Dispatch<React.SetStateAction<Date>>;
-  updateDueDate: any;
+  updateDueDate?: any;
   showDatePicker: boolean;
   setShowDatePicker: React.Dispatch<React.SetStateAction<boolean>>;
   showDateOptions?: boolean;
+  headerString?: string;
+  minDate?: Date;
+  maxDate?: Date;
+  hideClearButton?: boolean;
 }
 
 export const DueDatePickerModal = ({
@@ -25,6 +29,10 @@ export const DueDatePickerModal = ({
   showDatePicker,
   setShowDatePicker,
   showDateOptions,
+  headerString,
+  minDate,
+  maxDate,
+  hideClearButton,
 }: IDueDatePickerModalProps): JSX.Element => {
   const { t } = useTranslation();
 
@@ -49,7 +57,9 @@ export const DueDatePickerModal = ({
       }}
     >
       <DatePickerModalHeaderContainer>
-        <DatePickerModalHeader>Select Due Date</DatePickerModalHeader>
+        <DatePickerModalHeader>
+          {headerString ? headerString : `Select Due Date`}
+        </DatePickerModalHeader>
         <DateModalIconContainer onClick={() => setShowDatePicker(false)}>
           <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} ml="8px" />
         </DateModalIconContainer>
@@ -105,8 +115,8 @@ export const DueDatePickerModal = ({
           showSelectionPreview={true}
           direction={"vertical"}
           shownDate={new Date()}
-          minDate={new Date()}
-          maxDate={addDays(new Date(), 365.4)}
+          minDate={minDate ? minDate : new Date()}
+          maxDate={maxDate ? maxDate : addDays(new Date(), 365.4)}
           scroll={{
             enabled: true,
             calendarWidth: 320,
@@ -116,7 +126,7 @@ export const DueDatePickerModal = ({
           date={selectedDueDate}
           onChange={date => {
             setSelectedDueDate(date);
-            updateDueDate(date);
+            updateDueDate && updateDueDate(date);
             setShowDatePicker(false);
           }}
         />
@@ -131,17 +141,19 @@ export const DueDatePickerModal = ({
           >
             Done
           </Button>
-          <Button
-            variant={"redOutline"}
-            small
-            onClick={() => {
-              setSelectedDueDate(null);
-              updateDueDate(null);
-              setShowDatePicker(false);
-            }}
-          >
-            {t<string>("datePicker.clearDate")}
-          </Button>
+          {!hideClearButton && (
+            <Button
+              variant={"redOutline"}
+              small
+              onClick={() => {
+                setSelectedDueDate(null);
+                updateDueDate(null);
+                setShowDatePicker(false);
+              }}
+            >
+              {t<string>("datePicker.clearDate")}
+            </Button>
+          )}
         </DatePickerModalButtonContainer>
       </>
     </DatePickerModal>

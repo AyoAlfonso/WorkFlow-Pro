@@ -3,16 +3,42 @@ class CheckInTemplatePolicy < ApplicationPolicy
     true
   end
 
+  def create?
+    !user_can_observe_current_company?
+  end
+
+  def run_now?
+   user_is_part_of_this_company?(@company)
+  end
+
+  def publish_now?
+    user_is_part_of_this_company?(@company)
+  end
+
+  def show?
+    user_is_part_of_this_company?(@company)
+  end
+
+  def update?
+    @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
+  end
+
+  def destroy?
+    @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
+  end
+
+
   class Scope
-    attr_reader :user, :scope
+    attr_reader :user, :scope, :company
 
     def initialize(context, scope)
       @user = context.user
+      @company = context.company
       @scope = scope
     end
 
     def resolve #system defaults
-      scope.all
+     scope.sort_by_company(@company)
     end
   end
 end

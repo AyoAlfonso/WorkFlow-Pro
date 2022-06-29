@@ -75,7 +75,7 @@ const WeekSummary = ({ kpis, currentWeek, currentFiscalYear }): JSX.Element => {
       hoveroffset: 4,
     });
   }, [kpis]);
-
+console.log(data)
   return (
     <WeekContainer>
       <Header>This Week</Header>

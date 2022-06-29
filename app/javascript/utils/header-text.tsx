@@ -106,6 +106,12 @@ export const HeaderText = observer(
         return <> {t("scorecards.indexTitle")} </>;
       case "weekly-check-in":
         return <>{t("Weekly Check-in")}</>;
+      case "check-in":
+        switch (locationPath[2]) {
+          case "insights":
+            return <>{t("Insights")}</>;
+          default:
+        return <>{t("Check-ins")}</>;}
       case "audit-logs":
         return <>{t("Audit Logs")}</>;
       default:

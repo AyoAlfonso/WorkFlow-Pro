@@ -16,10 +16,14 @@ import { MobileKeyActivitiesList } from "./mobile-key-activities-list";
 
 import { toJS } from "mobx";
 
-interface IMobileKeyActivitiesBodyProps {}
+interface IMobileKeyActivitiesBodyProps {
+  TodayWeekly?: boolean;
+  WeeklyMaster?: boolean;
+  disabled?: boolean;
+}
 
 export const MobileKeyActivitiesBody = observer(
-  (props: IMobileKeyActivitiesBodyProps): JSX.Element => {
+  ({ TodayWeekly, WeeklyMaster, disabled }: IMobileKeyActivitiesBodyProps): JSX.Element => {
     const { keyActivityStore, sessionStore } = useMst();
     const { t } = useTranslation();
 
@@ -29,18 +33,12 @@ export const MobileKeyActivitiesBody = observer(
     const [listSelectorOpen, setListSelectorOpen] = useState<boolean>(false);
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
     const [showCompletedItems, setShowCompletedItems] = useState<boolean>(false);
-    const [currentList, setCurrentList] = useState<string>("Today");
+    const [currentList, setCurrentList] = useState<string>(WeeklyMaster ? "Weekly List" : "Today");
     const [currentTeamId, setCurrentTeamId] = useState<number>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
     const listRef = useRef<HTMLDivElement>(null);
-    const listName = currentTeamId
-      ? teams.find(group => group.id == currentTeamId)?.name
-      : showCompletedItems
-      ? "Completed"
-      : currentList === "Today"
-      ? "Today's Priorities"
-      : currentList;
+
     const selectedFilterGroupId = sessionStore.getScheduledGroupIdByName(currentList);
     const droppableId = `scheduled-group-activities-${selectedFilterGroupId}`;
     const completedKeyActivities = keyActivityStore.completedActivities;
@@ -84,6 +82,15 @@ export const MobileKeyActivitiesBody = observer(
       }
     };
 
+    const listName = currentTeamId
+      ? teams.find(group => group.id == currentTeamId)?.name
+      : showCompletedItems
+      ? "Completed"
+      : currentList === "Today"
+      ? "Today's Priorities"
+      : currentList === "Backlog"
+      ? "Master List"
+      : currentList;
     const currentListOfActivities = filteredKeyActivities();
 
     const renderListSelector = (): JSX.Element => {
@@ -101,16 +108,19 @@ export const MobileKeyActivitiesBody = observer(
           {listSelectorOpen && (
             <ListDropdownContainer>
               {renderFilterGroupOptions()}
-              <ListOption
-                onClick={() => {
-                  setShowCompletedItems(true);
-                  setListSelectorOpen(false);
-                  setCurrentList("");
-                  setCurrentTeamId(null);
-                }}
-              >
-                Completed
-              </ListOption>
+              {!TodayWeekly ||
+                (!WeeklyMaster && (
+                  <ListOption
+                    onClick={() => {
+                      setShowCompletedItems(true);
+                      setListSelectorOpen(false);
+                      setCurrentList("");
+                      setCurrentTeamId(null);
+                    }}
+                  >
+                    Completed
+                  </ListOption>
+                ))}
             </ListDropdownContainer>
           )}
         </ListSelectorContainer>
@@ -118,7 +128,12 @@ export const MobileKeyActivitiesBody = observer(
     };
 
     const renderFilterGroupOptions = (): Array<JSX.Element> => {
-      return scheduledGroups.map((group, index) => {
+      const groups = TodayWeekly
+        ? scheduledGroups.filter(group => group.name == "Today" || group.name == "Weekly List")
+        : WeeklyMaster
+        ? scheduledGroups.filter(group => group.name == "Weekly List" || group.name == "Backlog")
+        : scheduledGroups;
+      return groups.map(group => {
         return (
           <ListOption
             key={group.id}
@@ -129,7 +144,11 @@ export const MobileKeyActivitiesBody = observer(
               setShowCompletedItems(false);
             }}
           >
-            {group.name === "Today" ? "Today's Priorities" : group.name}
+            {group.name === "Today"
+              ? "Today's Priorities"
+              : group.name === "Backlog"
+              ? "Master List"
+              : group.name}
           </ListOption>
         );
       });
@@ -166,7 +185,7 @@ export const MobileKeyActivitiesBody = observer(
     };
 
     return (
-      <Container>
+      <Container disabled={disabled}>
         <CreateKeyActivityModal
           createKeyActivityModalOpen={createKeyActivityModalOpen}
           setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
@@ -190,10 +209,18 @@ const ChevronUp = styled(Icon)`
   transform: rotate(180deg);
 `;
 
-const Container = styled.div`
+type ContainerProps = {
+  disabled?: boolean;
+};
+
+const Container = styled.div<ContainerProps>`
   ${color}
   position: relative;
   padding: 0px 0px 6px 0px;
+  pointer-events: ${props => (props.disabled ? "none" : "auto")};
+  display: none @media (min-width: 768px) {
+    display: block;
+  }
 `;
 
 type IconContainerProps = {

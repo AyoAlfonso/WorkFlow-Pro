@@ -33,6 +33,8 @@ interface IWizardLayoutProps {
   finalButtonDisabled?: boolean;
   stepsForMobile?: JSX.Element;
   textUnderMobileButton?: JSX.Element;
+  bodyContainerOverflow?: string;
+  stepTitle?: string;
 }
 
 export const WizardLayout = ({
@@ -61,6 +63,8 @@ export const WizardLayout = ({
   finalButtonDisabled,
   stepsForMobile,
   textUnderMobileButton,
+  bodyContainerOverflow,
+  stepTitle,
 }: IWizardLayoutProps): JSX.Element => {
   const renderActionButtons = (): JSX.Element => {
     return (
@@ -132,6 +136,7 @@ export const WizardLayout = ({
             <Heading type={"h2"} mb={0}>
               {title}
             </Heading>
+            {stepTitle && <StepTitle>{stepTitle}</StepTitle>}
           </DescriptionTitleContainer>
           <DescriptionText>{description}</DescriptionText>
           <ButtonsContainer>{renderActionButtons()}</ButtonsContainer>
@@ -143,26 +148,30 @@ export const WizardLayout = ({
           </LynchpynLogoContainer>
         )}
       </DescriptionContainer>
-      <BodyContainer hasStepsForMobile={stepsForMobile ? true : false}>
+      <BodyContainer
+        overflow={bodyContainerOverflow}
+        hasStepsForMobile={stepsForMobile ? true : false}
+      >
         {stepsForMobile && (
-          <DesktopCloseButtonContainer>
+          <MobileCloseButtonContainer>
+            {stepTitle && <MobileStepTitle>{stepTitle}</MobileStepTitle>}
             {stepsForMobile}
             {showCloseButton && (
               <CloseButtonContainer onClick={onCloseButtonClick}>
-                <CloseText> Close </CloseText>
+                <CloseText> Exit </CloseText>
                 <Icon icon={"Close"} size={"16px"} iconColor={"grey100"} />
               </CloseButtonContainer>
             )}
-          </DesktopCloseButtonContainer>
+          </MobileCloseButtonContainer>
         )}
-        <MobileContainer>
+        <DesktopCloseButtonContainer>
           {showCloseButton && (
             <CloseButtonContainer onClick={onCloseButtonClick}>
-              <CloseText> Close </CloseText>
+              <CloseText> Exit </CloseText>
               <Icon icon={"Close"} size={"16px"} iconColor={"greyInactive"} />
             </CloseButtonContainer>
           )}
-        </MobileContainer>
+        </DesktopCloseButtonContainer>
         <BodyContentContainer hasStepsForMobile={stepsForMobile ? true : false}>
           {renderBodyComponents()}
           <MobileButtonContainer>
@@ -183,7 +192,7 @@ const Container = styled.div`
   position: relative;
 `;
 
-const DesktopCloseButtonContainer = styled.div`
+const MobileCloseButtonContainer = styled.div`
   display: none;
   @media only screen and (max-width: 768px) {
     display: flex;
@@ -194,10 +203,18 @@ const DesktopCloseButtonContainer = styled.div`
   }
 `;
 
-const MobileContainer = styled.div`
+const DesktopCloseButtonContainer = styled.div`
   @media only screen and (max-width: 768px) {
     display: none;
   }
+`;
+
+const MobileStepTitle = styled(Text)`
+  margin: 0px;
+  font-size: 12px;
+  color: ${props => props.theme.colors.grey100};
+  position: absolute;
+  left: 16px;
 `;
 
 const MobileButtonContainer = styled.div`
@@ -222,6 +239,9 @@ const DescriptionContainer = styled.div`
   @media only screen and (max-width: 768px) {
     display: none;
   }
+  @media only screen and (min-width: 1400px) {
+    max-width: 500px;
+  }
 `;
 
 const DescriptionBody = styled.div`
@@ -235,6 +255,7 @@ const DescriptionBody = styled.div`
 
 type BodyContainerProps = {
   hasStepsForMobile: boolean;
+  overflow?: string;
 };
 
 const BodyContainer = styled.div<BodyContainerProps>`
@@ -247,9 +268,18 @@ const BodyContainer = styled.div<BodyContainerProps>`
   // height: 100%;
   flex-direction: column;
   // overflow-x: auto;
+  overflow: ${props => props.overflow && props.overflow};
   @media only screen and (max-width: 768px) {
     width: 100%;
     padding: 0;
+  }
+  @media only screen and (min-width: 1600px) {
+    max-width: 1024px;
+    margin: 0 auto;
+  }
+  @media only screen and (min-width: 2048px) {
+    max-width: 50%;
+    margin: 0 auto;
   }
 `;
 
@@ -264,6 +294,16 @@ const BodyContentContainer = styled.div<BodyContentContainerProps>`
 `;
 
 const DescriptionTitleContainer = styled.div``;
+
+const StepTitle = styled(Text)`
+  margin-top: 16px;
+  color: ${props => props.theme.colors.black};
+  font-weight: bold;
+  font-size: 16px;
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
+`;
 
 const DescriptionText = styled(Text)`
   color: ${props => props.theme.colors.greyActive};

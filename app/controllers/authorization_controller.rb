@@ -23,9 +23,6 @@ class  AuthorizationController <  ApplicationController
    return render json: { error: "Error occured while logging in with google", status: 412 } 
   end
   if JSON.parse(response.body)["email_verified"] 
-
-
-
    @email = JSON.parse(response.body)["email"]
    @user  = User.find_by(email: @email)
 

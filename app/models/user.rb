@@ -193,6 +193,12 @@ class User < ApplicationRecord
          next
       end
 
+      if (k == "dynamic_check_in") 
+        # TeamUserEnablement.where(user_id: self.id).present?
+        # //find dynamic check ins that includes this users company or team in participants and set notifs for them
+         
+      end
+
       notification = Notification.find_or_initialize_by(
         user_id: self.id,
         notification_type: v,

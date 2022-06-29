@@ -468,7 +468,8 @@ export const SideNavNoMst = (
 
       {company && checkIn ? (
         <StyledNavLinkChildrenActive
-          to={`/weekly-check-in/${userId}/${getWeekOf()}`}
+          to={'/check-in'}
+          // to={`/weekly-check-in/${userId}/${getWeekOf()}`}
           icon={"Check-in-page"}
         >
           {t<string>("navigation.checkin")}

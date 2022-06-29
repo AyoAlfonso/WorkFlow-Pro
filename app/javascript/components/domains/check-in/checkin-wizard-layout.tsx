@@ -30,7 +30,11 @@ export const CheckInWizardLayout = observer(
     const { t } = useTranslation();
     const history = useHistory();
 
+    const stepName = checkIn?.currentStepDetails.name;
+
     const meetingTitle = () => R.path(["name"], checkIn);
+
+    const isWeeklyCheckin = checkIn.name == "Weekly Check-in" || checkIn.name == "Weekly Check in";
 
     const meetingDescription = () => R.path(["currentStepDetails", "instructions"], checkIn);
 
@@ -38,7 +42,7 @@ export const CheckInWizardLayout = observer(
 
     const closeButtonClick = () => {
       if (confirm(`Are you sure you want to exit this weekly check-in?`)) {
-        history.push(`/`);
+        history.push(`/check-in`);
       }
     };
 
@@ -57,32 +61,34 @@ export const CheckInWizardLayout = observer(
 
     const renderStepsForMobile = () => (
       <QuestionText type={"small"}>
-        {`Question ${checkIn.currentStep + 1} / ${numberOfSteps}`}
+        {`Step ${checkIn.currentStep + 1} / ${numberOfSteps}`}
       </QuestionText>
     );
 
     const actionButtons = () => {
       return (
         <>
-          {checkIn?.currentStep > 0 && (
-            <LeftButtonContainer>
-              <BackButton
-                small
-                variant={"primaryOutline"}
-                onClick={() => onNextButtonClick(checkIn.currentStep - 1)}
-              >
-                <StyledBackIcon icon={"Move2"} size={"15px"} iconColor={"primary100"} />
-              </BackButton>
-            </LeftButtonContainer>
-          )}
-          {checkIn.currentStep + 1 < numberOfSteps ? (
+          {(isWeeklyCheckin && checkIn?.currentStep > 0) ||
+            (checkIn?.currentStep > 1 && (
+              <LeftButtonContainer>
+                <BackButton
+                  small
+                  variant={"primaryOutline"}
+                  onClick={() => onNextButtonClick(checkIn.currentStep - 1)}
+                >
+                  <StyledBackIcon icon={"Move2"} size={"15px"} iconColor={"primary100"} />
+                </BackButton>
+              </LeftButtonContainer>
+            ))}
+          {(isWeeklyCheckin && checkIn?.currentStep + 1 < numberOfSteps) ||
+          checkIn.currentStep + 1 <= numberOfSteps ? (
             <NextButton
               small
               variant={"primary"}
               onClick={() => onNextButtonClick(checkIn.currentStep + 1)}
               disabled={checkIn.currentStep >= numberOfSteps}
             >
-              Next Question
+              Next Step
             </NextButton>
           ) : (
             stopMeetingButton
@@ -105,6 +111,7 @@ export const CheckInWizardLayout = observer(
           onCloseButtonClick={closeButtonClick}
           stepsForMobile={renderStepsForMobile()}
           textUnderMobileButton={renderVisibilityText()}
+          stepTitle={stepName}
         />
       </Container>
     );

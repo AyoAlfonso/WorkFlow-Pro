@@ -19,9 +19,10 @@ interface IButtonProps extends StyledSystemProps {
   onClick: () => void | void;
   disabled?: boolean;
   small?: boolean;
-  style?: object;
+  style?: any;
   fontOverride?: string;
   color?: any;
+  fontSize?: string;
   children?: React.ReactNode;
   // width?:any
 }
@@ -36,6 +37,7 @@ const StyledButton = styled.button<IButtonProps>`
   justify-content: center;
   border-radius: 5px;
   border-width: 1px;
+  font-size: ${props => props.fontSize ? props.fontSize : "14px"};
   border-style: solid;
   &:hover {
     cursor: pointer;
@@ -81,6 +83,11 @@ const StyledButton = styled.button<IButtonProps>`
           paddingLeft: "6px",
           paddingRight: "6px",
         },
+        greyOutline: {
+          bg: "transparent",
+          borderColor: props.disabled ? "greyInactive" : "greyActive",
+          color: props.disabled ? "greyInactive" : "greyActive",
+        },
       },
     })}
 `;
@@ -91,13 +98,14 @@ export const Button: React.FunctionComponent<IButtonProps> = ({
   small,
   children,
   fontOverride,
+  fontSize,
   ...restProps
 }): JSX.Element => {
   return (
     <StyledButton
       {...restProps}
       fontFamily={"Lato"}
-      fontSize={fontOverride ? fontOverride : small ? "1" : "2"}
+      fontSize={fontSize ? fontSize : fontOverride ? fontOverride : small ? "1" : "2"}
       px={4}
       disabled={disabled}
       onClick={disabled ? null : onClick}

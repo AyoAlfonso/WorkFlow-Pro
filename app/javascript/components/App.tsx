@@ -53,13 +53,21 @@ import { ForumWelcomeModal } from "./shared/forum-welcome-modal";
 import { OnboardingModal } from "./domains/onboarding";
 
 import { Onboarding } from "./domains/onboarding";
-import { CheckIn } from "./domains/check-in/checkin";
+import { WeeklyCheckIn } from "./domains/check-in/weekly-checkin";
 import { DummyCheckin } from "./domains/check-in/dummy-checkin";
 import { useEffect } from "react";
 import { getWeekOf } from "~/utils/date-time";
 import { CheckInSuccess } from "./domains/check-in/components/checkin-success";
 import { ForgotPasswordForm } from "./domains/user/forgot-password-form";
+import { CheckIn } from "./domains/check-in/checkin-index";
+import { NewCheckIn } from "./domains/check-in/new-checkin-index";
+import { NewCheckinLayout } from "./domains/check-in/new-checkin-layout";
+import { CheckInBuilderLayout } from "./domains/check-in/checkin-builder-layout";
+import { CheckinInsights } from "./domains/check-in/checkin-insights";
+import CheckinInsightsIndex from "./domains/check-in/checkin-insights-index";
+
 import { UpdateProfileForm } from "./domains/user/update-profile-form";
+import CheckInWizard from "./domains/check-in/checkin";
 const Container = styled.div`
   margin-left: 136px;
   margin-right: 40px;
@@ -70,6 +78,16 @@ const Container = styled.div`
   @media only screen and (max-width: 768px) {
     margin: 0;
     padding-top: 64px;
+  }
+
+  @media only screen and (min-width: 1600px) {
+    max-width: 1024px;
+    margin: 0 auto;
+  }
+
+  @media only screen and (min-width: 2048px) {
+    max-width: 50%;
+    margin: 0 auto;
   }
 `;
 
@@ -102,13 +120,13 @@ export const App = observer(
       redirectHome();
     }, [profile]);
 
-    useEffect(() => {
-      setTimeout(() => {
-        if (!sessionStore?.loggedIn) {
-          return history.push("/");
-        }
-      }, 1000);
-    }, [sessionStore]);
+    // useEffect(() => {
+    //   setTimeout(() => {
+    //     if (!sessionStore?.loggedIn) {
+    //       return history.push("/");
+    //     }
+    //   }, 1000);
+    // }, [sessionStore]);
 
     let noFeatures;
     let showGoalRoute;
@@ -258,6 +276,8 @@ export const App = observer(
                       "/meetings/section_1/:team_id",
                       "/meetings/section_2",
                       "/meetings/section_2/:team_id",
+                      "/check-in",
+                      "/check-in/insights/:id",
                       // "/static-planner",
                       // "/static-goals",
                       // "/static-scorecards",
@@ -326,6 +346,17 @@ export const App = observer(
                             <Route exact path="/meetings/section_2/:team_id" component={Section2} />
                           </>
                         )}
+
+                        {profile.productFeatures && profile.productFeatures.checkIn && (
+                          <>
+                            <Route exact path="/check-in" component={CheckIn} />
+                            <Route
+                              exact
+                              path="/check-in/insights/:id"
+                              component={CheckinInsightsIndex}
+                            />
+                          </>
+                        )}
                       </Container>
                     </>
                   </Route>
@@ -349,8 +380,16 @@ export const App = observer(
                     </>
                   </Route>
                   <>
-                    <Route exact path="/weekly-check-in/:userId/:weekOf" component={CheckIn} />
+                    <Route
+                      exact
+                      path="/weekly-check-in/:userId/:weekOf"
+                      component={WeeklyCheckIn}
+                    />
                     <Route exact path="/check-in/success" component={CheckInSuccess} />
+                    <Route exact path="/check-in/templates" component={NewCheckinLayout} />
+                    <Route exact path="/check-in/build" component={CheckInBuilderLayout} />
+
+                    <Route exact path="/check-in/run/:id" component={CheckInWizard} />
                   </>
                 </Switch>
               ) : (

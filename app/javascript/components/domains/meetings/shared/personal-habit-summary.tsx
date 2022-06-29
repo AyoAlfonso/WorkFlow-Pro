@@ -12,7 +12,7 @@ import { observer } from "mobx-react";
 import { Loading } from "~/components/shared/loading";
 
 export interface IPersonalHabitProps {
-  meeting: any;
+  meeting?: any;
 }
 
 export const PersonalHabitSummary = observer(

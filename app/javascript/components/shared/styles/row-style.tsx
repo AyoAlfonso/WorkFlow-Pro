@@ -11,6 +11,7 @@ export const MonthContainer = styled.div`
 type ColumnContainerType = {
   minWidth?: string;
   alignItems?: string;
+  disabled?: boolean;
 };
 
 export const ColumnContainer = styled.div<ColumnContainerType>`
@@ -51,6 +52,7 @@ export const ColumnContainerParent = styled.div<ColumnContainerType>`
   min-width: ${props => props.minWidth || "480px"};
   width: 100%;
   align-items: ${props => props.alignItems || "stretch"};
+  pointer-events: ${props => (props.disabled ? "none" : "auto")};
 `;
 
 interface IHeaderType {

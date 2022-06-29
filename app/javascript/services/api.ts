@@ -750,5 +750,25 @@ export class Api {
   async getAuditLogs(params) {
     return this.client.get(`/audit_logs/${params}`);
   }
+
+  async createCheckinTemplate(checkinTemplate) {
+    return this.client.post(`/check_in_templates`, checkinTemplate);
+  }
+
+  async runCheckin(id) {
+    return this.client.post(`/check_in_templates/run/${id}`);
+  }
+
+  async getCheckins() {
+    return this.client.get(`/general_check_in`);
+  }
+
+  async updateCheckinArtifact(id, value) {
+    return this.client.patch(`/check_in_templates/artifact/${id}`, value);
+  }
+
+  async publishCheckin(id) {
+    return this.client.post(`/check_in_templates/publish/${id}`, {});
+  }
   //async setJWT(jwt) {}
 }

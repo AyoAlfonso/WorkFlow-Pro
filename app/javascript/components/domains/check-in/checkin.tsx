@@ -1,44 +1,32 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import * as R from "ramda";
-import { useState, useEffect } from "react";
+import { useMst } from "~/setup/root";
 import { observer } from "mobx-react";
-import { toJS } from "mobx";
+import { useParams, useHistory } from "react-router-dom";
 import { CheckInWizardLayout } from "./checkin-wizard-layout";
 import styled from "styled-components";
-import { useMst } from "../../../setup/root";
-import { useParams, useHistory } from "react-router-dom";
 import { Loading } from "~/components/shared/loading";
 import { Button } from "~/components/shared/button";
-import moment from "moment";
 import { HeaderBar } from "../nav";
-import { validateWeekOf } from "~/utils/date-time";
+import { toJS } from "mobx";
 
-interface CheckInProps {}
+const CheckInWizard = observer(
+  (): JSX.Element => {
+    const [isLoading, setLoading] = useState<boolean>(true);
+    const { checkInTemplateStore } = useMst();
 
-export const CheckIn = observer(
-  (props: CheckInProps): JSX.Element => {
-    const { checkInTemplateStore, sessionStore, companyStore } = useMst();
-    const {
-      profile: { id },
-    } = sessionStore;
-    
+    const { currentCheckIn } = checkInTemplateStore;
+
+    const { id } = useParams();
+
+    const checkIn = currentCheckIn;
+
     const history = useHistory();
 
-    const checkIn = checkInTemplateStore.currentCheckIn;
-
-    const { weekOf } = useParams();
-
     useEffect(() => {
-      validateWeekOf(weekOf, history, id);
-
-      checkInTemplateStore.fetchCheckInTemplates();
-
-      companyStore.load().then(() => {
-        if (companyStore.company?.objectivesKeyType === "KeyResults") {
-          checkInTemplateStore.getCheckIn("Weekly Check-In");
-        } else if (companyStore.company?.objectivesKeyType === "Milestones") {
-          checkInTemplateStore.getCheckIn("Weekly Check In");
-        }
+      checkInTemplateStore.fetchCheckInTemplates().then(() => {
+        checkInTemplateStore.findCheckinTemplate(id);
+        setLoading(false);
       });
     }, []);
 
@@ -58,7 +46,7 @@ export const CheckIn = observer(
           small
           disabled={false}
         >
-          Publish Check-in
+          Complete
         </StopButton>
       );
     };
@@ -69,7 +57,7 @@ export const CheckIn = observer(
 
     return (
       <>
-        {R.isNil(checkIn) ? (
+        {isLoading ? (
           renderLoading()
         ) : (
           <>
@@ -91,9 +79,7 @@ export const CheckIn = observer(
   },
 );
 
-const Container = styled.div`
-  height: 100%;
-`;
+export default CheckInWizard;
 
 const BodyContainer = styled.div`
   display: flex;

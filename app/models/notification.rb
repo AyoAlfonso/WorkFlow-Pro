@@ -7,7 +7,8 @@ class Notification < ApplicationRecord
     weekly_alignment_meeting: 3,
     evening_reflection: 4,
     weekly_checkin:5,
-    weekly_check_in_report:6
+    weekly_check_in_report:6,
+    dynamic_check_in: 7
   }
   enum method: { disabled: 0, email: 1 }
 

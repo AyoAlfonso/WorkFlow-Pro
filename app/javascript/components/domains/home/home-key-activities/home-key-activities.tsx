@@ -24,6 +24,8 @@ export interface IHomeKeyActivities {
   weeklyOnly?: boolean;
   width?: string;
   setQuestionnaireVariant?: React.Dispatch<React.SetStateAction<string>>;
+  hideListSelector?: boolean;
+  disabled?: boolean;
 }
 
 export const HomeKeyActivities = observer(
@@ -32,6 +34,8 @@ export const HomeKeyActivities = observer(
     weeklyOnly = false,
     width,
     setQuestionnaireVariant,
+    hideListSelector,
+    disabled,
   }: IHomeKeyActivities): JSX.Element => {
     const [selectedFilterGroupName, setSelectedFilterGroupName] = useState<string>("Weekly List");
     const [selectedFilterTeamId, setSelectedFilterTeamId] = useState<number>(null);
@@ -48,7 +52,6 @@ export const HomeKeyActivities = observer(
       sessionStore: { scheduledGroups },
     } = useMst();
     const { t } = useTranslation();
-
 
     useEffect(() => {
       showCompletedItems
@@ -209,7 +212,7 @@ export const HomeKeyActivities = observer(
 
     if (todayOnly) {
       return (
-        <KeyActivitiesWrapperContainer width={width}>
+        <KeyActivitiesWrapperContainer width={width} disabled={disabled}>
           <SingleListContainer>
             <HeaderContainer>
               {renderHeader(
@@ -246,7 +249,7 @@ export const HomeKeyActivities = observer(
       );
     } else if (weeklyOnly) {
       return (
-        <KeyActivitiesWrapperContainer width={width}>
+        <KeyActivitiesWrapperContainer width={width} disabled={disabled}>
           <SingleListContainer>
             <HeaderContainer>
               {renderHeader(
@@ -289,7 +292,7 @@ export const HomeKeyActivities = observer(
       );
     } else {
       return (
-        <KeyActivitiesWrapperContainer width={width}>
+        <KeyActivitiesWrapperContainer width={width} disabled={disabled}>
           <KeyActivityColumnStyleListContainer>
             <HeaderContainer>
               {renderHeader(
@@ -338,11 +341,13 @@ export const HomeKeyActivities = observer(
               />
             </KeyActivitiesListContainer>
           </KeyActivityColumnStyleListContainer>
-          <FilterContainer>
-            {renderFilterGroupOptions()}
-            {renderFilterCompletedOption()}
-            {/* {renderFilterTeamOptions()} */}
-          </FilterContainer>
+          {!hideListSelector && (
+            <FilterContainer>
+              {renderFilterGroupOptions()}
+              {renderFilterCompletedOption()}
+              {/* {renderFilterTeamOptions()} */}
+            </FilterContainer>
+          )}
           <CreateKeyActivityModal
             createKeyActivityModalOpen={createKeyActivityModalOpen}
             setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}

@@ -34,10 +34,20 @@ export const TextStepDiv = styled.div`
   font-family: exo;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 768px) {
+    min-width: 100%;
+    font-size: 32px;
+  }
 `;
 
-export const TextStepContainer = styled.div`
+type TextStepContainerProps = {
+  disabled?: boolean;
+};
+
+export const TextStepContainer = styled.div<TextStepContainerProps>`
   display: flex;
   width: 100%;
   height: 100%;
+  pointer-events: ${props => (props.disabled ? "none" : "auto")};
 `;

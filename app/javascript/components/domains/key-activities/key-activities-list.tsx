@@ -13,7 +13,6 @@ import { KeyActivityModalContent } from "./key-activity-modal-content";
 import { sortByPosition } from "~/utils/sorting";
 import { toJS } from "mobx";
 
-
 interface IKeyActivitiesListProps {
   keyActivities: Array<any>;
   droppableId: string;
@@ -45,7 +44,6 @@ export const KeyActivitiesList = observer(
     if (mobile == null || width) {
       return <></>;
     }
-
 
     const renderKeyActivitiesList = () => {
       return data.map((keyActivity, index) => {
@@ -131,11 +129,13 @@ const KeyActivitiesContainer = styled.div<KeyActivitiesContainerType>`
 ///COMMON STYLING COMPONENTS FOR KEY ACTIVITIES
 type ContainerProps = {
   width?: string;
+  disabled?: boolean;
 };
 
 export const KeyActivitiesWrapperContainer = styled.div<ContainerProps>`
   display: flex;
   width: ${props => props.width || "75%"};
+  pointer-events: ${props => (props.disabled ? "none" : "auto")};
 `;
 
 export const KeyActivitiesListContainer = styled.div`

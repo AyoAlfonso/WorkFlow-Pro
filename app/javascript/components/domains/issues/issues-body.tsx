@@ -20,6 +20,7 @@ interface IIssuesBodyProps {
   teamId?: number | string;
   meetingId?: number | string;
   noShadow?: boolean;
+  disabled?: boolean;
 }
 
 export const IssuesBody = observer(
@@ -29,6 +30,7 @@ export const IssuesBody = observer(
     meetingId,
     teamId,
     noShadow,
+    disabled,
   }: IIssuesBodyProps): JSX.Element => {
     const {
       issueStore,
@@ -104,7 +106,7 @@ export const IssuesBody = observer(
     };
 
     return (
-      <>
+      <Container disabled={disabled}>
         <CreateIssueModal
           createIssueModalOpen={createIssueModalOpen}
           setCreateIssueModalOpen={setCreateIssueModalOpen}
@@ -153,10 +155,18 @@ export const IssuesBody = observer(
             </IssuesBodyContainer>
           )}
         </Droppable>
-      </>
+      </Container>
     );
   },
 );
+
+type ContainerProps = {
+  disabled?: boolean;
+}
+
+const Container = styled.div<ContainerProps>`
+  pointer-events: ${props => (props.disabled ? "none" : "auto")};
+`;
 
 const AddNewIssuePlus = styled.div`
   margin-top: auto;
