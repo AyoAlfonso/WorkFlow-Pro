@@ -59,7 +59,6 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def publish_now
-
     date_time_config = @check_in_template.date_time_config
     check_in_artifacts = [];
 

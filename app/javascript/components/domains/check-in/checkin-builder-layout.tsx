@@ -109,6 +109,27 @@ export const CheckInBuilderLayout = observer(
       },
     ];
 
+    const formatCadence = () => {
+      switch (cadence) {
+        case "Every Weekday":
+          return "every-weekday";
+        case "Weekly":
+          return "weekly";
+        case "Daily":
+          return "daily";
+        case "Once":
+          return "once";
+        case "Monthly":
+          return "monthly";
+        case "Bi-weekly":
+          return "bi-weekly";
+        case "Quarterly":
+          return "quarterly";
+        default:
+          return "";
+      }
+    }
+
     const showDateTime = cadence == "Once" || cadence == "Monthly" || cadence == "Quarterly";
     const showDayTime = cadence == "Weekly" || cadence == "Bi-weekly";
 
@@ -125,7 +146,7 @@ export const CheckInBuilderLayout = observer(
         viewers: viewers,
         runOnce: cadence == "Once" && selectedDate,
         dateTimeConfig: {
-          cadence: cadence,
+          cadence: formatCadence(),
           time: moment(checkinTime, ["hh:mm A"]).format("HH:mm"),
           date: showDateTime ? selectedDate : "",
           day: showDayTime ? checkinDay : "",
