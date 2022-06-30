@@ -106,10 +106,9 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     @check_in_template.viewers.each do |viewer|
         if(viewer["type"]  == "user")
         create_notifications(viewer["id"], schedule)
-            binding.pry
-        check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: viewer["id"])
-        check_in_artifact.update!(start_time: next_start )
-        check_in_artifacts << check_in_artifact
+          check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: viewer["id"])
+          check_in_artifact.update!(start_time: next_start )
+          check_in_artifacts << check_in_artifact
         end
 
         if(viewer["type"]  == "team")
