@@ -59,13 +59,9 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def publish_now
-    date_time_config = @check_in_template.date_time_config
-    check_in_artifacts = [];
 
-    notification = Notification.find_or_initialize_by(
-        user_id: current_user.id,
-        notification_type: 7,
-      )
+  date_time_config = @check_in_template.date_time_config
+  check_in_artifacts = [];
 
   schedule = IceCube::Schedule.new(Time.now)
   day_as_int = IceCube::RuleHelper.day_of_week_as_int(date_time_config)
@@ -93,40 +89,43 @@ class Api::CheckInTemplatesController < Api::ApplicationController
           single_occurence_schedule.add_recurrence_rule(IceCube::Rule.yearly.day_of_month(run_once.month).hour_of_day(run_once.hour).minute_of_hour(run_once.min))
       end
     end
-      notification.attributes = {
-        rule: schedule.to_hash,
-        method: :email,
-      }
-      notification.save!
+
+     
+   
       next_start = date_time_config["cadence"] == "once" ? Time.now : Time.new(schedule.first.year, schedule.first.month, schedule.first.day, schedule.first.hour)
     if(next_start.present?)
       @check_in_template.participants.each do |person|
         if(person["type"] == "user")
+          create_notifications(person["id"], schedule)
           check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: person["id"])
-          check_in_artifact.save!(start_time: next_start )
+          check_in_artifact.update!(start_time: next_start )
           check_in_artifacts << check_in_artifact
         end
       end
 
     @check_in_template.viewers.each do |viewer|
         if(viewer["type"]  == "user")
+        create_notifications(viewer["id"], schedule)
+            binding.pry
         check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: viewer["id"])
-        check_in_artifact.save!(start_time: next_start )
+        check_in_artifact.update!(start_time: next_start )
         check_in_artifacts << check_in_artifact
         end
 
         if(viewer["type"]  == "team")
           Team.find(viewer["id"]).team_user_enablements.pluck(:user_id).each do |user|
+              create_notifications(user, schedule)
               check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
-              check_in_artifact.save!(start_time: next_start)
+              check_in_artifact.update!(start_time: next_start)
               check_in_artifacts << check_in_artifact
           end
         end
 
         if(viewer["type"] == "company")
           Company.find(viewer["id"]).user_company_enablements.pluck(:user_id).each do |user|
+            create_notifications(user, schedule)
             check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
-            check_in_artifact.save!(start_time: next_start)
+            check_in_artifact.update!(start_time: next_start)
             check_in_artifacts << check_in_artifact
           end
         end
@@ -134,6 +133,18 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     end
 
    render json: {check_in_artifacts: check_in_artifacts, status: :ok }
+  end
+
+  def create_notifications(user_id,schedule ) 
+    notification = Notification.find_or_initialize_by(
+                user_id: user_id,
+                notification_type: 7,
+            )
+          notification.attributes = {
+            rule: schedule.to_hash,
+            method: :email,
+          }
+    notification.save!
   end
 
   def run_now
@@ -194,12 +205,10 @@ class Api::CheckInTemplatesController < Api::ApplicationController
    
     if(params[:skip])
       check_in_artifact.update(skip: params[:skip])
-      CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: next_start , end_time:Time.now.end_of_day )
-    end
-
-    if(params[:end_now])
+      check_in_artifact = CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: next_start , end_time:Time.now.end_of_day )
+    else (params[:end_now])
       check_in_artifact.update(end_time: Time.now.end_of_day)
-      CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: next_start)
+      check_in_artifact = CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: next_start)
     end
  
     #//log artifact 
