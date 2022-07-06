@@ -144,10 +144,10 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def run_now
-    if(@check_in_template.check_in_type == "dynamic") 
+    # if(@check_in_template.check_in_type == "dynamic")
       check_in_artifact = CheckInArtifact.new(check_in_template: @check_in_template, owned_by: current_user)
       check_in_artifact.save!(start_time: Time.now.beginning_of_day, end_time: Time.now.end_of_day)
-    end
+    # end
     render json: {check_in_artifact: check_in_artifact, status: :ok }
   end
 
@@ -197,7 +197,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     end
   end
   next_start = date_time_config["cadence"] == "once" ? Time.now : Time.new(schedule.first.year, schedule.first.month, schedule.first.day, schedule.first.hour)
-  
+
   if params[:skip] == true
     check_in_artifact.update(skip: params[:skip])
     check_in_artifact = CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: next_start )
@@ -213,11 +213,12 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   authorize check_in_artifact
-  render json: {check_in_artifact: check_in_artifact, status: :ok }
+   render json: {check_in_artifact: check_in_artifact, status: :ok }
   end
 
+
   def show
-      render json: { template: @check_in_template, status: :ok }
+    render json: { template: @check_in_template, status: :ok }
   end
 
   def destroy
@@ -227,13 +228,13 @@ class Api::CheckInTemplatesController < Api::ApplicationController
 
   private
   def check_in_template_params
-      params.require(:check_in_template).permit(:name, :check_in_type, :owner_type, :description, :participants, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder, 
-         :check_in_templates_steps_attributes [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :variant, :question], viewers: [:id, :type])
+    params.require(:check_in_template).permit(:name, :check_in_type, :owner_type, :description, :participants, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder, 
+    :check_in_templates_steps_attributes [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :variant, :question], viewers: [:id, :type])
   end
 
   def set_check_in_template
-      @check_in_template = CheckInTemplate.find(params[:id])
-      authorize @check_in_template
+    @check_in_template = CheckInTemplate.find(params[:id])
+    authorize @check_in_template
   end
 
   def record_activities
