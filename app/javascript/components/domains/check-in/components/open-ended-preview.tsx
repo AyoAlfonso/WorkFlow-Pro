@@ -16,13 +16,30 @@ export const OpenEndedPreview = observer(
 
     const { currentCheckInArtifact, updateCheckinArtifact } = checkInTemplateStore;
 
+    // const saveToLocalStorage = (value) => {
+    //   const items = JSON.parse(localStorage.getItem(`${currentCheckInArtifact.id}`));
+    //   if (!items) {
+    //     localStorage.setItem(`${currentCheckInArtifact.id}`, JSON.stringify([{ value }]));
+    //   } else {
+    //     items.push({ value });
+    //     localStorage.setItem(`${currentCheckInArtifact.id}`, JSON.stringify(items));
+    //   }
+    // }
+// console.log(saveToLocalStorage())
     return (
       <Container disabled={disabled}>
         <QuestionText>{question}</QuestionText>
         <TextField
           placeholder="Add response"
           value={value}
-          onChange={e => setValue(e.target.value)}
+          onChange={e => {
+            setValue(e.target.value)
+            const item = {
+              questionType: "open-ended",
+              prompt: question,
+              response: e.target.value
+            }
+          }}
         />
       </Container>
     );
