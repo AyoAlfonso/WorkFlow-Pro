@@ -93,7 +93,6 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     if(next_start.present?)
       @check_in_template.participants.each do |person|
         if(person["type"] == "user")
-       
           check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: person["id"])
           check_in_artifact.update!(start_time: next_start )
           check_in_artifacts << check_in_artifact
@@ -103,7 +102,6 @@ class Api::CheckInTemplatesController < Api::ApplicationController
 
     @check_in_template.viewers.each do |viewer|
         if(viewer["type"] == "user")
-      
           check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: viewer["id"])
           check_in_artifact.update!(start_time: next_start )
           check_in_artifacts << check_in_artifact
