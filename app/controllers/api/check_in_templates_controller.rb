@@ -53,13 +53,12 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     render json: { template: @check_in_template, status: :ok }
   end
 
-  def update
-    @check_in_template.update!(check_in_template_params)
-    render json: { template: @check_in_template, status: :ok }
-  end
+def update
+  @check_in_template.update!(check_in_template_params)
+  render json: { template: @check_in_template, status: :ok }
+end
 
-  def publish_now
-
+def publish_now
   date_time_config = @check_in_template.date_time_config
   check_in_artifacts = [];
 
@@ -91,47 +90,65 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     end
     
     next_start = date_time_config["cadence"] == "once" ? Time.now : Time.new(schedule.first.year, schedule.first.month, schedule.first.day, schedule.first.hour)
-    if(next_start.present?)
-      @check_in_template.participants.each do |person|
-        if(person["type"] == "user")
-          check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: person["id"])
-          check_in_artifact.update!(start_time: next_start )
-          check_in_artifacts << check_in_artifact
-          create_notifications(person["id"], schedule)
-        end
-      end
+          if(next_start.present?)
+              @check_in_template.participants.each do |person|
+                if(person["type"] == "user")
+                  check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: person["id"])
+                  check_in_artifact.update!(start_time: next_start )
+                  check_in_artifacts << check_in_artifact
+                  create_notifications(person["id"], schedule)
+                end
 
-    @check_in_template.viewers.each do |viewer|
-        if(viewer["type"] == "user")
-          check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: viewer["id"])
-          check_in_artifact.update!(start_time: next_start )
-          check_in_artifacts << check_in_artifact
-          create_notifications(viewer["id"], schedule)
-        end
+                if(person["type"] == "team")
+                  Team.find(person["id"]).team_user_enablements.pluck(:user_id).each do |user|
+                      check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
+                      check_in_artifact.update!(start_time: next_start)
+                      check_in_artifacts << check_in_artifact
+                      create_notifications(user, schedule)
+                  end
+                end
 
-        if(viewer["type"] == "team")
-          Team.find(viewer["id"]).team_user_enablements.pluck(:user_id).each do |user|
-              check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
-              check_in_artifact.update!(start_time: next_start)
-              check_in_artifacts << check_in_artifact
-              create_notifications(user, schedule)
+                if(person["type"] == "company")
+                  Company.find(person["id"]).user_company_enablements.pluck(:user_id).each do |user|
+                    check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
+                    check_in_artifact.update!(start_time: next_start)
+                    check_in_artifacts << check_in_artifact
+                    create_notifications(user, schedule)
+                   end
+                end
+              end
           end
-        end
 
-        if(viewer["type"] == "company")
-          Company.find(viewer["id"]).user_company_enablements.pluck(:user_id).each do |user|
-            check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
-            check_in_artifact.update!(start_time: next_start)
-            check_in_artifacts << check_in_artifact
-            create_notifications(user, schedule)
-          end
-        end
-      end
-    end
-   render json: {check_in_artifacts: check_in_artifacts, status: :ok }
-  end
+            @check_in_template.viewers.each do |viewer|
+              if(viewer["type"] == "user")
+                check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: viewer["id"])
+                check_in_artifact.update!(start_time: next_start )
+                check_in_artifacts << check_in_artifact
+                create_notifications(viewer["id"], schedule)
+              end
 
-  def create_notifications(user_id,schedule ) 
+              if(viewer["type"] == "team")
+                Team.find(viewer["id"]).team_user_enablements.pluck(:user_id).each do |user|
+                    check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
+                    check_in_artifact.update!(start_time: next_start)
+                    check_in_artifacts << check_in_artifact
+                    create_notifications(user, schedule)
+                end
+              end
+
+              if(viewer["type"] == "company")
+                  Company.find(viewer["id"]).user_company_enablements.pluck(:user_id).each do |user|
+                    check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
+                    check_in_artifact.update!(start_time: next_start)
+                    check_in_artifacts << check_in_artifact
+                    create_notifications(user, schedule)
+                  end
+              end
+            end
+  render json: {check_in_artifacts: check_in_artifacts, status: :ok }
+end
+
+def create_notifications(user_id,schedule ) 
     notification = Notification.find_or_initialize_by(
                 user_id: user_id,
                 notification_type: 7,
@@ -141,7 +158,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
             method: :email,
           }
     notification.save!
-  end
+end
 
   def run_now
       check_in_artifact = CheckInArtifact.new(check_in_template: @check_in_template, owned_by: current_user)
