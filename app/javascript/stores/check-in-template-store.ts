@@ -75,6 +75,18 @@ export const CheckInTemplateStoreModel = types
         return false;
       }
     }),
+    runCheckinOnce: flow(function* (checkInId) {
+      const response: ApiResponse<any> = yield self.environment.api.runCheckinOnce(checkInId);
+      if (response.ok) {
+        return true;
+      } else {
+        showToast(
+          "Error running check-in template, please try again",
+          ToastMessageConstants.ERROR,
+        );
+        return false;
+      }
+    }),
     updateCheckinArtifact: flow(function* (id, value) {
       const response: ApiResponse<any> = yield self.environment.api.updateCheckinArtifact(
         id,

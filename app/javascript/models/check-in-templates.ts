@@ -18,6 +18,7 @@ export const CheckInTemplateModel = types
     checkInTemplatesSteps: types.array(StepModel),
     currentStep: types.maybeNull(types.number),
     participants: types.maybeNull(types.array(EntityModel)),
+    viewers: types.maybeNull(types.array(EntityModel)),
     anonymous: types.maybeNull(types.boolean),
     runOnce: types.maybeNull(types.string),
     tag: types.maybeNull(types.array(types.string)),

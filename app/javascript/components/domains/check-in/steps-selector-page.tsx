@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Button, Icon, TextDiv } from "~/components/shared";
 import { StepOptions } from "./components/step-options";
@@ -43,6 +43,10 @@ export const StepsSelectorPage = ({
   const [isChanging, setIsChanging] = useState<boolean>(false);
   const [todoModalOpen, setTodoModalOpen] = useState<boolean>(false);
   const todoStep = widgetArray.find(step => step.name === "ToDos");
+
+  useEffect(() => {
+    setStepToPreview(selectedSteps[selectedSteps.length -1])
+  }, [selectedSteps.length]);
 
   const deleteStep = step => {
     let orderIndex = 0;
@@ -100,8 +104,8 @@ export const StepsSelectorPage = ({
                     setSelectedSteps={setSelectedSteps}
                     selectedSteps={selectedSteps}
                     selected={
-                      stepToPreview.orderIndex === step.orderIndex &&
-                      step.stepType == stepToPreview.stepType
+                      stepToPreview?.question === step.question &&
+                      step.instructions == stepToPreview?.instructions
                     }
                     handleClick={() => setStepToPreview(step)}
                     index={index}
@@ -138,6 +142,7 @@ export const StepsSelectorPage = ({
           setIsChanging={setIsChanging}
           stepToPreview={stepToPreview}
           selectedSteps={selectedSteps}
+          setStepToPreview={setStepToPreview}
           setTodoModalOpen={setTodoModalOpen}
         />
         <TodoComponentSelectorModal
@@ -172,6 +177,7 @@ const StepsContainer = styled.div`
 
 const PreviewContainer = styled.div`
   width: 60%;
+  min-width: 500px;
   // padding-left: 1em;
   // max-width: 640px;
   // flex: 1;

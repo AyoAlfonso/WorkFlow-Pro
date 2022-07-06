@@ -15,6 +15,7 @@ interface StepTypeCardProps {
   setIsChanging?: React.Dispatch<React.SetStateAction<boolean>>;
   isChanging?: boolean;
   stepToPreview?: SelectedStepType;
+  setStepToPreview: React.Dispatch<React.SetStateAction<SelectedStepType>>;
   selectedSteps?: Array<SelectedStepType>;
   setTodoModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -27,6 +28,7 @@ export const StepTypeCard = observer(
     setIsChanging,
     isChanging,
     stepToPreview,
+    setStepToPreview,
     selectedSteps,
     setTodoModalOpen,
   }: StepTypeCardProps): JSX.Element => {
@@ -93,7 +95,7 @@ export const StepTypeCard = observer(
             name: name,
             iconName: iconName,
             question: question,
-            instructions: name ==  "Issues" ? issuesInstructions : instructions,
+            instructions: name == "Issues" ? issuesInstructions : instructions,
             variant: variant,
             componentToRender: name,
             orderIndex: steps.length + 1,

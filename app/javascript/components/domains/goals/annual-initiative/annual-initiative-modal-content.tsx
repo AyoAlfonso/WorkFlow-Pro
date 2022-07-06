@@ -459,6 +459,9 @@ const Container = styled.div`
   overflow: auto;
   padding-left: auto;
   padding-right: auto;
+  @media (max-width: 768px) {
+    padding: 1em;
+  }
 `;
 
 const HeaderContainer = styled.div`

@@ -57,8 +57,12 @@ export const CheckinTemplates = (): JSX.Element => {
     <Container>
       <StyledHeader>Check-in Templates</StyledHeader>
       <OverviewTabsContainer>
-        {tabArray.map(tab => (
-          <OverviewTab active={activeTab === tab} onClick={() => filterTabs(tab)}>
+        {tabArray.map((tab, index) => (
+          <OverviewTab
+            key={`tab-${index}`}
+            active={activeTab === tab}
+            onClick={() => filterTabs(tab)}
+          >
             {tab}
           </OverviewTab>
         ))}
@@ -77,7 +81,7 @@ export const CheckinTemplates = (): JSX.Element => {
             name={checkin.name}
             id={checkin.id}
             description={checkin.description}
-            tags={[checkin.ownerType, checkin.checkInType == "dynamic" ? "Custom" : '']}
+            tags={[checkin.ownerType, checkin.checkInType == "dynamic" ? "Custom" : ""]}
           />
         ))}
       </CheckInTemplateCardsContainer>

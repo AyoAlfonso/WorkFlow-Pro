@@ -5,6 +5,8 @@ import { useHistory } from "react-router-dom";
 import { Icon } from "~/components/shared";
 import { Button } from "~/components/shared/button";
 import { baseTheme } from "~/themes";
+import { observer } from "mobx-react";
+import { useMst } from "~/setup/root";
 
 interface CheckInTemplateCardProps {
   name: string;
@@ -13,95 +15,104 @@ interface CheckInTemplateCardProps {
   id: number;
 }
 
-export const CheckInTemplateCard = ({
-  name,
-  description,
-  tags,
-  id,
-}: CheckInTemplateCardProps): JSX.Element => {
-  const [showOptions, setShowOptions] = useState<boolean>(false);
+export const CheckInTemplateCard = observer(
+  ({ name, description, tags, id }: CheckInTemplateCardProps): JSX.Element => {
+    const [showOptions, setShowOptions] = useState<boolean>(false);
 
-  const optionsRef = useRef(null);
+    const {
+      checkInTemplateStore: { runCheckinOnce },
+    } = useMst();
 
-  const history = useHistory();
+    const optionsRef = useRef(null);
 
-  useEffect(() => {
-    const externalEventHandler = e => {
-      if (!showOptions) return;
+    const history = useHistory();
 
-      const node = optionsRef.current;
+    useEffect(() => {
+      const externalEventHandler = e => {
+        if (!showOptions) return;
 
-      if (node && node.contains(e.target)) {
-        return;
+        const node = optionsRef.current;
+
+        if (node && node.contains(e.target)) {
+          return;
+        }
+        setShowOptions(false);
+      };
+
+      if (showOptions) {
+        document.addEventListener("click", externalEventHandler);
+      } else {
+        document.removeEventListener("click", externalEventHandler);
       }
-      setShowOptions(false);
-    };
 
-    if (showOptions) {
-      document.addEventListener("click", externalEventHandler);
-    } else {
-      document.removeEventListener("click", externalEventHandler);
-    }
+      return () => {
+        document.removeEventListener("click", externalEventHandler);
+      };
+    }, [showOptions]);
 
-    return () => {
-      document.removeEventListener("click", externalEventHandler);
-    };
-  }, [showOptions]);
+    const filteredTags = tags.filter(tag => tag);
 
-  const filteredTags = tags.filter(tag => tag);
-
-  return (
-    <Container>
-      <HeaderContainer>
-        <Title>{name}</Title>
-        <OptionsIconContainer ref={optionsRef}>
-          <IconContainer onClick={() => setShowOptions(!showOptions)}>
-            <StyledOptionIcon icon={"Options"} size={"13px"} iconColor={"grey80"} />
-          </IconContainer>
-          {showOptions && (
-            <OptionsContainer>
-              <Option>Make a copy</Option>
-            </OptionsContainer>
-          )}
-        </OptionsIconContainer>
-      </HeaderContainer>
-      <Description>{description}</Description>
-      <BottomRow>
-        <ButtonsContainer>
-          <Button
-            variant={"primary"}
-            mr="1em"
-            width="70px"
-            fontSize="12px"
-            onClick={() => console.log("log")}
-            small
-            style={{ whiteSpace: "nowrap" }}
-          >
-            Set up
-          </Button>
-          <Button
-            variant={"primaryOutline"}
-            mr="1em"
-            width="70px"
-            fontSize="12px"
-            onClick={() => history.push(`/check-in/run/${id}`)}
-            small
-            style={{ whiteSpace: "nowrap" }}
-          >
-            Run now
-          </Button>
-        </ButtonsContainer>
-        <TagsContainer>
-          {filteredTags.map((tag, index) => (
-            <Tag color={tag == "Custom" ? baseTheme.colors.primary100 : ""} key={`${tag}-${index}`}>
-              {tag.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}
-            </Tag>
-          ))}
-        </TagsContainer>
-      </BottomRow>
-    </Container>
-  );
-};
+    return (
+      <Container>
+        <HeaderContainer>
+          <Title>{name}</Title>
+          <OptionsIconContainer ref={optionsRef}>
+            <IconContainer onClick={() => setShowOptions(!showOptions)}>
+              <StyledOptionIcon icon={"Options"} size={"13px"} iconColor={"grey80"} />
+            </IconContainer>
+            {showOptions && (
+              <OptionsContainer>
+                <Option>Make a copy</Option>
+              </OptionsContainer>
+            )}
+          </OptionsIconContainer>
+        </HeaderContainer>
+        <Description>{description}</Description>
+        <BottomRow>
+          <ButtonsContainer>
+            <Button
+              variant={"primary"}
+              mr="1em"
+              width="70px"
+              fontSize="12px"
+              onClick={() => console.log("log")}
+              small
+              style={{ whiteSpace: "nowrap" }}
+            >
+              Set up
+            </Button>
+            <Button
+              variant={"primaryOutline"}
+              mr="1em"
+              width="70px"
+              fontSize="12px"
+              onClick={async () => {
+                const res = await runCheckinOnce(id);
+                if (res) {
+                  history.push(`/check-in/run/${id}`);
+                }
+              }}
+              small
+              style={{ whiteSpace: "nowrap" }}
+            >
+              Run now
+            </Button>
+          </ButtonsContainer>
+          <TagsContainer>
+            {filteredTags.map((tag, index) => (
+              <Tag
+                color={tag == "Custom" ? baseTheme.colors.primary100 : ""}
+                key={`${tag}-${index}`}
+              >
+                {tag.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}
+              </Tag>
+            ))}
+          </TagsContainer>
+        </BottomRow>
+      </Container>
+    );
+  },
+);
 
 const Container = styled.div`
   background: ${props => props.theme.colors.white};
@@ -191,7 +202,7 @@ const TagsContainer = styled.div`
 
 type TagProps = {
   color?: string;
-}
+};
 
 const Tag = styled.span<TagProps>`
   display: inline-block;

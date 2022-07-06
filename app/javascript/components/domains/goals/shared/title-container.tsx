@@ -7,7 +7,7 @@ import { Icon } from "~/components/shared/icon";
 import { observer } from "mobx-react";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "~/components/shared/switch"
+import Switch from "~/components/shared/switch";
 import { baseTheme } from "~/themes";
 import { withStyles } from "@material-ui/core/styles";
 import { Text } from "~/components/shared/text";
@@ -95,34 +95,49 @@ export const TitleContainer = observer(
     };
 
     return (
-      <Container>
-        <HomeTitleContainer>
-          {largeHomeTitle ? (
-            <EnlargedHomeTitle> {title} </EnlargedHomeTitle>
-          ) : (
-            <HomeTitle> {title} </HomeTitle>
-          )}
+      <>
+        <Container>
+          <HomeTitleContainer>
+            {largeHomeTitle ? (
+              <EnlargedHomeTitle> {title} </EnlargedHomeTitle>
+            ) : (
+              <HomeTitle> {title} </HomeTitle>
+            )}
 
-          <ToggleContainer>
-            <FormGroup row>
-              <StyledLabel
-                control={
-                  <Switch
-                    checked={toggleChecked}
-                    onChange={handleToggleChange}
-                    name="switch-checked"
-                  />
-                }
-                label="Plan"
-                labelPlacement="end"
-              />
-            </FormGroup>
-          </ToggleContainer>
-        </HomeTitleContainer>
+            <ToggleContainer>
+              <FormGroup row>
+                <StyledLabel
+                  control={
+                    <Switch
+                      checked={toggleChecked}
+                      onChange={handleToggleChange}
+                      name="switch-checked"
+                    />
+                  }
+                  label="Plan"
+                  labelPlacement="end"
+                />
+              </FormGroup>
+            </ToggleContainer>
+          </HomeTitleContainer>
 
-        {renderFilterOptions()}
-        {renderHideButton()}
-      </Container>
+          {renderFilterOptions()}
+          {renderHideButton()}
+        </Container>
+        <MobileContainer>
+          <MobileHomeTitleContainer>
+            <HomeTitleContainer>
+              {largeHomeTitle ? (
+                <EnlargedHomeTitle> {title} </EnlargedHomeTitle>
+              ) : (
+                <HomeTitle> {title} </HomeTitle>
+              )}
+            </HomeTitleContainer>
+            {renderHideButton()}
+          </MobileHomeTitleContainer>
+          {renderFilterOptions()}
+        </MobileContainer>
+      </>
     );
   },
 );
@@ -131,12 +146,36 @@ const Container = styled.div`
   display: flex;
   margin-bottom: 16px;
   position: relative;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const MobileContainer = styled.div`
+  display: none;
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;
+
+const MobileHomeTitleContainer = styled.div`
+  display: flex;
+  margin-bottom: 8px;
+  flex: 1;
+  align-items: center;
 `;
 
 const FilterContainer = styled.div`
   display: flex;
   margin-left: auto;
   margin-right: auto;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+    margin-bottom: 16px;
+  }
 `;
 
 type FilterOptionsType = {
@@ -156,6 +195,10 @@ const FilterOptions = styled.p<FilterOptionsType>`
 const HomeTitleContainer = styled.div`
   position: absolute;
   display: flex;
+
+  @media (max-width: 768px) {
+    position: static;
+  }
 `;
 
 type FilterOptionContainerType = {
@@ -172,12 +215,19 @@ const FilterOptionContainer = styled.div<FilterOptionContainerType>`
 
 const ToggleContainer = styled.div`
   margin-left: 32px;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const HideButtonContainer = styled.div`
   display: flex;
   &: hover {
     cursor: pointer;
+  }
+  @media (max-width: 768px) {
+    margin-left: auto;
   }
 `;
 

@@ -30,14 +30,23 @@ import { ConversationStarter } from "../../meetings/components/conversation-star
 import { WeeklyReview } from "./weekly-review";
 import { CheckinReflection } from "./check-in-reflection";
 import { QuestionnaireTypeConstants } from "~/constants/questionnaire-types";
+import { useMst } from "~/setup/root";
 
 export interface ICheckinStepProps {
   checkin: any;
 }
 
+const formatType = {
+  Milestones: "Milestones",
+  KeyResults: "Key Results",
+};
+
 export const CheckinStep = observer(
   ({ checkin }: ICheckinStepProps): JSX.Element => {
     const [showOpenIssues, setShowOpenIssues] = useState<boolean>(true);
+    const { companyStore } = useMst();
+
+    const objectivesKeyType = companyStore.company?.objectivesKeyType
 
     const StepComponent = (step: IStep) => {
       switch (step.stepType) {
@@ -89,7 +98,7 @@ export const CheckinStep = observer(
                 </Container>
               );
             case "Initiatives":
-              switch (step.variant) {
+              switch (formatType[objectivesKeyType]) {
                 case "Key Results":
                   return (
                     <Container>

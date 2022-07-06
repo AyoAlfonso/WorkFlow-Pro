@@ -94,6 +94,11 @@ const SideBar = styled.div`
   background: ${props => props.theme.colors.backgroundGrey};
   height: 100%;
   padding: 32px;
+
+  @media only screen and (min-width: 1600px) {
+    position: fixed;
+    left: 96px;
+  }
 `;
 
 const ContentContainer = styled.div`
@@ -108,6 +113,13 @@ const InsightsContainer = styled.div`
   overflow-y: auto;
   height: 100%;
   overscroll-behavior: contain;
+  @media only screen and (min-width: 1600px) {
+    margin: 0 auto;
+    padding-left: 200px;
+  }
+  @media only screen and (min-width: 1800px) {
+    padding-left: 32px;
+  }
 `;
 
 const CheckinName = styled(Text)`

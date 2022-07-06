@@ -10,6 +10,7 @@ interface StepOptionsProps {
   setIsChanging?: React.Dispatch<React.SetStateAction<boolean>>;
   isChanging?: boolean;
   stepToPreview?: SelectedStepType;
+  setStepToPreview?: React.Dispatch<React.SetStateAction<SelectedStepType>>;
   selectedSteps?: Array<SelectedStepType>;
   setTodoModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -20,6 +21,7 @@ export const StepOptions = ({
   setIsChanging,
   isChanging,
   stepToPreview,
+  setStepToPreview,
   selectedSteps,
   setTodoModalOpen,
 }: StepOptionsProps): JSX.Element => {
@@ -34,6 +36,7 @@ export const StepOptions = ({
             isChanging={isChanging}
             setIsChanging={setIsChanging}
             stepToPreview={stepToPreview}
+            setStepToPreview={setStepToPreview}
             selectedSteps={selectedSteps}
             setSelectedSteps={setSelectedSteps}
             setShowStepsModal={setShowStepsModal}
@@ -50,6 +53,7 @@ export const StepOptions = ({
             isChanging={isChanging}
             setIsChanging={setIsChanging}
             stepToPreview={stepToPreview}
+            setStepToPreview={setStepToPreview}
             selectedSteps={selectedSteps}
             setSelectedSteps={setSelectedSteps}
             setShowStepsModal={setShowStepsModal}

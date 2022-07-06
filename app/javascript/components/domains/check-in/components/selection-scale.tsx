@@ -12,6 +12,7 @@ interface SelectionScaleProps {
 
 export const SelectionScale = ({ question, type, disabled }: SelectionScaleProps): JSX.Element => {
   const [selected, setSelected] = useState<number>(0);
+  const [agreementSelection, setAgreementSelection] = useState<number>(0);
 
   return (
     <Container disabled={disabled}>
@@ -34,8 +35,8 @@ export const SelectionScale = ({ question, type, disabled }: SelectionScaleProps
             ))
           : agreementScale.map(agreement => (
               <OptionContainer key={agreement.option}>
-                <StepContainer onClick={() => setSelected(agreement.option)}>
-                  <Option selected={selected == agreement.option}>
+                <StepContainer onClick={() => setAgreementSelection(agreement.option)}>
+                  <Option selected={agreementSelection == agreement.option}>
                     {selected === agreement.option ? (
                       <Icon icon={"Checkmark"} size={"14px"} iconColor={"skyBlue"} />
                     ) : (

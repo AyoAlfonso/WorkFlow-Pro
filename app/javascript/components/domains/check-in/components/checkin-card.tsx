@@ -4,62 +4,99 @@ import { useHistory } from "react-router-dom";
 import { Button } from "~/components/shared/button";
 import { Icon } from "~/components/shared/icon";
 import { ICheckInArtifact } from "~/models/check-in-artifacts";
+import { observer } from "mobx-react";
+import { useMst } from "~/setup/root";
+import { toJS } from "mobx";
 
 interface CheckInCardProps {
   checkin: ICheckInArtifact;
 }
 
-export const CheckInCard = ({ checkin }: CheckInCardProps): JSX.Element => {
-  const history = useHistory();
+export const CheckInCard = observer(
+  ({ checkin }: CheckInCardProps): JSX.Element => {
+    const { checkInTemplateStore, sessionStore, teamStore } = useMst();
 
-  const { checkInTemplate } = checkin;
+    const history = useHistory();
 
-  const {name, ownerType, id} = checkInTemplate
-  return (
-    <Container>
-      <TitleContainer>
-        <Title>{name}</Title>
-        <IconContainer onClick={() => history.push(`/check-in/insights/2`)}>
-          <Icon icon={"Settings"} size="18px" iconColor={"greyActive"} />
-        </IconContainer>
-      </TitleContainer>
-      <InfoContainer>
-        <Tag>{ownerType.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}</Tag>
-        <DueDate>Due: Friday, May 20th </DueDate>
-        <EntryBadge>{` • Entry Needed`}</EntryBadge>
-      </InfoContainer>
-      <ActionsContainer>
-        <ButtonsContainer>
-          <Button
-            variant={"primary"}
-            mr="1em"
-            width="80px"
-            fontSize="12px"
-            onClick={() => history.push(`/check-in/run/${id}`)}
-            small
-            style={{ whiteSpace: "nowrap" }}
-          >
-            Check-in
-          </Button>
-          <Button
-            variant={"greyOutline"}
-            mr="1em"
-            width="80px"
-            fontSize="12px"
-            onClick={() => console.log("log")}
-            small
-          >
-            Skip
-          </Button>
-        </ButtonsContainer>
-        <StreakContainer>
-          <Icon icon={"Streak"} size="24px" mr="0.5em" iconColor={"greyActive"} />
-          <StreakCount>0</StreakCount>
-        </StreakContainer>
-      </ActionsContainer>
-    </Container>
-  );
-};
+    const { checkInTemplate } = checkin;
+
+    const { name, ownerType, id, viewers, participants } = checkInTemplate;
+
+    const getStatus = entityArray => {
+      const status = entityArray.map(item => {
+        if (item.type == "company") {
+          return "true";
+        } else if (item.type == "user") {
+          const isUser = sessionStore.profile?.id == item.id;
+          if (isUser) {
+            return "true";
+          }
+        } else if (item.type == "team") {
+          const team = teamStore.teams?.find(team => team.id == item.id);
+          const isUser = team.users?.find(user => user.id == sessionStore.profile?.id);
+          if (isUser) {
+            return "true";
+          }
+        }
+      });
+      return status.includes("true");
+    };
+
+    const isViewer = getStatus(viewers);
+    const isParticipant = getStatus(participants);
+
+    return (
+      <Container>
+        <TitleContainer>
+          <Title disabled={!isViewer} onClick={() => history.push(`/check-in/insights/${id}`)}>
+            {name}
+          </Title>
+          <IconContainer onClick={() => {}}>
+            <Icon icon={"Settings"} size="18px" iconColor={"greyActive"} />
+          </IconContainer>
+        </TitleContainer>
+        <InfoContainer>
+          <Tag>{ownerType.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}</Tag>
+          <DueDate>Due: Friday, May 20th </DueDate>
+          <EntryBadge>{` • Entry Needed`}</EntryBadge>
+        </InfoContainer>
+        {isParticipant && (
+          <ActionsContainer>
+            <ButtonsContainer>
+              <Button
+                variant={"primary"}
+                mr="1em"
+                width="80px"
+                fontSize="12px"
+                onClick={() => history.push(`/check-in/run/${id}`)}
+                small
+                style={{ whiteSpace: "nowrap" }}
+              >
+                Check-in
+              </Button>
+              <Button
+                variant={"greyOutline"}
+                mr="1em"
+                width="80px"
+                fontSize="12px"
+                onClick={() => {
+                  checkInTemplateStore.updateCheckinArtifact(checkin.id, { skip: true });
+                }}
+                small
+              >
+                Skip
+              </Button>
+            </ButtonsContainer>
+            <StreakContainer>
+              <Icon icon={"Streak"} size="24px" mr="0.5em" iconColor={"greyActive"} />
+              <StreakCount>0</StreakCount>
+            </StreakContainer>
+          </ActionsContainer>
+        )}
+      </Container>
+    );
+  },
+);
 
 const IconContainer = styled.div`
   display: none;
@@ -90,10 +127,16 @@ const TitleContainer = styled.div`
   align-items: center;
 `;
 
-const Title = styled.span`
+type TitleProps = {
+  disabled?: boolean;
+};
+
+const Title = styled.span<TitleProps>`
   font-size: 1em;
   font-weight: bold;
   color: ${props => props.theme.colors.black};
+  cursor: pointer;
+  pointer-events: ${props => (props.disabled ? "none" : "auto")};
 `;
 
 const InfoContainer = styled.div`

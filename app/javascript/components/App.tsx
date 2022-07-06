@@ -74,7 +74,7 @@ const Container = styled.div`
   margin-bottom: 50px;
   padding-top: 96px;
   height: inherit;
-
+  
   @media only screen and (max-width: 768px) {
     margin: 0;
     padding-top: 64px;
@@ -113,11 +113,12 @@ export const App = observer(
         const id = profile?.id;
         if (width) {
           if (location.pathname.includes("check-in")) return;
+          if (location.pathname.includes("goals")) return;
           if (location.pathname === "/") return;
           if (id) return history.push(`/`);
         }
       };
-      redirectHome();
+      // redirectHome();
     }, [profile]);
 
     // useEffect(() => {

@@ -921,6 +921,10 @@ const ValueInputContainer = styled.div`
   align-items: center;
   display: flex;
   justify-content: space-between;
+
+  @media (max-width: 768px) {
+    margin-bottom: 1.5em;
+  }
 `;
 
 const TargetValue = styled.span`
@@ -939,6 +943,9 @@ const TargetValueContainer = styled.div<ITargetValueContainer>`
   text-align: center;
   @media only screen and (max-width: 768px) {
     display: inline;
+    flex: 1;
+    margin-left: 0;
+    margin-right: 0;
   }
 `;
 
