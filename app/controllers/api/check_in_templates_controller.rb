@@ -76,7 +76,8 @@ class Api::CheckInTemplatesController < Api::ApplicationController
         when "bi-weekly"
            schedule.add_recurrence_rule(IceCube::Rule.weekly(2).day(day_as_int).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
         when "every-weekday"
-          schedule.add_recurrence_rule(IceCube::Rule.daily(5).day(:monday, :tuesday, :wednesday, :thursday, :friday).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
+          # schedule.add_recurrence_rule(IceCube::Rule.daily(5).day(:monday, :tuesday, :wednesday, :thursday, :friday).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
+           schedule.add_recurrence_rule(IceCube::Rule.weekly.day(:monday, :tuesday, :wednesday, :thursday, :friday).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
         when "daily" 
            schedule.add_recurrence_rule(IceCube::Rule.daily.hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
         when "monthly"
@@ -127,7 +128,6 @@ class Api::CheckInTemplatesController < Api::ApplicationController
         end
       end
     end
-
    render json: {check_in_artifacts: check_in_artifacts, status: :ok }
   end
 
@@ -182,7 +182,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
       when "bi-weekly"
           schedule.add_recurrence_rule(IceCube::Rule.weekly(2).day(day_as_int).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "every-weekday"
-        schedule.add_recurrence_rule(IceCube::Rule.daily(5).day(:monday, :tuesday, :wednesday, :thursday, :friday).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
+           schedule.add_recurrence_rule(IceCube::Rule.weekly.day(:monday, :tuesday, :wednesday, :thursday, :friday).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "daily" 
           schedule.add_recurrence_rule(IceCube::Rule.daily.hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "monthly"
