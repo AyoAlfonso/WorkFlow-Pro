@@ -68,7 +68,7 @@ export const CheckInCard = observer(
                 mr="1em"
                 width="80px"
                 fontSize="12px"
-                onClick={() => history.push(`/check-in/run/${id}`)}
+                onClick={() => history.push(`/check-in/run/${checkin.id}`)}
                 small
                 style={{ whiteSpace: "nowrap" }}
               >

@@ -15,7 +15,8 @@ export const CheckInTemplateStoreModel = types
   .props({
     checkInTemplates: types.array(CheckInTemplateModel),
     currentCheckIn: types.maybeNull(CheckInTemplateModel),
-    checkIns: types.array(CheckInArtifactsModel)
+    checkIns: types.array(CheckInArtifactsModel),
+    currentCheckInArtifact: types.maybeNull(CheckInArtifactsModel),
   })
   .extend(withEnvironment())
   .actions(self => ({
@@ -76,9 +77,9 @@ export const CheckInTemplateStoreModel = types
       }
     }),
     runCheckinOnce: flow(function* (checkInId) {
-      const response: ApiResponse<any> = yield self.environment.api.runCheckinOnce(checkInId);
+      const response = yield self.environment.api.runCheckinOnce(checkInId);
       if (response.ok) {
-        return true;
+        return response.data.checkInArtifact?.id;
       } else {
         showToast(
           "Error running check-in template, please try again",
@@ -109,9 +110,10 @@ export const CheckInTemplateStoreModel = types
       self.currentCheckIn = checkInObj;
     },
     findCheckinTemplate(id) {
-      const checkin = toJS(self.checkInTemplates).find(checkin => checkin.id == id);
-      const currentCheckIn = {...checkin, currentStep: 1};
+      const checkin = toJS(self.checkIns).find(checkin => checkin.id == id);
+      const currentCheckIn = {...checkin?.checkInTemplate, currentStep: 1};
       self.currentCheckIn = currentCheckIn;
+      self.currentCheckInArtifact = checkin;
     }
   }))
   .actions(self => ({

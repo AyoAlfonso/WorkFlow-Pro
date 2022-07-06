@@ -13,7 +13,6 @@ import { CheckinReflection } from "./components/check-in-reflection";
 import { KpiComponent } from "./components/kpi";
 import { NumericalStep } from "./components/numerical-step";
 import { OpenEndedPreview } from "./components/open-ended-preview";
-import { SelectionScale } from "./components/selection-scale";
 import { WeeklyKeyResults } from "./components/weekly-key-results";
 import { WeeklyMilestones } from "./components/weekly-milestones";
 import { WeeklyReview } from "./components/weekly-review";
@@ -23,6 +22,8 @@ import { SelectedStepType } from "./steps-selector-page";
 import { QuestionnaireTypeConstants } from "../../../constants/questionnaire-types";
 import { MobileKeyActivitiesBody } from "../key-activities/mobile-key-activities-body";
 import { MobileTodosInitiatives } from "./components/mobile-todos-initiatives";
+import { SentimentScale } from "./components/sentiment-scale";
+import { AgreementScale } from "./components/agreement-scale";
 
 interface StepsPreviewProps {
   step: SelectedStepType;
@@ -48,14 +49,14 @@ export const StepsPreview = ({ step }: StepsPreviewProps): JSX.Element => {
       case "Sentiment":
         return (
           <Container>
-            <SelectionScale question={step.question} type="sentiment" disabled />
+            <SentimentScale question={step.question} disabled />
           </Container>
         );
 
       case "Agreement Scale":
         return (
           <Container>
-            <SelectionScale question={step.question} disabled />
+            <AgreementScale question={step.question} disabled />
           </Container>
         );
       case "Yes/No":

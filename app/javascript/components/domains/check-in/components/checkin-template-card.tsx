@@ -89,7 +89,7 @@ export const CheckInTemplateCard = observer(
               onClick={async () => {
                 const res = await runCheckinOnce(id);
                 if (res) {
-                  history.push(`/check-in/run/${id}`);
+                  history.push(`/check-in/run/${res}`);
                 }
               }}
               small

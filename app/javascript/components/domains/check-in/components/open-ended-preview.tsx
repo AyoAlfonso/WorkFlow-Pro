@@ -1,23 +1,37 @@
 import * as React from "react";
+import { observer } from "mobx-react";
 import styled from "styled-components";
+import { useMst } from "~/setup/root";
 
 interface OpenEndedPreviewProps {
   question: string;
   disabled?: boolean;
 }
 
-export const OpenEndedPreview = ({ question, disabled }: OpenEndedPreviewProps): JSX.Element => {
-  return (
-    <Container disabled={disabled}>
-      <QuestionText>{question}</QuestionText>
-      <TextField placeholder="Add response" />
-    </Container>
-  );
-};
+export const OpenEndedPreview = observer(
+  ({ question, disabled }: OpenEndedPreviewProps): JSX.Element => {
+    const [value, setValue] = React.useState<string>("");
+
+    const { checkInTemplateStore } = useMst();
+
+    const { currentCheckInArtifact, updateCheckinArtifact } = checkInTemplateStore;
+
+    return (
+      <Container disabled={disabled}>
+        <QuestionText>{question}</QuestionText>
+        <TextField
+          placeholder="Add response"
+          value={value}
+          onChange={e => setValue(e.target.value)}
+        />
+      </Container>
+    );
+  },
+);
 
 type ContainerProps = {
   disabled: boolean;
-}
+};
 
 const Container = styled.div<ContainerProps>`
   background: ${props => props.theme.colors.white};

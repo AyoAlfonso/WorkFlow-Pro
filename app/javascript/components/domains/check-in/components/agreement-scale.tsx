@@ -1,52 +1,35 @@
-import * as React from "react";
+import React from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import { Icon } from "~/components/shared";
-import { agreementScale, sentimentScale } from "../data/selection-scale-data";
+import { agreementScale } from "../data/selection-scale-data";
 
-interface SelectionScaleProps {
+interface AgreementScaleProps {
   question: string;
-  type?: string;
   disabled?: boolean;
 }
 
-export const SelectionScale = ({ question, type, disabled }: SelectionScaleProps): JSX.Element => {
+export const AgreementScale = ({ question, disabled }: AgreementScaleProps): JSX.Element => {
   const [selected, setSelected] = useState<number>(0);
-  const [agreementSelection, setAgreementSelection] = useState<number>(0);
 
   return (
     <Container disabled={disabled}>
       <QuestionText>{question}</QuestionText>
       <OptionsContainer>
-        {type == "sentiment"
-          ? sentimentScale.map(sentiment => (
-              <OptionContainer key={sentiment.option}>
-                <StepContainer onClick={() => setSelected(sentiment.option)}>
-                  <Option selected={selected == sentiment.option}>
-                    {selected === sentiment.option ? (
-                      <Icon icon={"Checkmark"} size={"14px"} iconColor={"skyBlue"} />
-                    ) : (
-                      sentiment.option
-                    )}
-                  </Option>
-                  <LabelText>{sentiment.label}</LabelText>
-                </StepContainer>
-              </OptionContainer>
-            ))
-          : agreementScale.map(agreement => (
-              <OptionContainer key={agreement.option}>
-                <StepContainer onClick={() => setAgreementSelection(agreement.option)}>
-                  <Option selected={agreementSelection == agreement.option}>
-                    {selected === agreement.option ? (
-                      <Icon icon={"Checkmark"} size={"14px"} iconColor={"skyBlue"} />
-                    ) : (
-                      agreement.option
-                    )}
-                  </Option>
-                  <LabelText>{agreement.label}</LabelText>
-                </StepContainer>
-              </OptionContainer>
-            ))}
+        {agreementScale.map(agreement => (
+          <OptionContainer key={agreement.option}>
+            <StepContainer onClick={() => setSelected(agreement.option)}>
+              <Option selected={selected == agreement.option}>
+                {selected === agreement.option ? (
+                  <Icon icon={"Checkmark"} size={"14px"} iconColor={"skyBlue"} />
+                ) : (
+                  agreement.option
+                )}
+              </Option>
+              <LabelText>{agreement.label}</LabelText>
+            </StepContainer>
+          </OptionContainer>
+        ))}
       </OptionsContainer>
     </Container>
   );
@@ -54,7 +37,7 @@ export const SelectionScale = ({ question, type, disabled }: SelectionScaleProps
 
 type ContaineProps = {
   disabled?: boolean;
-}
+};
 
 const Container = styled.div<ContaineProps>`
   background: ${props => props.theme.colors.white};
