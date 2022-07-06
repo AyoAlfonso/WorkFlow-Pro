@@ -104,6 +104,25 @@ export const CheckInTemplateStoreModel = types
         return false;
       }
     }),
+    skipCheckIn: flow(function* (checkInId) {
+      const response: ApiResponse<any> = yield self.environment.api.updateCheckinArtifact(
+        checkInId,
+        { skip: true },
+      );
+      if (response.ok) {
+        showToast("Check-in skipped successfully", ToastMessageConstants.SUCCESS);
+        const checkins = self.checkIns.filter(checkin => checkin.id !== checkInId);
+        const newCheckins = [...checkins, response.data.checkInArtifact];
+        self.checkIns = newCheckins as any;
+        return true;
+      } else {
+        showToast(
+          "Something went wrong, please try again",
+          ToastMessageConstants.ERROR,
+        );
+        return false;
+      }
+    })
   }))
   .actions(self => ({
     updateCurrentCheckIn(checkInObj) {

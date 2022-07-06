@@ -33,7 +33,7 @@ export const CheckInCard = observer(
           }
         } else if (item.type == "team") {
           const team = teamStore.teams?.find(team => team.id == item.id);
-          const isUser = team.users?.find(user => user.id == sessionStore.profile?.id);
+          const isUser = team?.users?.find(user => user.id == sessionStore.profile?.id);
           if (isUser) {
             return "true";
           }
@@ -80,7 +80,7 @@ export const CheckInCard = observer(
                 width="80px"
                 fontSize="12px"
                 onClick={() => {
-                  checkInTemplateStore.updateCheckinArtifact(checkin.id, { skip: true });
+                  checkInTemplateStore.skipCheckIn(checkin.id);
                 }}
                 small
               >
