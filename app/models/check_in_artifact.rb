@@ -12,6 +12,7 @@ class CheckInArtifact < ApplicationRecord
   scope :not_skipped, ->  { where(skip: false) }
 
   belongs_to :check_in_template
+  has_many :check_in_artifact_logs, dependent: :destroy
 
   def as_json(options = [])
     super({
@@ -23,7 +24,11 @@ class CheckInArtifact < ApplicationRecord
              except: [:created_at, :updated_at]
             },
           }
-        }],
+        }, 
+        check_in_artifact_logs: {
+         except: [:updated_at],
+        }
+      ],
      })
   end
 
