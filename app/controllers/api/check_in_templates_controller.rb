@@ -197,11 +197,11 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     end
   end
   next_start = date_time_config["cadence"] == "once" ? Time.now : Time.new(schedule.first.year, schedule.first.month, schedule.first.day, schedule.first.hour)
-   
-  if params[:skip] == "true"
+  
+  if params[:skip] == true
     check_in_artifact.update(skip: params[:skip])
     check_in_artifact = CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: next_start )
-  elsif params[:end_now] == "true"
+  elsif params[:end_now] == true
     check_in_artifact.update(end_time: Time.now.end_of_day)
     check_in_artifact = CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: next_start)
   end
