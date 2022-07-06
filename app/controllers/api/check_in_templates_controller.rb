@@ -53,12 +53,12 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     render json: { template: @check_in_template, status: :ok }
   end
 
-def update
-  @check_in_template.update!(check_in_template_params)
-  render json: { template: @check_in_template, status: :ok }
-end
+  def update
+    @check_in_template.update!(check_in_template_params)
+    render json: { template: @check_in_template, status: :ok }
+  end
 
-def publish_now
+  def publish_now
   date_time_config = @check_in_template.date_time_config
   check_in_artifacts = [];
 
@@ -146,9 +146,9 @@ def publish_now
               end
             end
   render json: {check_in_artifacts: check_in_artifacts, status: :ok }
-end
+  end
 
-def create_notifications(user_id,schedule ) 
+  def create_notifications(user_id,schedule ) 
     notification = Notification.find_or_initialize_by(
                 user_id: user_id,
                 notification_type: 7,
@@ -158,11 +158,13 @@ def create_notifications(user_id,schedule )
             method: :email,
           }
     notification.save!
-end
+  end
 
   def run_now
-      check_in_artifact = CheckInArtifact.new(check_in_template: @check_in_template, owned_by: current_user)
-      check_in_artifact.save!(start_time: Time.now.beginning_of_day, end_time: Time.now.end_of_day)
+    #check_in_template cadence
+    #run_time
+    check_in_artifact = CheckInArtifact.new(check_in_template: @check_in_template, owned_by: current_user)
+    check_in_artifact.save!(start_time: Time.now.beginning_of_day, end_time: Time.now.end_of_day)
     render json: {check_in_artifact: check_in_artifact, status: :ok }
   end
 
@@ -174,9 +176,11 @@ end
     # .for_week_of_date(params[:on_week])
     # @check_in_artifacts_for_month =  check_in_artifacts
     # .for_month_of_date(params[:on_month])
+
+    # 1. If we are comfortable with a lot of logs data we can to save per step
+    # 2. If we are NOT comfortable with a lot of logs we need to save at the end of process
      authorize @check_in_artifacts_for_day
     render json: {check_in_artifacts: @check_in_artifacts_for_day, status: :ok }
-
     # render "api/check_in_artifacts/general_check_in_artifacts"
   end
 
@@ -211,6 +215,7 @@ end
         single_occurence_schedule.add_recurrence_rule(IceCube::Rule.yearly.day_of_month(run_once.month).hour_of_day(run_once.hour).minute_of_hour(run_once.min))
     end
   end
+
   next_start = date_time_config["cadence"] == "once" ? Time.now : Time.new(schedule.first.year, schedule.first.month, schedule.first.day, schedule.first.hour)
 
   if params[:skip] == true
@@ -221,12 +226,29 @@ end
     check_in_artifact = CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: next_start)
   end
   
-  if params[:responses].present?
-    scorecard_log = ScorecardLog.create!(scorecard_log_params)
-    objective_log = ObjectiveLog.create!(objective_log_params)
-    CheckInArtifactLog.create!(check_in_artifact_id: check_in_artifact.id, created_by_id: current_user.id, responses: params[:responses], scorecard_log_id: scorecard_log.id, objective_log_id: objective_log.id )
-  end
+  check_in_artifact_log = CheckInArtifactLog.find_or_initialize_by!(check_in_artifact_id: check_in_artifact.id, created_by_id: current_user.id)
  
+  if params[:scorecard_log].present?
+    scorecard_log = ScorecardLog.create!(scorecard_log_params)
+     check_in_artifact_log.attributes = {
+      scorecard_log_id: scorecard_log.id,
+    }
+  end
+
+  if params[:objective_log].present?
+    objective_log = ObjectiveLog.create!(objective_log_params)
+    check_in_artifact_log.attributes = {
+    objective_log_id: objective_log.id
+    }
+  end
+
+  if params[:responses].present?
+     check_in_artifact_log.attributes = {
+      responses: params[:responses]
+    }
+  end
+
+  check_in_artifact_log.save!
   authorize check_in_artifact
    render json: {check_in_artifact: check_in_artifact, status: :ok }
   end
