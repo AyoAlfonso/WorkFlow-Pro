@@ -93,36 +93,38 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     if(next_start.present?)
       @check_in_template.participants.each do |person|
         if(person["type"] == "user")
-          create_notifications(person["id"], schedule)
+       
           check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: person["id"])
           check_in_artifact.update!(start_time: next_start )
           check_in_artifacts << check_in_artifact
+          create_notifications(person["id"], schedule)
         end
       end
 
     @check_in_template.viewers.each do |viewer|
-        if(viewer["type"]  == "user")
-        create_notifications(viewer["id"], schedule)
+        if(viewer["type"] == "user")
+      
           check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: viewer["id"])
           check_in_artifact.update!(start_time: next_start )
           check_in_artifacts << check_in_artifact
+          create_notifications(viewer["id"], schedule)
         end
 
-        if(viewer["type"]  == "team")
+        if(viewer["type"] == "team")
           Team.find(viewer["id"]).team_user_enablements.pluck(:user_id).each do |user|
-              create_notifications(user, schedule)
               check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
               check_in_artifact.update!(start_time: next_start)
               check_in_artifacts << check_in_artifact
+              create_notifications(user, schedule)
           end
         end
 
         if(viewer["type"] == "company")
           Company.find(viewer["id"]).user_company_enablements.pluck(:user_id).each do |user|
-            create_notifications(user, schedule)
             check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
             check_in_artifact.update!(start_time: next_start)
             check_in_artifacts << check_in_artifact
+            create_notifications(user, schedule)
           end
         end
       end
