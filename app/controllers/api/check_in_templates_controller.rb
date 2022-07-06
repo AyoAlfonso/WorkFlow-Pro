@@ -217,7 +217,28 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   next_start = date_time_config["cadence"] == "once" ? Time.now : Time.new(schedule.first.year, schedule.first.month, schedule.first.day, schedule.first.hour)
+    
+  check_in_artifact_log = CheckInArtifactLog.find_or_initialize_by(check_in_artifact_id: check_in_artifact.id, created_by_id: current_user.id)
 
+  if params[:scorecard_log_id].present?
+     check_in_artifact_log.attributes = {
+      scorecard_log_id: params[:scorecard_log_id],
+    }
+  end
+
+  if params[:objective_log_id].present?
+    check_in_artifact_log.attributes = {
+    objective_log_id: params[:objective_log_id]
+    }
+  end
+
+  if params[:responses].present?
+     check_in_artifact_log.attributes = {
+     responses: params[:responses]
+    }
+  end
+
+  check_in_artifact_log.save!
   if params[:skip] == true
     check_in_artifact.update(skip: params[:skip])
     check_in_artifact = CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: next_start )
@@ -225,31 +246,8 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     check_in_artifact.update(end_time: Time.now.end_of_day)
     check_in_artifact = CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: next_start)
   end
-  
-  check_in_artifact_log = CheckInArtifactLog.find_or_initialize_by!(check_in_artifact_id: check_in_artifact.id, created_by_id: current_user.id)
- 
-  if params[:scorecard_log].present?
-    scorecard_log = ScorecardLog.create!(scorecard_log_params)
-     check_in_artifact_log.attributes = {
-      scorecard_log_id: scorecard_log.id,
-    }
-  end
 
-  if params[:objective_log].present?
-    objective_log = ObjectiveLog.create!(objective_log_params)
-    check_in_artifact_log.attributes = {
-    objective_log_id: objective_log.id
-    }
-  end
-
-  if params[:responses].present?
-     check_in_artifact_log.attributes = {
-      responses: params[:responses]
-    }
-  end
-
-  check_in_artifact_log.save!
-  authorize check_in_artifact
+   authorize check_in_artifact
    render json: {check_in_artifact: check_in_artifact, status: :ok }
   end
 
