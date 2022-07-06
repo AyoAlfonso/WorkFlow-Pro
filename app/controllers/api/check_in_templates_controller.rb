@@ -75,7 +75,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
            schedule.add_recurrence_rule(IceCube::Rule.weekly.day(day_as_int).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
         when "bi-weekly"
            schedule.add_recurrence_rule(IceCube::Rule.weekly(2).day(day_as_int).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
-        when "every-weekend"
+        when "every-weekday"
           schedule.add_recurrence_rule(IceCube::Rule.daily(5).day(:monday, :tuesday, :wednesday, :thursday, :friday).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
         when "daily" 
            schedule.add_recurrence_rule(IceCube::Rule.daily.hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
@@ -93,36 +93,36 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     if(next_start.present?)
       @check_in_template.participants.each do |person|
         if(person["type"] == "user")
-          create_notifications(person["id"], schedule)
           check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: person["id"])
           check_in_artifact.update!(start_time: next_start )
           check_in_artifacts << check_in_artifact
+          create_notifications(person["id"], schedule)
         end
       end
 
     @check_in_template.viewers.each do |viewer|
-        if(viewer["type"]  == "user")
-        create_notifications(viewer["id"], schedule)
+        if(viewer["type"] == "user")
           check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: viewer["id"])
           check_in_artifact.update!(start_time: next_start )
           check_in_artifacts << check_in_artifact
+          create_notifications(viewer["id"], schedule)
         end
 
-        if(viewer["type"]  == "team")
+        if(viewer["type"] == "team")
           Team.find(viewer["id"]).team_user_enablements.pluck(:user_id).each do |user|
-              create_notifications(user, schedule)
               check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
               check_in_artifact.update!(start_time: next_start)
               check_in_artifacts << check_in_artifact
+              create_notifications(user, schedule)
           end
         end
 
         if(viewer["type"] == "company")
           Company.find(viewer["id"]).user_company_enablements.pluck(:user_id).each do |user|
-            create_notifications(user, schedule)
             check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
             check_in_artifact.update!(start_time: next_start)
             check_in_artifacts << check_in_artifact
+            create_notifications(user, schedule)
           end
         end
       end
@@ -144,10 +144,8 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def run_now
-    # if(@check_in_template.check_in_type == "dynamic")
       check_in_artifact = CheckInArtifact.new(check_in_template: @check_in_template, owned_by: current_user)
       check_in_artifact.save!(start_time: Time.now.beginning_of_day, end_time: Time.now.end_of_day)
-    # end
     render json: {check_in_artifact: check_in_artifact, status: :ok }
   end
 
@@ -183,7 +181,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
           schedule.add_recurrence_rule(IceCube::Rule.weekly.day(day_as_int).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "bi-weekly"
           schedule.add_recurrence_rule(IceCube::Rule.weekly(2).day(day_as_int).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
-      when "every-weekend"
+      when "every-weekday"
         schedule.add_recurrence_rule(IceCube::Rule.daily(5).day(:monday, :tuesday, :wednesday, :thursday, :friday).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "daily" 
           schedule.add_recurrence_rule(IceCube::Rule.daily.hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
@@ -211,11 +209,10 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     objective_log = ObjectiveLog.create!(objective_log_params)
     CheckInArtifactLog.create!(check_in_artifact_id: check_in_artifact.id, created_by_id: current_user.id, responses: params[:responses], scorecard_log_id: scorecard_log.id, objective_log_id: objective_log.id )
   end
-
+ 
   authorize check_in_artifact
    render json: {check_in_artifact: check_in_artifact, status: :ok }
   end
-
 
   def show
     render json: { template: @check_in_template, status: :ok }
