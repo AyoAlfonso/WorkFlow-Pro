@@ -10,7 +10,7 @@ class CheckInTemplate < ApplicationRecord
   scope :optimized, -> { includes([:check_in_templates_steps ]) }
 
   has_many :check_in_templates_steps, dependent: :destroy
-
+  
   enum owner_type: {
     company: 0,
     team:1,

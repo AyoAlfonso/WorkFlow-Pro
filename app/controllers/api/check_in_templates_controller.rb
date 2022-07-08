@@ -7,6 +7,8 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   respond_to :json
   after_action :record_activities, only: [:create, :update, :show]
   before_action :set_check_in_template, only: [:show, :update, :run_now, :publish_now]
+  before_action :set_check_in_template_dedup, only: [:run_now, :publish_now]
+
   skip_after_action :verify_authorized, only: [:get_onboarding_company, :create_or_update_onboarding_goals, :get_onboarding_goals, :create_or_update_onboarding_key_activities, :get_onboarding_key_activities, :create_or_update_onboarding_team]
 
   def index
@@ -54,7 +56,17 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def update
-    @check_in_template.update!(check_in_template_params)
+    # //write active admin code to help edit 
+    # //get custom and child edit done here.
+    # //get customer 
+
+    # for austin
+    # array of check_in_logs
+    # streak data
+    
+    if (@check_in_template.tag.include? 'custom' || @check_in_template.child.present?)
+        @check_in_template.update!(child_check_in_template_params)
+    end
     render json: { template: @check_in_template, status: :ok }
   end
 
@@ -153,16 +165,14 @@ class Api::CheckInTemplatesController < Api::ApplicationController
                 user_id: user_id,
                 notification_type: 7,
             )
-          notification.attributes = {
-            rule: schedule.to_hash,
-            method: :email,
-          }
+    notification.attributes = {
+      rule: schedule.to_hash,
+      method: :email,
+    }
     notification.save!
   end
 
   def run_now
-    #check_in_template cadence
-    #run_time
     check_in_artifact = CheckInArtifact.new(check_in_template: @check_in_template, owned_by: current_user)
     check_in_artifact.save!(start_time: Time.now.beginning_of_day, end_time: Time.now.end_of_day)
     render json: {check_in_artifact: check_in_artifact, status: :ok }
@@ -179,7 +189,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
 
     # 1. If we are comfortable with a lot of logs data we can to save per step
     # 2. If we are NOT comfortable with a lot of logs we need to save at the end of process
-     authorize @check_in_artifacts_for_day
+    authorize @check_in_artifacts_for_day
     render json: {check_in_artifacts: @check_in_artifacts_for_day, status: :ok }
     # render "api/check_in_artifacts/general_check_in_artifacts"
   end
@@ -220,15 +230,15 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     
   check_in_artifact_log = CheckInArtifactLog.find_or_initialize_by(check_in_artifact_id: check_in_artifact.id, created_by_id: current_user.id)
 
-  if params[:scorecard_log_id].present?
+  if params[:scorecard_log_ids].present?
      check_in_artifact_log.attributes = {
-      scorecard_log_id: params[:scorecard_log_id],
+      scorecard_logs: params[:scorecard_log_ids],
     }
   end
 
-  if params[:objective_log_id].present?
+  if params[:objective_log_ids].present?
     check_in_artifact_log.attributes = {
-    objective_log_id: params[:objective_log_id]
+    objective_logs: params[:objective_log_ids]
     }
   end
 
@@ -266,6 +276,10 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     :check_in_templates_steps_attributes [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :variant, :question], viewers: [:id, :type])
   end
 
+  def child_check_in_template_params
+    params.require(:check_in_template).permit(:participants, :anonymous, :run_once, :date_time_config, :time_zone, :reminder, viewers: [:id, :type])
+  end
+
   def set_check_in_template
     @check_in_template = CheckInTemplate.find(params[:id])
     authorize @check_in_template
@@ -276,10 +290,10 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end 
 
   def objective_log_params
-    params.require(:objective_log).permit(:owned_by_id, :score, :note, :objecteable_id, :objecteable_type, :child_id, :child_type, :fiscal_quarter, :fiscal_year, :week, :status, :created_at, :adjusted_date)
+    # params.require(:objective_logs)
   end
 
   def scorecard_log_params
-    params.require(:scorecard_log).permit(:user_id, :score, :note, :key_performance_indicator_id, :fiscal_quarter, :fiscal_year, :week)
+    # params.require(:scorecard_logs).permit(:user_id, :score, :note, :key_performance_indicator_id, :fiscal_quarter, :fiscal_year, :week)
   end
 end

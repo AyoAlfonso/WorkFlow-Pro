@@ -2,8 +2,7 @@ class CheckInArtifactLog < ApplicationRecord
   acts_as_paranoid column: :deleted_at
 
   belongs_to :created_by, class_name: "User"
-  has_many :objective_logs
-  has_many :scorecard_logs
+
   belongs_to :check_in_artifact
 
   # validates :check_in_artifact_id, :responses, :created_by_id, presence: true
