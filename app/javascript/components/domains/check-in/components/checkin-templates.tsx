@@ -81,6 +81,7 @@ export const CheckinTemplates = (): JSX.Element => {
             name={checkin.name}
             id={checkin.id}
             description={checkin.description}
+            checkInTemplate={checkin}
             tags={[checkin.ownerType, checkin.checkInType == "dynamic" ? "Custom" : ""]}
           />
         ))}

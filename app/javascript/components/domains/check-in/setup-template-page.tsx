@@ -1,9 +1,8 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
 import { observer } from "mobx-react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { WizardLayout } from "~/components/layouts/wizard-layout";
 import * as R from "ramda";
 import { Button } from "~/components/shared/button";
@@ -12,6 +11,8 @@ import { CheckinBuilderSteps } from "./checkin-builder-steps";
 import { CheckinBuilderAgenda } from "./components/check-in-builder-agenda";
 import { useMst } from "~/setup/root";
 import moment from "moment";
+import { toJS } from "mobx";
+import { getIconName } from "./data/step-data";
 
 interface SelectedStepType {
   stepType: string;
@@ -34,10 +35,13 @@ export interface ParticipantsProps {
   executive?: number;
 }
 
-export const CheckInBuilderLayout = observer(
+export const SetupTemplatePage = observer(
   (): JSX.Element => {
-    const [currentStep, setCurrentStep] = useState(0);
-    const [checkinName, setCheckinName] = useState<string>("New Check-in");
+    const { companyStore, sessionStore, checkInTemplateStore } = useMst();
+    const template = toJS(checkInTemplateStore.currentCheckIn);
+
+    const [currentStep, setCurrentStep] = useState(2);
+    const [checkinName, setCheckinName] = useState<string>("");
     const [selectedSteps, setSelectedSteps] = useState<Array<SelectedStepType>>([]);
     const [participants, setParticipants] = useState<Array<ParticipantsProps>>([]);
     const [responseViewers, setResponseViewers] = useState("All Participants");
@@ -52,13 +56,39 @@ export const CheckInBuilderLayout = observer(
     const [selectedResponseViewers, setSelectedResponseViewers] = useState<
       Array<ParticipantsProps>
     >([]);
-    const [checkinType, setCheckinType] = useState<string>("Team");
+    const [checkinType, setCheckinType] = useState<string>("");
     const [checkinDescription, setCheckinDescription] = useState<string>("");
 
-    const { companyStore, sessionStore, checkInTemplateStore } = useMst();
     const isForum = companyStore.company?.displayFormat == "Forum";
 
     const history = useHistory();
+    const { id } = useParams();
+
+    useEffect(() => {
+      if (id) {
+        checkInTemplateStore.fetchCheckInTemplates().then(() => {
+          const template = checkInTemplateStore.getTemplateById(id);
+          setCheckinName(template.name);
+          setCheckinDescription(template.description);
+          setCheckinType(template.ownerType);
+          template.checkInTemplatesSteps.forEach(step => {
+            setSelectedSteps(steps => [
+              ...steps,
+              {
+                stepType: step.stepType,
+                name: step.name,
+                iconName: getIconName(step.name),
+                instructions: step.instructions,
+                orderIndex: step.orderIndex,
+                componentToRender: step.componentToRender,
+                variant: step.variant,
+                question: step.question
+              },
+            ]);
+          });
+        });
+      }
+    }, [id]);
 
     const company = companyStore && {
       id: companyStore.company?.id,
@@ -128,7 +158,7 @@ export const CheckInBuilderLayout = observer(
         default:
           return "";
       }
-    }
+    };
 
     const showDateTime = cadence == "Once" || cadence == "Monthly" || cadence == "Quarterly";
     const showDayTime = cadence == "Weekly" || cadence == "Bi-weekly";
@@ -155,6 +185,7 @@ export const CheckInBuilderLayout = observer(
           unit: reminderUnit,
           value: reminderValue,
         },
+        child: template.id,
         tag: ["global", "custom"],
       };
 
@@ -254,6 +285,7 @@ export const CheckInBuilderLayout = observer(
       );
     };
 
+    if (!template) return <></>;
     return (
       <Container>
         <WizardLayout

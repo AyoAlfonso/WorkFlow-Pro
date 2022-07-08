@@ -157,3 +157,44 @@ export const widgetArray: Array<StepCardProps> = [
     description: "Series of questions for a personal reflection at the end of each month",
   },
 ];
+
+export const getIconName = (stepType) => {
+  switch (stepType) {
+    case "Open-ended":
+      return "Open-Ended";
+    case "Numeric":
+      return "Numerical";
+    case "Sentiment":
+      return "Sentiment"
+    case "Agreement Scale":
+      return "Agreement-Scale"
+    case "Yes/No":
+      return "YesNo"
+    case "Intiatives":
+      return "Initiative";
+    case "Objectives":
+      return "New-Goals";
+    case "ToDos":
+      return "Tasks"
+    case "Issues":
+      return "Alert"
+    case "Topics":
+      return "Alert";
+    case "KPIs":
+      return "Scorecard_New";
+    case "Habits":
+      return "Habits"
+    case "Conversation Starter":
+      return "Conversation-Starter"
+    case "Weekly Review":
+      return "Stats"
+    case "Evening Reflection":
+      return "PM-Check-in"
+    case "Weekly Reflection":
+      return "Weekly-Milestones"
+    case "Monthly Reflection":
+      return "EoM"
+    default:
+      return ""
+  }
+}

@@ -142,6 +142,11 @@ export const CheckInTemplateStoreModel = types
         responses: responseArray,
       }
       self.updateCheckinArtifact(self.currentCheckInArtifact.id, item);
+    },
+    getTemplateById(id) {
+      const checkin = toJS(self.checkInTemplates).find(checkin => checkin.id == id);
+      self.currentCheckIn = checkin;
+      return checkin
     }
   }))
   .actions(self => ({

@@ -19,9 +19,9 @@ export const CheckInCard = observer(
 
     const history = useHistory();
 
-  const { checkInTemplate } = checkin;
+    const { checkInTemplate } = checkin;
 
-    const { name, ownerType, id, viewers, participants } = checkInTemplate;
+    const { name, ownerType, id, viewers, participants, runOnce } = checkInTemplate;
 
     const getStatus = entityArray => {
       const status = entityArray.map(item => {
@@ -47,14 +47,14 @@ export const CheckInCard = observer(
     const isParticipant = getStatus(participants);
 
     const dueDate = new Date(checkin.startTime).toDateString();
-    // const isEntryNeeded = new Date() 
+    // const isEntryNeeded = new Date()
     const isEntryNeeded = () => {
       const dateA = moment(dueDate);
       const dateB = moment(new Date());
       const diff = dateA.diff(dateB, "hours");
       return diff < 24;
-    }
-    
+    };
+
     return (
       <Container>
         <TitleContainer>
@@ -67,15 +67,16 @@ export const CheckInCard = observer(
         </TitleContainer>
         <InfoContainer>
           <Tag>{ownerType.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}</Tag>
-          <DueDate>{`Due: ${dueDate}`}</DueDate>
-          {isViewer && !isParticipant ? (
-            <EntryBadge>
-              {isEntryNeeded() == true && `• Response Expected`}
-            </EntryBadge>
-          ) : (
-            <EntryBadge>
-              {isEntryNeeded() == true && ` • Entry Needed`}
-            </EntryBadge>
+          {!runOnce && (
+            <>
+              <DueDate>{`Due: ${dueDate}`}</DueDate>
+
+              {isViewer && !isParticipant ? (
+                <EntryBadge>{isEntryNeeded() == true && `• Response Expected`}</EntryBadge>
+              ) : (
+                <EntryBadge>{isEntryNeeded() == true && ` • Entry Needed`}</EntryBadge>
+              )}
+            </>
           )}
         </InfoContainer>
         {isParticipant && (

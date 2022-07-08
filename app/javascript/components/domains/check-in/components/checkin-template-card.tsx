@@ -7,20 +7,23 @@ import { Button } from "~/components/shared/button";
 import { baseTheme } from "~/themes";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
+import moment from "moment";
 
 interface CheckInTemplateCardProps {
   name: string;
   description: string;
   tags: Array<string>;
   id: number;
+  checkInTemplate: any;
 }
 
 export const CheckInTemplateCard = observer(
-  ({ name, description, tags, id }: CheckInTemplateCardProps): JSX.Element => {
+  ({ name, description, tags, id, checkInTemplate }: CheckInTemplateCardProps): JSX.Element => {
     const [showOptions, setShowOptions] = useState<boolean>(false);
 
     const {
-      checkInTemplateStore: { runCheckinOnce },
+      checkInTemplateStore: { runCheckinOnce, createCheckinTemplate },
+      sessionStore: { profile },
     } = useMst();
 
     const optionsRef = useRef(null);
@@ -50,7 +53,51 @@ export const CheckInTemplateCard = observer(
       };
     }, [showOptions]);
 
+    const currentUser = profile && {
+      id: profile?.id,
+      type: "user",
+      defaultAvatarColor: profile?.defaultAvatarColor,
+      avatarUrl: profile?.avatarUrl,
+      name: profile?.firstName,
+      lastName: profile?.lastName,
+    };
+
     const filteredTags = tags.filter(tag => tag);
+
+    const handleRunNow = () => {
+      const checkin = {
+        name: checkInTemplate.name,
+        checkInTemplatesStepsAttributes: checkInTemplate.checkInTemplatesSteps,
+        participants: [currentUser],
+        anonymous: false,
+        checkInType: "dynamic",
+        ownerType: checkInTemplate.ownerType.toLowerCase(),
+        description: checkInTemplate.description,
+        timeZone: checkInTemplate.timeZone,
+        viewers: [currentUser],
+        runOnce: new Date(),
+        dateTimeConfig: {
+          cadence: "once",
+          time: moment(new Date(), ["hh:mm A"]).format("HH:mm"),
+          date: new Date(),
+          day: "",
+        },
+        reminder: {
+          unit: checkInTemplate.reminder.unit,
+          value: checkInTemplate.reminder.value,
+        },
+        tag: ["global", "custom"],
+        child: checkInTemplate.id,
+      };
+
+      createCheckinTemplate(checkin).then(id => {
+        runCheckinOnce(id).then(artifactId => {
+          if (artifactId) {
+            history.push(`/check-in/run/${artifactId}`);
+          }
+        });
+      });
+    };
 
     return (
       <Container>
@@ -75,7 +122,7 @@ export const CheckInTemplateCard = observer(
               mr="1em"
               width="70px"
               fontSize="12px"
-              onClick={() => console.log("log")}
+              onClick={() => history.push(`/check-in/setup/${id}`)}
               small
               style={{ whiteSpace: "nowrap" }}
             >
@@ -86,12 +133,7 @@ export const CheckInTemplateCard = observer(
               mr="1em"
               width="70px"
               fontSize="12px"
-              onClick={async () => {
-                const res = await runCheckinOnce(id);
-                if (res) {
-                  history.push(`/check-in/run/${res}`);
-                }
-              }}
+              onClick={handleRunNow}
               small
               style={{ whiteSpace: "nowrap" }}
             >

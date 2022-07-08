@@ -95,11 +95,11 @@ export const SetupPage = ({
         });
 
     const company = companyStore && {
-      id: companyStore.company.id,
+      id: companyStore.company?.id,
       type: "company",
       defaultAvatarColor: "cautionYellow",
-      avatarUrl: companyStore.company.logoUrl,
-      name: companyStore.company.name,
+      avatarUrl: companyStore.company?.logoUrl,
+      name: companyStore.company?.name,
     };
 
     const users =
@@ -125,12 +125,12 @@ export const SetupPage = ({
         });
 
     const user = {
-      id: currentUser.id,
+      id: currentUser?.id,
       type: "user",
-      defaultAvatarColor: currentUser.defaultAvatarColor,
-      avatarUrl: currentUser.avatarUrl,
-      name: currentUser.firstName,
-      lastName: currentUser.lastName,
+      defaultAvatarColor: currentUser?.defaultAvatarColor,
+      avatarUrl: currentUser?.avatarUrl,
+      name: currentUser?.firstName,
+      lastName: currentUser?.lastName,
     };
 
     if (currentUser?.role === "Employee") {

@@ -68,13 +68,14 @@ import CheckinInsightsIndex from "./domains/check-in/checkin-insights-index";
 
 import { UpdateProfileForm } from "./domains/user/update-profile-form";
 import CheckInWizard from "./domains/check-in/checkin";
+import { SetupTemplatePage } from "./domains/check-in/setup-template-page";
 const Container = styled.div`
   margin-left: 136px;
   margin-right: 40px;
   margin-bottom: 50px;
   padding-top: 96px;
   height: inherit;
-  
+
   @media only screen and (max-width: 768px) {
     margin: 0;
     padding-top: 64px;
@@ -391,6 +392,7 @@ export const App = observer(
                     <Route exact path="/check-in/build" component={CheckInBuilderLayout} />
 
                     <Route exact path="/check-in/run/:id" component={CheckInWizard} />
+                    <Route exact path="/check-in/setup/:id" component={SetupTemplatePage} />
                   </>
                 </Switch>
               ) : (
