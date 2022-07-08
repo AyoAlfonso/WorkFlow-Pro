@@ -10,6 +10,7 @@ class CheckInArtifact < ApplicationRecord
   scope :for_week_of_date_started_only, ->(end_time) { where("(end_time >= ? AND end_time <= ?)", end_time.beginning_of_week, end_time.end_of_week) }
   scope :owned_by_user, ->(user) { where(owned_by_id: user) }
   scope :not_skipped, ->  { where(skip: false) }
+  scope :parents_only, ->() { where(parent: nil) }
 
   belongs_to :check_in_template
   has_many :check_in_artifact_logs, dependent: :destroy

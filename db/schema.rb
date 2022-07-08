@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_07_231515) do
+ActiveRecord::Schema.define(version: 2022_07_08_164812) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -151,7 +151,7 @@ ActiveRecord::Schema.define(version: 2022_07_07_231515) do
     t.jsonb "viewers"
     t.bigint "company_id"
     t.datetime "deleted_at"
-    t.string "child"
+    t.integer "parent"
     t.index ["company_id"], name: "index_check_in_templates_on_company_id", where: "(deleted_at IS NULL)"
     t.index ["deleted_at"], name: "index_check_in_templates_on_deleted_at"
     t.index ["updated_at"], name: "index_check_in_templates_on_updated_at", where: "(deleted_at IS NULL)"

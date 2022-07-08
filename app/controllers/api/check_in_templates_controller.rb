@@ -179,7 +179,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def general_check_in
-    check_in_artifacts = CheckInArtifact.owned_by_user(current_user).not_skipped.incomplete
+    check_in_artifacts = CheckInArtifact.owned_by_user(current_user).not_skipped.incomplete.parents_only
     @check_in_artifacts_for_day = check_in_artifacts
     # .for_day_of_date(params[:on_day])
     # @check_in_artifacts_for_week = check_in_artifacts
