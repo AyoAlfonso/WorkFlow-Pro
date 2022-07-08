@@ -32,7 +32,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
           time_zone:params[:time_zone],
           tag:params[:tag],
           reminder: params[:reminder],
-          child: params[:child]
+          parent: params[:parent]
        })
 
       @step_atrributes = params[:check_in_template][:check_in_templates_steps_attributes]
@@ -57,15 +57,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def update
-    # //write active admin code to help edit 
-    # //get custom and child edit done here.
-    # //get customer 
-
-    # for austin
-    # array of check_in_logs
-    # streak data
-    
-    if (@check_in_template.tag.include? 'custom' || @check_in_template.child.present?)
+    if (@check_in_template.tag.include? 'custom' || @check_in_template.parent.present?)
         @check_in_template.update!(child_check_in_template_params)
     end
     render json: { template: @check_in_template, status: :ok }
@@ -180,7 +172,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def general_check_in
-    check_in_artifacts = CheckInArtifact.owned_by_user(current_user).not_skipped.incomplete.parents_only
+    check_in_artifacts = CheckInArtifact.owned_by_user(current_user).not_skipped.incomplete.with_parents
     @check_in_artifacts_for_day = check_in_artifacts
     # .for_day_of_date(params[:on_day])
     # @check_in_artifacts_for_week = check_in_artifacts
