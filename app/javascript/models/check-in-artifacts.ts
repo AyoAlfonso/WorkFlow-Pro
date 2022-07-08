@@ -1,4 +1,5 @@
 import { types } from "mobx-state-tree";
+import { CheckInArtifactsLogsModel } from "./check-in-artifacts-logs";
 import { CheckInTemplateModel } from "./check-in-templates";
 
 export const CheckInArtifactsModel = types.model("CheckInArtifactsModel").props({
@@ -12,6 +13,7 @@ export const CheckInArtifactsModel = types.model("CheckInArtifactsModel").props(
   deletedAt: types.maybeNull(types.string),
   questions: types.frozen(),
   boolean: types.maybeNull(types.boolean),
+  checkInArtifactLogs: types.maybeNull(types.array(CheckInArtifactsLogsModel))
 })
 
 type CheckInArtifactsModelType = typeof CheckInArtifactsModel.Type;

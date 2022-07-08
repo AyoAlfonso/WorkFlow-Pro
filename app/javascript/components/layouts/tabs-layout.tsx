@@ -216,7 +216,7 @@ const ContentContainer = styled.div`
   padding: 32px;
   width: 82%;
   max-width: 1280px;
-  overflow-y: auto;
+  // overflow-y: auto;
   height: 100%;
   overscroll-behavior: contain;
   @media only screen and (min-width: 1600px) {

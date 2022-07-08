@@ -70,6 +70,7 @@ export const KeyElement = observer(
       sessionStore,
       keyElementStore,
       userStore,
+      checkInTemplateStore,
     } = useMst();
     const [checkboxValue, setCheckboxValue] = useState<boolean>(false);
     const [element, setElement] = useState<any>(null);
@@ -79,6 +80,8 @@ export const KeyElement = observer(
     const [selectedUser, setSelectedUser] = useState<any>(sessionStore.profile);
     const [showTooltip, setShowTooltip] = useState<boolean>(false);
     const [disabled, setDisabled] = useState<boolean>(false);
+
+    const { currentCheckInArtifact, updateCheckinArtifact } = checkInTemplateStore;
 
     const { t } = useTranslation();
 
@@ -356,6 +359,13 @@ export const KeyElement = observer(
       }
     };
 
+    const submitCheckinResponse = id => {
+      const item = {
+        objectiveLogId: id,
+      };
+      updateCheckinArtifact(currentCheckInArtifact.id, item);
+    };
+
     const createLog = (updateMilestone = true) => {
       const objectiveLog = {
         ownedById: selectedUser.id,
@@ -373,7 +383,11 @@ export const KeyElement = observer(
         adjustedDate: date,
       };
 
-      store.createActivityLog(objectiveLog);
+      store.createActivityLog(objectiveLog).then((log) => {
+        if (type == "checkIn") {
+          submitCheckinResponse(log.id);
+        }
+      });
       company.objectivesKeyType === "KeyResults" &&
         updateMilestone &&
         updateMilestoneStatus(objectiveLog.weekOf);

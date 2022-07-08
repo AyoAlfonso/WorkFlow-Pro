@@ -70,7 +70,7 @@ export const SetupPage = ({
 
   const { userStore, teamStore, companyStore, sessionStore } = useMst();
   const currentUser = sessionStore.profile;
-
+  
   useEffect(() => {
     const teams =
       teamStore.teams &&
@@ -123,9 +123,23 @@ export const SetupPage = ({
             lastName: user.lastName,
           };
         });
-    setCompanyUsers(users);
-    setTeams(teams);
-    setCompany(company);
+
+    const user = {
+      id: currentUser.id,
+      type: "user",
+      defaultAvatarColor: currentUser.defaultAvatarColor,
+      avatarUrl: currentUser.avatarUrl,
+      name: currentUser.firstName,
+      lastName: currentUser.lastName,
+    };
+
+    if (currentUser?.role === "Employee") {
+      return setCompanyUsers([user]);
+    } else {
+      setCompanyUsers(users);
+      setTeams(teams);
+      setCompany(company);
+    }
   }, []);
 
   const participantsSelector = item => {
@@ -136,13 +150,16 @@ export const SetupPage = ({
     setSelectedResponseItems([...selectedResponseItems, item]);
   };
 
+  const userList =
+    currentUser?.role === "Employee" ? [...companyUsers] : [...companyUsers, ...teams, company];
+
   return (
     <Container>
       <SectionContainer>
         <SectionHeader>Participants</SectionHeader>
         <Label>Who will be asked to respond?</Label>
         <MultiEntitySelectionDropdownList
-          userList={[...companyUsers, ...teams, company]}
+          userList={[...userList]}
           onUserSelect={participantsSelector}
           placeholder={"Select user, team, or the company"}
           selectedItems={selectedItems}
@@ -179,7 +196,7 @@ export const SetupPage = ({
         />
         {responseViewers == "Custom" && (
           <MultiEntitySelectionDropdownList
-            userList={[...companyUsers, ...teams, company]}
+            userList={[...userList]}
             onUserSelect={responsesSelector}
             placeholder={"Select user, team, or the company"}
             selectedItems={selectedResponseItems}

@@ -1,39 +1,90 @@
 import * as React from "react";
 import { useState } from "react";
+import { observer } from "mobx-react";
 import styled from "styled-components";
+import { useMst } from "~/setup/root";
 import { Icon } from "~/components/shared";
+import { toJS } from "mobx";
 
 interface NumericalStepProps {
   question: string;
   disabled?: boolean;
 }
 
-export const NumericalStep = ({ question, disabled }: NumericalStepProps): JSX.Element => {
-  const [selected, setSelected] = useState<number>(0);
+export const NumericalStep = observer(
+  ({ question, disabled }: NumericalStepProps): JSX.Element => {
+    const { checkInTemplateStore } = useMst();
 
-  const numericalScale = Array.from({ length: 10 }, (_, i) => i + 1);
+    const {
+      currentCheckInArtifact,
+      updateCheckinArtifact,
+      updateCheckInArtifactResponse,
+    } = checkInTemplateStore;
 
-  return (
-    <Container disabled={disabled}>
-      <QuestionText>{question}</QuestionText>
-      <OptionsContainer>
-        {numericalScale.map(num => (
-          <OptionContainer key={num}>
-            <StepContainer onClick={() => setSelected(num)}>
-              <Option selected={selected == num}>
-                {selected === num ? (
-                  <Icon icon={"Checkmark"} size={"14px"} iconColor={"skyBlue"} />
-                ) : (
-                  num
-                )}
-              </Option>
-            </StepContainer>
-          </OptionContainer>
-        ))}
-      </OptionsContainer>
-    </Container>
-  );
-};
+    const checkInArtifactLogs = currentCheckInArtifact?.checkInArtifactLogs;
+
+    const savedResponse =
+      checkInArtifactLogs &&
+      toJS(checkInArtifactLogs)[0]?.responses.find(
+        response => response.questionType === "numeric" && response.prompt === question,
+      );
+
+    const [selected, setSelected] = useState<number>(savedResponse?.response || 0);
+
+    const numericalScale = Array.from({ length: 10 }, (_, i) => i + 1);
+
+    const submitCheckinResponse = num => {
+      const index =
+        toJS(checkInArtifactLogs).length &&
+        toJS(checkInArtifactLogs)[0]?.responses.findIndex(
+          response => response.questionType === "numeric" && response.prompt === question,
+        );
+      if (!index) {
+        const item = {
+          responses: [{ questionType: "numeric", prompt: question, response: num }],
+        };
+        updateCheckinArtifact(currentCheckInArtifact.id, item);
+      } else if (index === -1) {
+        const item = {
+          responses: [
+            ...checkInArtifactLogs[0].responses,
+            { questionType: "numeric", prompt: question, response: num },
+          ],
+        };
+        updateCheckinArtifact(currentCheckInArtifact.id, item);
+      } else {
+        const item = { questionType: "numeric", prompt: question, response: num };
+        updateCheckInArtifactResponse(index, item);
+      }
+    };
+
+    return (
+      <Container disabled={disabled}>
+        <QuestionText>{question}</QuestionText>
+        <OptionsContainer>
+          {numericalScale.map(num => (
+            <OptionContainer key={num}>
+              <StepContainer
+                onClick={() => {
+                  setSelected(num);
+                  submitCheckinResponse(num);
+                }}
+              >
+                <Option selected={selected == num}>
+                  {selected === num ? (
+                    <Icon icon={"Checkmark"} size={"14px"} iconColor={"skyBlue"} />
+                  ) : (
+                    num
+                  )}
+                </Option>
+              </StepContainer>
+            </OptionContainer>
+          ))}
+        </OptionsContainer>
+      </Container>
+    );
+  },
+);
 
 type ContainerProps = {
   disabled?: boolean;

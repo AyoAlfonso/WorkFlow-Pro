@@ -15,7 +15,7 @@ const CheckInWizard = observer(
     const [isLoading, setLoading] = useState<boolean>(true);
     const { checkInTemplateStore } = useMst();
 
-    const { currentCheckIn } = checkInTemplateStore;
+    const { currentCheckIn, updateCheckinArtifact, currentCheckInArtifact } = checkInTemplateStore;
 
     const { id } = useParams();
 
@@ -41,7 +41,11 @@ const CheckInWizard = observer(
         <StopButton
           variant={"primary"}
           onClick={() => {
-            history.push(`/check-in/success`);
+            if (confirm("Are you sure you want to end this Check-in?")) {
+              updateCheckinArtifact(currentCheckInArtifact.id, { endNow: true }).then(() => {
+                history.push(`/check-in/success`);
+              });
+            }
           }}
           small
           disabled={false}

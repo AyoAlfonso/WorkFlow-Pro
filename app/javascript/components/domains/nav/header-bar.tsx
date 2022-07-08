@@ -419,7 +419,7 @@ const MobileProfileNav = styled.div<MobileProfileNavProps>`
   transition: 0.2s;
   right: 0;
   display: none;
-  margin-top: 10px;
+  margin-top: 5px;
 
   @media only screen and (max-width: 768px) {
     display: block;

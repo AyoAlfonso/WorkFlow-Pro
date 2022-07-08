@@ -1,16 +1,60 @@
 import React from "react";
 import { useState } from "react";
+import { observer } from "mobx-react";
 import styled from "styled-components";
+import { useMst } from "~/setup/root";
 import { Icon } from "~/components/shared";
 import { sentimentScale } from "../data/selection-scale-data";
+import { toJS } from "mobx";
 
 interface SentimentScaleProps {
   question: string;
   disabled?: boolean;
 }
 
-export const SentimentScale = ({ question, disabled }: SentimentScaleProps): JSX.Element => {
-  const [selected, setSelected] = useState<number>(0);
+export const SentimentScale = observer(({ question, disabled }: SentimentScaleProps): JSX.Element => {
+  const { checkInTemplateStore } = useMst();
+
+  const {
+    currentCheckInArtifact,
+    updateCheckinArtifact,
+    updateCheckInArtifactResponse,
+  } = checkInTemplateStore;
+
+  const checkInArtifactLogs = currentCheckInArtifact?.checkInArtifactLogs;
+
+  const savedResponse =
+    checkInArtifactLogs &&
+    toJS(checkInArtifactLogs)[0]?.responses.find(
+      response => response.questionType === "sentiment" && response.prompt === question,
+    );
+
+  const [selected, setSelected] = useState<number>(savedResponse?.response || 0);
+
+  const submitCheckinResponse = num => {
+    const index =
+      toJS(checkInArtifactLogs).length &&
+      toJS(checkInArtifactLogs)[0]?.responses.findIndex(
+        response => response.questionType === "sentiment" && response.prompt === question,
+      );
+    if (!index) {
+      const item = {
+        responses: [{ questionType: "sentiment", prompt: question, response: num }],
+      };
+      updateCheckinArtifact(currentCheckInArtifact.id, item);
+    } else if (index === -1) {
+      const item = {
+        responses: [
+          ...checkInArtifactLogs[0].responses,
+          { questionType: "sentiment", prompt: question, response: num },
+        ],
+      };
+      updateCheckinArtifact(currentCheckInArtifact.id, item);
+    } else {
+      const item = { questionType: "sentiment", prompt: question, response: num };
+      updateCheckInArtifactResponse(index, item);
+    }
+  };
 
   return (
     <Container disabled={disabled}>
@@ -18,7 +62,12 @@ export const SentimentScale = ({ question, disabled }: SentimentScaleProps): JSX
       <OptionsContainer>
         {sentimentScale.map(sentiment => (
           <OptionContainer key={sentiment.option}>
-            <StepContainer onClick={() => setSelected(sentiment.option)}>
+            <StepContainer
+              onClick={() => {
+                setSelected(sentiment.option);
+                submitCheckinResponse(sentiment.option);
+              }}
+            >
               <Option selected={selected == sentiment.option}>
                 {selected === sentiment.option ? (
                   <Icon icon={"Checkmark"} size={"14px"} iconColor={"skyBlue"} />
@@ -33,7 +82,7 @@ export const SentimentScale = ({ question, disabled }: SentimentScaleProps): JSX
       </OptionsContainer>
     </Container>
   );
-};
+});
 
 type ContaineProps = {
   disabled?: boolean;

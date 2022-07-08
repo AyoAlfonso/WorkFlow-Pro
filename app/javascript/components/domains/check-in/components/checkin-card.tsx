@@ -7,6 +7,7 @@ import { ICheckInArtifact } from "~/models/check-in-artifacts";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import { toJS } from "mobx";
+import moment from "moment";
 
 interface CheckInCardProps {
   checkin: ICheckInArtifact;
@@ -18,7 +19,7 @@ export const CheckInCard = observer(
 
     const history = useHistory();
 
-    const { checkInTemplate } = checkin;
+  const { checkInTemplate } = checkin;
 
     const { name, ownerType, id, viewers, participants } = checkInTemplate;
 
@@ -45,6 +46,15 @@ export const CheckInCard = observer(
     const isViewer = getStatus(viewers);
     const isParticipant = getStatus(participants);
 
+    const dueDate = new Date(checkin.startTime).toDateString();
+    // const isEntryNeeded = new Date() 
+    const isEntryNeeded = () => {
+      const dateA = moment(dueDate);
+      const dateB = moment(new Date());
+      const diff = dateA.diff(dateB, "hours");
+      return diff < 24;
+    }
+    
     return (
       <Container>
         <TitleContainer>
@@ -57,8 +67,16 @@ export const CheckInCard = observer(
         </TitleContainer>
         <InfoContainer>
           <Tag>{ownerType.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}</Tag>
-          <DueDate>Due: Friday, May 20th </DueDate>
-          <EntryBadge>{` • Entry Needed`}</EntryBadge>
+          <DueDate>{`Due: ${dueDate}`}</DueDate>
+          {isViewer && !isParticipant ? (
+            <EntryBadge>
+              {isEntryNeeded() == true && `• Response Expected`}
+            </EntryBadge>
+          ) : (
+            <EntryBadge>
+              {isEntryNeeded() == true && ` • Entry Needed`}
+            </EntryBadge>
+          )}
         </InfoContainer>
         {isParticipant && (
           <ActionsContainer>

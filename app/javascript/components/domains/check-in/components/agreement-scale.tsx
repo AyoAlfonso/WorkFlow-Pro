@@ -1,39 +1,89 @@
 import React from "react";
 import { useState } from "react";
+import { observer } from "mobx-react";
 import styled from "styled-components";
+import { useMst } from "~/setup/root";
 import { Icon } from "~/components/shared";
 import { agreementScale } from "../data/selection-scale-data";
+import { toJS } from "mobx";
 
 interface AgreementScaleProps {
   question: string;
   disabled?: boolean;
 }
 
-export const AgreementScale = ({ question, disabled }: AgreementScaleProps): JSX.Element => {
-  const [selected, setSelected] = useState<number>(0);
+export const AgreementScale = observer(
+  ({ question, disabled }: AgreementScaleProps): JSX.Element => {
+  const { checkInTemplateStore } = useMst();
 
-  return (
-    <Container disabled={disabled}>
-      <QuestionText>{question}</QuestionText>
-      <OptionsContainer>
-        {agreementScale.map(agreement => (
-          <OptionContainer key={agreement.option}>
-            <StepContainer onClick={() => setSelected(agreement.option)}>
-              <Option selected={selected == agreement.option}>
-                {selected === agreement.option ? (
-                  <Icon icon={"Checkmark"} size={"14px"} iconColor={"skyBlue"} />
-                ) : (
-                  agreement.option
-                )}
-              </Option>
-              <LabelText>{agreement.label}</LabelText>
-            </StepContainer>
-          </OptionContainer>
-        ))}
-      </OptionsContainer>
-    </Container>
-  );
-};
+    const {
+      currentCheckInArtifact,
+      updateCheckinArtifact,
+      updateCheckInArtifactResponse,
+    } = checkInTemplateStore;
+
+    const checkInArtifactLogs = currentCheckInArtifact?.checkInArtifactLogs;
+
+    const savedResponse = checkInArtifactLogs && toJS(checkInArtifactLogs)[0]?.responses.find(
+      response => response.questionType === "agreement_scale" && response.prompt === question,
+    );
+
+    
+    const [selected, setSelected] = useState<number>(savedResponse?.response || 0);
+
+    const submitCheckinResponse = num => {
+      const index =
+        toJS(checkInArtifactLogs).length &&
+        toJS(checkInArtifactLogs)[0]?.responses.findIndex(
+          response => response.questionType === "agreement_scale" && response.prompt === question,
+        );
+      if (!index) {
+        const item = {
+          responses: [{ questionType: "agreement_scale", prompt: question, response: num }],
+        };
+        updateCheckinArtifact(currentCheckInArtifact.id, item);
+      } else if (index === -1) {
+        const item = {
+          responses: [
+            ...checkInArtifactLogs[0].responses,
+            { questionType: "agreement_scale", prompt: question, response: num },
+          ],
+        };
+        updateCheckinArtifact(currentCheckInArtifact.id, item);
+      } else {
+        const item = { questionType: "agreement_scale", prompt: question, response: num };
+        updateCheckInArtifactResponse(index, item);
+      }
+    };
+
+    return (
+      <Container disabled={disabled}>
+        <QuestionText>{question}</QuestionText>
+        <OptionsContainer>
+          {agreementScale.map(agreement => (
+            <OptionContainer key={agreement.option}>
+              <StepContainer
+                onClick={() => {
+                  setSelected(agreement.option);
+                  submitCheckinResponse(agreement.option);
+                }}
+              >
+                <Option selected={selected == agreement.option}>
+                  {selected === agreement.option ? (
+                    <Icon icon={"Checkmark"} size={"14px"} iconColor={"skyBlue"} />
+                  ) : (
+                    agreement.option
+                  )}
+                </Option>
+                <LabelText>{agreement.label}</LabelText>
+              </StepContainer>
+            </OptionContainer>
+          ))}
+        </OptionsContainer>
+      </Container>
+    );
+  },
+);
 
 type ContaineProps = {
   disabled?: boolean;

@@ -54,6 +54,7 @@ export const HomeKeyActivities = observer(
     const { t } = useTranslation();
 
     useEffect(() => {
+      setLoading(true)
       showCompletedItems
         ? keyActivityStore.fetchCompleteKeyActivities().then(() => setLoading(false))
         : keyActivityStore.fetchIncompleteKeyActivities().then(() => setLoading(false));
@@ -365,6 +366,9 @@ export const HomeKeyActivities = observer(
 const SingleListContainer = styled.div`
   width: 100%;
   margin-right: 20px;
+  @media (max-width: 768px) {
+    margin-right: 0;
+  }
 `;
 
 const FilterContainer = styled.div`

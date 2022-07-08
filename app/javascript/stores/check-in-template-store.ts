@@ -95,6 +95,7 @@ export const CheckInTemplateStoreModel = types
       );
       if (response.ok) {
         showToast("Check-in updated successfully", ToastMessageConstants.SUCCESS);
+        self.currentCheckInArtifact = response.data.checkInArtifact;
         return true;
       } else {
         showToast(
@@ -133,6 +134,14 @@ export const CheckInTemplateStoreModel = types
       const currentCheckIn = {...checkin?.checkInTemplate, currentStep: 1};
       self.currentCheckIn = currentCheckIn;
       self.currentCheckInArtifact = checkin;
+    },
+    updateCheckInArtifactResponse(index, response) {
+      const responseArray = toJS(self.currentCheckInArtifact).checkInArtifactLogs[0]?.responses;
+      responseArray[index] = response;
+      const item = {
+        responses: responseArray,
+      }
+      self.updateCheckinArtifact(self.currentCheckInArtifact.id, item);
     }
   }))
   .actions(self => ({
