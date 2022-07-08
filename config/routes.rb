@@ -188,6 +188,7 @@ Rails.application.routes.draw do
     get "general_check_in",  to: "check_in_templates#general_check_in"
     patch "check_in_templates/artifact/:id",  to: "check_in_templates#artifact" #can be used to skip an artifact, and update the artifact 
 
+    resources :check_in_artifact, only: [:show]
     #description_templates
     resources :description_templates, only: [:index, :destroy, :show]
     post "/description_templates/create_templates", to: "description_templates#update_or_create_templates"
