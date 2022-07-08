@@ -40,7 +40,7 @@ export const Responses = observer(
             ))}
           </Select>
         </FormGroup>
-        <FormGroup>
+        {/* <FormGroup>
           <CheckboxContainer>
             <Checkbox
               checked={anonymousResponse}
@@ -49,7 +49,7 @@ export const Responses = observer(
             />
             <ResponseText>Make the Check-in anonymous</ResponseText>
           </CheckboxContainer>
-        </FormGroup>
+        </FormGroup> */}
       </Container>
     );
   },

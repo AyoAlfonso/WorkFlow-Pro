@@ -30,7 +30,8 @@ class CheckInArtifact < ApplicationRecord
          except: [:updated_at],
         }
       ],
-     }).merge({ :streaks => self.streaks })
+     })
+    #  .merge({ :streaks => self.streaks })
   end
 
   scope :with_name, ->(name) { where(name: name) }

@@ -39,11 +39,12 @@ export const KeyActivitiesList = observer(
   }: IKeyActivitiesListProps): JSX.Element => {
     const splittedDroppableId = droppableId.split("-");
     const updateId = splittedDroppableId[splittedDroppableId.length - 1];
-    const data = React.useMemo(() => sortByPosition(keyActivities), [keyActivities]);
+    // const data = React.useMemo(() => sortByPosition(keyActivities), [keyActivities]);
+    const data = sortByPosition(keyActivities);
     const width = window.innerWidth <= 768;
-    if (mobile == null || width) {
-      return <></>;
-    }
+    // if (mobile == null || width) {
+    //   return <></>;
+    // }
 
     const renderKeyActivitiesList = () => {
       return data.map((keyActivity, index) => {
@@ -81,7 +82,7 @@ export const KeyActivitiesList = observer(
         );
       });
     };
-
+if (loading) return <></>
     return (
       <KeyActivitiesListStyleContainer>
         <Droppable droppableId={droppableId} key={droppableId}>

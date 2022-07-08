@@ -4,13 +4,6 @@ import { observer } from "mobx-react";
 import { useMst } from "../../../setup/root";
 import Select from "../../shared/select";
 import { CheckInCard } from "./components/checkin-card";
-import { StepOptionsModal } from "./components/step-options-modal";
-import { OpenEndedPreview } from "./components/open-ended-preview";
-import { StepPreviewCard } from "./components/step-preview-card";
-import { YesNoPreview } from "./components/yes-no-preview";
-import { SelectionScale } from "./components/selection-scale";
-import { NumericalStep } from "./components/numerical-step";
-import { TodoComponentSelectorModal } from "./components/todo-component-selector-modal";
 import { Loading } from "~/components/shared";
 
 export const CheckIn = observer(

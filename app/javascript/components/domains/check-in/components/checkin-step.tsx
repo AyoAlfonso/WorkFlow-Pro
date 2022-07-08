@@ -22,7 +22,6 @@ import { MobileKeyActivitiesBody } from "../../key-activities/mobile-key-activit
 import { DailyPlanning } from "../../meetings/components/daily-planning";
 import { OutstandingTodos } from "../outstanding-todos";
 import { NumericalStep } from "./numerical-step";
-import { SelectionScale } from "./selection-scale";
 import { YesNoPreview } from "./yes-no-preview";
 import { PersonalGoals } from "../../meetings/components/personal-goals";
 import { IssuesBody } from "../../issues/issues-body";
@@ -30,14 +29,25 @@ import { ConversationStarter } from "../../meetings/components/conversation-star
 import { WeeklyReview } from "./weekly-review";
 import { CheckinReflection } from "./check-in-reflection";
 import { QuestionnaireTypeConstants } from "~/constants/questionnaire-types";
+import { useMst } from "~/setup/root";
+import { AgreementScale } from "./agreement-scale";
+import { SentimentScale } from "./sentiment-scale";
 
 export interface ICheckinStepProps {
   checkin: any;
 }
 
+const formatType = {
+  Milestones: "Milestones",
+  KeyResults: "Key Results",
+};
+
 export const CheckinStep = observer(
   ({ checkin }: ICheckinStepProps): JSX.Element => {
     const [showOpenIssues, setShowOpenIssues] = useState<boolean>(true);
+    const { companyStore } = useMst();
+
+    const objectivesKeyType = companyStore.company?.objectivesKeyType
 
     const StepComponent = (step: IStep) => {
       switch (step.stepType) {
@@ -72,14 +82,14 @@ export const CheckinStep = observer(
             case "Sentiment":
               return (
                 <Container>
-                  <SelectionScale question={step.question} type="sentiment" />
+                  <SentimentScale question={step.question} />
                 </Container>
               );
 
             case "Agreement Scale":
               return (
                 <Container>
-                  <SelectionScale question={step.question} />
+                  <AgreementScale question={step.question} />
                 </Container>
               );
             case "Yes/No":
@@ -89,7 +99,7 @@ export const CheckinStep = observer(
                 </Container>
               );
             case "Initiatives":
-              switch (step.variant) {
+              switch (formatType[objectivesKeyType]) {
                 case "Key Results":
                   return (
                     <Container>

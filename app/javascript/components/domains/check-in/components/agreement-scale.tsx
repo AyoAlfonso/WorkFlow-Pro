@@ -1,19 +1,20 @@
-import * as React from "react";
+import React from "react";
 import { useState } from "react";
 import { observer } from "mobx-react";
 import styled from "styled-components";
 import { useMst } from "~/setup/root";
 import { Icon } from "~/components/shared";
+import { agreementScale } from "../data/selection-scale-data";
 import { toJS } from "mobx";
 
-interface NumericalStepProps {
+interface AgreementScaleProps {
   question: string;
   disabled?: boolean;
 }
 
-export const NumericalStep = observer(
-  ({ question, disabled }: NumericalStepProps): JSX.Element => {
-    const { checkInTemplateStore } = useMst();
+export const AgreementScale = observer(
+  ({ question, disabled }: AgreementScaleProps): JSX.Element => {
+  const { checkInTemplateStore } = useMst();
 
     const {
       currentCheckInArtifact,
@@ -23,37 +24,34 @@ export const NumericalStep = observer(
 
     const checkInArtifactLogs = currentCheckInArtifact?.checkInArtifactLogs;
 
-    const savedResponse =
-      checkInArtifactLogs &&
-      toJS(checkInArtifactLogs)[0]?.responses.find(
-        response => response.questionType === "numeric" && response.prompt === question,
-      );
+    const savedResponse = checkInArtifactLogs && toJS(checkInArtifactLogs)[0]?.responses.find(
+      response => response.questionType === "agreement_scale" && response.prompt === question,
+    );
 
+    
     const [selected, setSelected] = useState<number>(savedResponse?.response || 0);
-
-    const numericalScale = Array.from({ length: 10 }, (_, i) => i + 1);
 
     const submitCheckinResponse = num => {
       const index =
         toJS(checkInArtifactLogs).length &&
         toJS(checkInArtifactLogs)[0]?.responses.findIndex(
-          response => response.questionType === "numeric" && response.prompt === question,
+          response => response.questionType === "agreement_scale" && response.prompt === question,
         );
       if (!index) {
         const item = {
-          responses: [{ questionType: "numeric", prompt: question, response: num }],
+          responses: [{ questionType: "agreement_scale", prompt: question, response: num }],
         };
         updateCheckinArtifact(currentCheckInArtifact.id, item);
       } else if (index === -1) {
         const item = {
           responses: [
             ...checkInArtifactLogs[0].responses,
-            { questionType: "numeric", prompt: question, response: num },
+            { questionType: "agreement_scale", prompt: question, response: num },
           ],
         };
         updateCheckinArtifact(currentCheckInArtifact.id, item);
       } else {
-        const item = { questionType: "numeric", prompt: question, response: num };
+        const item = { questionType: "agreement_scale", prompt: question, response: num };
         updateCheckInArtifactResponse(index, item);
       }
     };
@@ -62,21 +60,22 @@ export const NumericalStep = observer(
       <Container disabled={disabled}>
         <QuestionText>{question}</QuestionText>
         <OptionsContainer>
-          {numericalScale.map(num => (
-            <OptionContainer key={num}>
+          {agreementScale.map(agreement => (
+            <OptionContainer key={agreement.option}>
               <StepContainer
                 onClick={() => {
-                  setSelected(num);
-                  submitCheckinResponse(num);
+                  setSelected(agreement.option);
+                  submitCheckinResponse(agreement.option);
                 }}
               >
-                <Option selected={selected == num}>
-                  {selected === num ? (
+                <Option selected={selected == agreement.option}>
+                  {selected === agreement.option ? (
                     <Icon icon={"Checkmark"} size={"14px"} iconColor={"skyBlue"} />
                   ) : (
-                    num
+                    agreement.option
                   )}
                 </Option>
+                <LabelText>{agreement.label}</LabelText>
               </StepContainer>
             </OptionContainer>
           ))}
@@ -86,16 +85,16 @@ export const NumericalStep = observer(
   },
 );
 
-type ContainerProps = {
+type ContaineProps = {
   disabled?: boolean;
 };
 
-const Container = styled.div<ContainerProps>`
+const Container = styled.div<ContaineProps>`
   background: ${props => props.theme.colors.white};
   padding: 1em;
   box-shadow: 0px 3px 6px #00000029;
   border-radius: 8px;
-  height: 140px;
+  // height: 140px;
   pointer-events: ${props => (props.disabled ? "none" : "auto")};
 `;
 
@@ -121,9 +120,6 @@ const StepContainer = styled.div`
   flex-direction: column;
   position: relative;
   top: -25px;
-  @media only screen and (max-width: 768px) {
-    top: -15px;
-  }
 `;
 
 const OptionContainer = styled.li`
@@ -137,9 +133,6 @@ const OptionContainer = styled.li`
     height: 8px;
     background-color: ${props => props.theme.colors.skyBlue};
     order: -1;
-    @media only screen and (max-width: 768px) {
-      height: 4px;
-    }
   }
 `;
 
@@ -159,12 +152,6 @@ const Option = styled.div<OptionProps>`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-
-  @media only screen and (max-width: 768px) {
-    height: 24px;
-    width: 24px;
-    padding: 1px;
-  }
 `;
 
 const LabelText = styled.span`
@@ -172,4 +159,5 @@ const LabelText = styled.span`
   font-size: 10px;
   font-weight: bold;
   margin-top: 10px;
+  white-space: nowrap;
 `;

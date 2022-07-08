@@ -320,7 +320,7 @@ export const GoalsIndex = observer(
 
         <StyledModal
           isOpen={annualInitiativeModalOpen}
-          style={{ width: "60rem", height: "800px", maxHeight: "90%", overflow: "auto" }}
+          style={{ height: "800px", maxHeight: "90%", overflow: "auto" }}
           onBackgroundClick={e => {
             setAnnualInitiativeModalOpen(false);
           }}
@@ -336,7 +336,7 @@ export const GoalsIndex = observer(
 
         <StyledModal
           isOpen={quarterlyGoalModalOpen}
-          style={{ width: "60rem", height: "800px", maxHeight: "90%", overflow: "auto" }}
+          style={{ height: "800px", maxHeight: "90%", overflow: "auto" }}
           onBackgroundClick={e => {
             setQuarterlyGoalModalOpen(false);
           }}
@@ -356,7 +356,7 @@ export const GoalsIndex = observer(
 
         <StyledModal
           isOpen={subInitiativeModalOpen}
-          style={{ width: "60rem", height: "800px", maxHeight: "90%", overflow: "auto" }}
+          style={{ height: "800px", maxHeight: "90%", overflow: "auto" }}
           onBackgroundClick={e => {
             setSubInitiativeModalOpen(false);
           }}
@@ -375,13 +375,21 @@ export const GoalsIndex = observer(
   },
 );
 
-const Container = styled.div``;
+const Container = styled.div`
+  @media (max-width: 768px) {
+    padding: 1em;
+  }
+`;
 
 const InitiativesContainer = styled.div`
   display: -webkit-box;
   margin-top: 16px;
   padding-bottom: 16px;
   overflow-x: auto;
+
+  @media (max-width: 768px) {
+    scroll-snap-type: x mandatory;
+  }
 `;
 
 const PersonalInitiativesContainer = styled.div`
@@ -390,10 +398,14 @@ const PersonalInitiativesContainer = styled.div`
 `;
 
 const StyledModal = Modal.styled`
-  width: 30rem;
+  width: 60rem;
   min-height: 100px;
   border-radius: 8px;
   background-color: ${props => props.theme.colors.white};
+
+  @media (max-width: 768px) {
+    width: 95%;
+  }
 `;
 
 const CreateAnnualInitiativeContainer = styled.div`

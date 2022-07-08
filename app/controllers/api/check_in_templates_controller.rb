@@ -7,7 +7,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   respond_to :json
   after_action :record_activities, only: [:create, :update, :show]
   before_action :set_check_in_template, only: [:show, :update, :run_now, :publish_now]
-  before_action :set_check_in_template_dedup, only: [:run_now, :publish_now]
+  # before_action :set_check_in_template_dedup, only: [:run_now, :publish_now]
 
   skip_after_action :verify_authorized, only: [:get_onboarding_company, :create_or_update_onboarding_goals, :get_onboarding_goals, :create_or_update_onboarding_key_activities, :get_onboarding_key_activities, :create_or_update_onboarding_team]
 
@@ -31,7 +31,8 @@ class Api::CheckInTemplatesController < Api::ApplicationController
           date_time_config: params[:date_time_config],
           time_zone:params[:time_zone],
           tag:params[:tag],
-          reminder: params[:reminder]
+          reminder: params[:reminder],
+          child: params[:child]
        })
 
       @step_atrributes = params[:check_in_template][:check_in_templates_steps_attributes]

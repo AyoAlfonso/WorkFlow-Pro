@@ -755,8 +755,8 @@ export class Api {
     return this.client.post(`/check_in_templates`, checkinTemplate);
   }
 
-  async runCheckin(id) {
-    return this.client.post(`/check_in_templates/run/${id}`);
+  async runCheckinOnce(id) {
+    return this.client.post(`/check_in_templates/run/${id}`, {});
   }
 
   async getCheckins() {

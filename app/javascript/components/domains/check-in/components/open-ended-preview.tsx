@@ -1,23 +1,79 @@
 import * as React from "react";
+import { observer } from "mobx-react";
 import styled from "styled-components";
+import { useMst } from "~/setup/root";
+import { toJS } from "mobx";
 
 interface OpenEndedPreviewProps {
   question: string;
   disabled?: boolean;
 }
 
-export const OpenEndedPreview = ({ question, disabled }: OpenEndedPreviewProps): JSX.Element => {
-  return (
-    <Container disabled={disabled}>
-      <QuestionText>{question}</QuestionText>
-      <TextField placeholder="Add response" />
-    </Container>
-  );
-};
+export const OpenEndedPreview = observer(
+  ({ question, disabled }: OpenEndedPreviewProps): JSX.Element => {
+    const { checkInTemplateStore } = useMst();
+
+    const {
+      currentCheckInArtifact,
+      updateCheckinArtifact,
+      updateCheckInArtifactResponse,
+    } = checkInTemplateStore;
+
+    const checkInArtifactLogs = currentCheckInArtifact?.checkInArtifactLogs;
+
+    const savedResponse =
+      checkInArtifactLogs &&
+      toJS(checkInArtifactLogs)[0]?.responses.find(
+        response => response.questionType === "open_ended" && response.prompt === question,
+      );
+
+    const [value, setValue] = React.useState<string>(savedResponse?.response || "");
+
+    const submitCheckinResponse = () => {
+      const index =
+        toJS(checkInArtifactLogs).length &&
+        toJS(checkInArtifactLogs)[0]?.responses.findIndex(
+          response => response.questionType === "open_ended" && response.prompt === question,
+        );
+      console.log(index, toJS(checkInArtifactLogs));
+      if (!index) {
+        const item = {
+          responses: [{ questionType: "open_ended", prompt: question, response: value }],
+        };
+        updateCheckinArtifact(currentCheckInArtifact.id, item);
+      } else if (index === -1) {
+        const item = {
+          responses: [
+            ...checkInArtifactLogs[0].responses,
+            { questionType: "open_ended", prompt: question, response: value },
+          ],
+        };
+        updateCheckinArtifact(currentCheckInArtifact.id, item);
+      } else {
+        const item = { questionType: "open_ended", prompt: question, response: value };
+        updateCheckInArtifactResponse(index, item);
+      }
+    };
+
+    return (
+      <Container disabled={disabled}>
+        <QuestionText>{question}</QuestionText>
+        <TextField
+          placeholder="Add response"
+          value={value}
+          onChange={e => {
+            setValue(e.target.value);
+          }}
+          onBlur={submitCheckinResponse}
+        />
+      </Container>
+    );
+  },
+);
 
 type ContainerProps = {
   disabled: boolean;
-}
+};
 
 const Container = styled.div<ContainerProps>`
   background: ${props => props.theme.colors.white};
@@ -26,7 +82,6 @@ const Container = styled.div<ContainerProps>`
   border-radius: 8px;
   height: 200px;
   position: relative;
-  z-index: 10;
   pointer-events: ${props => (props.disabled ? "none" : "auto")};
 `;
 

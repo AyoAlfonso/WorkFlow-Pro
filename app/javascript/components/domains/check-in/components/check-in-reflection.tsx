@@ -12,6 +12,7 @@ import { Loading } from "~/components/shared";
 import { MIPSelector } from "../../journal/mip-selector";
 import { EmotionSelector } from "../../journal/emotion-selector";
 import { SurveyHeader } from "../../journal/survey-bot";
+import { toJS } from "mobx";
 
 // const botAvatarPath = require("../../../../assets/images/LynchPyn-Logo-Blue_300x300.png");
 
@@ -36,6 +37,7 @@ export const CheckinReflection = (props: ICheckinReflection): JSX.Element => {
 
   useEffect(() => {
     async function setUp() {
+      setLoading(true)
       await questionnaireStore.load();
       const questionnaireVariant = questionnaireStore.getQuestionnaireByVariant(props.variant);
       await questionnaireStore.getQuestionnaireAttemptsSummaryForReflections(
@@ -133,7 +135,7 @@ export const CheckinReflection = (props: ICheckinReflection): JSX.Element => {
         return step;
       }
     }),
-  )(questionnaireVariant.steps);
+  )(questionnaireVariant?.steps);
 
   // End of Customized Steps
 

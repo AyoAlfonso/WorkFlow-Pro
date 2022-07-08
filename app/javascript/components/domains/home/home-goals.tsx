@@ -13,6 +13,7 @@ import { observer } from "mobx-react";
 import { TitleContainer } from "../goals/shared/title-container";
 import { RallyingCry } from "../goals/shared/rallying-cry";
 import { PersonalVision } from "../goals/shared/personal-vision";
+import { GoalsCoreFour } from "../goals/goals-core-four";
 
 interface IHomeGoalsProps {
   isForum?: boolean;
@@ -41,10 +42,24 @@ export const HomeGoals = observer(
 
     const [showCompanyInitiatives, setShowCompanyInitiatives] = useState<boolean>(true);
     const [showPersonalInitiatives, setShowPersonalInitiatives] = useState<boolean>(true);
+    const [showCoreFour, setShowCoreFour] = useState<boolean>(false);
 
     useEffect(() => {
       goalStore.load().then(() => setLoading(false));
     }, []);
+
+    // useEffect(() => {
+    //   if (showCoreFour) {
+    //     setShowCompanyInitiatives(false);
+    //     setShowPersonalInitiatives(false);
+    //   } else if (showCompanyInitiatives) {
+    //     setShowCoreFour(false);
+    //     setShowPersonalInitiatives(false);
+    //   } else if (showPersonalInitiatives) {
+    //     setShowCoreFour(false);
+    //     setShowCompanyInitiatives(false);
+    //   }
+    // }, [showCoreFour, showCompanyInitiatives, showPersonalInitiatives]);
 
     if (loading || R.isNil(goalStore.companyGoals) || !companyStore.company) {
       return <Loading />;
@@ -119,6 +134,9 @@ export const HomeGoals = observer(
 
     return (
       <Container>
+        <MobileCoreFourContainer>
+          <GoalsCoreFour showCoreFour={showCoreFour} setShowCoreFour={setShowCoreFour} />
+        </MobileCoreFourContainer>
         {!isForum && (
           <CompanyInitiativesContainer>
             <TitleContainer
@@ -133,11 +151,14 @@ export const HomeGoals = observer(
               setShowInitiatives={setShowCompanyInitiatives}
             />
 
-            <RallyingCry rallyingCry={companyGoals.rallyingCry} />
-
-            <InitiativesContainer>
-              {renderAnnualInitiatives(companyGoalsToShow(), "company")}
-            </InitiativesContainer>
+            {showCompanyInitiatives && (
+              <>
+                <RallyingCry rallyingCry={companyGoals.rallyingCry} />
+                <InitiativesContainer>
+                  {renderAnnualInitiatives(companyGoalsToShow(), "company")}
+                </InitiativesContainer>
+              </>
+            )}
           </CompanyInitiativesContainer>
         )}
 
@@ -152,10 +173,14 @@ export const HomeGoals = observer(
             showInitiatives={showPersonalInitiatives}
             setShowInitiatives={setShowPersonalInitiatives}
           />
-          <PersonalVision personalVision={personalGoals.personalVision} />
-          <InitiativesContainer>
-            {renderAnnualInitiatives(personalGoalsToShow(), "personal")}
-          </InitiativesContainer>
+          {showPersonalInitiatives && (
+            <>
+              <PersonalVision personalVision={personalGoals.personalVision} />
+              <InitiativesContainer>
+                {renderAnnualInitiatives(personalGoalsToShow(), "personal")}
+              </InitiativesContainer>
+            </>
+          )}
         </PersonalVisionContainer>
 
         <StyledModal
@@ -224,6 +249,10 @@ const InitiativesContainer = styled.div`
   white-space: nowrap;
   overflow-x: auto;
   padding-bottom: 15px;
+
+  @media (max-width: 768px) {
+    scroll-snap-type: x mandatory;
+  }
 `;
 
 const PersonalVisionContainer = styled.div`
@@ -239,3 +268,10 @@ const StyledModal = Modal.styled`
 `;
 
 const CompanyInitiativesContainer = styled.div``;
+
+const MobileCoreFourContainer = styled.div`
+  display: none;
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;

@@ -15,7 +15,8 @@ export const CheckInTemplateStoreModel = types
   .props({
     checkInTemplates: types.array(CheckInTemplateModel),
     currentCheckIn: types.maybeNull(CheckInTemplateModel),
-    checkIns: types.array(CheckInArtifactsModel)
+    checkIns: types.array(CheckInArtifactsModel),
+    currentCheckInArtifact: types.maybeNull(CheckInArtifactsModel),
   })
   .extend(withEnvironment())
   .actions(self => ({
@@ -75,6 +76,18 @@ export const CheckInTemplateStoreModel = types
         return false;
       }
     }),
+    runCheckinOnce: flow(function* (checkInId) {
+      const response = yield self.environment.api.runCheckinOnce(checkInId);
+      if (response.ok) {
+        return response.data.checkInArtifact?.id;
+      } else {
+        showToast(
+          "Error running check-in template, please try again",
+          ToastMessageConstants.ERROR,
+        );
+        return false;
+      }
+    }),
     updateCheckinArtifact: flow(function* (id, value) {
       const response: ApiResponse<any> = yield self.environment.api.updateCheckinArtifact(
         id,
@@ -82,6 +95,7 @@ export const CheckInTemplateStoreModel = types
       );
       if (response.ok) {
         showToast("Check-in updated successfully", ToastMessageConstants.SUCCESS);
+        self.currentCheckInArtifact = response.data.checkInArtifact;
         return true;
       } else {
         showToast(
@@ -91,15 +105,48 @@ export const CheckInTemplateStoreModel = types
         return false;
       }
     }),
+    skipCheckIn: flow(function* (checkInId) {
+      const response: ApiResponse<any> = yield self.environment.api.updateCheckinArtifact(
+        checkInId,
+        { skip: true },
+      );
+      if (response.ok) {
+        showToast("Check-in skipped successfully", ToastMessageConstants.SUCCESS);
+        const checkins = self.checkIns.filter(checkin => checkin.id !== checkInId);
+        const newCheckins = [...checkins, response.data.checkInArtifact];
+        self.checkIns = newCheckins as any;
+        return true;
+      } else {
+        showToast(
+          "Something went wrong, please try again",
+          ToastMessageConstants.ERROR,
+        );
+        return false;
+      }
+    })
   }))
   .actions(self => ({
     updateCurrentCheckIn(checkInObj) {
       self.currentCheckIn = checkInObj;
     },
     findCheckinTemplate(id) {
-      const checkin = toJS(self.checkInTemplates).find(checkin => checkin.id == id);
-      const currentCheckIn = {...checkin, currentStep: 1};
+      const checkin = toJS(self.checkIns).find(checkin => checkin.id == id);
+      const currentCheckIn = {...checkin?.checkInTemplate, currentStep: 1};
       self.currentCheckIn = currentCheckIn;
+      self.currentCheckInArtifact = checkin;
+    },
+    updateCheckInArtifactResponse(index, response) {
+      const responseArray = toJS(self.currentCheckInArtifact).checkInArtifactLogs[0]?.responses;
+      responseArray[index] = response;
+      const item = {
+        responses: responseArray,
+      }
+      self.updateCheckinArtifact(self.currentCheckInArtifact.id, item);
+    },
+    getTemplateById(id) {
+      const checkin = toJS(self.checkInTemplates).find(checkin => checkin.id == id);
+      self.currentCheckIn = checkin;
+      return checkin
     }
   }))
   .actions(self => ({

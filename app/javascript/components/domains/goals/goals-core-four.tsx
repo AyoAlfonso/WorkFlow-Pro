@@ -64,8 +64,8 @@ const CoreFourValues = observer(
     const core4Header = instanceType == "forum" ? t("forumCore.core4") : t("core.core4");
 
     return company ? (
-      <Flex>
-        <Box width={1 / 4} sx={boxStyle}>
+      <FlexContainer>
+        <BoxContainer sx={boxStyle}>
           <CoreFourHeaderText fontSize={2} color={"primary100"}>
             {core1Header}
           </CoreFourHeaderText>
@@ -75,8 +75,8 @@ const CoreFourValues = observer(
               dangerouslySetInnerHTML={{ __html: company.coreFour.core1Content }}
             ></div>
           </CoreFourBodyTextContainer>
-        </Box>
-        <Box width={1 / 4} sx={boxStyle}>
+        </BoxContainer>
+        <BoxContainer sx={boxStyle}>
           <CoreFourHeaderText fontSize={2} color={"primary100"}>
             {core2Header}
           </CoreFourHeaderText>
@@ -86,8 +86,8 @@ const CoreFourValues = observer(
               dangerouslySetInnerHTML={{ __html: company.coreFour.core2Content }}
             ></div>
           </CoreFourBodyTextContainer>
-        </Box>
-        <Box width={1 / 4} sx={boxStyle}>
+        </BoxContainer>
+        <BoxContainer sx={boxStyle}>
           <CoreFourHeaderText fontSize={2} color={"primary100"}>
             {core3Header}
           </CoreFourHeaderText>
@@ -97,8 +97,8 @@ const CoreFourValues = observer(
               dangerouslySetInnerHTML={{ __html: company.coreFour.core3Content }}
             ></div>
           </CoreFourBodyTextContainer>
-        </Box>
-        <Box width={1 / 4} sx={boxStyle}>
+        </BoxContainer>
+        <BoxContainer sx={boxStyle}>
           <CoreFourHeaderText fontSize={2} color={"primary100"}>
             {core4Header}
           </CoreFourHeaderText>
@@ -108,8 +108,8 @@ const CoreFourValues = observer(
               dangerouslySetInnerHTML={{ __html: company.coreFour.core4Content }}
             ></div>
           </CoreFourBodyTextContainer>
-        </Box>
-      </Flex>
+        </BoxContainer>
+      </FlexContainer>
     ) : (
       <Loading key="core-four" />
     );
@@ -124,11 +124,24 @@ export const CoreFourOnly = (): JSX.Element => (
 
 const boxStyle = {
   padding: 16,
-  marginRight: "10px",
   boxShadow: `1px 3px 6px ${baseTheme.colors.grayShadow}`,
   border: `0px solid ${baseTheme.colors.white}`,
   borderRadius: "10px",
 };
+
+const FlexContainer = styled(Flex)`
+  gap: 0 10px;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+const BoxContainer = styled(Box)`
+  flex: 1;
+  @media (max-width: 768px) {
+    margin-right: 0;
+  }
+`;
 
 const Container = styled.div`
   flex-direction: column;
@@ -158,6 +171,7 @@ const CoreFourTitle = styled(EnlargedHomeTitle)`
 const CoreFourHeader = styled.div`
   display: flex;
   margin-top: -32px;
+  align-items: center;
 `;
 
 const HideButtonContainer = styled.div`

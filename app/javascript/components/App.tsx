@@ -68,6 +68,7 @@ import CheckinInsightsIndex from "./domains/check-in/checkin-insights-index";
 
 import { UpdateProfileForm } from "./domains/user/update-profile-form";
 import CheckInWizard from "./domains/check-in/checkin";
+import { SetupTemplatePage } from "./domains/check-in/setup-template-page";
 const Container = styled.div`
   margin-left: 136px;
   margin-right: 40px;
@@ -113,11 +114,12 @@ export const App = observer(
         const id = profile?.id;
         if (width) {
           if (location.pathname.includes("check-in")) return;
+          if (location.pathname.includes("goals")) return;
           if (location.pathname === "/") return;
           if (id) return history.push(`/`);
         }
       };
-      redirectHome();
+      // redirectHome();
     }, [profile]);
 
     // useEffect(() => {
@@ -390,6 +392,7 @@ export const App = observer(
                     <Route exact path="/check-in/build" component={CheckInBuilderLayout} />
 
                     <Route exact path="/check-in/run/:id" component={CheckInWizard} />
+                    <Route exact path="/check-in/setup/:id" component={SetupTemplatePage} />
                   </>
                 </Switch>
               ) : (

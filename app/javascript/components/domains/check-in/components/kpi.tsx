@@ -24,10 +24,17 @@ interface KpiProps {
 
 export const KpiComponent = observer(
   ({ disabled }: KpiProps): JSX.Element => {
-    const { keyPerformanceIndicatorStore, scorecardStore, sessionStore, companyStore } = useMst();
+    const {
+      keyPerformanceIndicatorStore,
+      scorecardStore,
+      sessionStore,
+      companyStore,
+      checkInTemplateStore,
+    } = useMst();
     const { createScorecardLog } = keyPerformanceIndicatorStore;
     const { kpis } = scorecardStore;
     const { company } = companyStore;
+    const { currentCheckInArtifact, updateCheckinArtifact } = checkInTemplateStore;
     const { t } = useTranslation();
 
     const { profile } = sessionStore;
@@ -50,6 +57,13 @@ export const KpiComponent = observer(
       companyStore.load();
     }, [id]);
 
+    const submitCheckinResponse = id => {
+      const item = {
+        scorecardLogId: id,
+      };
+      updateCheckinArtifact(currentCheckInArtifact.id, item);
+    };
+
     const handleBlur = kpiId => {
       if (!value || !valueForComment) {
         const log = {
@@ -61,7 +75,9 @@ export const KpiComponent = observer(
           fiscalYear: company.yearForCreatingAnnualInitiatives,
           fiscalQuarter: Math.floor((company.currentFiscalWeek - 1) / 13) + 1,
         };
-        createScorecardLog(log);
+        createScorecardLog(log).then(({log}) => {
+          submitCheckinResponse(log.id);
+        });
         //to do add the scorecard to update frontend
       }
     };

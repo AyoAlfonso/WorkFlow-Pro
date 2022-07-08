@@ -301,6 +301,22 @@ export const HeaderBar = observer(
               <MobileMenuOption
                 showSideNav={showSideNav}
                 onClick={() => {
+                  history.push(`/goals`);
+
+                  setShowSideNav(false);
+                }}
+              >
+                <Icon
+                  icon={"New-Goals"}
+                  mr="1em"
+                  size={"24px"}
+                  iconColor={baseTheme.colors.primary100}
+                />
+                Objectives
+              </MobileMenuOption>
+              <MobileMenuOption
+                showSideNav={showSideNav}
+                onClick={() => {
                   history.push(`/weekly-check-in/${userId}/${getWeekOf()}`);
 
                   setShowSideNav(false);
@@ -381,7 +397,7 @@ const MobileNavMenu = styled.div<MobileNavMenuProps>`
   transition: 0.2s;
   left: 0;
   display: none;
-  margin-top: 10px;
+  margin-top: 5px;
 
   @media only screen and (max-width: 768px) {
     display: block;
@@ -403,7 +419,7 @@ const MobileProfileNav = styled.div<MobileProfileNavProps>`
   transition: 0.2s;
   right: 0;
   display: none;
-  margin-top: 10px;
+  margin-top: 5px;
 
   @media only screen and (max-width: 768px) {
     display: block;
@@ -482,20 +498,12 @@ const Container = styled.div`
   border-bottom: ${props => `1px solid ${props.theme.colors.borderGrey}`};
   @media only screen and (max-width: 768px) {
     height: 40px;
-    border-bottom: none;
+    border-bottom: 0px;
   }
 `;
 
 const ContentWrapper = styled.div`
   padding-top: 0.5em;
-  @media only screen and (min-width: 1600px) {
-    max-width: 1024px;
-    margin: 0 auto;
-  }
-  @media only screen and (min-width: 2048px) {
-    max-width: 50%;
-    margin: 0 auto;
-  }
 `;
 
 const Wrapper = styled.div`
@@ -514,9 +522,6 @@ const Wrapper = styled.div`
     align-items: center;
     background-color: ${props => props.theme.colors.mipBlue};
   }
-  @media only screen and (min-width: 1600px) {
-    margin-left: 0px;
-  }
 `;
 
 const ActionsContainer = styled.div`
@@ -527,9 +532,6 @@ const ActionsContainer = styled.div`
     margin-right: auto;
     max-width: 60%;
     display: flex;
-  }
-  @media only screen and (min-width: 1600px) {
-    margin-left: 0px;
   }
 `;
 
@@ -694,9 +696,6 @@ const PersonalInfoContainer = styled.div`
     padding-right: 0px;
     display: none;
     pointer-events: none;
-  }
-  @media only screen and (min-width: 1600px) {
-    padding-right: 0px;
   }
 `;
 

@@ -49,6 +49,12 @@ const VisionContainer = styled(HomeContainerBorders)`
   width: 100%;
   display: flex;
   position: relative;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    height: auto;
+  }
 `;
 
 const VisionTitle = styled.p`
@@ -64,6 +70,12 @@ const VisionTitle = styled.p`
   height: inherit;
   width: 184px;
   white-space: nowrap;
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+    width: auto;
+    font-size: 20px;
+  }
 `;
 
 const StyledContentEditable = styled(ContentEditable)`
@@ -74,6 +86,10 @@ const StyledContentEditable = styled(ContentEditable)`
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 `;
 
 const ContentEditableContainer = styled.div`
@@ -84,4 +100,10 @@ const ContentEditableContainer = styled.div`
   padding: 5px;
   padding-right: 250px;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    position: static;
+    padding-right: 0px;
+    width: 95%;
+  }
 `;

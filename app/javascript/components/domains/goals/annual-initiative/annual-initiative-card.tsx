@@ -215,6 +215,11 @@ const ColumnContainer = styled.div<ColumnContainerProps>`
       : `padding-right: 8px;
   padding-left: 8px;`}
   min-width: 240px;
+
+  @media (max-width: 768px) {
+    scroll-snap-align: start;
+    ${props => (props.onboarding ? "" : "flex: 0 1 calc(80% - 16px);")}
+  }
 `;
 
 type DescriptionContainerProps = {

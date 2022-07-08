@@ -15,10 +15,10 @@ export const PersonalGoals = ({ company, meeting, disabled }: IPersonalGoalsProp
   const isPersonalMeeting =
     meeting?.meetingType == "personal_daily" || meeting?.meetingType == "personal_weekly";
   const isForum = company?.displayFormat == "Forum";
-  const show = isPersonalMeeting && isForum
+  const show = isPersonalMeeting && isForum;
   return (
     <Container disabled={disabled}>
-      {show ? <></> : <CoreFourOnly />}
+      <DesktopCoreFourContainer>{show ? <></> : <CoreFourOnly />}</DesktopCoreFourContainer>
       <HomeGoals isForum={isForum} />
     </Container>
   );
@@ -26,8 +26,14 @@ export const PersonalGoals = ({ company, meeting, disabled }: IPersonalGoalsProp
 
 type ContainerProps = {
   disabled?: boolean;
-}
+};
 
 const Container = styled.div<ContainerProps>`
   pointer-events: ${props => (props.disabled ? "none" : "auto")};
+`;
+
+const DesktopCoreFourContainer = styled.div`
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;

@@ -5,103 +5,156 @@ import { useHistory } from "react-router-dom";
 import { Icon } from "~/components/shared";
 import { Button } from "~/components/shared/button";
 import { baseTheme } from "~/themes";
+import { observer } from "mobx-react";
+import { useMst } from "~/setup/root";
+import moment from "moment";
 
 interface CheckInTemplateCardProps {
   name: string;
   description: string;
   tags: Array<string>;
   id: number;
+  checkInTemplate: any;
 }
 
-export const CheckInTemplateCard = ({
-  name,
-  description,
-  tags,
-  id,
-}: CheckInTemplateCardProps): JSX.Element => {
-  const [showOptions, setShowOptions] = useState<boolean>(false);
+export const CheckInTemplateCard = observer(
+  ({ name, description, tags, id, checkInTemplate }: CheckInTemplateCardProps): JSX.Element => {
+    const [showOptions, setShowOptions] = useState<boolean>(false);
 
-  const optionsRef = useRef(null);
+    const {
+      checkInTemplateStore: { runCheckinOnce, createCheckinTemplate },
+      sessionStore: { profile },
+    } = useMst();
 
-  const history = useHistory();
+    const optionsRef = useRef(null);
 
-  useEffect(() => {
-    const externalEventHandler = e => {
-      if (!showOptions) return;
+    const history = useHistory();
 
-      const node = optionsRef.current;
+    useEffect(() => {
+      const externalEventHandler = e => {
+        if (!showOptions) return;
 
-      if (node && node.contains(e.target)) {
-        return;
+        const node = optionsRef.current;
+
+        if (node && node.contains(e.target)) {
+          return;
+        }
+        setShowOptions(false);
+      };
+
+      if (showOptions) {
+        document.addEventListener("click", externalEventHandler);
+      } else {
+        document.removeEventListener("click", externalEventHandler);
       }
-      setShowOptions(false);
+
+      return () => {
+        document.removeEventListener("click", externalEventHandler);
+      };
+    }, [showOptions]);
+
+    const currentUser = profile && {
+      id: profile?.id,
+      type: "user",
+      defaultAvatarColor: profile?.defaultAvatarColor,
+      avatarUrl: profile?.avatarUrl,
+      name: profile?.firstName,
+      lastName: profile?.lastName,
     };
 
-    if (showOptions) {
-      document.addEventListener("click", externalEventHandler);
-    } else {
-      document.removeEventListener("click", externalEventHandler);
-    }
+    const filteredTags = tags.filter(tag => tag);
 
-    return () => {
-      document.removeEventListener("click", externalEventHandler);
+    const handleRunNow = () => {
+      const checkin = {
+        name: checkInTemplate.name,
+        checkInTemplatesStepsAttributes: checkInTemplate.checkInTemplatesSteps,
+        participants: [currentUser],
+        anonymous: false,
+        checkInType: "dynamic",
+        ownerType: checkInTemplate.ownerType.toLowerCase(),
+        description: checkInTemplate.description,
+        timeZone: checkInTemplate.timeZone,
+        viewers: [currentUser],
+        runOnce: new Date(),
+        dateTimeConfig: {
+          cadence: "once",
+          time: moment(new Date(), ["hh:mm A"]).format("HH:mm"),
+          date: new Date(),
+          day: "",
+        },
+        reminder: {
+          unit: checkInTemplate.reminder.unit,
+          value: checkInTemplate.reminder.value,
+        },
+        tag: ["global", "custom"],
+        child: checkInTemplate.id,
+      };
+
+      createCheckinTemplate(checkin).then(id => {
+        runCheckinOnce(id).then(artifactId => {
+          if (artifactId) {
+            history.push(`/check-in/run/${artifactId}`);
+          }
+        });
+      });
     };
-  }, [showOptions]);
 
-  const filteredTags = tags.filter(tag => tag);
-
-  return (
-    <Container>
-      <HeaderContainer>
-        <Title>{name}</Title>
-        <OptionsIconContainer ref={optionsRef}>
-          <IconContainer onClick={() => setShowOptions(!showOptions)}>
-            <StyledOptionIcon icon={"Options"} size={"13px"} iconColor={"grey80"} />
-          </IconContainer>
-          {showOptions && (
-            <OptionsContainer>
-              <Option>Make a copy</Option>
-            </OptionsContainer>
-          )}
-        </OptionsIconContainer>
-      </HeaderContainer>
-      <Description>{description}</Description>
-      <BottomRow>
-        <ButtonsContainer>
-          <Button
-            variant={"primary"}
-            mr="1em"
-            width="70px"
-            fontSize="12px"
-            onClick={() => console.log("log")}
-            small
-            style={{ whiteSpace: "nowrap" }}
-          >
-            Set up
-          </Button>
-          <Button
-            variant={"primaryOutline"}
-            mr="1em"
-            width="70px"
-            fontSize="12px"
-            onClick={() => history.push(`/check-in/run/${id}`)}
-            small
-            style={{ whiteSpace: "nowrap" }}
-          >
-            Run now
-          </Button>
-        </ButtonsContainer>
-        <TagsContainer>
-          {filteredTags.map((tag, index) => (
-            <Tag color={tag == "Custom" ? baseTheme.colors.primary100 : ""} key={`${tag}-${index}`}>
-              {tag.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}
-            </Tag>
-          ))}
-        </TagsContainer>
-      </BottomRow>
-    </Container>
-  );
-};
+    return (
+      <Container>
+        <HeaderContainer>
+          <Title>{name}</Title>
+          <OptionsIconContainer ref={optionsRef}>
+            <IconContainer onClick={() => setShowOptions(!showOptions)}>
+              <StyledOptionIcon icon={"Options"} size={"13px"} iconColor={"grey80"} />
+            </IconContainer>
+            {showOptions && (
+              <OptionsContainer>
+                <Option>Make a copy</Option>
+              </OptionsContainer>
+            )}
+          </OptionsIconContainer>
+        </HeaderContainer>
+        <Description>{description}</Description>
+        <BottomRow>
+          <ButtonsContainer>
+            <Button
+              variant={"primary"}
+              mr="1em"
+              width="70px"
+              fontSize="12px"
+              onClick={() => history.push(`/check-in/setup/${id}`)}
+              small
+              style={{ whiteSpace: "nowrap" }}
+            >
+              Set up
+            </Button>
+            <Button
+              variant={"primaryOutline"}
+              mr="1em"
+              width="70px"
+              fontSize="12px"
+              onClick={handleRunNow}
+              small
+              style={{ whiteSpace: "nowrap" }}
+            >
+              Run now
+            </Button>
+          </ButtonsContainer>
+          <TagsContainer>
+            {filteredTags.map((tag, index) => (
+              <Tag
+                color={tag == "Custom" ? baseTheme.colors.primary100 : ""}
+                key={`${tag}-${index}`}
+              >
+                {tag.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}
+              </Tag>
+            ))}
+          </TagsContainer>
+        </BottomRow>
+      </Container>
+    );
+  },
+);
 
 const Container = styled.div`
   background: ${props => props.theme.colors.white};
@@ -191,7 +244,7 @@ const TagsContainer = styled.div`
 
 type TagProps = {
   color?: string;
-}
+};
 
 const Tag = styled.span<TagProps>`
   display: inline-block;
