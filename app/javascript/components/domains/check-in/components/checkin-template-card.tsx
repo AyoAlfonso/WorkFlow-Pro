@@ -87,7 +87,7 @@ export const CheckInTemplateCard = observer(
           value: checkInTemplate.reminder.value,
         },
         tag: ["global", "custom"],
-        child: checkInTemplate.id,
+        parent: checkInTemplate.id,
       };
 
       createCheckinTemplate(checkin).then(id => {
