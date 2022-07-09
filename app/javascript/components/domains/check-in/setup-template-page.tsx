@@ -185,7 +185,7 @@ export const SetupTemplatePage = observer(
           unit: reminderUnit,
           value: reminderValue,
         },
-        child: template.id,
+        parent: template.id,
         tag: ["global", "custom"],
       };
 

@@ -158,7 +158,7 @@ export const widgetArray: Array<StepCardProps> = [
   },
 ];
 
-export const getIconName = (stepType) => {
+export const getIconName = (stepType: string) => {
   switch (stepType) {
     case "Open-ended":
       return "Open-Ended";
