@@ -25,7 +25,7 @@ export const SentimentScale = observer(({ question, disabled }: SentimentScalePr
 
   const savedResponse =
     checkInArtifactLogs &&
-    toJS(checkInArtifactLogs)[0]?.responses.find(
+    toJS(checkInArtifactLogs)[0]?.responses?.find(
       response => response.questionType === "sentiment" && response.prompt === question,
     );
 
@@ -34,7 +34,7 @@ export const SentimentScale = observer(({ question, disabled }: SentimentScalePr
   const submitCheckinResponse = num => {
     const index =
       toJS(checkInArtifactLogs).length &&
-      toJS(checkInArtifactLogs)[0]?.responses.findIndex(
+      toJS(checkInArtifactLogs)[0]?.responses?.findIndex(
         response => response.questionType === "sentiment" && response.prompt === question,
       );
     if (!index) {

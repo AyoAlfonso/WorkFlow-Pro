@@ -360,8 +360,9 @@ export const KeyElement = observer(
     };
 
     const submitCheckinResponse = id => {
+      const isCheckInArtifactLogsEmpty = R.isEmpty(currentCheckInArtifact.checkInArtifactLogs);
       const item = {
-        objectiveLogId: id,
+        objectiveLogs: !isCheckInArtifactLogsEmpty ? [...currentCheckInArtifact.checkInArtifactLogs[0].objectiveLogs, id] : [id],
       };
       updateCheckinArtifact(currentCheckInArtifact.id, item);
     };
