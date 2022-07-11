@@ -31,7 +31,8 @@ class Api::CheckInTemplatesController < Api::ApplicationController
           time_zone:params[:time_zone],
           tag:params[:tag],
           reminder: params[:reminder],
-          parent: params[:parent]
+          parent: params[:parent],
+          created_by: current_user
        })
 
       @step_atrributes = params[:check_in_template][:check_in_templates_steps_attributes]
@@ -56,7 +57,10 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def update
-    if (@check_in_template.tag.include? 'custom' || @check_in_template.parent.present?)
+    if (@check_in_template.tag.include? 'custom')
+       @check_in_template.update!(check_in_template_params)
+    end
+    if (@check_in_template.parent.present?)
         @check_in_template.update!(child_check_in_template_params)
     end
     render json: { template: @check_in_template, status: :ok }
@@ -78,7 +82,6 @@ class Api::CheckInTemplatesController < Api::ApplicationController
         when "bi-weekly"
            schedule.add_recurrence_rule(IceCube::Rule.weekly(2).day(day_as_int).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
         when "every-weekday"
-          # schedule.add_recurrence_rule(IceCube::Rule.daily(5).day(:monday, :tuesday, :wednesday, :thursday, :friday).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
            schedule.add_recurrence_rule(IceCube::Rule.weekly.day(:monday, :tuesday, :wednesday, :thursday, :friday).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
         when "daily" 
            schedule.add_recurrence_rule(IceCube::Rule.daily.hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
