@@ -32,7 +32,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
           tag:params[:tag],
           reminder: params[:reminder],
           parent: params[:parent],
-          created_by: current_user
+          created_by_id: current_user.id
        })
 
       @step_atrributes = params[:check_in_template][:check_in_templates_steps_attributes]
@@ -57,13 +57,49 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def update
-    if (@check_in_template.tag.include? 'custom')
-       @check_in_template.update!(check_in_template_params)
+    if (params[:check_in_template]["participants"].present? || params[:child_check_in_template_params]["participants"].present?)
+        @check_in_template.participants.each do |person|
+                if(person["type"] == "user")
+                  destroy_notifications(person["id"])
+                end
+                if(person["type"] == "team")
+                    Team.find(viewer["id"]).team_user_enablements.pluck(:user_id).each do |user|
+                      destroy_notifications(user)
+                    end
+                end
+              if(person["type"] == "company")
+                  Company.find(person["id"]).user_company_enablements.pluck(:user_id).each do |user|
+                      destroy_notifications(user)
+                  end
+              end
+            end
+
+          @check_in_template.viewers.each do |viewer|
+            if(viewer["type"] == "user")
+              destroy_notifications(viewer["id"])
+            end
+
+            if(viewer["type"] == "team")
+              Team.find(viewer["id"]).team_user_enablements.pluck(:user_id).each do |user|
+                destroy_notifications(user)
+              end
+            end
+
+            if(viewer["type"] == "company")
+                Company.find(viewer["id"]).user_company_enablements.pluck(:user_id).each do |user|
+                  destroy_notifications(user)
+                end
+            end
+          end
     end
-    if (@check_in_template.parent.present?)
+ 
+    if ( @check_in_template.parent.present?)
         @check_in_template.update!(child_check_in_template_params)
+       return render json: { template: @check_in_template, status: :ok }
+    elsif @check_in_template.tag.include? 'custom'
+       @check_in_template.update!(check_in_template_params)
+      return render json: { template: @check_in_template, status: :ok }
     end
-    render json: { template: @check_in_template, status: :ok }
   end
 
   def publish_now
@@ -157,7 +193,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   def create_notifications(user_id,schedule ) 
     notification = Notification.find_or_initialize_by(
                 user_id: user_id,
-                notification_type: 7,
+                notification_type: Notification.notification_types["dynamic_check_in"],
             )
     notification.attributes = {
       rule: schedule.to_hash,
@@ -165,6 +201,14 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     }
     notification.save!
   end
+
+   def remove_notifications(user_id) 
+    notification = Notification.find_or_initialize_by(
+                user_id: user_id,
+                notification_type: Notification.notification_types["dynamic_check_in"],
+            )
+    notification.destroy!
+   end
 
   def run_now
     check_in_artifact = CheckInArtifact.new(check_in_template: @check_in_template, owned_by: current_user, start_time: Time.now.beginning_of_day)
@@ -274,7 +318,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def child_check_in_template_params
-    params.require(:check_in_template).permit(:participants, :anonymous, :run_once, :date_time_config, :time_zone, :reminder, viewers: [:id, :type])
+    params.require(:check_in_template).permit(:anonymous, :run_once, :date_time_config, :time_zone, :reminder, viewers: [:id, :type], participants: [:id, :type])
   end
 
   def set_check_in_template
@@ -285,12 +329,4 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   def record_activities
     record_activity(params[:note], nil, params[:id])
   end 
-
-  def objective_log_params
-    # params.require(:objective_logs)
-  end
-
-  def scorecard_log_params
-    # params.require(:scorecard_logs).permit(:user_id, :score, :note, :key_performance_indicator_id, :fiscal_quarter, :fiscal_year, :week)
-  end
 end

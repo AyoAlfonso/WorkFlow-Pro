@@ -1,10 +1,11 @@
 ActiveAdmin.register CheckInTemplate do
-  permit_params :name, :check_in_type, :description, check_in_templates_steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :_destroy]
+  permit_params :name, :check_in_type, :owner_type, :description, check_in_templates_steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :question,:check_in_template_id, :image, :link_embed, :override_key, :_destroy]
 
   index do
     selectable_column
     id_column
     column :name
+    column :tag
     column :check_in_type do |mt|
       mt.check_in_type.humanize.titleize
     end
@@ -21,6 +22,8 @@ ActiveAdmin.register CheckInTemplate do
         name: @check_in_template_params[:name],
         check_in_type: @check_in_template_params[:check_in_type],
         description: @check_in_template_params[:description],
+        tag: ["global"],
+        owner_type:  @check_in_template_params[:owner_type]                        
       })
       @step_atrributes = params[:check_in_template][:check_in_templates_steps_attributes]
       if @step_atrributes.present?
@@ -29,8 +32,8 @@ ActiveAdmin.register CheckInTemplate do
           CheckInTemplatesStep.create!({
             step_type: step[:step_type],
             order_index: step[:order_index],
-            name: step[:name],
-            instructions: step[:instructions],
+            name: step[:name]|| "step name",
+            instructions: step[:instructions]|| "step instructions...",
             duration: step[:duration],
             component_to_render: step[:component_to_render],
             check_in_template_id: @check_in_template.id,
@@ -42,11 +45,10 @@ ActiveAdmin.register CheckInTemplate do
       redirect_to admin_check_in_template_path(@check_in_template), notice: "Check In Template Created"
     end
 
-    def update 
-      #we want to store 
+  # def update
+  #   binding.pry
+  # end
 
-
-    end
   end
 
   show do
@@ -80,17 +82,26 @@ ActiveAdmin.register CheckInTemplate do
   form do |f|
     h1 object.name
     f.input :name
+    f.input :owner_type, as: :select, collection: CheckInTemplate.owner_types.map { |ci| [ci[0].humanize.titleize, ci[0]] }
     f.input :check_in_type, as: :select, collection: CheckInTemplate.check_in_types.map { |ci| [ci[0].humanize.titleize, ci[0]] }
     f.input :description, input_html: { rows: 5 }
 
     f.has_many :check_in_templates_steps, heading: "Steps", allow_destroy: true do |step|
       step.input :name
-      step.input :step_type, as: :select, collection: Step.step_types.map { |st| [st[0].humanize.titleize, st[0]] }
+      step.input :step_type, as: :select, collection: CheckInTemplatesStep.step_types.map { |st| [st[0].humanize.titleize, st[0]] } 
+      
+      if step.object.persisted? && step.object.try(:step_type) == 'questions'
+         step.input :question
+      end
       step.input :order_index
       step.input :duration, label: "Duration (in minutes)"
       step.input :instructions, input_html: { rows: 3 }
-      step.input :component_to_render, as: :select, collection: Step::STEP_COMPONENTS
-  
+      
+      if step.object.persisted? && step.object.try(:step_type) == "questions"
+       step.input :component_to_render, as: :select, collection: CheckInTemplatesStep::QUESTION_STEP_COMPONENTS
+      else
+       step.input :component_to_render, as: :select, collection: CheckInTemplatesStep::STEP_COMPONENTS
+      end
       step.input :image, as: :file, hint: (step.object.try(:image_url) ? image_tag(step.object.image_url, style: "max-height: 150px;") : "No Image Selected")
     end
     f.actions

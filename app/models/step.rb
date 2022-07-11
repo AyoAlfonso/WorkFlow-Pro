@@ -3,7 +3,7 @@ class Step < ApplicationRecord
 
   #Add check_in_template in the model of steps
 
-  enum step_type: { image: 0, component: 1, embedded_link: 2, description_text: 3 }
+  enum step_type: { image: 0, components: 1, embedded_link: 2, description_text: 3, questions: 4 }
   has_one_attached :image
 
   default_scope { order(meeting_template_id: :asc).order(order_index: :asc) }
@@ -40,4 +40,5 @@ class Step < ApplicationRecord
     "WeeklyMilestones",
     "WeeklyKeyResults",
   ]
+ 
 end

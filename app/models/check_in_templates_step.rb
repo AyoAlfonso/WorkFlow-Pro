@@ -3,7 +3,7 @@ class CheckInTemplatesStep < ApplicationRecord
 
 
   belongs_to :check_in_template
-  enum step_type: { image: 0, component: 1, embedded_link: 2, description_text: 3 }
+  enum step_type: { image: 0, component: 1, embedded_link: 2, description_text: 3, questions: 4  }
   has_one_attached :image
 
   default_scope { order(check_in_template_id: :asc).order(order_index: :asc) }
@@ -24,4 +24,13 @@ class CheckInTemplatesStep < ApplicationRecord
     "KPI",
     "KeyResults"
   ]
+
+  QUESTION_STEP_COMPONENTS = [
+    "Yes/No",
+    "Open-ended",
+    "Numeric",
+    "Agreement Scale",
+    "Sentiment"
+  ]
+
 end
