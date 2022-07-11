@@ -8,6 +8,8 @@ class CheckInTemplate < ApplicationRecord
 
   scope :sort_by_company, ->(company) { where(company_id: [nil, company.id]) }
   scope :optimized, -> { includes([:check_in_templates_steps ]) }
+  scope :not_skipped, ->  { where(skip: false) }
+  scope :is_parent, ->  { where(parent: nil) }
 
   has_many :check_in_templates_steps, dependent: :destroy
   

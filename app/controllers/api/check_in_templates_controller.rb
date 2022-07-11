@@ -7,12 +7,11 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   respond_to :json
   after_action :record_activities, only: [:create, :update, :show]
   before_action :set_check_in_template, only: [:show, :update, :run_now, :publish_now]
-  # before_action :set_check_in_template_dedup, only: [:run_now, :publish_now]
 
   skip_after_action :verify_authorized, only: [:get_onboarding_company, :create_or_update_onboarding_goals, :get_onboarding_goals, :create_or_update_onboarding_key_activities, :get_onboarding_key_activities, :create_or_update_onboarding_team]
 
   def index
-    @check_in_templates = policy_scope(CheckInTemplate)
+    @check_in_templates = policy_scope(CheckInTemplate).is_parent
     render json: @check_in_templates.as_json(only: [:id, :name, :check_in_type, :owner_type, :description, :participants, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder], include: {
                   check_in_templates_steps: {  only: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :variant, :question]}})
   end

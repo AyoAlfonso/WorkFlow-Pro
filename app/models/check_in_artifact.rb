@@ -11,7 +11,7 @@ class CheckInArtifact < ApplicationRecord
   scope :owned_by_user, ->(user) { where(owned_by_id: user) }
   scope :not_skipped, ->  { where(skip: false) }
   scope :with_parents, ->() { joins(:check_in_template).where.not(check_in_templates: { parent: nil }) }
-
+  
   belongs_to :check_in_template
   has_many :check_in_artifact_logs, dependent: :destroy
 
