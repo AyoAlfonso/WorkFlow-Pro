@@ -1,5 +1,6 @@
 class CheckInTemplate < ApplicationRecord
   acts_as_paranoid column: :deleted_at
+  include HasCreator
 
   enum check_in_type: {
     weekly_check_in: 0,

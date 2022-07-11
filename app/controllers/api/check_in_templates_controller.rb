@@ -70,7 +70,6 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   day_as_int = IceCube::RuleHelper.day_of_week_as_int(date_time_config)
   hour_as_int = IceCube::RuleHelper.hour_of_day_as_int(date_time_config)
   minute_as_int = IceCube::RuleHelper.minute_of_hour_as_int(date_time_config)
-  single_occurence_schedule = IceCube::Schedule.new(Time.new(Date.current.year, 1,1))
 
     begin
       case date_time_config["cadence"] 
@@ -89,7 +88,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
           schedule.add_recurrence_rule(IceCube::Rule.yearly.month_of_year(:march, :june, :september, :december).day(day_as_int).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
         when "once"
           run_once = @check_in_template.run_once.to_datetime  if @check_in_template.run_once.present?
-          single_occurence_schedule.add_recurrence_rule(IceCube::Rule.yearly.day_of_month(run_once.month).hour_of_day(run_once.hour).minute_of_hour(run_once.min))
+          schedule.add_recurrence_rule(IceCube::Rule.yearly.day_of_month(run_once.month).hour_of_day(run_once.hour).minute_of_hour(run_once.min))
       end
     end
     
@@ -165,8 +164,8 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def run_now
-    check_in_artifact = CheckInArtifact.new(check_in_template: @check_in_template, owned_by: current_user)
-    check_in_artifact.save!(start_time: Time.now.beginning_of_day, end_time: Time.now.end_of_day)
+    check_in_artifact = CheckInArtifact.new(check_in_template: @check_in_template, owned_by: current_user, start_time: Time.now.beginning_of_day)
+    check_in_artifact.save!
     render json: {check_in_artifact: check_in_artifact, status: :ok }
   end
 
@@ -195,8 +194,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   hour_as_int = IceCube::RuleHelper.hour_of_day_as_int(date_time_config)
   minute_as_int = IceCube::RuleHelper.minute_of_hour_as_int(date_time_config)
 
-  schedule = IceCube::Schedule.new(Time.now)
-  single_occurence_schedule = IceCube::Schedule.new(Time.new(Date.current.year, 1,1))
+  schedule = IceCube::Schedule.new(Time.parse(check_in_artifact.start_time))
 
   begin
     case date_time_config["cadence"] 
@@ -214,7 +212,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
         schedule.add_recurrence_rule(IceCube::Rule.yearly.month_of_year(:march, :june, :september, :december).day(day_as_int).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "once"
         run_once = @check_in_template.run_once || Time.parse(@check_in_template.date_time_config["date"])
-        single_occurence_schedule.add_recurrence_rule(IceCube::Rule.yearly.day_of_month(run_once.month).hour_of_day(run_once.hour).minute_of_hour(run_once.min))
+        schedule.add_recurrence_rule(IceCube::Rule.yearly.day_of_month(run_once.month).hour_of_day(run_once.hour).minute_of_hour(run_once.min))
     end
   end
 
@@ -242,11 +240,15 @@ class Api::CheckInTemplatesController < Api::ApplicationController
 
   check_in_artifact_log.save!
   if params[:skip] == true
-    check_in_artifact.update(skip: params[:skip])
-    check_in_artifact = CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: next_start )
+    check_in_artifact.update(skip: params[:skip]) 
+    if(date_time_config["cadence"] != "once")
+     check_in_artifact = CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: next_start )
+    end
   elsif params[:end_now] == true
     check_in_artifact.update(end_time: Time.now.end_of_day)
-    check_in_artifact = CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: next_start)
+    if(date_time_config["cadence"] != "once")
+     check_in_artifact = CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: next_start)
+    end
   end
 
    authorize check_in_artifact

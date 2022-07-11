@@ -20,7 +20,7 @@ class CheckInTemplatePolicy < ApplicationPolicy
   end
 
   def update?
-    @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
+    @record.created_by == @user || user_is_company_admin_of_current_company?
   end
 
   def destroy?
