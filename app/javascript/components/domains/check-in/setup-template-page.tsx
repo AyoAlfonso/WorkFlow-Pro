@@ -245,7 +245,8 @@ export const SetupTemplatePage = observer(
           unit: reminderUnit,
           value: reminderValue,
         },
-        parent: template.id,
+        parent: id ? template.id : null,
+        tag: id ? [] : ["custom"],
       };
       if (id) {
       checkInTemplateStore.createCheckinTemplate(checkin).then(id => {
