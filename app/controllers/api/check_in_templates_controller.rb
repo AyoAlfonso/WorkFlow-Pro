@@ -95,10 +95,10 @@ class Api::CheckInTemplatesController < Api::ApplicationController
  
     if ( @check_in_template.parent.present?)
         @check_in_template.update!(child_check_in_template_params)
-       return render json: { template: @check_in_template, status: :ok }
+       return render json: { check_in_template: @check_in_template, status: :ok }
     elsif @check_in_template.tag.include? 'custom'
        @check_in_template.update!(check_in_template_params)
-      return render json: { template: @check_in_template, status: :ok }
+      return render json: { check_in_template: @check_in_template, status: :ok }
     end
   end
 
