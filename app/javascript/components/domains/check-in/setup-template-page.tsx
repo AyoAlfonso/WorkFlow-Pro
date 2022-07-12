@@ -255,7 +255,13 @@ export const SetupTemplatePage = observer(
       });
       } else {
         const templateId = checkInTemplateStore.currentCheckInArtifact.checkInTemplate.id;
-        checkInTemplateStore.updateCheckinTemplate(templateId, checkin)
+        checkInTemplateStore.updateCheckinTemplate(templateId, checkin).then(id => {
+          if (id) {
+            return checkInTemplateStore.publishCheckinTemplate(id).then(() => {
+              history.push("/check-in/templates");
+            })
+          }
+        })
       }
     };
 

@@ -113,7 +113,7 @@ export const CheckInTemplateStoreModel = types
       if (response.ok) {
         showToast("Template updated successfully", ToastMessageConstants.SUCCESS);
         self.currentCheckIn = response.data.template;
-        return true;
+        return response.data.template.id;
       } else {
         showToast(
           "Something went wrong, please try again",
