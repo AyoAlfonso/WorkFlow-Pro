@@ -102,6 +102,8 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     end
   end
 
+  
+
   def publish_now
   date_time_config = @check_in_template.date_time_config
   check_in_artifacts = [];
@@ -202,7 +204,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     notification.save!
   end
 
-   def remove_notifications(user_id) 
+   def destroy_notifications(user_id) 
     notification = Notification.find_or_initialize_by(
                 user_id: user_id,
                 notification_type: Notification.notification_types["dynamic_check_in"],
