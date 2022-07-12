@@ -75,7 +75,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
             end
     end
 
-   if (params[:check_in_template]["participants"].present? || params[:child_check_in_template_params]["participants"].present?)
+   if (params[:check_in_template]["viewers"].present? || params[:child_check_in_template_params]["viewers"].present?)
           @check_in_template.viewers.each do |viewer|
             if(viewer["type"] == "user")
               destroy_notifications(viewer["id"])
