@@ -73,7 +73,9 @@ class Api::CheckInTemplatesController < Api::ApplicationController
                   end
               end
             end
+    end
 
+   if (params[:check_in_template]["participants"].present? || params[:child_check_in_template_params]["participants"].present?)
           @check_in_template.viewers.each do |viewer|
             if(viewer["type"] == "user")
               destroy_notifications(viewer["id"])
@@ -91,13 +93,13 @@ class Api::CheckInTemplatesController < Api::ApplicationController
                 end
             end
           end
-    end
+   end
  
-    if ( @check_in_template.parent.present?)
+    if (@check_in_template.parent.present?)
         @check_in_template.update!(child_check_in_template_params)
        return render json: { check_in_template: @check_in_template, status: :ok }
     elsif @check_in_template.tag.include? 'custom'
-       @check_in_template.update!(check_in_template_params)
+       @check_in_template.update!(custom_check_in_template_params.merge(created_by_id: current_user.id))
       return render json: { check_in_template: @check_in_template, status: :ok }
     end
   end
@@ -314,9 +316,9 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   private
-  def check_in_template_params
-    params.require(:check_in_template).permit(:name, :check_in_type, :owner_type, :description, :participants, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder, 
-    :check_in_templates_steps_attributes [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :variant, :question], viewers: [:id, :type])
+  def custom_check_in_template_params
+    params.require(:check_in_template).permit(:name, :check_in_type, :owner_type, :description, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder, 
+    check_in_templates_steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :variant, :question], viewers: [:id, :type],  participants: [:id, :type])
   end
 
   def child_check_in_template_params
