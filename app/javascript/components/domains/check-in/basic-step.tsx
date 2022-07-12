@@ -10,6 +10,7 @@ interface BasicStepProps {
   setCheckinType: React.Dispatch<React.SetStateAction<string>>;
   description: string;
   setDescription: React.Dispatch<React.SetStateAction<string>>;
+  disabled?: boolean;
 }
 
 export const BasicStep = ({
@@ -19,6 +20,7 @@ export const BasicStep = ({
   setCheckinType,
   description,
   setDescription,
+  disabled
 }: BasicStepProps): JSX.Element => {
   const checkinTypes = ["Team", "Personal", "Company"];
   return (
@@ -29,11 +31,12 @@ export const BasicStep = ({
           value={checkinName}
           onChange={e => setCheckinName(e.target.value)}
           placeholder="Name"
+          disabled={disabled}
         />
       </FormGroup>
       <FormGroup>
         <Label>Type</Label>
-        <Select onChange={e => setCheckinType(e.target.value)} value={checkinType}>
+        <Select onChange={e => setCheckinType(e.target.value)} value={checkinType} disabled={disabled}>
           {checkinTypes.map((type, index) => (
             <option key={`option-${index}`} value={type}>
               {type}
@@ -47,13 +50,15 @@ export const BasicStep = ({
           placeholder="Add a description"
           value={description}
           onChange={e => setDescription(e.target.value)}
+          disabled={disabled}
         />
       </FormGroup>
     </Container>
   );
 };
 
-const Container = styled.div``;
+const Container = styled.div`
+`;
 
 const FormGroup = styled.div`
   margin-bottom: 1em;

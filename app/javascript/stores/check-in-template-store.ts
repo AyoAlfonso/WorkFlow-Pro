@@ -105,6 +105,23 @@ export const CheckInTemplateStoreModel = types
         return false;
       }
     }),
+    updateCheckinTemplate: flow(function* (id, value) {
+      const response: ApiResponse<any> = yield self.environment.api.updateCheckinTemplate(
+        id,
+        value,
+      );
+      if (response.ok) {
+        showToast("Template updated successfully", ToastMessageConstants.SUCCESS);
+        self.currentCheckIn = response.data.template;
+        return true;
+      } else {
+        showToast(
+          "Something went wrong, please try again",
+          ToastMessageConstants.ERROR,
+        );
+        return false;
+      }
+    }),
     skipCheckIn: flow(function* (checkInId) {
       const response: ApiResponse<any> = yield self.environment.api.updateCheckinArtifact(
         checkInId,
@@ -134,6 +151,7 @@ export const CheckInTemplateStoreModel = types
       const currentCheckIn = {...checkin?.checkInTemplate, currentStep: 1};
       self.currentCheckIn = currentCheckIn;
       self.currentCheckInArtifact = checkin;
+      return {checkin, currentCheckIn};
     },
     updateCheckInArtifactResponse(index, response) {
       const responseArray = toJS(self.currentCheckInArtifact).checkInArtifactLogs[0]?.responses;

@@ -27,9 +27,9 @@ interface SelectedStepType {
 export interface ParticipantsProps {
   id: number;
   type: string;
-  defaultAvatarColor: string;
+  defaultAvatarColor?: string;
   avatarUrl?: string;
-  name: string | null;
+  name?: string | null;
   lastName?: string;
   executive?: number;
 }
@@ -155,7 +155,7 @@ export const CheckInBuilderLayout = observer(
           unit: reminderUnit,
           value: reminderValue,
         },
-        tag: ["global", "custom"],
+        tag: ["custom"],
       };
 
       checkInTemplateStore.createCheckinTemplate(checkin).then(id => {

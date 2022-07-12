@@ -18,7 +18,7 @@ export const OpenEndedPreview = observer(
       updateCheckinArtifact,
       updateCheckInArtifactResponse,
     } = checkInTemplateStore;
-console.log(toJS(currentCheckInArtifact))
+
     const checkInArtifactLogs = currentCheckInArtifact?.checkInArtifactLogs;
 
     const savedResponse =

@@ -47,9 +47,9 @@ export const CheckInCard = observer(
     const isParticipant = getStatus(participants);
 
     const dueDate = new Date(checkin.startTime).toDateString();
-    // const isEntryNeeded = new Date()
+    
     const isEntryNeeded = () => {
-      const dateA = moment(dueDate);
+      const dateA = moment(new Date(checkin.startTime));
       const dateB = moment(new Date());
       const diff = dateA.diff(dateB, "hours");
       return diff < 24;
@@ -61,7 +61,7 @@ export const CheckInCard = observer(
           <Title disabled={!isViewer} onClick={() => history.push(`/check-in/insights/${id}`)}>
             {name}
           </Title>
-          <IconContainer onClick={() => {}}>
+          <IconContainer onClick={() => history.push(`/check-in/edit/${checkin.id}`)}>
             <Icon icon={"Settings"} size="18px" iconColor={"greyActive"} />
           </IconContainer>
         </TitleContainer>
@@ -106,10 +106,12 @@ export const CheckInCard = observer(
                 Skip
               </Button>
             </ButtonsContainer>
-            <StreakContainer>
-              <Icon icon={"Streak"} size="24px" mr="0.5em" iconColor={"greyActive"} />
-              <StreakCount>0</StreakCount>
-            </StreakContainer>
+            {!runOnce && (
+              <StreakContainer>
+                <Icon icon={"Streak"} size="24px" mr="0.5em" iconColor={"greyActive"} />
+                <StreakCount>0</StreakCount>
+              </StreakContainer>
+            )}
           </ActionsContainer>
         )}
       </Container>

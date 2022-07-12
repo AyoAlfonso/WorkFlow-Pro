@@ -28,9 +28,9 @@ interface SelectedStepType {
 export interface ParticipantsProps {
   id: number;
   type: string;
-  defaultAvatarColor: string;
+  defaultAvatarColor?: string;
   avatarUrl?: string;
-  name: string | null;
+  name?: string;
   lastName?: string;
   executive?: number;
 }
@@ -62,7 +62,33 @@ export const SetupTemplatePage = observer(
     const isForum = companyStore.company?.displayFormat == "Forum";
 
     const history = useHistory();
-    const { id } = useParams();
+    const { id, artifactId } = useParams();
+
+    const getTimezone = {
+      0: "user",
+      1: "account",
+    };
+
+    const getCadence = cad => {
+      switch (cad) {
+        case "every-weekday":
+          return "Every Weekday";
+        case "weekly":
+          return "Weekly";
+        case "daily":
+          return "daily";
+        case "once":
+          return "Once";
+        case "monthly":
+          return "Monthly";
+        case "bi-weekly":
+          return "Bi-weekly";
+        case "quarterly":
+          return "Quarterly";
+        default:
+          return "";
+      }
+    };
 
     useEffect(() => {
       if (id) {
@@ -82,13 +108,47 @@ export const SetupTemplatePage = observer(
                 orderIndex: step.orderIndex,
                 componentToRender: step.componentToRender,
                 variant: step.variant,
-                question: step.question
+                question: step.question,
+              },
+            ]);
+          });
+        });
+      } else if (artifactId) {
+        checkInTemplateStore.getCheckIns().then(() => {
+          const { currentCheckIn: template } = checkInTemplateStore.findCheckinTemplate(artifactId);
+
+          setCurrentStep(0);
+          setCheckinName(template?.name);
+          setCheckinDescription(template.description);
+          setCheckinType(template.ownerType);
+          setParticipants(template.participants);
+          setResponseViewers("Custom");
+          setCadence(getCadence(template.dateTimeConfig.cadence));
+          setCheckinTime(moment(template.dateTimeConfig.time, ["HH:mm"]).format("hh:mm A"));
+          setCheckinDay(template.dateTimeConfig.day);
+          setSelectedDate(new Date(template.dateTimeConfig.date));
+          setTimeZone(getTimezone[template.timeZone]);
+          setSelectedResponseViewers(template.viewers);
+          setReminderUnit(template.reminder.unit);
+          setReminderValue(template.reminder.value);
+          template.checkInTemplatesSteps.forEach(step => {
+            setSelectedSteps(steps => [
+              ...steps,
+              {
+                stepType: step.stepType,
+                name: step.name,
+                iconName: getIconName(step.name),
+                instructions: step.instructions,
+                orderIndex: step.orderIndex,
+                componentToRender: step.componentToRender,
+                variant: step.variant,
+                question: step.question,
               },
             ]);
           });
         });
       }
-    }, [id]);
+    }, [id, artifactId]);
 
     const company = companyStore && {
       id: companyStore.company?.id,
@@ -169,7 +229,7 @@ export const SetupTemplatePage = observer(
         checkInTemplatesStepsAttributes: selectedSteps,
         participants: participants,
         anonymous: anonymousResponse,
-        checkInType: "dynamic",
+        checkInType: template.checkInType,
         ownerType: checkinType.toLowerCase(),
         description: checkinDescription,
         timeZone: timezone,
@@ -186,19 +246,24 @@ export const SetupTemplatePage = observer(
           value: reminderValue,
         },
         parent: template.id,
-        tag: ["global", "custom"],
       };
-
+      if (id) {
       checkInTemplateStore.createCheckinTemplate(checkin).then(id => {
         checkInTemplateStore.publishCheckinTemplate(id).then(() => {
           history.push("/check-in/templates");
         });
       });
+      } else {
+        const templateId = checkInTemplateStore.currentCheckInArtifact.checkInTemplate.id;
+        checkInTemplateStore.updateCheckinTemplate(templateId, checkin)
+      }
     };
 
     const title = () => R.path([currentStep, "name"], steps);
 
     const description = () => R.path([currentStep, "description"], steps);
+
+    const disabled = template?.checkInType !== "dynamic";
 
     const component = () => (
       <CheckinBuilderSteps
@@ -233,12 +298,17 @@ export const SetupTemplatePage = observer(
         setCheckinType={setCheckinType}
         description={checkinDescription}
         setDescription={setCheckinDescription}
+        disabled={disabled}
       />
     );
 
     const closeButtonClick = () => {
       if (confirm(`Are you sure you want to exit?`)) {
-        history.push(`/check-in/templates`);
+        if (id) {
+          history.push(`/check-in/templates`);
+        } else {
+          history.push(`/check-in`);
+        }
       }
     };
 

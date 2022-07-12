@@ -770,5 +770,9 @@ export class Api {
   async publishCheckin(id) {
     return this.client.post(`/check_in_templates/publish/${id}`, {});
   }
+
+  async updateCheckinTemplate(id, checkinTemplate) {
+    return this.client.patch(`/check_in_templates/${id}`, checkinTemplate);
+  }
   //async setJWT(jwt) {}
 }

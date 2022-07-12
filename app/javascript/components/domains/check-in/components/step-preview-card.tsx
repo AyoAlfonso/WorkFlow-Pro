@@ -16,6 +16,7 @@ interface StepPreviewCardProps {
   setSelectedSteps: React.Dispatch<React.SetStateAction<Array<SelectedStepType>>>;
   selectedSteps?: Array<SelectedStepType>;
   handleClick: () => void;
+  disabled?: boolean;
 }
 
 export const StepPreviewCard = ({
@@ -28,6 +29,7 @@ export const StepPreviewCard = ({
   selectedSteps,
   handleClick,
   index,
+  disabled,
 }: StepPreviewCardProps): JSX.Element => {
   const { companyStore } = useMst();
   const isForum = companyStore.company?.displayFormat == "Forum";
@@ -55,14 +57,19 @@ export const StepPreviewCard = ({
     } else {
       return str;
     }
-  }
-  
+  };
+
   const formattedStepName = name == "Issues" ? formatIssue(name) : name;
 
   const formattedVariant = variant == "My Issues" ? formatVariant(variant) : variant;
 
   return (
-    <Draggable draggableId={orderIndex.toString()} index={index} type="StepPreviewCard">
+    <Draggable
+      draggableId={orderIndex.toString()}
+      index={index}
+      type="StepPreviewCard"
+      isDragDisabled={disabled}
+    >
       {provided => (
         <Container
           ref={provided.innerRef}
@@ -83,6 +90,7 @@ export const StepPreviewCard = ({
               <OptionsContainer>
                 <IconContainer
                   onClick={() => {
+                    if (disabled) return;
                     setShowStepsModal(true);
                     setIsChanging(true);
                   }}
@@ -103,6 +111,7 @@ export const StepPreviewCard = ({
                 name="question"
                 onChange={handleChange}
                 value={question}
+                disabled={disabled}
               />
             )}
           </BodyContainer>
