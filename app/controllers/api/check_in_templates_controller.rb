@@ -139,7 +139,6 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   date_time_config = @check_in_template.date_time_config
   check_in_artifacts = [];
 
-  schedule = IceCube::Schedule.new(Time.now - 7.days)
   day_as_int = IceCube::RuleHelper.day_of_week_as_int(date_time_config)
   hour_as_int = IceCube::RuleHelper.hour_of_day_as_int(date_time_config)
   minute_as_int = IceCube::RuleHelper.minute_of_hour_as_int(date_time_config)
@@ -151,7 +150,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
           schedule = IceCube::Schedule.new(check_in_artifact.start_time)
           schedule.add_recurrence_rule(IceCube::Rule.weekly.day(day_as_int).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "bi-weekly"
-          schedule = IceCube::Schedule.new(check_in_artifact.start_time + 7.days)
+          # schedule = IceCube::Schedule.new(check_in_artifact.start_time + 7.days)
           schedule.add_recurrence_rule(IceCube::Rule.weekly.day(day_as_int).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "every-weekday"
            schedule = IceCube::Schedule.new(check_in_artifact.start_time - 7.days)
@@ -280,8 +279,6 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   day_as_int = IceCube::RuleHelper.day_of_week_as_int(date_time_config)
   hour_as_int = IceCube::RuleHelper.hour_of_day_as_int(date_time_config)
   minute_as_int = IceCube::RuleHelper.minute_of_hour_as_int(date_time_config)
-
- 
 
   day = Time.parse(date_time_config["date"]).day if date_time_config["date"].present?
   begin
