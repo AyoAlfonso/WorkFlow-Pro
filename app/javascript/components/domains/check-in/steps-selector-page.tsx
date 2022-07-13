@@ -24,11 +24,13 @@ export interface SelectedStepType {
 interface StepsSelectorPageProps {
   selectedSteps: Array<SelectedStepType>;
   setSelectedSteps: React.Dispatch<React.SetStateAction<Array<SelectedStepType>>>;
+  disabled?: boolean;
 }
 
 export const StepsSelectorPage = ({
   selectedSteps,
   setSelectedSteps,
+  disabled,
 }: StepsSelectorPageProps): JSX.Element => {
   const [showStepsModal, setShowStepsModal] = useState<boolean>(false);
   const [stepToPreview, setStepToPreview] = useState<SelectedStepType>({
@@ -45,10 +47,11 @@ export const StepsSelectorPage = ({
   const todoStep = widgetArray.find(step => step.name === "ToDos");
 
   useEffect(() => {
-    setStepToPreview(selectedSteps[selectedSteps.length -1])
+    setStepToPreview(selectedSteps[selectedSteps.length - 1]);
   }, [selectedSteps.length]);
 
   const deleteStep = step => {
+    if (disabled) return
     let orderIndex = 0;
     const filteredSteps = selectedSteps.filter(s => s.orderIndex !== step.orderIndex);
     const updatedSelectedSteps = filteredSteps.map(newStep => {
@@ -109,16 +112,19 @@ export const StepsSelectorPage = ({
                     }
                     handleClick={() => setStepToPreview(step)}
                     index={index}
+                    disabled={disabled}
                   />
                 ))}
                 {provided.placeholder}
               </StepCardsContainer>
             )}
           </Droppable>
-          <StyledButton small variant={"grey"} onClick={() => setShowStepsModal(true)}>
-            <CircularIcon icon={"Plus"} size={"12px"} />
-            <AddStepText> Add Step </AddStepText>
-          </StyledButton>
+          {!disabled && (
+            <StyledButton small variant={"grey"} onClick={() => setShowStepsModal(true)}>
+              <CircularIcon icon={"Plus"} size={"12px"} />
+              <AddStepText> Add Step </AddStepText>
+            </StyledButton>
+          )}
         </StepsContainer>
         <PreviewContainer>
           <SectionHeader>Preview</SectionHeader>

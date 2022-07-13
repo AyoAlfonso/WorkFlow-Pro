@@ -317,7 +317,7 @@ export const SessionStoreModel = types
           }
         }
       } catch (error) {
-        console.log(error);
+        //
       }
       self.loading = false;
     }),

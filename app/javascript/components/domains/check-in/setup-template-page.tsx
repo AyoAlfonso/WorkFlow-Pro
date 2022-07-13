@@ -6,7 +6,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { WizardLayout } from "~/components/layouts/wizard-layout";
 import * as R from "ramda";
 import { Button } from "~/components/shared/button";
-import { Icon } from "~/components/shared";
+import { Icon, Loading } from "~/components/shared";
 import { CheckinBuilderSteps } from "./checkin-builder-steps";
 import { CheckinBuilderAgenda } from "./components/check-in-builder-agenda";
 import { useMst } from "~/setup/root";
@@ -28,19 +28,19 @@ interface SelectedStepType {
 export interface ParticipantsProps {
   id: number;
   type: string;
-  defaultAvatarColor: string;
+  defaultAvatarColor?: string;
   avatarUrl?: string;
-  name: string | null;
+  name: string;
   lastName?: string;
   executive?: number;
 }
 
 export const SetupTemplatePage = observer(
   (): JSX.Element => {
-    const { companyStore, sessionStore, checkInTemplateStore } = useMst();
+    const { companyStore, sessionStore, checkInTemplateStore, userStore, teamStore } = useMst();
     const template = toJS(checkInTemplateStore.currentCheckIn);
 
-    const [currentStep, setCurrentStep] = useState(2);
+    const [currentStep, setCurrentStep] = useState(0);
     const [checkinName, setCheckinName] = useState<string>("");
     const [selectedSteps, setSelectedSteps] = useState<Array<SelectedStepType>>([]);
     const [participants, setParticipants] = useState<Array<ParticipantsProps>>([]);
@@ -58,11 +58,76 @@ export const SetupTemplatePage = observer(
     >([]);
     const [checkinType, setCheckinType] = useState<string>("");
     const [checkinDescription, setCheckinDescription] = useState<string>("");
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const isForum = companyStore.company?.displayFormat == "Forum";
 
     const history = useHistory();
-    const { id } = useParams();
+    const { id, artifactId } = useParams();
+
+    const getTimezone = {
+      0: "user",
+      1: "account",
+    };
+
+    const getCadence = cad => {
+      switch (cad) {
+        case "every-weekday":
+          return "Every Weekday";
+        case "weekly":
+          return "Weekly";
+        case "daily":
+          return "daily";
+        case "once":
+          return "Once";
+        case "monthly":
+          return "Monthly";
+        case "bi-weekly":
+          return "Bi-weekly";
+        case "quarterly":
+          return "Quarterly";
+        default:
+          return "";
+      }
+    };
+
+    const getEntityArray = entityArray => {
+      const entityArrayToReturn = [];
+      entityArray.forEach(entity => {
+        if (entity.type === "user") {
+          const user = userStore.users?.find(user => user.id === entity.id);
+          if (user) {
+            entityArrayToReturn.push({
+              id: user.id,
+              type: "user",
+              defaultAvatarColor: user.defaultAvatarColor,
+              avatarUrl: user.avatarUrl,
+              name: user.firstName,
+              lastName: user.lastName,
+            });
+          }
+        } else if (entity.type === "team") {
+          const team = teamStore.teams?.find(team => team.id === entity.id);
+          if (team) {
+            entityArrayToReturn.push({
+              id: team.id,
+              type: "team",
+              defaultAvatarColor: team.defaultAvatarColor,
+              name: team.name,
+            });
+          }
+        } else {
+          companyStore.company &&
+            entityArrayToReturn.push({
+              id: companyStore.company?.id,
+              type: "company",
+              avatarUrl: companyStore.company?.logoUrl,
+              name: companyStore.company?.name,
+            });
+        }
+      });
+      return entityArrayToReturn;
+    };
 
     useEffect(() => {
       if (id) {
@@ -71,24 +136,62 @@ export const SetupTemplatePage = observer(
           setCheckinName(template.name);
           setCheckinDescription(template.description);
           setCheckinType(template.ownerType);
-          template.checkInTemplatesSteps.forEach(step => {
-            setSelectedSteps(steps => [
-              ...steps,
-              {
-                stepType: step.stepType,
-                name: step.name,
-                iconName: getIconName(step.name),
-                instructions: step.instructions,
-                orderIndex: step.orderIndex,
-                componentToRender: step.componentToRender,
-                variant: step.variant,
-                question: step.question
-              },
-            ]);
+          const steps = template.checkInTemplatesSteps.map(step => {
+            return {
+              stepType: step.stepType,
+              name: step.name,
+              iconName: getIconName(step.name),
+              instructions: step.instructions,
+              orderIndex: step.orderIndex,
+              componentToRender: step.componentToRender,
+              variant: step.variant,
+              question: step.question,
+            };
           });
+          setSelectedSteps(steps);
+          setIsLoading(false);
+        });
+      } else if (artifactId) {
+        checkInTemplateStore.getCheckIns().then(() => {
+          const { currentCheckIn: template } = checkInTemplateStore.findCheckinTemplate(artifactId);
+
+          const participantsArray = getEntityArray(template.participants);
+          const viewersArray = getEntityArray(template.viewers);
+          const date = !template.dateTimeConfig.date
+            ? new Date()
+            : new Date(template.dateTimeConfig.date);
+          
+          setCurrentStep(0);
+          setCheckinName(template?.name);
+          setCheckinDescription(template.description);
+          setCheckinType(template.ownerType);
+          setParticipants(participantsArray);
+          setResponseViewers("Custom");
+          setCadence(getCadence(template.dateTimeConfig.cadence));
+          setCheckinTime(moment(template.dateTimeConfig.time, ["HH:mm"]).format("hh:mm A"));
+          setCheckinDay(template.dateTimeConfig.day);
+          setSelectedDate(date);
+          setTimeZone(getTimezone[template.timeZone]);
+          setSelectedResponseViewers(viewersArray);
+          setReminderUnit(template.reminder.unit);
+          setReminderValue(template.reminder.value);
+          const steps = template.checkInTemplatesSteps.map(step => {
+            return {
+              stepType: step.stepType,
+              name: step.name,
+              iconName: getIconName(step.name),
+              instructions: step.instructions,
+              orderIndex: step.orderIndex,
+              componentToRender: step.componentToRender,
+              variant: step.variant,
+              question: step.question,
+            };
+          });
+          setSelectedSteps(steps);
+          setIsLoading(false);
         });
       }
-    }, [id]);
+    }, [id, artifactId, companyStore.company]);
 
     const company = companyStore && {
       id: companyStore.company?.id,
@@ -169,7 +272,7 @@ export const SetupTemplatePage = observer(
         checkInTemplatesStepsAttributes: selectedSteps,
         participants: participants,
         anonymous: anonymousResponse,
-        checkInType: "dynamic",
+        checkInType: template.checkInType,
         ownerType: checkinType.toLowerCase(),
         description: checkinDescription,
         timeZone: timezone,
@@ -185,20 +288,32 @@ export const SetupTemplatePage = observer(
           unit: reminderUnit,
           value: reminderValue,
         },
-        parent: template.id,
-        tag: ["global", "custom"],
+        parent: id ? template.id : null,
+        tag: id ? [] : ["custom"],
       };
-
-      checkInTemplateStore.createCheckinTemplate(checkin).then(id => {
-        checkInTemplateStore.publishCheckinTemplate(id).then(() => {
-          history.push("/check-in/templates");
+      if (id) {
+        checkInTemplateStore.createCheckinTemplate(checkin).then(id => {
+          checkInTemplateStore.publishCheckinTemplate(id).then(() => {
+            history.push("/check-in");
+          });
         });
-      });
+      } else {
+        const templateId = checkInTemplateStore.currentCheckInArtifact.checkInTemplate.id;
+        checkInTemplateStore.updateCheckinTemplate(templateId, checkin).then(id => {
+          if (id) {
+            return checkInTemplateStore.publishCheckinTemplate(id).then(() => {
+              history.push("/check-in");
+            });
+          }
+        });
+      }
     };
 
     const title = () => R.path([currentStep, "name"], steps);
 
     const description = () => R.path([currentStep, "description"], steps);
+
+    const disabled = template?.checkInType !== "dynamic";
 
     const component = () => (
       <CheckinBuilderSteps
@@ -233,12 +348,13 @@ export const SetupTemplatePage = observer(
         setCheckinType={setCheckinType}
         description={checkinDescription}
         setDescription={setCheckinDescription}
+        disabled={disabled}
       />
     );
 
     const closeButtonClick = () => {
       if (confirm(`Are you sure you want to exit?`)) {
-        history.push(`/check-in/templates`);
+        history.push(`/check-in`);
       }
     };
 
@@ -285,7 +401,12 @@ export const SetupTemplatePage = observer(
       );
     };
 
-    if (!template) return <></>;
+    if (!template && isLoading)
+      return (
+        <LoadingContainer>
+          <Loading />
+        </LoadingContainer>
+      );
     return (
       <Container>
         <WizardLayout
@@ -348,4 +469,12 @@ export const StopButton = styled(Button)<IStopMeetingButton>`
   width: 100%;
   margin: 0;
   font-size: 16px;
+`;
+
+const LoadingContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 `;

@@ -110,6 +110,7 @@ const initialState = {
   checkInTemplateStore: {
     checkInTemplates: [],
     currentCheckIn: null,
+    checkIns: [],
   },
   auditLogStore: {
     auditLogs: [],

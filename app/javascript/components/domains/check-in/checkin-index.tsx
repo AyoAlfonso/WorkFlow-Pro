@@ -5,6 +5,7 @@ import { useMst } from "../../../setup/root";
 import Select from "../../shared/select";
 import { CheckInCard } from "./components/checkin-card";
 import { Loading } from "~/components/shared";
+import { toJS } from "mobx";
 
 export const CheckIn = observer(
   (): JSX.Element => {
@@ -33,9 +34,9 @@ export const CheckIn = observer(
             <OverviewTab active={activeTab === "active"} onClick={() => setActiveTab("active")}>
               Active
             </OverviewTab>
-            <OverviewTab active={activeTab === "archived"} onClick={() => setActiveTab("archived")}>
+            {/* <OverviewTab active={activeTab === "archived"} onClick={() => setActiveTab("archived")}>
               Archived
-            </OverviewTab>
+            </OverviewTab> */}
           </OverviewTabsContainer>
           <SelectContainer>
             <Select selection={selection} setSelection={e => setSelection(e)}>
@@ -47,7 +48,7 @@ export const CheckIn = observer(
         </TopContainer>
         <CheckinsContainer>
           {checkIns.map(checkIn => (
-            <CheckInCard checkin={checkIn} />
+            <CheckInCard checkin={checkIn} key={checkIn.id} />
           ))}
         </CheckinsContainer>
       </Container>

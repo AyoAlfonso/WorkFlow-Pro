@@ -23,7 +23,7 @@ export const OpenEndedPreview = observer(
 
     const savedResponse =
       checkInArtifactLogs &&
-      toJS(checkInArtifactLogs)[0]?.responses.find(
+      toJS(checkInArtifactLogs)[0]?.responses?.find(
         response => response.questionType === "open_ended" && response.prompt === question,
       );
 
@@ -32,10 +32,10 @@ export const OpenEndedPreview = observer(
     const submitCheckinResponse = () => {
       const index =
         toJS(checkInArtifactLogs).length &&
-        toJS(checkInArtifactLogs)[0]?.responses.findIndex(
+        toJS(checkInArtifactLogs)[0]?.responses?.findIndex(
           response => response.questionType === "open_ended" && response.prompt === question,
         );
-      console.log(index, toJS(checkInArtifactLogs));
+      
       if (!index) {
         const item = {
           responses: [{ questionType: "open_ended", prompt: question, response: value }],

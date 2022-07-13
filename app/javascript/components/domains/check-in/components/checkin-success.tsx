@@ -33,14 +33,6 @@ export const CheckInSuccess = observer(
         </ImageContainer>
         <HeaderText>Published!</HeaderText>
         <InfoText>Your updates have been saved.</InfoText>
-        <RestartButton
-          variant={"primary"}
-          small
-          disabled={false}
-          onClick={() => history.push(`/weekly-check-in/${id}/${getWeekOf()}`)}
-        >
-          Restart Check-in
-        </RestartButton>
       </Container>
     );
   },

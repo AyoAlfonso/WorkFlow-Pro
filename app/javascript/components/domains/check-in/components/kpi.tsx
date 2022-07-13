@@ -58,8 +58,13 @@ export const KpiComponent = observer(
     }, [id]);
 
     const submitCheckinResponse = id => {
+      const isCheckInArtifactLogsEmpty = R.isEmpty(currentCheckInArtifact.checkInArtifactLogs);
+      const isScorecardLogsEmpty = R.isEmpty(
+        currentCheckInArtifact.checkInArtifactLogs[0]?.scorecardLogs,
+      );
+      const scorecardLogIdArray = toJS(currentCheckInArtifact).checkInArtifactLogs[0]?.scorecardLogs;
       const item = {
-        scorecardLogId: id,
+        scorecardLogIds: !isCheckInArtifactLogsEmpty && !isScorecardLogsEmpty ? [...scorecardLogIdArray, id] : [id],
       };
       updateCheckinArtifact(currentCheckInArtifact.id, item);
     };

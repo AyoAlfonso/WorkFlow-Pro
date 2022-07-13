@@ -38,6 +38,7 @@ interface CheckinBuilderStepsProps {
   setCheckinType: React.Dispatch<React.SetStateAction<string>>;
   description: string;
   setDescription: React.Dispatch<React.SetStateAction<string>>;
+  disabled?: boolean;
 }
 
 export const CheckinBuilderSteps = ({
@@ -72,6 +73,7 @@ export const CheckinBuilderSteps = ({
   setCheckinType,
   description,
   setDescription,
+  disabled,
 }: CheckinBuilderStepsProps): JSX.Element => {
   const stepComponent = step => {
     switch (step.componentToRender) {
@@ -86,6 +88,7 @@ export const CheckinBuilderSteps = ({
               setCheckinType={setCheckinType}
               description={description}
               setDescription={setDescription}
+              disabled={disabled}
             />
           </>
         );
@@ -93,7 +96,11 @@ export const CheckinBuilderSteps = ({
         return (
           <>
             <CheckinName>{checkinName}</CheckinName>
-            <StepsSelectorPage setSelectedSteps={setSelectedSteps} selectedSteps={selectedSteps} />
+            <StepsSelectorPage
+              setSelectedSteps={setSelectedSteps}
+              selectedSteps={selectedSteps}
+              disabled={disabled}
+            />
           </>
         );
       case "setup":

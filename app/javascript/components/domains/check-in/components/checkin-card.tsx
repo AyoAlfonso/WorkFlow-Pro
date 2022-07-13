@@ -47,9 +47,9 @@ export const CheckInCard = observer(
     const isParticipant = getStatus(participants);
 
     const dueDate = new Date(checkin.startTime).toDateString();
-    // const isEntryNeeded = new Date()
+    
     const isEntryNeeded = () => {
-      const dateA = moment(dueDate);
+      const dateA = moment(new Date(checkin.startTime));
       const dateB = moment(new Date());
       const diff = dateA.diff(dateB, "hours");
       return diff < 24;
@@ -61,13 +61,13 @@ export const CheckInCard = observer(
           <Title disabled={!isViewer} onClick={() => history.push(`/check-in/insights/${id}`)}>
             {name}
           </Title>
-          <IconContainer onClick={() => {}}>
+          <IconContainer onClick={() => history.push(`/check-in/edit/${checkin.id}`)}>
             <Icon icon={"Settings"} size="18px" iconColor={"greyActive"} />
           </IconContainer>
         </TitleContainer>
         <InfoContainer>
           <Tag>{ownerType.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}</Tag>
-          {!runOnce && (
+          {!runOnce ? (
             <>
               <DueDate>{`Due: ${dueDate}`}</DueDate>
 
@@ -77,9 +77,11 @@ export const CheckInCard = observer(
                 <EntryBadge>{isEntryNeeded() == true && ` • Entry Needed`}</EntryBadge>
               )}
             </>
+          ) : (
+            <EntryBadge>{`• Completed`}</EntryBadge>
           )}
         </InfoContainer>
-        {isParticipant && (
+        {isParticipant && !runOnce && (
           <ActionsContainer>
             <ButtonsContainer>
               <Button

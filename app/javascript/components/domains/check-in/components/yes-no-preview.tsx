@@ -24,7 +24,7 @@ export const YesNoPreview = observer(
 
     const savedResponse =
       checkInArtifactLogs &&
-      toJS(checkInArtifactLogs)[0]?.responses.find(
+      toJS(checkInArtifactLogs)[0]?.responses?.find(
         response => response.questionType === "yes_no" && response.prompt === question,
       );
 
@@ -35,7 +35,7 @@ export const YesNoPreview = observer(
     const submitCheckinResponse = value => {
       const index =
         toJS(checkInArtifactLogs).length &&
-        toJS(checkInArtifactLogs)[0]?.responses.findIndex(
+        toJS(checkInArtifactLogs)[0]?.responses?.findIndex(
           response => response.questionType === "yes_no" && response.prompt === question,
         );
       if (!index) {

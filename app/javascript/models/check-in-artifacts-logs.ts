@@ -11,7 +11,7 @@ export const CheckInArtifactsLogsModel = types.model("CheckInArtifactsLogsModel"
   checkInArtifactId: types.number,
   responses: types.maybeNull(types.array(ResponsesModel)),
   createdById: types.number,
-  scorecardLogId: types.maybeNull(types.number),
-  objectiveLogId: types.maybeNull(types.number),
+  scorecardLogs: types.maybeNull(types.array(types.number)),
+  objectiveLogs: types.maybeNull(types.array(types.number)),
   deletedAt: types.maybeNull(types.string),
 });

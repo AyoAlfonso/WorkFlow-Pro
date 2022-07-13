@@ -25,7 +25,7 @@ export const NumericalStep = observer(
 
     const savedResponse =
       checkInArtifactLogs &&
-      toJS(checkInArtifactLogs)[0]?.responses.find(
+      toJS(checkInArtifactLogs)[0]?.responses?.find(
         response => response.questionType === "numeric" && response.prompt === question,
       );
 
@@ -36,7 +36,7 @@ export const NumericalStep = observer(
     const submitCheckinResponse = num => {
       const index =
         toJS(checkInArtifactLogs).length &&
-        toJS(checkInArtifactLogs)[0]?.responses.findIndex(
+        toJS(checkInArtifactLogs)[0]?.responses?.findIndex(
           response => response.questionType === "numeric" && response.prompt === question,
         );
       if (!index) {

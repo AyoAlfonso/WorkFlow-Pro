@@ -24,7 +24,7 @@ export const AgreementScale = observer(
 
     const checkInArtifactLogs = currentCheckInArtifact?.checkInArtifactLogs;
 
-    const savedResponse = checkInArtifactLogs && toJS(checkInArtifactLogs)[0]?.responses.find(
+    const savedResponse = checkInArtifactLogs && toJS(checkInArtifactLogs)[0]?.responses?.find(
       response => response.questionType === "agreement_scale" && response.prompt === question,
     );
 
@@ -34,7 +34,7 @@ export const AgreementScale = observer(
     const submitCheckinResponse = num => {
       const index =
         toJS(checkInArtifactLogs).length &&
-        toJS(checkInArtifactLogs)[0]?.responses.findIndex(
+        toJS(checkInArtifactLogs)[0]?.responses?.findIndex(
           response => response.questionType === "agreement_scale" && response.prompt === question,
         );
       if (!index) {

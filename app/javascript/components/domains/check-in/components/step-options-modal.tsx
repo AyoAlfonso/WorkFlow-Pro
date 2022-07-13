@@ -56,6 +56,7 @@ const StyledModal = Modal.styled`
   width: 700px;
   border-radius: 16px;
   height: 95%;
+  max-height: 75em;
   overflow: auto;
   background-color: ${props => props.theme.colors.white};
 `;

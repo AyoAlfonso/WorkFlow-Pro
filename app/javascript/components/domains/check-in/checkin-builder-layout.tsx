@@ -27,7 +27,7 @@ interface SelectedStepType {
 export interface ParticipantsProps {
   id: number;
   type: string;
-  defaultAvatarColor: string;
+  defaultAvatarColor?: string;
   avatarUrl?: string;
   name: string | null;
   lastName?: string;
@@ -155,12 +155,12 @@ export const CheckInBuilderLayout = observer(
           unit: reminderUnit,
           value: reminderValue,
         },
-        tag: ["global", "custom"],
+        tag: ["custom"],
       };
 
       checkInTemplateStore.createCheckinTemplate(checkin).then(id => {
         checkInTemplateStore.publishCheckinTemplate(id).then(() => {
-          history.push("/check-in/templates");
+          history.push("/check-in");
         });
       });
     };

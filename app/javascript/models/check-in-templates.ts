@@ -26,6 +26,7 @@ export const CheckInTemplateModel = types
     timeZone: types.maybeNull(types.number),
     reminder: types.maybeNull(ReminderModel),
     ownerType: types.maybeNull(types.string),
+    createdById: types.maybeNull(types.number),
   })
   .views(self => ({
     get currentStepDetails() {
