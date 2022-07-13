@@ -293,7 +293,7 @@ export const SetupTemplatePage = observer(
       if (id) {
         checkInTemplateStore.createCheckinTemplate(checkin).then(id => {
           checkInTemplateStore.publishCheckinTemplate(id).then(() => {
-            history.push("/check-in/templates");
+            history.push("/check-in");
           });
         });
       } else {
@@ -301,7 +301,7 @@ export const SetupTemplatePage = observer(
         checkInTemplateStore.updateCheckinTemplate(templateId, checkin).then(id => {
           if (id) {
             return checkInTemplateStore.publishCheckinTemplate(id).then(() => {
-              history.push("/check-in/templates");
+              history.push("/check-in");
             });
           }
         });

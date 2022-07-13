@@ -160,7 +160,7 @@ export const CheckInBuilderLayout = observer(
 
       checkInTemplateStore.createCheckinTemplate(checkin).then(id => {
         checkInTemplateStore.publishCheckinTemplate(id).then(() => {
-          history.push("/check-in/templates");
+          history.push("/check-in");
         });
       });
     };
@@ -207,7 +207,7 @@ export const CheckInBuilderLayout = observer(
 
     const closeButtonClick = () => {
       if (confirm(`Are you sure you want to exit?`)) {
-        history.push(`/check-in`);
+        history.push(`/check-in/templates`);
       }
     };
 

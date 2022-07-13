@@ -67,7 +67,7 @@ export const CheckInCard = observer(
         </TitleContainer>
         <InfoContainer>
           <Tag>{ownerType.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}</Tag>
-          {!runOnce && (
+          {!runOnce ? (
             <>
               <DueDate>{`Due: ${dueDate}`}</DueDate>
 
@@ -77,9 +77,11 @@ export const CheckInCard = observer(
                 <EntryBadge>{isEntryNeeded() == true && ` • Entry Needed`}</EntryBadge>
               )}
             </>
+          ) : (
+            <EntryBadge>{`• Completed`}</EntryBadge>
           )}
         </InfoContainer>
-        {isParticipant && (
+        {isParticipant && !runOnce && (
           <ActionsContainer>
             <ButtonsContainer>
               <Button
@@ -106,12 +108,10 @@ export const CheckInCard = observer(
                 Skip
               </Button>
             </ButtonsContainer>
-            {!runOnce && (
-              <StreakContainer>
-                <Icon icon={"Streak"} size="24px" mr="0.5em" iconColor={"greyActive"} />
-                <StreakCount>0</StreakCount>
-              </StreakContainer>
-            )}
+            <StreakContainer>
+              <Icon icon={"Streak"} size="24px" mr="0.5em" iconColor={"greyActive"} />
+              <StreakCount>0</StreakCount>
+            </StreakContainer>
           </ActionsContainer>
         )}
       </Container>
