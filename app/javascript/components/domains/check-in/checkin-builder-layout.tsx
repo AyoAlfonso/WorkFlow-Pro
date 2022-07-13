@@ -29,7 +29,7 @@ export interface ParticipantsProps {
   type: string;
   defaultAvatarColor?: string;
   avatarUrl?: string;
-  name?: string | null;
+  name: string | null;
   lastName?: string;
   executive?: number;
 }
@@ -207,7 +207,7 @@ export const CheckInBuilderLayout = observer(
 
     const closeButtonClick = () => {
       if (confirm(`Are you sure you want to exit?`)) {
-        history.push(`/check-in/templates`);
+        history.push(`/check-in`);
       }
     };
 

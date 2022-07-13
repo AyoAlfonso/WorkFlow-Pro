@@ -5,6 +5,7 @@ import { useMst } from "../../../setup/root";
 import Select from "../../shared/select";
 import { CheckInCard } from "./components/checkin-card";
 import { Loading } from "~/components/shared";
+import { toJS } from "mobx";
 
 export const CheckIn = observer(
   (): JSX.Element => {

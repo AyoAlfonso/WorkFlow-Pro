@@ -47,7 +47,7 @@ export const DeliverySection = ({
   const ShowOnlyTime = cadence == "Every Weekday" || cadence == "Daily";
   const showDateTime = cadence == "Once" || cadence == "Monthly" || cadence == "Quarterly";
   const showDayTime = cadence == "Weekly" || cadence == "Bi-weekly";
-  // console.log(reminderObject);
+  
   return (
     <Container>
       <FormGroup>
