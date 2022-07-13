@@ -266,7 +266,6 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def artifact
-  # binding.pry
   check_in_artifact = CheckInArtifact.find(params[:id])
   @check_in_template = CheckInTemplate.find(check_in_artifact.check_in_template_id)
   date_time_config = @check_in_template.date_time_config
@@ -276,7 +275,6 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   minute_as_int = IceCube::RuleHelper.minute_of_hour_as_int(date_time_config)
 
   schedule = IceCube::Schedule.new(check_in_artifact.start_time)
-  # schedule = IceCube::Schedule.new(Time.now)
   day = Time.parse(date_time_config["date"]).day if date_time_config["date"].present?
   begin
     case date_time_config["cadence"] 

@@ -45,10 +45,6 @@ ActiveAdmin.register CheckInTemplate do
       redirect_to admin_check_in_template_path(@check_in_template), notice: "Check In Template Created"
     end
 
-  # def update
-  #   binding.pry
-  # end
-
   end
 
   show do
