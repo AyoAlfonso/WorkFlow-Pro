@@ -138,7 +138,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   def publish_now
   date_time_config = @check_in_template.date_time_config
   check_in_artifacts = [];
-
+  start_time = Time.now
   day_as_int = IceCube::RuleHelper.day_of_week_as_int(date_time_config)
   hour_as_int = IceCube::RuleHelper.hour_of_day_as_int(date_time_config)
   minute_as_int = IceCube::RuleHelper.minute_of_hour_as_int(date_time_config)
@@ -147,22 +147,22 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     begin
       case date_time_config["cadence"] 
       when "weekly"
-          schedule = IceCube::Schedule.new(check_in_artifact.start_time)
+          schedule = IceCube::Schedule.new(start_time)
           schedule.add_recurrence_rule(IceCube::Rule.weekly.day(day_as_int).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "bi-weekly"
-          schedule = IceCube::Schedule.new(check_in_artifact.start_time)
+          schedule = IceCube::Schedule.new(start_time)
           schedule.add_recurrence_rule(IceCube::Rule.weekly.day(day_as_int).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "every-weekday"
-           schedule = IceCube::Schedule.new(check_in_artifact.start_time - 7.days)
+           schedule = IceCube::Schedule.new(start_time - 7.days)
            schedule.add_recurrence_rule(IceCube::Rule.weekly.day(:monday, :tuesday, :wednesday, :thursday, :friday).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "daily" 
-          schedule = IceCube::Schedule.new(check_in_artifact.start_time)
+          schedule = IceCube::Schedule.new(start_time)
           schedule.add_recurrence_rule(IceCube::Rule.daily.hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "monthly"
-          schedule = IceCube::Schedule.new(check_in_artifact.start_time - 7.days)
+          schedule = IceCube::Schedule.new(start_time - 7.days)
           schedule.add_recurrence_rule(IceCube::Rule.monthly.day_of_month(day).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "quarterly"
-          schedule = IceCube::Schedule.new(check_in_artifact.start_time - 7.days)
+          schedule = IceCube::Schedule.new(start_time - 7.days)
           schedule.add_recurrence_rule(IceCube::Rule.yearly.month_of_year(:march, :june, :september, :december).day_of_month(day).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
         when "once"
           run_once = @check_in_template.run_once.to_datetime  if @check_in_template.run_once.present?
