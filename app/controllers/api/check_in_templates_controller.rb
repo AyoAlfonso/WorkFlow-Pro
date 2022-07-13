@@ -135,8 +135,6 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     end
   end
 
-  
-
   def publish_now
   date_time_config = @check_in_template.date_time_config
   check_in_artifacts = [];
@@ -145,7 +143,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   day_as_int = IceCube::RuleHelper.day_of_week_as_int(date_time_config)
   hour_as_int = IceCube::RuleHelper.hour_of_day_as_int(date_time_config)
   minute_as_int = IceCube::RuleHelper.minute_of_hour_as_int(date_time_config)
-
+  day = date_time_config["day"]
     begin
       case date_time_config["cadence"] 
         when "weekly"
@@ -157,12 +155,12 @@ class Api::CheckInTemplatesController < Api::ApplicationController
         when "daily" 
            schedule.add_recurrence_rule(IceCube::Rule.daily.hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
         when "monthly"
-          schedule.add_recurrence_rule(IceCube::Rule.monthly.day(day_as_int).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
+          schedule.add_recurrence_rule(IceCube::Rule.monthly.day_of_month(day).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
         when "quarterly"
-          schedule.add_recurrence_rule(IceCube::Rule.yearly.month_of_year(:march, :june, :september, :december).day(day_as_int).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
+          schedule.add_recurrence_rule(IceCube::Rule.yearly.month_of_year(:march, :june, :september, :december).day_of_month(day).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
         when "once"
           run_once = @check_in_template.run_once.to_datetime  if @check_in_template.run_once.present?
-          schedule.add_recurrence_rule(IceCube::Rule.yearly.day_of_month(run_once.month).hour_of_day(run_once.hour).minute_of_hour(run_once.min))
+          schedule.add_recurrence_rule(IceCube::Rule.yearly.day_of_month(run_once.day).hour_of_day(run_once.hour).minute_of_hour(run_once.min))
       end
     end
     
@@ -277,7 +275,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   minute_as_int = IceCube::RuleHelper.minute_of_hour_as_int(date_time_config)
 
   schedule = IceCube::Schedule.new(check_in_artifact.start_time)
-
+  day = date_time_config["day"]
   begin
     case date_time_config["cadence"] 
       when "weekly"
@@ -289,12 +287,12 @@ class Api::CheckInTemplatesController < Api::ApplicationController
       when "daily" 
           schedule.add_recurrence_rule(IceCube::Rule.daily.hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "monthly"
-        schedule.add_recurrence_rule(IceCube::Rule.monthly.day(day_as_int).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
+        schedule.add_recurrence_rule(IceCube::Rule.monthly.day_of_month(day).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "quarterly"
-        schedule.add_recurrence_rule(IceCube::Rule.yearly.month_of_year(:march, :june, :september, :december).day(day_as_int).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
+        schedule.add_recurrence_rule(IceCube::Rule.yearly.month_of_year(:march, :june, :september, :december).day_of_month(day).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "once"
         run_once = @check_in_template.run_once || Time.parse(@check_in_template.date_time_config["date"])
-        schedule.add_recurrence_rule(IceCube::Rule.yearly.day_of_month(run_once.month).hour_of_day(run_once.hour).minute_of_hour(run_once.min))
+        schedule.add_recurrence_rule(IceCube::Rule.yearly.day_of_month(run_once.day).hour_of_day(run_once.hour).minute_of_hour(run_once.min))
     end
   end
 
