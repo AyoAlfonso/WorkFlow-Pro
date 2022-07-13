@@ -136,21 +136,20 @@ export const SetupTemplatePage = observer(
           setCheckinName(template.name);
           setCheckinDescription(template.description);
           setCheckinType(template.ownerType);
-          template.checkInTemplatesSteps.forEach(step => {
-            setSelectedSteps(steps => [
-              ...steps,
-              {
-                stepType: step.stepType,
-                name: step.name,
-                iconName: getIconName(step.name),
-                instructions: step.instructions,
-                orderIndex: step.orderIndex,
-                componentToRender: step.componentToRender,
-                variant: step.variant,
-                question: step.question,
-              },
-            ]);
+          const steps = template.checkInTemplatesSteps.map(step => {
+            return {
+              stepType: step.stepType,
+              name: step.name,
+              iconName: getIconName(step.name),
+              instructions: step.instructions,
+              orderIndex: step.orderIndex,
+              componentToRender: step.componentToRender,
+              variant: step.variant,
+              question: step.question,
+            };
           });
+          setSelectedSteps(steps);
+          setIsLoading(false);
         });
       } else if (artifactId) {
         checkInTemplateStore.getCheckIns().then(() => {
@@ -158,6 +157,10 @@ export const SetupTemplatePage = observer(
 
           const participantsArray = getEntityArray(template.participants);
           const viewersArray = getEntityArray(template.viewers);
+          const date = !template.dateTimeConfig.date
+            ? new Date()
+            : new Date(template.dateTimeConfig.date);
+          
           setCurrentStep(0);
           setCheckinName(template?.name);
           setCheckinDescription(template.description);
@@ -167,26 +170,24 @@ export const SetupTemplatePage = observer(
           setCadence(getCadence(template.dateTimeConfig.cadence));
           setCheckinTime(moment(template.dateTimeConfig.time, ["HH:mm"]).format("hh:mm A"));
           setCheckinDay(template.dateTimeConfig.day);
-          setSelectedDate(new Date(template.dateTimeConfig.date));
+          setSelectedDate(date);
           setTimeZone(getTimezone[template.timeZone]);
           setSelectedResponseViewers(viewersArray);
           setReminderUnit(template.reminder.unit);
           setReminderValue(template.reminder.value);
-          template.checkInTemplatesSteps.forEach(step => {
-            setSelectedSteps(steps => [
-              ...steps,
-              {
-                stepType: step.stepType,
-                name: step.name,
-                iconName: getIconName(step.name),
-                instructions: step.instructions,
-                orderIndex: step.orderIndex,
-                componentToRender: step.componentToRender,
-                variant: step.variant,
-                question: step.question,
-              },
-            ]);
+          const steps = template.checkInTemplatesSteps.map(step => {
+            return {
+              stepType: step.stepType,
+              name: step.name,
+              iconName: getIconName(step.name),
+              instructions: step.instructions,
+              orderIndex: step.orderIndex,
+              componentToRender: step.componentToRender,
+              variant: step.variant,
+              question: step.question,
+            };
           });
+          setSelectedSteps(steps);
           setIsLoading(false);
         });
       }
@@ -400,7 +401,7 @@ export const SetupTemplatePage = observer(
       );
     };
 
-    if (!template && !isLoading)
+    if (!template && isLoading)
       return (
         <LoadingContainer>
           <Loading />
