@@ -57,6 +57,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def update
+    @step_atrributes = params[:check_in_templates_steps_attributes]
     if (params[:check_in_template]["participants"].present? || params[:child_check_in_template_params]["participants"].present?)
         @check_in_template.participants.each do |person|
                 if(person["type"] == "user")
@@ -96,11 +97,41 @@ class Api::CheckInTemplatesController < Api::ApplicationController
    end
  
     if (@check_in_template.parent.present?)
-        @check_in_template.update!(child_check_in_template_params)
+        @check_in_template.update!(child_check_in_template_params.merge(created_by_id: current_user.id))
+          if @step_atrributes.present?
+            @step_atrributes.each do |step|
+              CheckInTemplatesStep.upsert({
+                step_type: step[:step_type],
+                order_index: step[:order_index],
+                name: step[:name],
+                instructions: step[:instructions],
+                duration: step[:duration],
+                component_to_render: step[:component_to_render],
+                check_in_template_id: @check_in_template.id,
+                variant: step[:variant],
+                question:step[:question]
+                }, unique_by: [:order_index, :check_in_template_id])
+              end
+          end
        return render json: { check_in_template: @check_in_template, status: :ok }
     elsif @check_in_template.tag.include? 'custom'
        @check_in_template.update!(custom_check_in_template_params.merge(created_by_id: current_user.id))
-      return render json: { check_in_template: @check_in_template, status: :ok }
+          if @step_atrributes.present?
+              @step_atrributes.each do |step|
+              CheckInTemplatesStep.upsert({
+                step_type: step[:step_type],
+                order_index: step[:order_index],
+                name: step[:name],
+                instructions: step[:instructions],
+                duration: step[:duration],
+                component_to_render: step[:component_to_render],
+                check_in_template_id: @check_in_template.id,
+                variant: step[:variant],
+                question:step[:question]
+                  }, unique_by: [:order_index, :check_in_template_id])
+              end
+          end
+        return render json: { check_in_template: @check_in_template, status: :ok }
     end
   end
 
@@ -317,8 +348,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
 
   private
   def custom_check_in_template_params
-    params.require(:check_in_template).permit(:name, :check_in_type, :owner_type, :description, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder, 
-    check_in_templates_steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :variant, :question], viewers: [:id, :type],  participants: [:id, :type])
+    params.require(:check_in_template).permit(:name, :check_in_type, :owner_type, :description, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder, viewers: [:id, :type], participants: [:id, :type])
   end
 
   def child_check_in_template_params

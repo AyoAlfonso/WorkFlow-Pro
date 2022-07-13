@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_11_174515) do
+ActiveRecord::Schema.define(version: 2022_07_13_123323) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -167,11 +167,12 @@ ActiveRecord::Schema.define(version: 2022_07_11_174515) do
     t.float "duration"
     t.string "component_to_render"
     t.bigint "check_in_template_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.string "variant"
     t.string "question"
     t.index ["check_in_template_id"], name: "index_check_in_templates_steps_on_check_in_template_id"
+    t.index ["order_index", "check_in_template_id"], name: "order_index_check_in_template_id_index", unique: true
   end
 
   create_table "comment_logs", force: :cascade do |t|
