@@ -29,8 +29,16 @@ export const CheckIn = observer(
     const handleSort = (e) => {
       setSelection(e);
       if (e === "dueDate") {
-        const data = checkIns.slice().sort(sortByDueDate);
-        setArtifacts(data);
+        const filteredArtifacts = checkIns
+          .filter(artifact => artifact.checkInTemplate.runOnce)
+          .slice()
+          .sort(sortByDueDate);
+        
+        const data = checkIns
+          .filter(artifact => !artifact.checkInTemplate.runOnce)
+          .slice()
+          .sort(sortByDueDate);
+        setArtifacts([...data, ...filteredArtifacts]);
       }
       if (e === "name") {
         const data = checkIns.slice().sort(sortByName);
