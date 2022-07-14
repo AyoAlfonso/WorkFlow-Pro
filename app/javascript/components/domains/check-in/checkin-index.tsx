@@ -6,27 +6,50 @@ import Select from "../../shared/select";
 import { CheckInCard } from "./components/checkin-card";
 import { Loading } from "~/components/shared";
 import { toJS } from "mobx";
+import { sortByDueDate, sortByName } from "~/utils/sorting";
 
 export const CheckIn = observer(
   (): JSX.Element => {
     const [activeTab, setActiveTab] = useState("active");
     const [selection, setSelection] = useState("");
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(true);
+    const [artifacts, setArtifacts] = useState([]);
 
-    const {checkInTemplateStore} = useMst();
+    const { checkInTemplateStore } = useMst();
 
-    const {checkIns} = checkInTemplateStore;
+    const { checkIns } = checkInTemplateStore;
 
     useEffect(() => {
-      checkInTemplateStore.getCheckIns().then(() => {
-        setLoading(false)
+      checkInTemplateStore.getCheckIns().then(checkIns => {
+        setArtifacts(checkIns);
+        setLoading(false);
       });
-    }, [])
-    
-    if (loading) {
-      return <Loading />
+    }, []);
+
+    const handleSort = (e) => {
+      setSelection(e);
+      if (e === "dueDate") {
+        const filteredArtifacts = checkIns
+          .filter(artifact => artifact.checkInTemplate.runOnce)
+          .slice()
+          .sort(sortByDueDate);
+        
+        const data = checkIns
+          .filter(artifact => !artifact.checkInTemplate.runOnce)
+          .slice()
+          .sort(sortByDueDate);
+        setArtifacts([...data, ...filteredArtifacts]);
+      }
+      if (e === "name") {
+        const data = checkIns.slice().sort(sortByName);
+        setArtifacts(data);
+      }
     }
-    
+
+    if (loading) {
+      return <Loading />;
+    }
+
     return (
       <Container>
         <TopContainer>
@@ -39,15 +62,16 @@ export const CheckIn = observer(
             </OverviewTab> */}
           </OverviewTabsContainer>
           <SelectContainer>
-            <Select selection={selection} setSelection={e => setSelection(e)}>
+            <Select selection={selection} setSelection={handleSort}>
+              <option>Sort</option>
               <option value="dueDate">Sort by due date</option>
               <option value="name">Sort by name</option>
-              <option value="type">Sort by type</option>
+              {/* <option value="type">Sort by type</option> */}
             </Select>
           </SelectContainer>
         </TopContainer>
         <CheckinsContainer>
-          {checkIns.map(checkIn => (
+          {artifacts.map(checkIn => (
             <CheckInCard checkin={checkIn} key={checkIn.id} />
           ))}
         </CheckinsContainer>

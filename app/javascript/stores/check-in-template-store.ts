@@ -44,6 +44,7 @@ export const CheckInTemplateStoreModel = types
       try {
         const response: ApiResponse<any> = yield self.environment.api.getCheckins();
         self.checkIns = response.data.checkInArtifacts;
+        return response.data.checkInArtifacts;
       } catch {
         // showToast("Something went wrong", ToastMessageConstants.ERROR);
         // caught by Api Monitor
