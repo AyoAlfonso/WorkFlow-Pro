@@ -57,23 +57,27 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def update
+    # binding.pry
     @step_atrributes = params[:check_in_templates_steps_attributes]
+  
     if (params[:check_in_template]["participants"].present? || params[:child_check_in_template_params]["participants"].present?)
-        @check_in_template.participants.each do |person|
-                if(person["type"] == "user")
-                  destroy_notifications(person["id"])
-                end
-                if(person["type"] == "team")
-                    Team.find(viewer["id"]).team_user_enablements.pluck(:user_id).each do |user|
-                      destroy_notifications(user)
-                    end
-                end
-              if(person["type"] == "company")
-                  Company.find(person["id"]).user_company_enablements.pluck(:user_id).each do |user|
-                      destroy_notifications(user)
-                  end
-              end
+      @check_in_template.participants.each do |person|
+          if(person["type"] == "user")
+            destroy_notifications(person["id"])
+          end
+
+          if(person["type"] == "team")
+            Team.find(viewer["id"]).team_user_enablements.pluck(:user_id).each do |user|
+              destroy_notifications(user)
             end
+          end
+          
+          if(person["type"] == "company")
+              Company.find(person["id"]).user_company_enablements.pluck(:user_id).each do |user|
+                  destroy_notifications(user)
+              end
+          end
+      end
     end
 
    if (params[:check_in_template]["viewers"].present? || params[:child_check_in_template_params]["viewers"].present?)
@@ -99,38 +103,47 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     if (@check_in_template.parent.present?)
         @check_in_template.update!(child_check_in_template_params.merge(created_by_id: current_user.id))
           if @step_atrributes.present?
-            @step_atrributes.each do |step|
-              CheckInTemplatesStep.upsert({
-                step_type: step[:step_type],
-                order_index: step[:order_index],
-                name: step[:name],
-                instructions: step[:instructions],
-                duration: step[:duration],
-                component_to_render: step[:component_to_render],
-                check_in_template_id: @check_in_template.id,
-                variant: step[:variant],
-                question:step[:question]
-                }, unique_by: [:order_index, :check_in_template_id])
+            @step_atrributes.each_with_index do |step, index|
+              if(@step_atrributes[index]["_destroy"])
+                CheckInTemplatesStep.find(@step_atrributes[index]["id"]).destroy
+              else
+                CheckInTemplatesStep.upsert({
+                  step_type: step[:step_type],
+                  order_index: step[:order_index],
+                  name: step[:name],
+                  instructions: step[:instructions],
+                  duration: step[:duration],
+                  component_to_render: step[:component_to_render],
+                  check_in_template_id: @check_in_template.id,
+                  variant: step[:variant],
+                  question:step[:question]
+                  }, unique_by: [:order_index, :check_in_template_id])
               end
+            end
           end
        return render json: { check_in_template: @check_in_template, status: :ok }
     elsif @check_in_template.tag.include? 'custom'
        @check_in_template.update!(custom_check_in_template_params.merge(created_by_id: current_user.id))
           if @step_atrributes.present?
-              @step_atrributes.each do |step|
-              CheckInTemplatesStep.upsert({
-                step_type: step[:step_type],
-                order_index: step[:order_index],
-                name: step[:name],
-                instructions: step[:instructions],
-                duration: step[:duration],
-                component_to_render: step[:component_to_render],
-                check_in_template_id: @check_in_template.id,
-                variant: step[:variant],
-                question:step[:question]
-                  }, unique_by: [:order_index, :check_in_template_id])
+              @step_atrributes.each_with_index do |step, index|
+              if(@step_atrributes[index]["_destroy"])
+                CheckInTemplatesStep.find(@step_atrributes[index]["id"]).destroy
+              else
+                CheckInTemplatesStep.upsert({
+                  step_type: step[:step_type],
+                  order_index: step[:order_index],
+                  name: step[:name],
+                  instructions: step[:instructions],
+                  duration: step[:duration],
+                  component_to_render: step[:component_to_render],
+                  check_in_template_id: @check_in_template.id,
+                  variant: step[:variant],
+                  question:step[:question]
+                    }, unique_by: [:order_index, :check_in_template_id])
               end
+            end
           end
+
         return render json: { check_in_template: @check_in_template, status: :ok }
     end
   end
@@ -153,7 +166,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
           schedule = IceCube::Schedule.new(start_time)
           schedule.add_recurrence_rule(IceCube::Rule.weekly.day(day_as_int).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "every-weekday"
-           schedule = IceCube::Schedule.new(start_time - 7.days)
+          #  schedule = IceCube::Schedule.new(start_time - 7.days)
            schedule.add_recurrence_rule(IceCube::Rule.weekly.day(:monday, :tuesday, :wednesday, :thursday, :friday).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "daily" 
           schedule = IceCube::Schedule.new(start_time)
@@ -358,11 +371,11 @@ class Api::CheckInTemplatesController < Api::ApplicationController
 
   private
   def custom_check_in_template_params
-    params.require(:check_in_template).permit(:name, :check_in_type, :owner_type, :description, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder, viewers: [:id, :type], participants: [:id, :type])
+    params.require(:check_in_template).permit(:name, :check_in_type, :owner_type, :description, :anonymous, :run_once, :time_zone, :tag, :reminder, date_time_config: [:cadence,:time,:date,:day], viewers: [:id, :type], participants: [:id, :type])
   end
 
   def child_check_in_template_params
-    params.require(:check_in_template).permit(:anonymous, :run_once, :date_time_config, :time_zone, :reminder, viewers: [:id, :type], participants: [:id, :type])
+    params.require(:check_in_template).permit(:anonymous, :run_once, :time_zone, :reminder, date_time_config: [:cadence,:time,:date,:day], viewers: [:id, :type], participants: [:id, :type])
   end
 
   def set_check_in_template

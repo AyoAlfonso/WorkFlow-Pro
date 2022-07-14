@@ -7,18 +7,23 @@ class CheckInTemplate < ApplicationRecord
     dynamic: 1,
   }
 
+  validates :check_in_type, presence: true
   scope :sort_by_company, ->(company) { where(company_id: [nil, company.id]) }
+  scope :sort_by_global_only, ->  { where(tag: ['global']) }
+  scope :sort_by_custom_only, ->  { where(tag: ['custom']) }
   scope :optimized, -> { includes([:check_in_templates_steps ]) }
   scope :not_skipped, ->  { where(skip: false) }
   scope :is_parent, ->  { where(parent: nil) }
 
   has_many :check_in_templates_steps, dependent: :destroy
-  
+  accepts_nested_attributes_for :check_in_templates_steps, allow_destroy: true
+
   enum owner_type: {
     company: 0,
     team:1,
     personal:2
   }
+
 
 
   def as_json(options = [])
