@@ -26,16 +26,8 @@ class CheckInTemplate < ApplicationRecord
        include: {check_in_templates_steps: { methods: ["step_type", "order_index", "name", "instructions", "duration","component_to_render","check_in_template_id", "variant", "question" ] }
         }})
   end
-
-  # enum time_zone: {
-  #   user: 0,
-  #   company: 1,
-  # }
-
-  # Validation
-  # check for reminder should only accept one key at a time
-  # check for date_time_config
-
+ 
+  #run the notifications migrations the right people for global, you have done it for custom and children templates
 
   accepts_nested_attributes_for :check_in_templates_steps, allow_destroy: true
 
