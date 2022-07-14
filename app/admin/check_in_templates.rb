@@ -86,18 +86,19 @@ ActiveAdmin.register CheckInTemplate do
       step.input :name
       step.input :step_type, as: :select, collection: CheckInTemplatesStep.step_types.map { |st| [st[0].humanize.titleize, st[0]] } 
       
-      if step.object.persisted? && step.object.try(:step_type) == 'questions'
-         step.input :question
-      end
+      # if step.object.persisted? && step.object.try(:step_type) == 'questions'
+      step.input :question, label: "Question Prompt"
+      # end
       step.input :order_index
       step.input :duration, label: "Duration (in minutes)"
       step.input :instructions, input_html: { rows: 3 }
       
-      if step.object.persisted? && step.object.try(:step_type) == "questions"
-       step.input :component_to_render, as: :select, collection: CheckInTemplatesStep::QUESTION_STEP_COMPONENTS
-      else
-       step.input :component_to_render, as: :select, collection: CheckInTemplatesStep::STEP_COMPONENTS
-      end
+      # if step.object.persisted? && step.object.try(:step_type) == "questions"
+      #  step.input :component_to_render, as: :select, collection: CheckInTemplatesStep::QUESTION_STEP_COMPONENTS
+      # else
+      #  step.input :component_to_render, as: :select, collection: CheckInTemplatesStep::STEP_COMPONENTS
+      # end
+      step.input :component_to_render, as: :select, collection: [*CheckInTemplatesStep::STEP_COMPONENTS, *CheckInTemplatesStep::QUESTION_STEP_COMPONENTS]
       step.input :image, as: :file, hint: (step.object.try(:image_url) ? image_tag(step.object.image_url, style: "max-height: 150px;") : "No Image Selected")
     end
     f.actions
