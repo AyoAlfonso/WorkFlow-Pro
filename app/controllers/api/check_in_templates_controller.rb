@@ -166,7 +166,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
           schedule = IceCube::Schedule.new(start_time)
           schedule.add_recurrence_rule(IceCube::Rule.weekly.day(day_as_int).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "every-weekday"
-          #  schedule = IceCube::Schedule.new(start_time - 7.days)
+           schedule = IceCube::Schedule.new(start_time)
            schedule.add_recurrence_rule(IceCube::Rule.weekly.day(:monday, :tuesday, :wednesday, :thursday, :friday).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "daily" 
           schedule = IceCube::Schedule.new(start_time)
