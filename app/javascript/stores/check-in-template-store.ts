@@ -9,6 +9,7 @@ import * as R from "ramda";
 import { StepModel } from "~/models/step";
 import { toJS } from "mobx";
 import { CheckInArtifactsModel } from "~/models/check-in-artifacts";
+import { sortByDueDate, sortByName } from "~/utils/sorting";
 
 export const CheckInTemplateStoreModel = types
   .model("CheckInTemplateStoreModel")
@@ -166,6 +167,26 @@ export const CheckInTemplateStoreModel = types
       const checkin = toJS(self.checkInTemplates).find(checkin => checkin.id == id);
       self.currentCheckIn = checkin;
       return checkin
+    },
+    sortArtifacts(sortBy) {
+      const checkIns = self.checkIns;
+      let sortedCheckins;
+      if (sortBy === "dueDate") {
+        const filteredArtifacts = checkIns
+          .filter(artifact => artifact.checkInTemplate.runOnce)
+          .slice()
+          .sort(sortByDueDate);
+
+        const data = checkIns
+          .filter(artifact => !artifact.checkInTemplate.runOnce)
+          .slice()
+          .sort(sortByDueDate);
+
+        sortedCheckins = [...data, ...filteredArtifacts];
+      } else if (sortBy === "name") {
+        sortedCheckins = checkIns.slice().sort(sortByName)
+      }
+      self.checkIns = sortedCheckins;
     }
   }))
   .actions(self => ({
