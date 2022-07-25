@@ -17,6 +17,9 @@ class ScorecardLogPolicy < ApplicationPolicy
       true 
   end
 
+  def show_scorecard_from_log?
+    @record.user_id == @user.id || user_can_observe_current_company?
+  end
   class Scope
     attr_reader :user, :company, :scope
 

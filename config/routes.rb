@@ -145,6 +145,7 @@ Rails.application.routes.draw do
 
     #scorecards
     get "/scorecard/:owner_type/:owner_id", to: "scorecard_logs#show"
+    get "scorecard_logs/:id", to: "scorecard_logs#show_scorecard_from_log"
     resources :scorecard_logs, only: [:create, :destroy]
 
     #objective_logs

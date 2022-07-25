@@ -3,7 +3,7 @@ class Api::ScorecardLogsController < Api::ApplicationController
   include UserActivityLogHelper
   after_action :record_activities, only: [:create, :destroy]
   respond_to :json
-  before_action :set_scorecard_log, only: [:destroy]
+  before_action :set_scorecard_log, only: [:show_scorecard_from_log, :destroy]
 
   def create
   year_number = params[:year_number] || current_company.current_fiscal_start_date.year
@@ -114,6 +114,10 @@ class Api::ScorecardLogsController < Api::ApplicationController
       kpi.as_json()
     end
     render json: @kpis
+  end
+
+  def show_scorecard_from_log
+    render "api/scorecard_logs/show"
   end
 
   def destroy
