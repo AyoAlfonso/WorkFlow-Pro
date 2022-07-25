@@ -57,7 +57,6 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def update
-    # binding.pry
     @step_atrributes = params[:check_in_templates_steps_attributes]
   
     if (params[:check_in_template]["participants"].present? || params[:child_check_in_template_params]["participants"].present?)
@@ -271,17 +270,8 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   def general_check_in
     check_in_artifacts = CheckInArtifact.owned_by_user(current_user).not_skipped.incomplete.with_parents
     @check_in_artifacts_for_day = check_in_artifacts
-    # .for_day_of_date(params[:on_day])
-    # @check_in_artifacts_for_week = check_in_artifacts
-    # .for_week_of_date(params[:on_week])
-    # @check_in_artifacts_for_month =  check_in_artifacts
-    # .for_month_of_date(params[:on_month])
-
-    # 1. If we are comfortable with a lot of logs data we can to save per step
-    # 2. If we are NOT comfortable with a lot of logs we need to save at the end of process
     authorize @check_in_artifacts_for_day
     render json: {check_in_artifacts: @check_in_artifacts_for_day, status: :ok }
-    # render "api/check_in_artifacts/general_check_in_artifacts"
   end
 
   def artifact

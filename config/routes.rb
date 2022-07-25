@@ -203,7 +203,7 @@ Rails.application.routes.draw do
     get '/milestones/check_in/:due_date', to: "milestones#check_in_goals"
 
     #key_element
-    resources :key_elements, only: [:update]
+    resources :key_elements, only: [:show, :update]
     get '/key_elements/check_in', to: "key_elements#check_in_key_elements"
 
     #user_pulses
