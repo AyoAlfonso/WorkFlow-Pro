@@ -188,7 +188,7 @@ export const WizardLayout = ({
 const Container = styled.div`
   display: flex;
   height: 100vh;
-  overflow: hidden;
+  overflow: auto;
   position: relative;
 `;
 
@@ -236,6 +236,8 @@ const DescriptionContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: inherit;
+  position: fixed;
+  z-index: 10;
   @media only screen and (max-width: 768px) {
     display: none;
   }
@@ -269,6 +271,11 @@ const BodyContainer = styled.div<BodyContainerProps>`
   flex-direction: column;
   // overflow-x: auto;
   overflow: ${props => props.overflow && props.overflow};
+  padding-left: 350px;
+
+  @media only screen and (min-width: 1400px) {
+    padding-left: 390px;
+  }
   @media only screen and (max-width: 768px) {
     width: 100%;
     padding: 0;
@@ -289,7 +296,7 @@ type BodyContentContainerProps = {
 
 const BodyContentContainer = styled.div<BodyContentContainerProps>`
   height: 100%;
-  overflow-y: auto;
+  // overflow-y: auto;
   display: ${props => (props.hasStepsForMobile ? "block" : "flex")};
 `;
 

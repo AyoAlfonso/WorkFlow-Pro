@@ -26,6 +26,8 @@ import { Can } from "~/components/shared/auth/can";
 import { Button, IconContainer, Icon } from "~/components/shared";
 import { CreateNewTeamModal } from "./teams/create-new-team-modal";
 import { EditTeamModal } from "./teams/edit-team-modal";
+import { sortUsersListByName } from "~/utils/sorting";
+import { ParticipantsAvatars } from "~/components/shared/participants-avatars";
 
 export const Teams = observer(
   (): JSX.Element => {
@@ -44,6 +46,8 @@ export const Teams = observer(
       teamStore.load();
     }, []);
 
+    const userList = users.slice().sort(sortUsersListByName)
+
     const { t } = useTranslation();
     const teamsData = R.flatten(
       [].concat(
@@ -61,57 +65,9 @@ export const Teams = observer(
               {team.name}
             </TextNoMargin>
           </LeftAlignedTableContainer>,
-          <LeftAlignedColumnListTableContainer>
-            {users
-              .slice()
-              .sort((a, b) => {
-                if (!a.firstName || !b.firstName) {
-                  return 0;
-                } else {
-                  return a.firstName.localeCompare(b.firstName);
-                }
-              })
-              .filter(user => team.isAMember(user))
-              .map(
-                user =>
-                  user && (
-                    <UserCardContainer key={user.id}>
-                      <UserCard {...user} />
-                    </UserCardContainer>
-                  ),
-              )}
-          </LeftAlignedColumnListTableContainer>,
-
-          <LeftAlignedColumnListTableContainer>
-            {users
-              .slice()
-              .sort((a, b) => {
-                if (!a.firstName || !b.firstName) {
-                  return 0;
-                } else {
-                  return a.firstName.localeCompare(b.firstName);
-                }
-              })
-              .filter(user => team.isAMember(user))
-              .map(
-                user =>
-                  user && (
-                    <CheckboxContainer key={user.id}>
-                      <Label>
-                        <Checkbox
-                          id={`${user.id}`}
-                          defaultChecked={team.isALead(user)}
-                          onChange={e => {
-                            userStore.updateUserTeamLeadRole(user.id, team.id, e.target.checked, {
-                              note: `Updated User Team lead role via the company team module on settings page `,
-                            });
-                          }}
-                        />
-                      </Label>
-                    </CheckboxContainer>
-                  ),
-              )}
-          </LeftAlignedColumnListTableContainer>,
+          <LeftAlignedTableContainer>
+            <ParticipantsAvatars entityList={userList.filter(user => team.isAMember(user))} />
+          </LeftAlignedTableContainer>,
           <LeftAlignedColumnListTableContainer>
             <Can
               action={"create-team"}
@@ -180,10 +136,10 @@ export const Teams = observer(
         </HeaderContainer>
         <BodyContainer>
           <Table
-            columns={4}
-            headers={["Team", "Team Members", "Meeting Lead", ""]}
+            columns={3}
+            headers={["Team", "Team Members", ""]}
             data={teamsData}
-            styling={{ widths: [2, 3, 1, 1] }}
+            styling={{ widths: [3, 3, 1] }}
           ></Table>
         </BodyContainer>
       </StretchContainer>

@@ -11,118 +11,142 @@ import { getScorePercent } from "./scorecard-table-view";
 import { toJS } from "mobx";
 import { useTranslation } from "react-i18next";
 import { findNextMonday, resetYearOfDateToCurrent } from "~/utils/date-time";
+import { useMst } from "~/setup/root";
 
-const WeekSummary = ({ kpis, currentWeek, currentFiscalYear }): JSX.Element => {
-  const [data, setData] = useState<Object>(null);
-  const [onTrack, setOnTrack] = useState(0);
-  const {
-    cavier,
-    fadedCavier,
-    fadedGreen,
-    fadedYellow,
-    fadedRed,
-    backgroundGrey,
-    successGreen,
-    cautionYellow,
-    poppySunrise,
-    warningRed,
-    greyActive,
-    grey100,
-  } = baseTheme.colors;
+const WeekSummary = observer(
+  ({ kpis, currentWeek, currentFiscalYear, setWeekToShow }): JSX.Element => {
+    const [data, setData] = useState<Object>(null);
 
-  const chartOptions = {
-    legend: {
-      display: false,
-    },
-    radius: 100,
-    cutoutPercentage: 60,
-  };
+    const { companyStore } = useMst();
 
-  useEffect(() => {
-    const dataPoints = kpis.reduce(
-      (acc: number[], kpi: any) => {
-        const week = kpi?.period[currentFiscalYear]?.[currentWeek];
-        if (!week) {
-          acc[0]++;
-        } else {
-          const percentScore =
-            kpi.targetValue == 0 && week.score == 0
-              ? 100
-              : kpi.targetValue == 0 && week.score != 0
-              ? -week.score
-              : getScorePercent(week.score, kpi.targetValue, kpi.greaterThan);
-          if (percentScore >= 100) {
-            acc[3]++;
-          } else if (percentScore >= kpi.needsAttentionThreshold) {
-            acc[2]++;
-          } else {
-            acc[1]++;
-          }
-        }
-        return acc;
+    const [onTrack, setOnTrack] = useState(0);
+    const {
+      cavier,
+      fadedCavier,
+      fadedGreen,
+      fadedYellow,
+      fadedRed,
+      backgroundGrey,
+      successGreen,
+      cautionYellow,
+      poppySunrise,
+      warningRed,
+      greyActive,
+      grey100,
+    } = baseTheme.colors;
+
+    const chartOptions = {
+      legend: {
+        display: false,
       },
-      [0, 0, 0, 0],
-    ); // ["None", "Behind", "Needs Attention", "On Track"]
-    setOnTrack(dataPoints[3]);
-    setData({
-      labels: ["None", "Behind", "NeedsAttention", "On Track"],
-      datasets: [
-        {
-          data: dataPoints,
-          backgroundColor: [grey100, warningRed, cautionYellow, successGreen],
-        },
-      ],
-      hoveroffset: 4,
-    });
-  }, [kpis]);
+      radius: 100,
+      cutoutPercentage: 60,
+    };
 
-  return (
-    <WeekContainer>
-      <Header>This Week</Header>
-      <RowContainer>
-        <DoughnutChartContainer>
-          <DoughnutTextContainer>
-            <Text fontSize={11} mb={8}>
-              This week
-            </Text>
-            <div>
-              <Text fontSize={20} bold>
-                <OnTrackCount percentageOnTrack={onTrack / kpis.length}>{onTrack}</OnTrackCount> /{" "}
-                {kpis.length}
+    useEffect(() => {
+      const dataPoints = kpis.reduce(
+        (acc: number[], kpi: any) => {
+          const week = kpi?.period[currentFiscalYear]?.[currentWeek];
+          if (!week) {
+            acc[0]++;
+          } else {
+            const percentScore =
+              kpi.targetValue == 0 && week.score == 0
+                ? 100
+                : kpi.targetValue == 0 && week.score != 0
+                ? -week.score
+                : getScorePercent(week.score, kpi.targetValue, kpi.greaterThan);
+            if (percentScore >= 100) {
+              acc[3]++;
+            } else if (percentScore >= kpi.needsAttentionThreshold) {
+              acc[2]++;
+            } else {
+              acc[1]++;
+            }
+          }
+          return acc;
+        },
+        [0, 0, 0, 0],
+      ); // ["None", "Behind", "Needs Attention", "On Track"]
+      setOnTrack(dataPoints[3]);
+      setData({
+        labels: ["None", "Behind", "NeedsAttention", "On Track"],
+        datasets: [
+          {
+            data: dataPoints,
+            backgroundColor: [grey100, warningRed, cautionYellow, successGreen],
+          },
+        ],
+        hoveroffset: 4,
+      });
+    }, [kpis]);
+
+    return (
+      <WeekContainer>
+        <HeaderContainer>
+          <Header>
+            {companyStore.company.currentFiscalWeek === currentWeek ? "This Week" : "Last Week"}
+          </Header>
+          {companyStore.company.currentFiscalWeek === currentWeek ? (
+            <IconContainer onClick={() => setWeekToShow(currentWeek - 1)}>
+              <Icon icon={"Chevron-Left"} size={"12px"} iconColor={"primary100"} ml={"0.5em"} />
+            </IconContainer>
+          ) : (
+            <IconContainer onClick={() => setWeekToShow(companyStore.company.currentFiscalWeek)}>
+              <RightIcon
+                icon={"Chevron-Left"}
+                size={"12px"}
+                iconColor={"primary100"}
+                ml={"0.5em"}
+              />
+            </IconContainer>
+          )}
+        </HeaderContainer>
+        <RowContainer>
+          <DoughnutChartContainer>
+            <DoughnutTextContainer>
+              <Text fontSize={11} mb={8}>
+                {companyStore.company.currentFiscalWeek === currentWeek ? "This Week" : "Last Week"}
               </Text>
-            </div>
-            <Text fontSize={11} mt={8}>
-              KPIs are On Track
-            </Text>
-          </DoughnutTextContainer>
-          {data && <StyledDoughnut data={data} options={chartOptions} width={200} height={200} />}
-        </DoughnutChartContainer>
-        <WeekLegendContainer>
-          <StatusBadgeContainer>
-            <StatusBadge fontSize={"12px"} color={successGreen} background={fadedGreen}>
-              On Track
-            </StatusBadge>
-          </StatusBadgeContainer>
-          <StatusBadgeContainer>
-            <StatusBadge fontSize={"12px"} color={poppySunrise} background={fadedYellow}>
-              Needs Attention
-            </StatusBadge>
-          </StatusBadgeContainer>
-          <StatusBadgeContainer>
-            <StatusBadge fontSize={"12px"} color={warningRed} background={fadedRed}>
-              Behind
-            </StatusBadge>
-          </StatusBadgeContainer>
-          <StatusBadgeContainer>
-            <StatusBadge fontSize={"12px"} color={greyActive} background={backgroundGrey}>
-              None
-            </StatusBadge>
-          </StatusBadgeContainer>
-        </WeekLegendContainer>
-      </RowContainer>
-    </WeekContainer>
-  );
-};
+              <div>
+                <Text fontSize={20} bold>
+                  <OnTrackCount percentageOnTrack={onTrack / kpis.length}>{onTrack}</OnTrackCount> /{" "}
+                  {kpis.length}
+                </Text>
+              </div>
+              <Text fontSize={11} mt={8}>
+                KPIs are On Track
+              </Text>
+            </DoughnutTextContainer>
+            {data && <StyledDoughnut data={data} options={chartOptions} width={200} height={200} />}
+          </DoughnutChartContainer>
+          <WeekLegendContainer>
+            <StatusBadgeContainer>
+              <StatusBadge fontSize={"12px"} color={successGreen} background={fadedGreen}>
+                On Track
+              </StatusBadge>
+            </StatusBadgeContainer>
+            <StatusBadgeContainer>
+              <StatusBadge fontSize={"12px"} color={poppySunrise} background={fadedYellow}>
+                Needs Attention
+              </StatusBadge>
+            </StatusBadgeContainer>
+            <StatusBadgeContainer>
+              <StatusBadge fontSize={"12px"} color={warningRed} background={fadedRed}>
+                Behind
+              </StatusBadge>
+            </StatusBadgeContainer>
+            <StatusBadgeContainer>
+              <StatusBadge fontSize={"12px"} color={greyActive} background={backgroundGrey}>
+                None
+              </StatusBadge>
+            </StatusBadgeContainer>
+          </WeekLegendContainer>
+        </RowContainer>
+      </WeekContainer>
+    );
+  },
+);
 
 const Arrow = ({ up = true, color }) => {
   return (
@@ -170,7 +194,7 @@ const QuarterSummary = ({
         label: function(tooltipItem, data) {
           const label = data.datasets[tooltipItem.datasetIndex].label || "";
           if (label) {
-            return `${label}: ${tooltipItem.yLabel}%`;
+            return `${label}: ${tooltipItem.yLabel.toFixed(1)}%`;
           } else {
             return "";
           }
@@ -240,9 +264,9 @@ const QuarterSummary = ({
         setLastWeekPercent(+currentQuarterData[currentQuarterData.length - 2]);
       }
     }
-
+    console.log(currentQuarterWeeks);
     setData({
-      labels: R.range(startWeek, startWeek + 13).map((i: number) => weekToDate(i)),
+      labels: R.range(startWeek, startWeek + 13).map((i: number) => `Week ${i}`),
       datasets: [
         {
           label: "Current Quarter",
@@ -373,6 +397,7 @@ type ScorecardSummaryProps = {
   currentQuarter: number;
   fiscalYearStart: string;
   currentFiscalYear: number;
+  setWeekToShow: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export const ScorecardSummary = ({
@@ -381,11 +406,17 @@ export const ScorecardSummary = ({
   currentQuarter,
   fiscalYearStart,
   currentFiscalYear,
+  setWeekToShow,
 }: ScorecardSummaryProps): JSX.Element => {
   const KPIs = JSON.parse(JSON.stringify(kpis));
   return (
     <Container>
-      <WeekSummary kpis={KPIs} currentWeek={currentWeek} currentFiscalYear={currentFiscalYear} />
+      <WeekSummary
+        kpis={KPIs}
+        currentWeek={currentWeek}
+        currentFiscalYear={currentFiscalYear}
+        setWeekToShow={setWeekToShow}
+      />
       <QuarterSummary
         kpis={KPIs}
         currentWeek={currentWeek}
@@ -412,6 +443,11 @@ const Container = styled.div`
       "week"
       "quarter";
   }
+`;
+
+const HeaderContainer = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const Header = styled.h3`
@@ -558,4 +594,12 @@ type ArrowIconContainerProps = {
 
 const ArrowIconContainer = styled.div<ArrowIconContainerProps>`
   transform: rotate(${props => (props.up ? 0 : 180)}deg);
+`;
+
+const RightIcon = styled(Icon)`
+  transform: rotate(180deg);
+`;
+
+const IconContainer = styled.div`
+  cursor: pointer;
 `;

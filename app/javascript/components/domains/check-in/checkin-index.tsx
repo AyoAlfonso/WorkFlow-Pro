@@ -5,8 +5,6 @@ import { useMst } from "../../../setup/root";
 import Select from "../../shared/select";
 import { CheckInCard } from "./components/checkin-card";
 import { Loading } from "~/components/shared";
-import { toJS } from "mobx";
-import { sortByDueDate, sortByName } from "~/utils/sorting";
 
 export const CheckIn = observer(
   (): JSX.Element => {
@@ -14,20 +12,25 @@ export const CheckIn = observer(
     const [selection, setSelection] = useState("");
     const [loading, setLoading] = useState(true);
 
-    const { checkInTemplateStore } = useMst();
+    const { checkInTemplateStore, teamStore, userStore } = useMst();
 
     const { checkIns } = checkInTemplateStore;
 
     useEffect(() => {
-      checkInTemplateStore.getCheckIns().then(() => {
-        setLoading(false);
+      teamStore.fetchTeams().then(() => {
+        userStore.fetchUsers().then(() => {
+          checkInTemplateStore.getCheckIns().then(() => {
+            checkInTemplateStore.sortArtifacts("dueDate");
+            setLoading(false);
+          });
+        });
       });
     }, []);
 
-    const handleSort = (e) => {
+    const handleSort = e => {
       setSelection(e);
       checkInTemplateStore.sortArtifacts(e);
-    }
+    };
 
     if (loading) {
       return <Loading />;
@@ -46,7 +49,6 @@ export const CheckIn = observer(
           </OverviewTabsContainer>
           <SelectContainer>
             <Select selection={selection} setSelection={handleSort}>
-              <option>Sort</option>
               <option value="dueDate">Sort by due date</option>
               <option value="name">Sort by name</option>
             </Select>

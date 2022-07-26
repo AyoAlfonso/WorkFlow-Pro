@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { Button } from "~/components/shared/button";
@@ -8,6 +9,7 @@ import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import { toJS } from "mobx";
 import moment from "moment";
+import { ParticipantsAvatars } from "~/components/shared/participants-avatars";
 
 interface CheckInCardProps {
   checkin: ICheckInArtifact;
@@ -15,13 +17,58 @@ interface CheckInCardProps {
 
 export const CheckInCard = observer(
   ({ checkin }: CheckInCardProps): JSX.Element => {
-    const { checkInTemplateStore, sessionStore, teamStore } = useMst();
+    const { checkInTemplateStore, sessionStore, teamStore, userStore, companyStore } = useMst();
+
+    const [participantsArray, setParticipantsArray] = useState([]);
 
     const history = useHistory();
 
     const { checkInTemplate } = checkin;
 
     const { name, ownerType, id, viewers, participants, runOnce } = checkInTemplate;
+
+    const getParticipantsAvatar = entityArray => {
+      const entityArrayToReturn = [];
+      entityArray.map(entity => {
+        if (entity.type === "user") {
+          const user = userStore.users?.find(user => user.id === entity.id);
+          if (user) {
+            entityArrayToReturn.push({
+              id: user.id,
+              type: "user",
+              defaultAvatarColor: user.defaultAvatarColor,
+              avatarUrl: user.avatarUrl,
+              name: user.firstName,
+              lastName: user.lastName,
+            });
+          }
+        } else if (entity.type === "team") {
+          const team = teamStore.teams?.find(team => team.id === entity.id);
+          if (team) {
+            entityArrayToReturn.push({
+              id: team.id,
+              type: "team",
+              defaultAvatarColor: team.defaultAvatarColor,
+              name: team.name,
+            });
+          }
+        } else {
+          companyStore.company &&
+            entityArrayToReturn.push({
+              id: companyStore.company?.id,
+              type: "company",
+              avatarUrl: companyStore.company?.logoUrl,
+              defaultAvatarColor: "cautionYellow",
+              name: companyStore.company?.name,
+            });
+        }
+      });
+      setParticipantsArray(entityArrayToReturn);
+    };
+
+    useEffect(() => {
+      getParticipantsAvatar(participants);
+    }, [participants]);
 
     const getStatus = entityArray => {
       const status = entityArray.map(item => {
@@ -47,7 +94,7 @@ export const CheckInCard = observer(
     const isParticipant = getStatus(participants);
 
     const dueDate = new Date(checkin.startTime).toDateString();
-    
+
     const isEntryNeeded = () => {
       const dateA = moment(new Date(checkin.startTime));
       const dateB = moment(new Date());
@@ -81,39 +128,44 @@ export const CheckInCard = observer(
             <EntryBadge>{`• Completed`}</EntryBadge>
           )}
         </InfoContainer>
-        {isParticipant && !runOnce && (
-          <ActionsContainer>
-            <ButtonsContainer>
-              <Button
-                variant={"primary"}
-                mr="1em"
-                width="80px"
-                fontSize="12px"
-                onClick={() => history.push(`/check-in/run/${checkin.id}`)}
-                small
-                style={{ whiteSpace: "nowrap" }}
-              >
-                Check-in
-              </Button>
-              <Button
-                variant={"greyOutline"}
-                mr="1em"
-                width="80px"
-                fontSize="12px"
-                onClick={() => {
-                  checkInTemplateStore.skipCheckIn(checkin.id);
-                }}
-                small
-              >
-                Skip
-              </Button>
-            </ButtonsContainer>
-            <StreakContainer>
+        <ActionsContainer>
+          {isParticipant && !runOnce && (
+            <>
+              <ButtonsContainer>
+                <Button
+                  variant={"primary"}
+                  mr="1em"
+                  width="80px"
+                  fontSize="12px"
+                  onClick={() => history.push(`/check-in/run/${checkin.id}`)}
+                  small
+                  style={{ whiteSpace: "nowrap" }}
+                >
+                  Check-in
+                </Button>
+                <Button
+                  variant={"greyOutline"}
+                  mr="1em"
+                  width="80px"
+                  fontSize="12px"
+                  onClick={() => {
+                    checkInTemplateStore.skipCheckIn(checkin.id);
+                  }}
+                  small
+                >
+                  Skip
+                </Button>
+              </ButtonsContainer>
+              {/* <StreakContainer>
               <Icon icon={"Streak"} size="24px" mr="0.5em" iconColor={"greyActive"} />
               <StreakCount>0</StreakCount>
-            </StreakContainer>
-          </ActionsContainer>
-        )}
+            </StreakContainer> */}
+            </>
+          )}
+          <ParticipantsContainer>
+            <ParticipantsAvatars entityList={participantsArray} />
+          </ParticipantsContainer>
+        </ActionsContainer>
       </Container>
     );
   },
@@ -189,6 +241,20 @@ const EntryBadge = styled.span`
 const ActionsContainer = styled.div`
   display: flex;
   align-items: center;
+
+  @media only screen and (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`;
+
+const ParticipantsContainer = styled.div`
+  margin-left: auto;
+
+  @media only screen and (max-width: 768px) {
+    margin-left: 0;
+    margin-top: 1em;
+  }
 `;
 
 const ButtonsContainer = styled.div`

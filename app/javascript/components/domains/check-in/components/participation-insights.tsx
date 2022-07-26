@@ -57,7 +57,7 @@ const Container = styled.div`
   padding: 16px;
   height: fit-content;
   position: sticky;
-  top: 0;
+  top: 96px;
 
   @media only screen and (max-width: 768px) {
     position: static;

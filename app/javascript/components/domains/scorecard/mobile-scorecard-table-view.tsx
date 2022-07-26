@@ -14,7 +14,6 @@ import { StatusBadge } from "~/components/shared/status-badge";
 import { AddKPIDropdown } from "./shared/add-kpi-dropdown";
 import { ViewEditKPIModal } from "./shared/view-kpi-modal";
 import { MiniUpdateKPIModal } from "./shared/update-kpi-modal";
-import { AddExistingManualKPIModal } from "./shared/edit-existing-manual-kpi-modal";
 import { titleCase } from "~/utils/camelize";
 import { sortByDateReverse } from "~/utils/sorting";
 import { findNextMonday, resetYearOfDateToCurrent } from "~/utils/date-time";
@@ -39,7 +38,7 @@ type ScorecardTableViewProps = {
   isMiniEmbed?: boolean;
 };
 
-export const ScorecardTableView = observer(
+export const MobileScorecardTableView = observer(
   ({
     tableKPIs,
     allKPIs,
@@ -543,120 +542,6 @@ export const ScorecardTableView = observer(
           width: "17%",
           minWidth: "160px",
         },
-        ...R.range(1, 53).map((n, i) => ({
-          Header: () => (
-            <div style={{ fontSize: "14px" }}>
-              {" "}
-              {`Week ${n}`} <br />{" "}
-              <span style={{ fontSize: "12px", fontWeight: "normal" }}>{weekToDate(n)}</span>{" "}
-            </div>
-          ),
-          accessor: `wk_${n}`,
-          Cell: ({ value, row }) => {
-            const i = row.id;
-            const { parentType } = row.original.updateKPI;
-            if (parentType) {
-              return (
-                <EmptyWeekContainer>
-                  {value === undefined ? (
-                    <EmptyWeekContainer>
-                      <EmptyWeek />
-                    </EmptyWeekContainer>
-                  ) : (
-                    <WeekContainer>
-                      <WeekText color={value.color}>{convertNumberInLogic(value.score)}</WeekText>
-                    </WeekContainer>
-                  )}
-                </EmptyWeekContainer>
-              );
-            }
-            if (value === undefined) {
-              if (company.currentFiscalWeek < n) {
-                return (
-                  <EmptyWeekContainer>
-                    <EmptyWeek />
-                  </EmptyWeekContainer>
-                );
-              }
-              return (
-                // TODO: REPETITION TURN INTO A PARENT COMPONENT AND PASS THE CHILDREN
-                <EmptyWeekContainer
-                  onMouseEnter={() => {
-                    setSelectedKPIWeek(`wk_${n}_${i}`);
-                  }}
-                  onMouseLeave={() => {
-                    setSelectedKPIWeek(null);
-                  }}
-                >
-                  <UpdateKPICellContainer
-                    disabled={
-                      parentType ||
-                      (currentUser.role == RoleNormalUser &&
-                        currentUser.id != row.original.updateKPI.ownedById) ||
-                      false
-                    }
-                    onClick={() => {
-                      if (parentType) return;
-                      if (!isMiniEmbed) {
-                        setTargetWeek(n);
-                        setTargetValue(0);
-                        setUpdateKPI(row.original.updateKPI);
-                        setUpdateKPIModalOpen(true);
-                      }
-                    }}
-                    hover={selectedKPIWeek == `wk_${n}_${i}` ? true : false}
-                  >
-                    {selectedKPIWeek == `wk_${n}_${i}` ? (
-                      <WhiteUpdateKpiIcon icon={"Update_KPI_New"} size={16} />
-                    ) : (
-                      <> </>
-                    )}
-                  </UpdateKPICellContainer>
-                  {selectedKPIWeek !== `wk_${n}_${i}` ? <EmptyWeek /> : <> </>}
-                </EmptyWeekContainer>
-              );
-            }
-            return (
-              <EmptyWeekContainer
-                onMouseEnter={() => {
-                  setSelectedKPIWeek(`wk_${n}_${i}`);
-                }}
-                onMouseLeave={() => {
-                  setSelectedKPIWeek(null);
-                }}
-              >
-                <UpdateKPICellContainer
-                  disabled={
-                    parentType ||
-                    (currentUser.role == RoleNormalUser &&
-                      currentUser.id != row.original.updateKPI.ownedById) ||
-                    false
-                  }
-                  onClick={() => {
-                    if (parentType) return;
-                    if (!isMiniEmbed) {
-                      setTargetWeek(n);
-                      setTargetValue(value.score);
-                      setUpdateKPI(row.original.updateKPI);
-                      setUpdateKPIModalOpen(true);
-                    }
-                  }}
-                  hover={selectedKPIWeek == `wk_${n}_${i}` || value}
-                >
-                  {selectedKPIWeek == `wk_${n}_${i}` ? (
-                    <WhiteUpdateKpiIcon icon={"Update_KPI_New"} size={16} />
-                  ) : (
-                    <WeekContainer>
-                      <WeekText color={value.color}>{convertNumberInLogic(value.score)}</WeekText>
-                    </WeekContainer>
-                  )}
-                </UpdateKPICellContainer>
-              </EmptyWeekContainer>
-            );
-          },
-          width: "1fr",
-          minWidth: "64px",
-        })),
       ],
       [quarter, year, selectedKPIIcon, selectedKPIWeek],
     );
@@ -804,16 +689,6 @@ export const ScorecardTableView = observer(
           />
         )}
 
-        {showEditExistingKPIContainer && (
-          <AddExistingManualKPIModal
-            kpiId={currentSelectedKpi}
-            showAddManualKPIModal={showEditExistingKPIContainer}
-            setShowAddManualKPIModal={setShowEditExistingKPIContainer}
-            headerText={"Edit KPI"}
-            kpis={allKPIs}
-          />
-        )}
-
         {updateKPI && (
           <MiniUpdateKPIModal
             kpiId={updateKPI.id}
@@ -841,9 +716,9 @@ export const ScorecardTableView = observer(
 const Container = styled.div`
   width: 100%;
   font-family: Lato;
-
+  display: none;
   @media (max-width: 768px) {
-    display: none;
+    display: block;
   }
 `;
 

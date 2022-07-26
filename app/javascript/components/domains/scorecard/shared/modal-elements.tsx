@@ -13,8 +13,13 @@ export const StyledModal = Modal.styled<StyledModalProps>`
   border-radius: 8px;
   width: ${props => props.width || "640px"};
   maxHeight: 90%;
+
   background-color: ${props => props.theme.colors.white};
     transition: 0.8s ease-out;
+
+    @media only screen and (max-width: 768px) {
+      width: 95%;
+    }
 `;
 
 const inputStyles = css`

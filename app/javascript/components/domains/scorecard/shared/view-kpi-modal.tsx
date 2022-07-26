@@ -323,7 +323,7 @@ export const ViewEditKPIModal = observer(
       <>
         <StyledModal
           isOpen={viewEditKPIModalOpen}
-          style={{ width: "60rem", maxHeight: "80%", overflow: "auto" }}
+          style={{ maxHeight: "80%", overflow: "auto" }}
           onBackgroundClick={e => {
             closeModal();
           }}
@@ -387,13 +387,17 @@ export const ViewEditKPIModal = observer(
                         disabled={currentUser.role == RoleNormalUser}
                       />
                     </OwnerAndLogicText>
-                    <Icon icon={"Stats"} iconColor={greyInactive} size={16} />
-                    <OwnerAndLogicText style={{ textTransform: "capitalize" }}>
-                      {R.uniq(kpi?.viewers.map(viewer => KPIViewerName(viewer))).join(", ")} KPI
-                    </OwnerAndLogicText>
+                    <IconContainer>
+                      <Icon icon={"Stats"} iconColor={greyInactive} size={16} mr={"0.5em"} />
+                      <OwnerAndLogicText style={{ textTransform: "capitalize" }}>
+                        {R.uniq(kpi?.viewers.map(viewer => KPIViewerName(viewer))).join(", ")} KPI
+                      </OwnerAndLogicText>
+                    </IconContainer>
 
-                    <Icon icon={"Initiative"} iconColor={greyInactive} size={16} />
-                    <OwnerAndLogicText>{logic}</OwnerAndLogicText>
+                    <IconContainer>
+                      <Icon icon={"Initiative"} iconColor={greyInactive} size={16} mr={"0.5em"} />
+                      <OwnerAndLogicText>{logic}</OwnerAndLogicText>
+                    </IconContainer>
                     {kpi?.parentType && (
                       <KPITypeContainer>
                         <KPITypeWrapper
@@ -623,12 +627,25 @@ const Container = styled.div`
 `;
 
 const StyledModal = Modal.styled`
-  width: 30rem;
+  width: 60rem;
   min-height: 100px;
   border-radius: 8px;
   padding: 32px;
   background-color: ${props => props.theme.colors.white};
+
+  @media (max-width: 768px) {
+    width: 20rem;
+  }
 `;
+
+const IconContainer = styled.div`
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    margin-bottom: 12px;
+  }
+`
 
 const ChartContainer = styled.div`
   width: 100%;
@@ -659,6 +676,11 @@ const OwnerAndLogicContainer = styled.div`
   align-items: center;
   width: 100%;
   margin-bottom: 16px;
+
+  @media only screen and (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const OwnerAndLogicText = styled.div`
@@ -666,6 +688,11 @@ const OwnerAndLogicText = styled.div`
   color: ${props => props.theme.colors.grey100};
   margin-left: 8px;
   margin-right: 16px;
+
+  @media only screen and (max-width: 768px) {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
 `;
 
 const ValueAndUpdateContainer = styled.div`

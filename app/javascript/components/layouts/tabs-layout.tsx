@@ -174,9 +174,9 @@ const SideBar = styled.div`
   background: ${props => props.theme.colors.backgroundGrey};
   height: 100%;
   padding: 32px;
+  position: fixed;
 
   @media only screen and (min-width: 1600px) {
-    position: fixed;
     left: 96px;
   }
 `;
@@ -216,9 +216,10 @@ const ContentContainer = styled.div`
   padding: 32px;
   width: 82%;
   max-width: 1280px;
-  overflow-y: auto;
+  // overflow-y: auto;
   height: 100%;
   overscroll-behavior: contain;
+  padding-left: 330px;
   @media only screen and (min-width: 1600px) {
     margin: 0 auto;
     padding-left: 200px;

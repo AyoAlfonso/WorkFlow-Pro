@@ -110,5 +110,6 @@ const ContentEditableContainer = styled.div`
   @media (max-width: 768px) {
     position: static;
     padding-right: 0px;
+    width: 95%;
   }
 `;
