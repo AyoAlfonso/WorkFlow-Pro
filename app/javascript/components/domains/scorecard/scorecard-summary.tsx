@@ -16,6 +16,7 @@ import { useMst } from "~/setup/root";
 const WeekSummary = observer(
   ({ kpis, currentWeek, currentFiscalYear, setWeekToShow }): JSX.Element => {
     const [data, setData] = useState<Object>(null);
+    const [showDropdown, setShowDropdown] = useState<boolean>(false);
 
     const { companyStore } = useMst();
 
@@ -84,22 +85,43 @@ const WeekSummary = observer(
     return (
       <WeekContainer>
         <HeaderContainer>
-          <Header>
-            {companyStore.company.currentFiscalWeek === currentWeek ? "This Week" : "Last Week"}
-          </Header>
-          {companyStore.company.currentFiscalWeek === currentWeek ? (
-            <IconContainer onClick={() => setWeekToShow(currentWeek - 1)}>
-              <Icon icon={"Chevron-Left"} size={"12px"} iconColor={"primary100"} ml={"0.5em"} />
-            </IconContainer>
-          ) : (
-            <IconContainer onClick={() => setWeekToShow(companyStore.company.currentFiscalWeek)}>
-              <RightIcon
-                icon={"Chevron-Left"}
+          <HeaderContainer onClick={() => setShowDropdown(!showDropdown)}>
+            <Header>
+              {companyStore.company.currentFiscalWeek === currentWeek ? "This Week" : "Last Week"}
+            </Header>
+            {showDropdown ? (
+              <ChevronUp
+                icon={"Chevron-Down"}
                 size={"12px"}
                 iconColor={"primary100"}
                 ml={"0.5em"}
               />
-            </IconContainer>
+            ) : (
+              <Icon icon={"Chevron-Down"} size={"12px"} iconColor={"primary100"} ml={"0.5em"} />
+            )}
+          </HeaderContainer>
+          {showDropdown && (
+            <WeekToogleContainer>
+              {companyStore.company.currentFiscalWeek === currentWeek ? (
+                <ToogleOption
+                  onClick={() => {
+                    setWeekToShow(currentWeek - 1);
+                    setShowDropdown(false);
+                  }}
+                >
+                  Last Week
+                </ToogleOption>
+              ) : (
+                <ToogleOption
+                  onClick={() => {
+                    setWeekToShow(companyStore.company.currentFiscalWeek);
+                    setShowDropdown(false);
+                  }}
+                >
+                  This Week
+                </ToogleOption>
+              )}
+            </WeekToogleContainer>
           )}
         </HeaderContainer>
         <RowContainer>
@@ -448,6 +470,9 @@ const Container = styled.div`
 const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
+  position: relative;
+  width: fit-content;
+  cursor: pointer;
 `;
 
 const Header = styled.h3`
@@ -602,4 +627,28 @@ const RightIcon = styled(Icon)`
 
 const IconContainer = styled.div`
   cursor: pointer;
+`;
+
+const WeekToogleContainer = styled.div`
+  background: ${props => props.theme.colors.white};
+  border-radius: 4px;
+  padding: 8px 0px;
+  position: absolute;
+  box-shadow: 0px 3px 6px #00000029;
+  width: 100%;    
+  z-index: 5;
+  bottom: -45px;
+}
+`;
+const ToogleOption = styled.div`
+  padding: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  &:hover {
+    background: ${props => props.theme.colors.backgroundGrey};
+  }
+`;
+
+const ChevronUp = styled(Icon)`
+  transform: rotate(180deg);
 `;

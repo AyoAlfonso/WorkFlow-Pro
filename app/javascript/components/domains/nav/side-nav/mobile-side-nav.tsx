@@ -132,11 +132,15 @@ const MobileMenuOption = styled.div<MobileNavMenuProps>`
   align-items: center;
   padding: 5px 30px;
   margin-bottom: 0.5em;
+  position: relative;
   top: 0;
-  left: 0;
-  display: ${props => (props.showSideNav ? "flex" : "none")};
+  right: ${props => (props.showSideNav ? "0" : "800px")};
+  display: flex;
+  // display: ${props => (props.showSideNav ? "flex" : "none")};
   width: 70vw;
   transition: 0.2s;
+  height: 48px;
+  border-bottom: 1px solid ${props => props.theme.colors.grey20};
 
   &:hover {
     background: ${props => props.theme.colors.backgroundGrey};
