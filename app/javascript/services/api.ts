@@ -740,7 +740,7 @@ export class Api {
   }
 
   async getWeeklyCheckinKeyElements() {
-    return this.client.get(`/key_elements/check_in`);
+    return this.client.get(`/check_in_key_elements`);
   }
 
   async updateWeeklyCheckInKeyElements(id, value) {

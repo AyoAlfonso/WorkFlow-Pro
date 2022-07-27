@@ -36,10 +36,21 @@ export interface ParticipantsProps {
 
 export const CheckInBuilderLayout = observer(
   (): JSX.Element => {
+    const { companyStore, sessionStore, checkInTemplateStore } = useMst();
+    
     const [currentStep, setCurrentStep] = useState(0);
     const [checkinName, setCheckinName] = useState<string>("New Check-in");
     const [selectedSteps, setSelectedSteps] = useState<Array<SelectedStepType>>([]);
-    const [participants, setParticipants] = useState<Array<ParticipantsProps>>([]);
+    const [participants, setParticipants] = useState<Array<ParticipantsProps>>([
+      {
+        id: sessionStore.profile?.id,
+        type: "user",
+        defaultAvatarColor: sessionStore.profile?.defaultAvatarColor,
+        avatarUrl: sessionStore.profile?.avatarUrl,
+        name: sessionStore.profile?.firstName,
+        lastName: sessionStore.profile?.lastName,
+      },
+    ]);
     const [responseViewers, setResponseViewers] = useState("All Participants");
     const [cadence, setCadence] = useState<string>("Every Weekday");
     const [checkinTime, setCheckinTime] = useState<string>("09:00 AM");
@@ -55,7 +66,6 @@ export const CheckInBuilderLayout = observer(
     const [checkinType, setCheckinType] = useState<string>("Team");
     const [checkinDescription, setCheckinDescription] = useState<string>("");
 
-    const { companyStore, sessionStore, checkInTemplateStore } = useMst();
     const isForum = companyStore.company?.displayFormat == "Forum";
 
     const history = useHistory();
@@ -128,7 +138,7 @@ export const CheckInBuilderLayout = observer(
         default:
           return "";
       }
-    }
+    };
 
     const showDateTime = cadence == "Once" || cadence == "Monthly" || cadence == "Quarterly";
     const showDayTime = cadence == "Weekly" || cadence == "Bi-weekly";
