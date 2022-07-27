@@ -66,7 +66,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
           end
 
           if(person["type"] == "team")
-            Team.find(viewer["id"]).team_user_enablements.pluck(:user_id).each do |user|
+            Team.find(person["id"]).team_user_enablements.pluck(:user_id).each do |user|
               destroy_notifications(user)
             end
           end
