@@ -60,19 +60,19 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     @step_atrributes = params[:check_in_templates_steps_attributes]
   
     if (params[:check_in_template]["participants"].present? || params[:child_check_in_template_params]["participants"].present?)
-      @check_in_template.participants.each do |person|
-          if(person["type"] == "user")
-            destroy_notifications(person["id"])
+      @check_in_template.participants.each do |participant|
+          if(participant["type"] == "user")
+            destroy_notifications(participant["id"])
           end
 
-          if(person["type"] == "team")
-            Team.find(person["id"]).team_user_enablements.pluck(:user_id).each do |user|
+          if(participant["type"] == "team")
+            Team.find(participant["id"]).team_user_enablements.pluck(:user_id).each do |user|
               destroy_notifications(user)
             end
           end
           
-          if(person["type"] == "company")
-              Company.find(person["id"]).user_company_enablements.pluck(:user_id).each do |user|
+          if(participant["type"] == "company")
+              Company.find(participant["id"]).user_company_enablements.pluck(:user_id).each do |user|
                   destroy_notifications(user)
               end
           end
@@ -102,10 +102,27 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     if (@check_in_template.parent.present?)
         @check_in_template.update!(child_check_in_template_params.merge(created_by_id: current_user.id))
           if @step_atrributes.present?
+             @check_in_template.check_in_templates_steps.destroy_all
             @step_atrributes.each_with_index do |step, index|
-              if(@step_atrributes[index]["_destroy"])
-                CheckInTemplatesStep.find(@step_atrributes[index]["id"]).destroy
-              else
+                CheckInTemplatesStep.upsert({
+                  step_type: step[:step_type],
+                  order_index: step[:order_index],
+                  name: step[:name],
+                  instructions: step[:instructions],
+                  duration: step[:duration],
+                  component_to_render: step[:component_to_render],
+                  check_in_template_id: @check_in_template.id,
+                  variant: step[:variant],
+                  question:step[:question]
+                  }, unique_by: [:order_index, :check_in_template_id])
+            end
+          end
+       return render json: { check_in_template: @check_in_template, status: :ok }
+    elsif @check_in_template.tag.include? 'custom'
+       @check_in_template.update!(custom_check_in_template_params.merge(created_by_id: current_user.id))
+          if @step_atrributes.present?
+              @check_in_template.check_in_templates_steps.destroy_all
+              @step_atrributes.each_with_index do |step, index|
                 CheckInTemplatesStep.upsert({
                   step_type: step[:step_type],
                   order_index: step[:order_index],
@@ -118,32 +135,8 @@ class Api::CheckInTemplatesController < Api::ApplicationController
                   question:step[:question]
                   }, unique_by: [:order_index, :check_in_template_id])
               end
-            end
           end
-       return render json: { check_in_template: @check_in_template, status: :ok }
-    elsif @check_in_template.tag.include? 'custom'
-       @check_in_template.update!(custom_check_in_template_params.merge(created_by_id: current_user.id))
-          if @step_atrributes.present?
-              @step_atrributes.each_with_index do |step, index|
-              if(@step_atrributes[index]["_destroy"])
-                CheckInTemplatesStep.find(@step_atrributes[index]["id"]).destroy
-              else
-                CheckInTemplatesStep.upsert({
-                  step_type: step[:step_type],
-                  order_index: step[:order_index],
-                  name: step[:name],
-                  instructions: step[:instructions],
-                  duration: step[:duration],
-                  component_to_render: step[:component_to_render],
-                  check_in_template_id: @check_in_template.id,
-                  variant: step[:variant],
-                  question:step[:question]
-                    }, unique_by: [:order_index, :check_in_template_id])
-              end
-            end
-          end
-
-        return render json: { check_in_template: @check_in_template, status: :ok }
+        return render json: { check_in_template: @check_in_template.reload , status: :ok }
     end
   end
 
@@ -184,16 +177,16 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     
     next_start = date_time_config["cadence"] == "once" ? Time.now : Time.new(schedule.first.year, schedule.first.month, schedule.first.day, schedule.first.hour)
           if(next_start.present?)
-              @check_in_template.participants.each do |person|
-                if(person["type"] == "user")
-                  check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: person["id"])
+              @check_in_template.participants.each do |participant|
+                if(participant["type"] == "user")
+                  check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: participant["id"])
                   check_in_artifact.update!(start_time: next_start )
                   check_in_artifacts << check_in_artifact
-                  create_notifications(person["id"], schedule)
+                  create_notifications(participant["id"], schedule)
                 end
 
-                if(person["type"] == "team")
-                  Team.find(person["id"]).team_user_enablements.pluck(:user_id).each do |user|
+                if(participant["type"] == "team")
+                  Team.find(participant["id"]).team_user_enablements.pluck(:user_id).each do |user|
                       check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
                       check_in_artifact.update!(start_time: next_start)
                       check_in_artifacts << check_in_artifact
@@ -201,8 +194,8 @@ class Api::CheckInTemplatesController < Api::ApplicationController
                   end
                 end
 
-                if(person["type"] == "company")
-                  Company.find(person["id"]).user_company_enablements.pluck(:user_id).each do |user|
+                if(participant["type"] == "company")
+                  Company.find(participant["id"]).user_company_enablements.pluck(:user_id).each do |user|
                     check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
                     check_in_artifact.update!(start_time: next_start)
                     check_in_artifacts << check_in_artifact
