@@ -1,13 +1,17 @@
 ActiveAdmin.register CheckInTemplate do
   permit_params :name, :check_in_type, :owner_type, :description, check_in_templates_steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :question,:check_in_template_id, :image, :link_embed, :override_key, :_destroy]
 
+  scope :all
+  scope :sort_by_global_only,  default: true
+  scope :sort_by_custom_only
+
   index do
     selectable_column
     id_column
     column :name
     column :tag
     column :check_in_type do |mt|
-      mt.check_in_type.humanize.titleize
+      mt.check_in_type&.humanize&.titleize
     end
     actions
   end
@@ -23,6 +27,7 @@ ActiveAdmin.register CheckInTemplate do
         check_in_type: @check_in_template_params[:check_in_type],
         description: @check_in_template_params[:description],
         tag: ["global"],
+        created_by_id: current_user.id,
         owner_type:  @check_in_template_params[:owner_type]                        
       })
       @step_atrributes = params[:check_in_template][:check_in_templates_steps_attributes]
@@ -44,6 +49,36 @@ ActiveAdmin.register CheckInTemplate do
       end
       redirect_to admin_check_in_template_path(@check_in_template), notice: "Check In Template Created"
     end
+
+    # def update 
+    #      @check_in_template.update!(child_check_in_template_params.merge(created_by_id: current_user.id))
+
+    # end
+
+    # def update 
+    #   @check_in_template = CheckInTemplate.find(params[:id])
+    #   @step_atrributes = params[:check_in_template][:check_in_templates_steps_attributes]
+    #     if @step_atrributes.present?
+    #          @step_atrributes.each do |step|
+    #           CheckInTemplatesStep.upsert({
+    #             step_type: step[:step_type],
+    #             order_index: step[:order_index],
+    #             name: step[:name],
+    #             instructions: step[:instructions],
+    #             duration: step[:duration],
+    #             component_to_render: step[:component_to_render],
+    #             check_in_template_id: @check_in_template.id,
+    #             variant: step[:variant],
+    #             question:step[:question]
+    #             }, unique_by: [:order_index, :check_in_template_id])
+    #           end
+    #     end
+    #   if @check_in_template.update!(params.require(:check_in_template).permit(:name, :check_in_type, :owner_type, :description, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder, viewers: [:id, :type], participants: [:id, :type]).merge(created_by_id: current_user.id))
+    #   # if @check_in_template.update!(params.require(:meeting_template).permit(:name, :meeting_type, :duration, :description, steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :meeting_template_id, :image, :link_embed, :override_key, :description_text, :_destroy]))
+    #     flash[:alert] = @check_in_template.errors.full_messages
+    #      redirect_to admin_check_in_template_path(@check_in_template), notice: "Check-In Template updated"
+    #   end
+    # end
 
   end
 
@@ -86,18 +121,19 @@ ActiveAdmin.register CheckInTemplate do
       step.input :name
       step.input :step_type, as: :select, collection: CheckInTemplatesStep.step_types.map { |st| [st[0].humanize.titleize, st[0]] } 
       
-      if step.object.persisted? && step.object.try(:step_type) == 'questions'
-         step.input :question
-      end
+      # if step.object.persisted? && step.object.try(:step_type) == 'questions'
+      step.input :question, label: "Question Prompt"
+      # end
       step.input :order_index
       step.input :duration, label: "Duration (in minutes)"
       step.input :instructions, input_html: { rows: 3 }
       
-      if step.object.persisted? && step.object.try(:step_type) == "questions"
-       step.input :component_to_render, as: :select, collection: CheckInTemplatesStep::QUESTION_STEP_COMPONENTS
-      else
-       step.input :component_to_render, as: :select, collection: CheckInTemplatesStep::STEP_COMPONENTS
-      end
+      # if step.object.persisted? && step.object.try(:step_type) == "questions"
+      #  step.input :component_to_render, as: :select, collection: CheckInTemplatesStep::QUESTION_STEP_COMPONENTS
+      # else
+      #  step.input :component_to_render, as: :select, collection: CheckInTemplatesStep::STEP_COMPONENTS
+      # end
+      step.input :component_to_render, as: :select, collection: [*Step::STEP_COMPONENTS, *CheckInTemplatesStep::QUESTION_STEP_COMPONENTS]
       step.input :image, as: :file, hint: (step.object.try(:image_url) ? image_tag(step.object.image_url, style: "max-height: 150px;") : "No Image Selected")
     end
     f.actions

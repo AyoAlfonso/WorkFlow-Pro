@@ -19,6 +19,10 @@ class CheckInTemplatePolicy < ApplicationPolicy
     user_is_part_of_this_company?(@company)
   end
 
+  def report?
+     @record.created_by == @user || !user_is_company_admin_of_current_company?
+  end
+
   def update?
     @record.created_by == @user || user_is_company_admin_of_current_company?
   end

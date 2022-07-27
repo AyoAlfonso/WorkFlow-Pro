@@ -31,8 +31,12 @@ class CheckInArtifact < ApplicationRecord
         }
       ],
      })
-    #  .merge({ :streaks => self.streaks })
+  
   end
 
+  # def streaks
+  #   return 1
+  # end
+  
   scope :with_name, ->(name) { where(name: name) }
 end

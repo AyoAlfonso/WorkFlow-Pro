@@ -145,6 +145,7 @@ Rails.application.routes.draw do
 
     #scorecards
     get "/scorecard/:owner_type/:owner_id", to: "scorecard_logs#show"
+    get "scorecard_logs/:id", to: "scorecard_logs#show_scorecard_from_log"
     resources :scorecard_logs, only: [:create, :destroy]
 
     #objective_logs
@@ -186,6 +187,7 @@ Rails.application.routes.draw do
     post "check_in_templates/run/:id", to: "check_in_templates#run_now"
     post "check_in_templates/publish/:id", to: "check_in_templates#publish_now"
     get "general_check_in",  to: "check_in_templates#general_check_in"
+    get "check_in_templates_report/:id", to: "check_in_templates#report"
     patch "check_in_templates/artifact/:id",  to: "check_in_templates#artifact" #can be used to skip an artifact, and update the artifact 
 
     resources :check_in_artifact, only: [:show]
@@ -203,7 +205,7 @@ Rails.application.routes.draw do
     get '/milestones/check_in/:due_date', to: "milestones#check_in_goals"
 
     #key_element
-    resources :key_elements, only: [:update]
+    resources :key_elements, only: [:show, :update]
     get '/key_elements/check_in', to: "key_elements#check_in_key_elements"
 
     #user_pulses

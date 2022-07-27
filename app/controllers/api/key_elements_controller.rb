@@ -4,7 +4,7 @@ class Api::KeyElementsController < Api::ApplicationController
   after_action :record_activities, only: [:check_in_key_elements, :update]
   
   respond_to :json
-  before_action :set_key_element, only: [:update]
+  before_action :set_key_element, only: [:show, :update]
   before_action :skip_authorization, only: :check_in_key_elements
 
   def check_in_key_elements
@@ -13,6 +13,10 @@ class Api::KeyElementsController < Api::ApplicationController
     authorize  @subinitiative_key_elements
     authorize @quarterly_goal_key_elements
     render "/api/key_elements/key_elements_for_check_in"
+  end
+
+  def show
+   render "api/key_elements/show"
   end
 
   def update

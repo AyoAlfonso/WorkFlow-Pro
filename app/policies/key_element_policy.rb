@@ -7,6 +7,11 @@ class KeyElementPolicy < ApplicationPolicy
   def update?
       @record.owned_by == @user || user_is_company_admin_of_current_company?
   end 
+
+  def show?
+    @record.owned_by == @user || user_is_company_admin_of_current_company?
+  end
+  
   class Scope
     attr_reader :user, :company, :scope
 

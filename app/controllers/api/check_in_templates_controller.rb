@@ -6,7 +6,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   include UserActivityLogHelper
   respond_to :json
   after_action :record_activities, only: [:create, :update, :show]
-  before_action :set_check_in_template, only: [:show, :update, :run_now, :publish_now]
+  before_action :set_check_in_template, only: [:show, :update, :run_now, :publish_now, :report]
 
   skip_after_action :verify_authorized, only: [:get_onboarding_company, :create_or_update_onboarding_goals, :get_onboarding_goals, :create_or_update_onboarding_key_activities, :get_onboarding_key_activities, :create_or_update_onboarding_team]
 
@@ -58,22 +58,25 @@ class Api::CheckInTemplatesController < Api::ApplicationController
 
   def update
     @step_atrributes = params[:check_in_templates_steps_attributes]
+  
     if (params[:check_in_template]["participants"].present? || params[:child_check_in_template_params]["participants"].present?)
-        @check_in_template.participants.each do |person|
-                if(person["type"] == "user")
-                  destroy_notifications(person["id"])
-                end
-                if(person["type"] == "team")
-                    Team.find(viewer["id"]).team_user_enablements.pluck(:user_id).each do |user|
-                      destroy_notifications(user)
-                    end
-                end
-              if(person["type"] == "company")
-                  Company.find(person["id"]).user_company_enablements.pluck(:user_id).each do |user|
-                      destroy_notifications(user)
-                  end
-              end
+      @check_in_template.participants.each do |person|
+          if(person["type"] == "user")
+            destroy_notifications(person["id"])
+          end
+
+          if(person["type"] == "team")
+            Team.find(viewer["id"]).team_user_enablements.pluck(:user_id).each do |user|
+              destroy_notifications(user)
             end
+          end
+          
+          if(person["type"] == "company")
+              Company.find(person["id"]).user_company_enablements.pluck(:user_id).each do |user|
+                  destroy_notifications(user)
+              end
+          end
+      end
     end
 
    if (params[:check_in_template]["viewers"].present? || params[:child_check_in_template_params]["viewers"].present?)
@@ -99,38 +102,47 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     if (@check_in_template.parent.present?)
         @check_in_template.update!(child_check_in_template_params.merge(created_by_id: current_user.id))
           if @step_atrributes.present?
-            @step_atrributes.each do |step|
-              CheckInTemplatesStep.upsert({
-                step_type: step[:step_type],
-                order_index: step[:order_index],
-                name: step[:name],
-                instructions: step[:instructions],
-                duration: step[:duration],
-                component_to_render: step[:component_to_render],
-                check_in_template_id: @check_in_template.id,
-                variant: step[:variant],
-                question:step[:question]
-                }, unique_by: [:order_index, :check_in_template_id])
+            @step_atrributes.each_with_index do |step, index|
+              if(@step_atrributes[index]["_destroy"])
+                CheckInTemplatesStep.find(@step_atrributes[index]["id"]).destroy
+              else
+                CheckInTemplatesStep.upsert({
+                  step_type: step[:step_type],
+                  order_index: step[:order_index],
+                  name: step[:name],
+                  instructions: step[:instructions],
+                  duration: step[:duration],
+                  component_to_render: step[:component_to_render],
+                  check_in_template_id: @check_in_template.id,
+                  variant: step[:variant],
+                  question:step[:question]
+                  }, unique_by: [:order_index, :check_in_template_id])
               end
+            end
           end
        return render json: { check_in_template: @check_in_template, status: :ok }
     elsif @check_in_template.tag.include? 'custom'
        @check_in_template.update!(custom_check_in_template_params.merge(created_by_id: current_user.id))
           if @step_atrributes.present?
-              @step_atrributes.each do |step|
-              CheckInTemplatesStep.upsert({
-                step_type: step[:step_type],
-                order_index: step[:order_index],
-                name: step[:name],
-                instructions: step[:instructions],
-                duration: step[:duration],
-                component_to_render: step[:component_to_render],
-                check_in_template_id: @check_in_template.id,
-                variant: step[:variant],
-                question:step[:question]
-                  }, unique_by: [:order_index, :check_in_template_id])
+              @step_atrributes.each_with_index do |step, index|
+              if(@step_atrributes[index]["_destroy"])
+                CheckInTemplatesStep.find(@step_atrributes[index]["id"]).destroy
+              else
+                CheckInTemplatesStep.upsert({
+                  step_type: step[:step_type],
+                  order_index: step[:order_index],
+                  name: step[:name],
+                  instructions: step[:instructions],
+                  duration: step[:duration],
+                  component_to_render: step[:component_to_render],
+                  check_in_template_id: @check_in_template.id,
+                  variant: step[:variant],
+                  question:step[:question]
+                    }, unique_by: [:order_index, :check_in_template_id])
               end
+            end
           end
+
         return render json: { check_in_template: @check_in_template, status: :ok }
     end
   end
@@ -153,7 +165,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
           schedule = IceCube::Schedule.new(start_time)
           schedule.add_recurrence_rule(IceCube::Rule.weekly.day(day_as_int).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "every-weekday"
-           schedule = IceCube::Schedule.new(start_time - 7.days)
+           schedule = IceCube::Schedule.new(start_time)
            schedule.add_recurrence_rule(IceCube::Rule.weekly.day(:monday, :tuesday, :wednesday, :thursday, :friday).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "daily" 
           schedule = IceCube::Schedule.new(start_time)
@@ -258,17 +270,8 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   def general_check_in
     check_in_artifacts = CheckInArtifact.owned_by_user(current_user).not_skipped.incomplete.with_parents
     @check_in_artifacts_for_day = check_in_artifacts
-    # .for_day_of_date(params[:on_day])
-    # @check_in_artifacts_for_week = check_in_artifacts
-    # .for_week_of_date(params[:on_week])
-    # @check_in_artifacts_for_month =  check_in_artifacts
-    # .for_month_of_date(params[:on_month])
-
-    # 1. If we are comfortable with a lot of logs data we can to save per step
-    # 2. If we are NOT comfortable with a lot of logs we need to save at the end of process
     authorize @check_in_artifacts_for_day
     render json: {check_in_artifacts: @check_in_artifacts_for_day, status: :ok }
-    # render "api/check_in_artifacts/general_check_in_artifacts"
   end
 
   def artifact
@@ -290,7 +293,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
           schedule = IceCube::Schedule.new(check_in_artifact.start_time + 7.days)
           schedule.add_recurrence_rule(IceCube::Rule.weekly.day(day_as_int).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "every-weekday"
-           schedule = IceCube::Schedule.new(check_in_artifact.start_time - 7.days)
+           schedule = IceCube::Schedule.new(check_in_artifact.start_time)
            schedule.add_recurrence_rule(IceCube::Rule.weekly.day(:monday, :tuesday, :wednesday, :thursday, :friday).hour_of_day(hour_as_int).minute_of_hour(minute_as_int))
       when "daily" 
           schedule = IceCube::Schedule.new(check_in_artifact.start_time)
@@ -351,6 +354,12 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     render json: { template: @check_in_template, status: :ok }
   end
 
+  def report
+    # authorize check_in_template
+    render json: { template: @check_in_template, status: :ok }
+  end
+
+
   def destroy
     @check_in_template.destroy!
     render json: { template: @check_in_template.id, status: :ok }
@@ -358,11 +367,11 @@ class Api::CheckInTemplatesController < Api::ApplicationController
 
   private
   def custom_check_in_template_params
-    params.require(:check_in_template).permit(:name, :check_in_type, :owner_type, :description, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder, viewers: [:id, :type], participants: [:id, :type])
+    params.require(:check_in_template).permit(:name, :check_in_type, :owner_type, :description, :anonymous, :run_once, :time_zone, :tag, :reminder, date_time_config: [:cadence,:time,:date,:day], viewers: [:id, :type], participants: [:id, :type])
   end
 
   def child_check_in_template_params
-    params.require(:check_in_template).permit(:anonymous, :run_once, :date_time_config, :time_zone, :reminder, viewers: [:id, :type], participants: [:id, :type])
+    params.require(:check_in_template).permit(:anonymous, :run_once, :time_zone, :reminder, date_time_config: [:cadence,:time,:date,:day], viewers: [:id, :type], participants: [:id, :type])
   end
 
   def set_check_in_template

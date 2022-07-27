@@ -381,6 +381,7 @@ export const ScorecardTableView = observer(
           Header: "",
           accessor: "updateKPI",
           width: "31px",
+          sticky: true,
           minWidth: "31px",
           Cell: ({ value }) => {
             return (
@@ -427,6 +428,7 @@ export const ScorecardTableView = observer(
           },
         },
         {
+          sticky: true,
           Header: () => (
             <div
               style={{
@@ -461,6 +463,7 @@ export const ScorecardTableView = observer(
         {
           Header: () => <div style={{ fontSize: "14px" }}>Score</div>,
           accessor: "score",
+          sticky: true,
           width: "8%",
           minWidth: "86px",
           Cell: ({ value, row }) => {
@@ -501,6 +504,7 @@ export const ScorecardTableView = observer(
         },
         {
           Header: () => <div style={{ fontSize: "14px" }}>Status</div>,
+          sticky: true,
           accessor: "status",
           Cell: ({ value, row }) => {
             const quarterValue = value[quarter - 1];
@@ -527,11 +531,13 @@ export const ScorecardTableView = observer(
               </StatusContainer>
             );
           },
+
           width: "8%",
           minWidth: "86px",
         },
         {
           Header: () => <div style={{ fontSize: "14px" }}>Owner</div>,
+          sticky: true,
           accessor: "owner",
           Cell: ({ value }) => {
             return (
@@ -755,6 +761,22 @@ export const ScorecardTableView = observer(
             <TableContainer>
               <Table {...getTableProps()}>
                 <TableHead>
+                  {headerGroups.map(headerGroup => (
+                    <TableRow {...headerGroup.getHeaderGroupProps()}>
+                      {headerGroup.headers.map(column => (
+                        <TableHeader
+                          {...column.getHeaderProps({
+                            style: {
+                              width: column.width,
+                              minWidth: column.minWidth,
+                            },
+                          })}
+                        >
+                          {column.render("Header")}
+                        </TableHeader>
+                      ))}
+                    </TableRow>
+                  ))}
                   {headerGroups.map(headerGroup => (
                     <TableRow {...headerGroup.getHeaderGroupProps()}>
                       {headerGroup.headers.map(column => (
