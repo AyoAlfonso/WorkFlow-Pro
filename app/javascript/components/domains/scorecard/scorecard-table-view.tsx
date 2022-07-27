@@ -339,13 +339,13 @@ export const ScorecardTableView = observer(
       if (n === Infinity) {
         return n;
       } else if (n >= 1000000000000) {
-        return `${Math.round(((n / 1000000000000) + Number.EPSILON) * 100) / 100}T`;
+        return `${Math.round((n / 1000000000000 + Number.EPSILON) * 100) / 100}T`;
       } else if (n >= 1000000000) {
-        return `${Math.round(((n / 1000000000) + Number.EPSILON) * 100) / 100}B`;
+        return `${Math.round((n / 1000000000 + Number.EPSILON) * 100) / 100}B`;
       } else if (n >= 1000000) {
-        return `${Math.round(((n / 1000000) + Number.EPSILON) * 100) / 100}M`;
+        return `${Math.round((n / 1000000 + Number.EPSILON) * 100) / 100}M`;
       } else if (n >= 1000) {
-        return `${Math.round(((n / 1000) + Number.EPSILON) * 100) / 100}K`;
+        return `${Math.round((n / 1000 + Number.EPSILON) * 100) / 100}K`;
       } else {
         return `${n}`;
       }
@@ -357,10 +357,7 @@ export const ScorecardTableView = observer(
     };
 
     const convertNumberInLogic = logic => {
-      return logic.replace(
-        findNumberText(logic),
-        largeNumToText(Number(findNumberText(logic))),
-      );
+      return logic.replace(findNumberText(logic), largeNumToText(Number(findNumberText(logic))));
     };
 
     const columns = useMemo(
@@ -369,6 +366,7 @@ export const ScorecardTableView = observer(
           Header: "",
           accessor: "updateKPI",
           width: "31px",
+          sticky: true,
           minWidth: "31px",
           Cell: ({ value }) => {
             return (
@@ -415,6 +413,7 @@ export const ScorecardTableView = observer(
           },
         },
         {
+          sticky: true,
           Header: () => (
             <div
               style={{
@@ -449,6 +448,7 @@ export const ScorecardTableView = observer(
         {
           Header: () => <div style={{ fontSize: "14px" }}>Score</div>,
           accessor: "score",
+          sticky: true,
           width: "8%",
           minWidth: "86px",
           Cell: ({ value, row }) => {
@@ -489,6 +489,7 @@ export const ScorecardTableView = observer(
         },
         {
           Header: () => <div style={{ fontSize: "14px" }}>Status</div>,
+          sticky: true,
           accessor: "status",
           Cell: ({ value, row }) => {
             const quarterValue = value[quarter - 1];
@@ -515,11 +516,13 @@ export const ScorecardTableView = observer(
               </StatusContainer>
             );
           },
+
           width: "8%",
           minWidth: "86px",
         },
         {
           Header: () => <div style={{ fontSize: "14px" }}>Owner</div>,
+          sticky: true,
           accessor: "owner",
           Cell: ({ value }) => {
             return (
@@ -546,9 +549,7 @@ export const ScorecardTableView = observer(
                     </EmptyWeekContainer>
                   ) : (
                     <WeekContainer>
-                      <WeekText color={value.color}>
-                        {convertNumberInLogic(value.score)}
-                      </WeekText>
+                      <WeekText color={value.color}>{convertNumberInLogic(value.score)}</WeekText>
                     </WeekContainer>
                   )}
                 </EmptyWeekContainer>
@@ -739,6 +740,22 @@ export const ScorecardTableView = observer(
             <TableContainer>
               <Table {...getTableProps()}>
                 <TableHead>
+                  {headerGroups.map(headerGroup => (
+                    <TableRow {...headerGroup.getHeaderGroupProps()}>
+                      {headerGroup.headers.map(column => (
+                        <TableHeader
+                          {...column.getHeaderProps({
+                            style: {
+                              width: column.width,
+                              minWidth: column.minWidth,
+                            },
+                          })}
+                        >
+                          {column.render("Header")}
+                        </TableHeader>
+                      ))}
+                    </TableRow>
+                  ))}
                   {headerGroups.map(headerGroup => (
                     <TableRow {...headerGroup.getHeaderGroupProps()}>
                       {headerGroup.headers.map(column => (

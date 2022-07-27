@@ -187,6 +187,7 @@ Rails.application.routes.draw do
     post "check_in_templates/run/:id", to: "check_in_templates#run_now"
     post "check_in_templates/publish/:id", to: "check_in_templates#publish_now"
     get "general_check_in",  to: "check_in_templates#general_check_in"
+    get "check_in_templates_report/:id", to: "check_in_templates#report"
     patch "check_in_templates/artifact/:id",  to: "check_in_templates#artifact" #can be used to skip an artifact, and update the artifact 
 
     resources :check_in_artifact, only: [:show]

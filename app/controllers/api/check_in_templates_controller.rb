@@ -6,7 +6,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   include UserActivityLogHelper
   respond_to :json
   after_action :record_activities, only: [:create, :update, :show]
-  before_action :set_check_in_template, only: [:show, :update, :run_now, :publish_now]
+  before_action :set_check_in_template, only: [:show, :update, :run_now, :publish_now, :report]
 
   skip_after_action :verify_authorized, only: [:get_onboarding_company, :create_or_update_onboarding_goals, :get_onboarding_goals, :create_or_update_onboarding_key_activities, :get_onboarding_key_activities, :create_or_update_onboarding_team]
 
@@ -353,6 +353,12 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   def show
     render json: { template: @check_in_template, status: :ok }
   end
+
+  def report
+    # authorize check_in_template
+    render json: { template: @check_in_template, status: :ok }
+  end
+
 
   def destroy
     @check_in_template.destroy!
