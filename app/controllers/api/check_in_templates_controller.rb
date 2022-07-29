@@ -147,7 +147,8 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   day_as_int = IceCube::RuleHelper.day_of_week_as_int(date_time_config)
   hour_as_int = IceCube::RuleHelper.hour_of_day_as_int(date_time_config)
   minute_as_int = IceCube::RuleHelper.minute_of_hour_as_int(date_time_config)
-
+  @check_in_template.status = 1
+  
    day = Time.parse(date_time_config["date"]).day if date_time_config["date"].present?
     begin
       case date_time_config["cadence"] 

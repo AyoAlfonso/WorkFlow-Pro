@@ -6,6 +6,16 @@ class CheckInTemplate < ApplicationRecord
     weekly_check_in: 0,
     dynamic: 1,
   }
+  enum status: {
+    draft: 0,
+    published:1,
+    archive: 2,
+  }
+  enum owner_type: {
+    company: 0,
+    team:1,
+    personal:2
+  }
 
   validates :check_in_type, presence: true
   scope :sort_by_company, ->(company) { where(company_id: [nil, company.id]) }
@@ -20,12 +30,6 @@ class CheckInTemplate < ApplicationRecord
 
   accepts_nested_attributes_for :check_in_templates_steps, allow_destroy: true
 
-  enum owner_type: {
-    company: 0,
-    team:1,
-    personal:2
-  }
-
   def as_json(options = [])
     super({
        include: [
@@ -39,10 +43,18 @@ class CheckInTemplate < ApplicationRecord
   end
 
    def period
-     (self.check_in_artifacts.empty?) ? {} : self.check_in_artifacts.group_by { |log| log[:start_time].strftime("%A, %B %d, %Y")}.map do |start_time, check_in_artifact|
+     (self.check_in_artifacts.empty?) ? {} : self.check_in_artifacts.group_by { |log| log[:start_time].strftime("%A, %B, %d, %Y")}.map do |start_time, check_in_artifact|
         [start_time, check_in_artifact]
        end.to_h
    end
+
+  def related_parent
+    if !self.parent.present?
+      return nil
+    elsif self.parent.present?
+      return CheckInTemplate.find(id: self.parent)
+    end
+  end
 
  
   #run the notifications migrations the right people for global, you have done it for custom and children templates

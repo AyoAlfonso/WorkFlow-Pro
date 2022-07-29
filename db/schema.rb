@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_25_201129) do
+ActiveRecord::Schema.define(version: 2022_07_28_120054) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -152,6 +152,7 @@ ActiveRecord::Schema.define(version: 2022_07_25_201129) do
     t.datetime "deleted_at"
     t.integer "parent"
     t.bigint "created_by_id"
+    t.integer "status", default: 0
     t.index ["company_id"], name: "index_check_in_templates_on_company_id", where: "(deleted_at IS NULL)"
     t.index ["created_by_id"], name: "index_check_in_templates_on_created_by_id"
     t.index ["deleted_at"], name: "index_check_in_templates_on_deleted_at"

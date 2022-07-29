@@ -1,7 +1,10 @@
 class CheckInTemplatesStep < ApplicationRecord
   before_save :set_description_text
 
-
+  # amoeba do
+  #   enable
+  # end
+  
   belongs_to :check_in_template
   enum step_type: { image: 0, component: 1, embedded_link: 2, description_text: 3, questions: 4  }
   has_one_attached :image
