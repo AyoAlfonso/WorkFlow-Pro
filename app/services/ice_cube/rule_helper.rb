@@ -117,18 +117,21 @@ class IceCube::RuleHelper
     schedule.to_h
   end
 
-  def self.construct_rule(day, hour, minute, date_time_config )
+  # def self.construct_rule(day, hour, minute, date_time_config)
+  #   if day
+  #     construct_weekly_rule(day, hour, minute)
+  #   elsif(date_time_config["cadence"])
+  #    return case date_time_config["cadence"] 
+  #       when construct_monthly_rule(date_time_config)
+  #     end
+  #   else
+  #     construct_daily_rule(hour, minute)
+  #   end
+  # end
+
+  def self.construct_rule(day, hour, minute)
     if day
       construct_weekly_rule(day, hour, minute)
-    elsif(date_time_config["cadence"])
-     return case date_time_config["cadence"] 
-        when construct_monthly_rule(date_time_config)
-        # when "bi-weekly"; rule = schedule.add_recurrence_rule(IceCube::Rule.weekly(2).day(date_time_config["day"]).hour_of_day(date_time_config["time"]).minute_of_hour(0)).to_h
-        # when "daily"; rule = schedule.add_recurrence_rule(IceCube::Rule.daily.hour_of_day(1).minute_of_hour()).to_h
-        # when "monthly"; rule = schedule.add_recurrence_rule().to_h
-        # when "once";  rule = single_occurence_schedule.add_recurrence_rule(IceCube::Rule.yearly.day_of_month(run_once.month).hour_of_day(run_once.hour).minute_of_hour(run_once.min).count(1)).to_h
-      end
-
     else
       construct_daily_rule(hour, minute)
     end

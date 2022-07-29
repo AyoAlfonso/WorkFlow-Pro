@@ -777,7 +777,7 @@ export const ScorecardTableView = observer(
                       ))}
                     </TableRow>
                   ))}
-                  {headerGroups.map(headerGroup => (
+                  {/* {headerGroups.map(headerGroup => (
                     <TableRow {...headerGroup.getHeaderGroupProps()}>
                       {headerGroup.headers.map(column => (
                         <TableHeader
@@ -792,7 +792,7 @@ export const ScorecardTableView = observer(
                         </TableHeader>
                       ))}
                     </TableRow>
-                  ))}
+                  ))} */}
                 </TableHead>
                 <TableBody {...getTableBodyProps()}>
                   {rows.map(row => {
