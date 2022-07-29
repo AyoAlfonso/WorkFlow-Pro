@@ -4,7 +4,7 @@ import moment from "moment";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { Icon, Text } from "~/components/shared";
+import { Icon, Loading, Text } from "~/components/shared";
 import { ParticipantsAvatars } from "~/components/shared/participants-avatars";
 import { useMst } from "~/setup/root";
 import { getCadence, getTimezone } from "~/utils/check-in-functions";
@@ -36,7 +36,7 @@ export const CheckinInsights = observer(
       teamStore,
       companyStore,
     } = useMst();
-    
+
     useEffect(() => {
       getCheckInTemplateInsights(id).then(temp => {
         setData(temp);
@@ -51,7 +51,7 @@ export const CheckinInsights = observer(
 
     const getEntityArray = entityArray => {
       const entityArrayToReturn = [];
-      entityArray.forEach(entity => {
+      entityArray?.forEach(entity => {
         if (entity.type === "user") {
           const user = userStore.users?.find(user => user.id === entity.id);
           if (user) {
@@ -152,19 +152,70 @@ export const CheckinInsights = observer(
           filtered.push(item);
         return filtered;
       }, []);
-      return users;
+      return users.length;
     };
 
     const getSteps = data?.checkInTemplatesSteps?.map(step => step.name);
 
     const steps = data.checkInTemplatesSteps;
 
-    console.log(getSteps, insightsToShow);
+    const handleClick = action => {
+      const index = insightDates.indexOf(currentInsightDate);
+      if (action === "next") {
+        if (index < insightDates.length - 1) {
+          setCurrentInsightDate(insightDates[index + 1]);
+          setInsightsToShow(data.period[insightDates[index + 1]]);
+        }
+      } else if (action === "previous") {
+        if (index > 0) {
+          setCurrentInsightDate(insightDates[index - 1]);
+          setInsightsToShow(data.period[insightDates[index - 1]]);
+        }
+      }
+    };
 
-    if (loading) {
-      return <></>;
-    }
+    const isPrevDisabled = () => {
+      const index = insightDates.indexOf(currentInsightDate);
+      if (index === 0) {
+        return true;
+      }
+      return false;
+    };
+
+    const isNextDisabled = () => {
+      const index = insightDates.indexOf(currentInsightDate);
+      if (index === insightDates.length - 1) {
+        return true;
+      }
+      return false;
+    };
+
+    const getNumberOfResponses = () => {
+      const logs = insightsToShow
+        .map(artifact => {
+          if (artifact.checkInArtifactLogs[0]) {
+            return {
+              ...artifact.checkInArtifactLogs[0],
+              ownedBy: artifact.ownedById,
+              updatedAt: artifact.updatedAt,
+            };
+          }
+        })
+        .filter(Boolean);
+      return logs.length;
+    };
     
+    if (loading) {
+      return (
+        <DesktopLoadingContainer>
+          <Loading />
+        </DesktopLoadingContainer>
+      );
+    }
+
+    const responseNumber = getNumberOfResponses();
+    const totalParticipants = getUsers(data.participants);
+
     return (
       <Container>
         <SideBar>
@@ -200,15 +251,23 @@ export const CheckinInsights = observer(
         <InsightsContainer>
           <CheckinName>{data.name.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}</CheckinName>
           <FlexContainer>
-            <IconContainer disabled={false}>
-              <Icon icon={"Chevron-Left"} size={"12px"} iconColor={"greyActive"} />
+            <IconContainer disabled={isPrevDisabled()} onClick={() => handleClick("previous")}>
+              <Icon
+                icon={"Chevron-Left"}
+                size={"12px"}
+                iconColor={isPrevDisabled() ? "greyInactive" : "greyActive"}
+              />
             </IconContainer>
             <DateContainer onClick={() => setShowDropdown(!showDropdown)}>
               {moment(currentInsightDate).format("dddd, MMMM Do, YYYY")}
               <Icon icon={"Chevron-Down"} size={"12px"} iconColor={"grey100"} />
             </DateContainer>
-            <IconContainer disabled={false}>
-              <RightIcon icon={"Chevron-Left"} size={"12px"} iconColor={"greyActive"} />
+            <IconContainer disabled={isNextDisabled()} onClick={() => handleClick("next")}>
+              <RightIcon
+                icon={"Chevron-Left"}
+                size={"12px"}
+                iconColor={isNextDisabled() ? "greyInactive" : "greyActive"}
+              />
             </IconContainer>
 
             {showDropdown && (
@@ -242,12 +301,17 @@ export const CheckinInsights = observer(
               {getSteps.includes("Agreement Scale") && (
                 <AgreementInsights insightsToShow={insightsToShow} steps={steps} />
               )}
-              <YesNoInsights />
+              {getSteps.includes("Yes/No") && (
+                <YesNoInsights insightsToShow={insightsToShow} steps={steps} />
+              )}
               <KpiInsights />
               <InitiativeInsights />
               <JournalInsights />
             </LeftContainer>
-            <ParticipationInsights />
+            <ParticipationInsights
+              responseNumber={responseNumber || 0}
+              totalNumberOfParticipants={totalParticipants || 0}
+            />
           </ContentContainer>
         </InsightsContainer>
       </Container>
@@ -256,6 +320,12 @@ export const CheckinInsights = observer(
 );
 
 const LeftContainer = styled.div``;
+
+const DesktopLoadingContainer = styled.div`
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
+`;
 
 const Container = styled.div`
   height: 100%;
@@ -372,12 +442,12 @@ type IconContainerProps = {
   disabled?: boolean;
 };
 
-const IconContainer = styled.div<IconContainerProps>`
+export const IconContainer = styled.div<IconContainerProps>`
   cursor: pointer;
   pointer-events: ${props => (props.disabled ? "none" : "auto")};
 `;
 
-const DateContainer = styled.div`
+export const DateContainer = styled.div`
   border: 1px solid ${props => props.theme.colors.borderGrey};
   color: ${props => props.theme.colors.grey100};
   padding: 0.5em 1em;
@@ -392,7 +462,7 @@ const DateContainer = styled.div`
   cursor: pointer;
 `;
 
-const FlexContainer = styled.div`
+export const FlexContainer = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 1em;
@@ -400,7 +470,7 @@ const FlexContainer = styled.div`
   width: fit-content;
 `;
 
-const DropdownContainer = styled.div`
+export const DropdownContainer = styled.div`
   background: ${props => props.theme.colors.white};
   border-radius: 4px;
   padding: 8px 0px;
@@ -411,7 +481,7 @@ const DropdownContainer = styled.div`
   bottom: -80px;
 `;
 
-const Option = styled.div`
+export const Option = styled.div`
   padding: 8px;
   cursor: pointer;
   font-size: 12px;
@@ -420,6 +490,6 @@ const Option = styled.div`
   }
 `;
 
-const RightIcon = styled(Icon)`
+export const RightIcon = styled(Icon)`
   transform: rotate(180deg);
 `;

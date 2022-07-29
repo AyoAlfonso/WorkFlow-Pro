@@ -4,7 +4,7 @@ import { Doughnut } from "react-chartjs-2";
 import { baseTheme } from "~/themes";
 import { Text } from "~/components/shared";
 
-const ParticipationInsights = (): JSX.Element => {
+const ParticipationInsights = ({ responseNumber, totalNumberOfParticipants }): JSX.Element => {
   const chartOptions = {
     legend: {
       display: false,
@@ -13,17 +13,20 @@ const ParticipationInsights = (): JSX.Element => {
     cutoutPercentage: 60,
   };
 
+  const participationPercentage =
+    (Number(responseNumber) / Number(totalNumberOfParticipants)) * 100;
+
   const data = {
-    labels: ["Participation"],
+    labels: ["Response", "No Response"],
     datasets: [
       {
-        data: [33, 67],
+        data: [participationPercentage, 100 - participationPercentage],
         backgroundColor: [baseTheme.colors.primary100, baseTheme.colors.grey100],
       },
     ],
     hoveroffset: 0,
   };
-
+  
   return (
     <Container>
       <HeaderContainer>
@@ -31,13 +34,16 @@ const ParticipationInsights = (): JSX.Element => {
       </HeaderContainer>
       <DoughnutChartContainer>
         <DoughnutTextContainer>
-          <ParticipationPercentage>33%</ParticipationPercentage>
+          <ParticipationPercentage>{`${
+            !participationPercentage.toFixed() ? 0 : participationPercentage.toFixed()
+          }%`}</ParticipationPercentage>
         </DoughnutTextContainer>
         <Doughnut data={data} options={chartOptions} width={200} height={200} />
       </DoughnutChartContainer>
       <InfoContainer>
         <InfoText>
-          Reported <b>2</b> people out of <b>6</b>
+          Reported <b>{responseNumber}</b> {responseNumber == 1 ? "people" : "person"} out of{" "}
+          <b>{totalNumberOfParticipants}</b>
         </InfoText>
       </InfoContainer>
     </Container>
@@ -61,6 +67,7 @@ const Container = styled.div`
 
   @media only screen and (max-width: 768px) {
     position: static;
+    margin-bottom: 1em;
   }
 `;
 
