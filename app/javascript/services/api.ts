@@ -774,5 +774,9 @@ export class Api {
   async updateCheckinTemplate(id, checkinTemplate) {
     return this.client.patch(`/check_in_templates/${id}`, checkinTemplate);
   }
+
+  async getTemplateInsights(id) {
+    return this.client.get(`/check_in_templates_report/${id}`);
+  }
   //async setJWT(jwt) {}
 }

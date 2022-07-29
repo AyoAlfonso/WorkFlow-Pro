@@ -1,6 +1,14 @@
-import React, { useState } from "react";
+import { object } from "@storybook/addon-knobs";
+import { observer } from "mobx-react";
+import moment from "moment";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { Icon, Text } from "~/components/shared";
+import { ParticipantsAvatars } from "~/components/shared/participants-avatars";
+import { useMst } from "~/setup/root";
+import { getCadence, getTimezone } from "~/utils/check-in-functions";
+import AgreementInsights from "./components/agreement-insights";
 import DateSelector from "./components/date-selector";
 import InitiativeInsights from "./components/initiatives-insights";
 import JournalInsights from "./components/journal-insights";
@@ -8,72 +16,244 @@ import { KpiInsights } from "./components/kpi-insights";
 import { NumericalStepInsights } from "./components/numerical-step-insights";
 import { OpenEndedInsights } from "./components/open-ended-insights";
 import ParticipationInsights from "./components/participation-insights";
-import { SelectionScaleInsights } from "./components/selection-scale-insights";
+import SentimentInsights from "./components/sentiment-insights";
 import { YesNoInsights } from "./components/yes-no-insights";
 
-export const CheckinInsights = (): JSX.Element => {
-  const [date, setDate] = useState<Date>(new Date());
-  return (
-    <Container>
-      <SideBar>
-        <SectionContainer>
-          <SideBarHeader>participants</SideBarHeader>
-          <AvatarContainer>
-            <Avatar>
-              <AvatarImage src="https://via.placeholder.com/150" />
-            </Avatar>
-            <Avatar>
-              <AvatarImage src="https://via.placeholder.com/150" />
-            </Avatar>
-            <Avatar>
-              <AvatarImage src="https://via.placeholder.com/150" />
-            </Avatar>
-            <Avatar>
-              <AvatarImage src="https://via.placeholder.com/150" />
-            </Avatar>
-            <Avatar>
-              <AvatarImage src="https://via.placeholder.com/150" />
-            </Avatar>
-          </AvatarContainer>
-        </SectionContainer>
-        <SectionContainer>
-          <SideBarHeader>delivery</SideBarHeader>
-          <InfoText>Every weekday at 10:00am in the account time zone</InfoText>
-        </SectionContainer>
-        <SectionContainer>
-          <SideBarHeader>response</SideBarHeader>
-          <InfoText>Manager</InfoText>
-        </SectionContainer>
-        <SectionContainer>
-          <SideBarHeader>steps</SideBarHeader>
-          <StepContainer>
-            <StepIconContainer>
-              <ChevronRightIcon icon="Chevron-Left" iconColor="white" size="16px" />
-            </StepIconContainer>
-            <StepText>What are you working on today?</StepText>
-          </StepContainer>
-        </SectionContainer>
-      </SideBar>
-      <InsightsContainer>
-        <CheckinName>Weekly Check-in</CheckinName>
-        <DateSelector date={date} setDate={setDate} />
-        <ContentContainer>
-          <LeftContainer>
-            <OpenEndedInsights /> <br />
-            <NumericalStepInsights /> <br />
-            <SelectionScaleInsights /> <br />
-            <SelectionScaleInsights type="sentiment" /> <br />
-            <YesNoInsights /> <br />
-            <KpiInsights /> <br />
-            <InitiativeInsights /> <br />
-            <JournalInsights />
-          </LeftContainer>
-          <ParticipationInsights />
-        </ContentContainer>
-      </InsightsContainer>
-    </Container>
-  );
-};
+export const CheckinInsights = observer(
+  (): JSX.Element => {
+    const [data, setData] = useState<any>({});
+    const [loading, setLoading] = useState<boolean>(true);
+    const [insightsToShow, setInsightsToShow] = useState([]);
+    const [insightDates, setInsightDates] = useState<any>([]);
+    const [currentInsightDate, setCurrentInsightDate] = useState("");
+    const [showDropdown, setShowDropdown] = useState<boolean>(false);
+
+    const { id } = useParams();
+
+    const {
+      checkInTemplateStore: { getCheckInTemplateInsights, checkInTemplateInsights },
+      userStore,
+      teamStore,
+      companyStore,
+    } = useMst();
+    
+    useEffect(() => {
+      getCheckInTemplateInsights(id).then(temp => {
+        setData(temp);
+        const insightKeys = Object.keys(temp.period);
+        const insightDateToShow = insightKeys[insightKeys.length - 1];
+        setCurrentInsightDate(insightDateToShow);
+        setInsightDates(insightKeys);
+        setInsightsToShow(temp.period[insightDateToShow]);
+        setLoading(false);
+      });
+    }, []);
+
+    const getEntityArray = entityArray => {
+      const entityArrayToReturn = [];
+      entityArray.forEach(entity => {
+        if (entity.type === "user") {
+          const user = userStore.users?.find(user => user.id === entity.id);
+          if (user) {
+            entityArrayToReturn.push({
+              id: user.id,
+              type: "user",
+              defaultAvatarColor: user.defaultAvatarColor,
+              avatarUrl: user.avatarUrl,
+              name: user.firstName,
+              lastName: user.lastName,
+            });
+          }
+        } else if (entity.type === "team") {
+          const team = teamStore.teams?.find(team => team.id === entity.id);
+          if (team) {
+            entityArrayToReturn.push({
+              id: team.id,
+              type: "team",
+              defaultAvatarColor: team.defaultAvatarColor,
+              name: team.name,
+            });
+          }
+        } else {
+          companyStore.company &&
+            entityArrayToReturn.push({
+              id: companyStore.company?.id,
+              type: "company",
+              avatarUrl: companyStore.company?.logoUrl,
+              name: companyStore.company?.name,
+            });
+        }
+      });
+      return entityArrayToReturn;
+    };
+
+    const getDeliveryStatement = () => {
+      const dateTimeConfig = data.dateTimeConfig;
+
+      const timezone = `${getTimezone[data.timeZone]} time zone`;
+      const cadence = getCadence(dateTimeConfig.cadence);
+      const time = moment(dateTimeConfig.time, ["HH:mm"]).format("hh:mm A");
+
+      const deliveryStatement = `${cadence} at ${time} ${
+        dateTimeConfig.day || dateTimeConfig.date
+          ? `on ${dateTimeConfig.day || dateTimeConfig.date}`
+          : ""
+      } in the ${timezone}`;
+
+      return deliveryStatement;
+    };
+
+    const getUsersFromEntityArray = entityArray => {
+      const users = [];
+      const entityArrayToReturn = getEntityArray(entityArray);
+
+      entityArrayToReturn.map(entity => {
+        if (entity.type === "user") {
+          users.push(entity);
+        } else if (entity.type === "team") {
+          teamStore.teams?.map(team => {
+            if (team.id === entity.id) {
+              team.users?.map(user => {
+                users.push({
+                  id: user.id,
+                  type: "user",
+                  defaultAvatarColor: user.defaultAvatarColor,
+                  avatarUrl: user.avatarUrl,
+                  name: user.firstName,
+                  lastName: user.lastName,
+                });
+              });
+            }
+          });
+        } else if (entity.type === "company") {
+          userStore.users
+            .filter(user => user.status == "active")
+            .map(user => {
+              users.push({
+                id: user.id,
+                type: "user",
+                defaultAvatarColor: user.defaultAvatarColor,
+                avatarUrl: user.avatarUrl,
+                name: user.firstName,
+                lastName: user.lastName,
+              });
+            });
+        }
+      });
+
+      return users;
+    };
+
+    const getUsers = entityArray => {
+      const usersArray = getUsersFromEntityArray(entityArray);
+
+      const users = usersArray.reduce((filtered, item) => {
+        if (!filtered.some(filteredItem => JSON.stringify(filteredItem) == JSON.stringify(item)))
+          filtered.push(item);
+        return filtered;
+      }, []);
+      return users;
+    };
+
+    const getSteps = data?.checkInTemplatesSteps?.map(step => step.name);
+
+    const steps = data.checkInTemplatesSteps;
+
+    console.log(getSteps, insightsToShow);
+
+    if (loading) {
+      return <></>;
+    }
+    
+    return (
+      <Container>
+        <SideBar>
+          <SectionContainer>
+            <SideBarHeader>participants</SideBarHeader>
+            <AvatarContainer>
+              <ParticipantsAvatars entityList={getEntityArray(data.participants)} />
+            </AvatarContainer>
+          </SectionContainer>
+          <SectionContainer>
+            <SideBarHeader>delivery</SideBarHeader>
+            <InfoText>{getDeliveryStatement()}</InfoText>
+          </SectionContainer>
+          <SectionContainer>
+            <SideBarHeader>response</SideBarHeader>
+            {/* <InfoText>Manager</InfoText> */}
+            <AvatarContainer>
+              <ParticipantsAvatars entityList={getEntityArray(data.viewers)} />
+            </AvatarContainer>
+          </SectionContainer>
+          <SectionContainer>
+            <SideBarHeader>steps</SideBarHeader>
+            {data.checkInTemplatesSteps.map(step => (
+              <StepContainer key={step.orderIndex}>
+                <StepIconContainer>
+                  <ChevronRightIcon icon="Chevron-Left" iconColor="white" size="16px" />
+                </StepIconContainer>
+                <StepText>{step.variant || step.question}</StepText>
+              </StepContainer>
+            ))}
+          </SectionContainer>
+        </SideBar>
+        <InsightsContainer>
+          <CheckinName>{data.name.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}</CheckinName>
+          <FlexContainer>
+            <IconContainer disabled={false}>
+              <Icon icon={"Chevron-Left"} size={"12px"} iconColor={"greyActive"} />
+            </IconContainer>
+            <DateContainer onClick={() => setShowDropdown(!showDropdown)}>
+              {moment(currentInsightDate).format("dddd, MMMM Do, YYYY")}
+              <Icon icon={"Chevron-Down"} size={"12px"} iconColor={"grey100"} />
+            </DateContainer>
+            <IconContainer disabled={false}>
+              <RightIcon icon={"Chevron-Left"} size={"12px"} iconColor={"greyActive"} />
+            </IconContainer>
+
+            {showDropdown && (
+              <DropdownContainer>
+                {insightDates.map(insightDate => (
+                  <Option
+                    key={`${insightDate}`}
+                    onClick={() => {
+                      setCurrentInsightDate(insightDate);
+                      setInsightsToShow(data.period[insightDate]);
+                      setShowDropdown(false);
+                    }}
+                  >
+                    {moment(insightDate).format("dddd, MMMM Do, YYYY")}
+                  </Option>
+                ))}
+              </DropdownContainer>
+            )}
+          </FlexContainer>
+          <ContentContainer>
+            <LeftContainer>
+              {getSteps.includes("Open-ended") && (
+                <OpenEndedInsights insightsToShow={insightsToShow} steps={steps} />
+              )}
+              {getSteps.includes("Numeric") && (
+                <NumericalStepInsights insightsToShow={insightsToShow} steps={steps} />
+              )}
+              {getSteps.includes("Sentiment") && (
+                <SentimentInsights insightsToShow={insightsToShow} steps={steps} />
+              )}
+              {getSteps.includes("Agreement Scale") && (
+                <AgreementInsights insightsToShow={insightsToShow} steps={steps} />
+              )}
+              <YesNoInsights />
+              <KpiInsights />
+              <InitiativeInsights />
+              <JournalInsights />
+            </LeftContainer>
+            <ParticipationInsights />
+          </ContentContainer>
+        </InsightsContainer>
+      </Container>
+    );
+  },
+);
 
 const LeftContainer = styled.div``;
 
@@ -95,6 +275,7 @@ const SideBar = styled.div`
   height: 100%;
   padding: 32px;
   position: fixed;
+  overflow-y: auto;
 
   @media only screen and (min-width: 1600px) {
     left: 96px;
@@ -180,26 +361,65 @@ export const StepContainer = styled.div`
   display: flex;
   align-items: center;
   padding-left: 1em;
+  margin-bottom: 0.5em;
 `;
 
-export const AvatarContainer = styled.div`
-  display: inline-flex;
+const AvatarContainer = styled.div`
   padding-left: 1em;
 `;
 
-export const Avatar = styled.span`
-  position: relative;
-  border: 2px solid #fff;
-  border-radius: 50%;
-  overflow: hidden;
-  width: 32px;
+type IconContainerProps = {
+  disabled?: boolean;
+};
 
-  &:not(:first-child) {
-    margin-left: -16px;
+const IconContainer = styled.div<IconContainerProps>`
+  cursor: pointer;
+  pointer-events: ${props => (props.disabled ? "none" : "auto")};
+`;
+
+const DateContainer = styled.div`
+  border: 1px solid ${props => props.theme.colors.borderGrey};
+  color: ${props => props.theme.colors.grey100};
+  padding: 0.5em 1em;
+  font-size: 0.75em;
+  font-weight: bold;
+  margin: 0 1em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 4px;
+  gap: 0 1em;
+  cursor: pointer;
+`;
+
+const FlexContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 1em;
+  position: relative;
+  width: fit-content;
+`;
+
+const DropdownContainer = styled.div`
+  background: ${props => props.theme.colors.white};
+  border-radius: 4px;
+  padding: 8px 0px;
+  position: absolute;
+  box-shadow: 0px 3px 6px #00000029;
+  width: 100%;
+  // z-index: 5;
+  bottom: -80px;
+`;
+
+const Option = styled.div`
+  padding: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  &:hover {
+    background: ${props => props.theme.colors.backgroundGrey};
   }
 `;
 
-export const AvatarImage = styled.img`
-  width: 100%;
-  display: block;
+const RightIcon = styled(Icon)`
+  transform: rotate(180deg);
 `;

@@ -97,6 +97,7 @@ const Container = styled.div`
   background: ${props => props.theme.colors.white};
   border-radius: 8px;
   padding: 16px 0;
+  margin-bottom: 16px;
   // height: 250px;
 `;
 

@@ -106,7 +106,7 @@ export const CheckInCard = observer(
       <Container>
         <TitleContainer>
           <Title disabled={!isViewer} onClick={() => history.push(`/check-in/insights/${id}`)}>
-            {name}
+            {name.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}
           </Title>
           <IconContainer onClick={() => history.push(`/check-in/edit/${checkin.id}`)}>
             <Icon icon={"Settings"} size="18px" iconColor={"greyActive"} />

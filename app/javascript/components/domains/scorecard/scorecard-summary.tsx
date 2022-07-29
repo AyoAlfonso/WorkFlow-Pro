@@ -635,11 +635,11 @@ const WeekToogleContainer = styled.div`
   padding: 8px 0px;
   position: absolute;
   box-shadow: 0px 3px 6px #00000029;
-  width: 100%;    
+  width: 100%;
   z-index: 5;
   bottom: -45px;
-}
 `;
+
 const ToogleOption = styled.div`
   padding: 8px;
   cursor: pointer;

@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Icon, Text } from "~/components/shared";
 import {
-  Avatar,
-  AvatarContainer,
-  AvatarImage,
   ChevronRightIcon,
   InfoText,
   SectionContainer,
@@ -20,13 +17,12 @@ import { KpiInsights } from "./components/kpi-insights";
 import { NumericalStepInsights } from "./components/numerical-step-insights";
 import { OpenEndedInsights } from "./components/open-ended-insights";
 import ParticipationInsights from "./components/participation-insights";
-import { SelectionScaleInsights } from "./components/selection-scale-insights";
 import { YesNoInsights } from "./components/yes-no-insights";
 
 const MobileCheckinInsights = (): JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
   const [date, setDate] = useState<Date>(new Date());
-  
+
   return (
     <Container>
       <HeaderContainer>
@@ -41,7 +37,7 @@ const MobileCheckinInsights = (): JSX.Element => {
             </IconContainer>
             <SectionContainer>
               <SideBarHeader>participants</SideBarHeader>
-              <AvatarContainer>
+              {/* <AvatarContainer>
                 <Avatar>
                   <AvatarImage src="https://via.placeholder.com/150" />
                 </Avatar>
@@ -57,7 +53,7 @@ const MobileCheckinInsights = (): JSX.Element => {
                 <Avatar>
                   <AvatarImage src="https://via.placeholder.com/150" />
                 </Avatar>
-              </AvatarContainer>
+              </AvatarContainer> */}
             </SectionContainer>
             <SectionContainer>
               <SideBarHeader>delivery</SideBarHeader>
@@ -81,14 +77,14 @@ const MobileCheckinInsights = (): JSX.Element => {
       </HeaderContainer>
       <DateSelector date={date} setDate={setDate} />
       <ParticipationInsights /> <br />
-      <OpenEndedInsights /> <br />
-      <NumericalStepInsights /> <br />
-      <SelectionScaleInsights type="sentiment" /> <br />
-      <SelectionScaleInsights /> <br />
-      <YesNoInsights /> <br />
-      <InitiativeInsights /> <br />
-      <KpiInsights /> <br />
-      <JournalInsights />
+      {/* <OpenEndedInsights /> 
+      <NumericalStepInsights /> 
+      <SelectionScaleInsights type="sentiment" /> 
+      <SelectionScaleInsights /> 
+      <YesNoInsights /> 
+      <InitiativeInsights /> 
+      <KpiInsights /> 
+      <JournalInsights /> */}
     </Container>
   );
 };
