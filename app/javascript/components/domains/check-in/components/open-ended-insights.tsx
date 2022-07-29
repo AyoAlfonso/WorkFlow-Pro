@@ -74,14 +74,14 @@ export const OpenEndedInsights = observer(({
                     marginLeft={"0px"}
                     marginTop={"0px"}
                     marginRight={"16px"}
-                    firstName={getUser(log.ownedBy).firstName}
-                    lastName={getUser(log.ownedBy).lastName}
-                    defaultAvatarColor={getUser(log.ownedBy).defaultAvatarColor}
-                    avatarUrl={getUser(log.ownedBy).avatarUrl}
+                    firstName={getUser(log.ownedBy)?.firstName}
+                    lastName={getUser(log.ownedBy)?.lastName}
+                    defaultAvatarColor={getUser(log.ownedBy)?.defaultAvatarColor}
+                    avatarUrl={getUser(log.ownedBy)?.avatarUrl}
                   />
                   <TextContainer>
-                    <NameText>{`${getUser(log.ownedBy).firstName} ${
-                      getUser(log.ownedBy).lastName
+                    <NameText>{`${getUser(log.ownedBy)?.firstName} ${
+                      getUser(log.ownedBy)?.lastName
                     }`}</NameText>
                     <ResponseText>{getResponse(question, log)}</ResponseText>
                     <DateText>{moment(log.updatedAt).format("hh:mm a")}</DateText>
