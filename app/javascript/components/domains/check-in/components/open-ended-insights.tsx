@@ -10,103 +10,111 @@ interface OpenEndedInsightsProps {
   steps: Array<any>;
 }
 
-export const OpenEndedInsights = observer(({
-  insightsToShow,
-  steps,
-}: OpenEndedInsightsProps): JSX.Element => {
-  const { userStore } = useMst();
+export const OpenEndedInsights = observer(
+  ({ insightsToShow, steps }: OpenEndedInsightsProps): JSX.Element => {
+    const { userStore } = useMst();
 
-  const stepQuestions = steps
-    .map(step => {
-      if (step.name === "Open-ended") {
-        return step.question;
-      } else return;
-    })
-    .filter(Boolean);
+    const stepQuestions = steps
+      .map(step => {
+        if (step.name === "Open-ended") {
+          return step.question;
+        } else return;
+      })
+      .filter(Boolean);
 
-  const checkInArtifactLogs = insightsToShow
-    .map(artifact => {
-      if (artifact.checkInArtifactLogs[0]) {
-        return { ...artifact.checkInArtifactLogs[0], ownedBy: artifact.ownedById, updatedAt: artifact.updatedAt };
+    const checkInArtifactLogs = insightsToShow
+      .map(artifact => {
+        if (artifact.checkInArtifactLogs[0]) {
+          return {
+            ...artifact.checkInArtifactLogs[0],
+            ownedBy: artifact.ownedById,
+            updatedAt: artifact.updatedAt,
+          };
+        }
+      })
+      .filter(Boolean);
+
+    const getUser = userId => {
+      const user = userStore.users?.find(user => user.id === userId);
+      if (user) {
+        return user;
       }
-    })
-    .filter(Boolean);
+    };
 
-  const getUser = userId => {
-    const user = userStore.users?.find(user => user.id === userId);
-    if (user) {
-      return user;
-    }
-  };
-
-  const getResponse = (question, log) => {
-    const response = log.responses.find(
-      response => response.prompt == question && response.questionType == "open_ended",
-    );
-    return response?.response;
-  };
-
-  const getTotalNumberOfResponses = (question, logs) => {
-    const totalNumberOfResponses = logs.reduce((acc, log) => {
-      const response = log.responses.find(
+    const getResponse = (question, log) => {
+      const response = log.responses?.find(
         response => response.prompt == question && response.questionType == "open_ended",
       );
-      if (response) {
-        return acc + 1;
-      } else return acc;
-    }, 0);
-    return totalNumberOfResponses;
-  };
+      return response?.response;
+    };
 
-  return (
-    <>
-      {stepQuestions?.map((question, index) => (
-        <Container key={`${question}-${index}`}>
-          <HeaderContainer>
-            <QuestionText>{question}</QuestionText>
-          </HeaderContainer>
-          <ResponsesContainer>
-            {checkInArtifactLogs.length ? (
-              checkInArtifactLogs.map(log => (
-                <ResponseContainer key={log.ownedBy}>
-                  <Avatar
-                    size={32}
-                    marginLeft={"0px"}
-                    marginTop={"0px"}
-                    marginRight={"16px"}
-                    firstName={getUser(log.ownedBy)?.firstName}
-                    lastName={getUser(log.ownedBy)?.lastName}
-                    defaultAvatarColor={getUser(log.ownedBy)?.defaultAvatarColor}
-                    avatarUrl={getUser(log.ownedBy)?.avatarUrl}
-                  />
-                  <TextContainer>
-                    <NameText>{`${getUser(log.ownedBy)?.firstName} ${
-                      getUser(log.ownedBy)?.lastName
-                    }`}</NameText>
-                    <ResponseText>{getResponse(question, log)}</ResponseText>
-                    <DateText>{moment(log.updatedAt).format("hh:mm a")}</DateText>
-                  </TextContainer>
-                </ResponseContainer>
-              ))
-            ) : (
-              <></>
-            )}
-          </ResponsesContainer>
-          <Divider />
-          <InfoContainer>
-            <InfoText>
-              {!getTotalNumberOfResponses(question, checkInArtifactLogs)
-                ? "No response"
-                : getTotalNumberOfResponses(question, checkInArtifactLogs) == 1
-                ? "1 response"
-                : `${getTotalNumberOfResponses(question, checkInArtifactLogs)} total responses`}
-            </InfoText>
-          </InfoContainer>
-        </Container>
-      ))}
-    </>
-  );
-});
+    const getTotalNumberOfResponses = (question, logs) => {
+      const totalNumberOfResponses = logs.reduce((acc, log) => {
+        const response = log.responses?.find(
+          response => response.prompt == question && response.questionType == "open_ended",
+        );
+        if (response) {
+          return acc + 1;
+        } else return acc;
+      }, 0);
+      return totalNumberOfResponses;
+    };
+
+    return (
+      <>
+        {stepQuestions?.map((question, index) => (
+          <Container key={`${question}-${index}`}>
+            <HeaderContainer>
+              <QuestionText>{question}</QuestionText>
+            </HeaderContainer>
+            <ResponsesContainer>
+              {checkInArtifactLogs.length ? (
+                checkInArtifactLogs.map(log => {
+                  const response = getResponse(question, log);
+                  if (response) {
+                    return (
+                      <ResponseContainer key={log.ownedBy}>
+                        <Avatar
+                          size={32}
+                          marginLeft={"0px"}
+                          marginTop={"0px"}
+                          marginRight={"16px"}
+                          firstName={getUser(log.ownedBy)?.firstName}
+                          lastName={getUser(log.ownedBy)?.lastName}
+                          defaultAvatarColor={getUser(log.ownedBy)?.defaultAvatarColor}
+                          avatarUrl={getUser(log.ownedBy)?.avatarUrl}
+                        />
+                        <TextContainer>
+                          <NameText>{`${getUser(log.ownedBy)?.firstName} ${
+                            getUser(log.ownedBy)?.lastName
+                          }`}</NameText>
+                          <ResponseText>{getResponse(question, log)}</ResponseText>
+                          <DateText>{moment(log.updatedAt).format("hh:mm a")}</DateText>
+                        </TextContainer>
+                      </ResponseContainer>
+                    );
+                  }
+                })
+              ) : (
+                <></>
+              )}
+            </ResponsesContainer>
+            <Divider />
+            <InfoContainer>
+              <InfoText>
+                {!getTotalNumberOfResponses(question, checkInArtifactLogs)
+                  ? "No response"
+                  : getTotalNumberOfResponses(question, checkInArtifactLogs) == 1
+                  ? "1 response"
+                  : `${getTotalNumberOfResponses(question, checkInArtifactLogs)} total responses`}
+              </InfoText>
+            </InfoContainer>
+          </Container>
+        ))}
+      </>
+    );
+  },
+);
 
 const Container = styled.div`
   box-shadow: 0px 3px 6px #00000029;

@@ -7,6 +7,9 @@ import { useMst } from "~/setup/root";
 import {
   ChevronRightIcon,
   DateContainer,
+  DateInfo,
+  DateInfoSection,
+  DateText,
   DropdownContainer,
   FlexContainer,
   IconContainer,
@@ -16,6 +19,8 @@ import {
   SideBarHeader,
   StepContainer,
   StepIconContainer,
+  StepsContainer,
+  StepsSection,
   StepText,
 } from "./checkin-insights";
 import DateSelector from "./components/date-selector";
@@ -219,6 +224,7 @@ const MobileCheckinInsights = (): JSX.Element => {
 
   const responseNumber = getNumberOfResponses();
   const totalParticipants = getUsers(data.participants);
+  const { createdAt, updatedAt } = data;
 
   if (loading) {
     return (
@@ -256,17 +262,33 @@ const MobileCheckinInsights = (): JSX.Element => {
                 <ParticipantsAvatars entityList={getEntityArray(data.viewers)} />
               </AvatarContainer>
             </SectionContainer>
-            <SectionContainer>
+            <StepsSection>
               <SideBarHeader>steps</SideBarHeader>
-              {data.checkInTemplatesSteps.map(step => (
-                <StepContainer key={step.orderIndex}>
-                  <StepIconContainer>
-                    <ChevronRightIcon icon="Chevron-Left" iconColor="white" size="16px" />
-                  </StepIconContainer>
-                  <StepText>{step.variant || step.question}</StepText>
-                </StepContainer>
-              ))}
-            </SectionContainer>
+              <StepsContainer>
+                {data.checkInTemplatesSteps.map(step => (
+                  <StepContainer key={step.orderIndex}>
+                    <StepIconContainer>
+                      <ChevronRightIcon icon="Chevron-Left" iconColor="white" size="16px" />
+                    </StepIconContainer>
+                    <StepText>{step.variant || step.question}</StepText>
+                  </StepContainer>
+                ))}
+              </StepsContainer>
+            </StepsSection>
+            <DateInfoSection>
+              <DateInfo>
+                Created{" "}
+                <DateText>{`${new Date(createdAt).toDateString()}, ${moment(createdAt).format(
+                  "hh:mm a",
+                )}`}</DateText>
+              </DateInfo>
+              <DateInfo>
+                Last updated{" "}
+                <DateText>{`${new Date(updatedAt).toDateString()}, ${moment(updatedAt).format(
+                  "hh:mm a",
+                )}`}</DateText>
+              </DateInfo>
+            </DateInfoSection>
           </SideBar>
         )}
       </HeaderContainer>
@@ -364,17 +386,17 @@ type SideBarProps = {
 };
 
 const SideBar = styled.div<SideBarProps>`
-  position: absolute;
+  position: fixed;
   display: none;
-  right: 0;
-  top: 0;
+  right: 1em;
+  bottom: 0;
   width: ${props => (props.showSideBar ? "60vw" : "0px")};
   transition: 0.2s;
   background: ${props => props.theme.colors.backgroundGrey};
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   height: calc(100vh - 60px);
   padding: 1em;
-  z-index: 1;
+  z-index: 10;
   box-sizing: border-box;
 
   @media only screen and (max-width: 768px) {

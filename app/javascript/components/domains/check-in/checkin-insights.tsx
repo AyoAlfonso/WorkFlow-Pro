@@ -2,7 +2,7 @@ import { object } from "@storybook/addon-knobs";
 import { observer } from "mobx-react";
 import moment from "moment";
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { Icon, Loading, Text } from "~/components/shared";
 import { ParticipantsAvatars } from "~/components/shared/participants-avatars";
@@ -29,6 +29,7 @@ export const CheckinInsights = observer(
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
 
     const { id } = useParams();
+    const history = useHistory();
 
     const {
       checkInTemplateStore: { getCheckInTemplateInsights, checkInTemplateInsights },
@@ -204,7 +205,7 @@ export const CheckinInsights = observer(
         .filter(Boolean);
       return logs.length;
     };
-    
+
     if (loading) {
       return (
         <DesktopLoadingContainer>
@@ -215,11 +216,16 @@ export const CheckinInsights = observer(
 
     const responseNumber = getNumberOfResponses();
     const totalParticipants = getUsers(data.participants);
+    const { createdAt, updatedAt } = data;
+    const userArtifact = data.period[currentInsightDate].find(artifact => artifact.ownedBy === userStore.user?.id);
 
     return (
       <Container>
         <SideBar>
           <SectionContainer>
+            <IconContainer onClick={() => history.push(`/check-in/edit/${userArtifact?.id}`)}>
+              <Icon icon={"Settings"} size="18px" iconColor={"greyActive"} ml="auto" />
+            </IconContainer>
             <SideBarHeader>participants</SideBarHeader>
             <AvatarContainer>
               <ParticipantsAvatars entityList={getEntityArray(data.participants)} />
@@ -236,17 +242,33 @@ export const CheckinInsights = observer(
               <ParticipantsAvatars entityList={getEntityArray(data.viewers)} />
             </AvatarContainer>
           </SectionContainer>
-          <SectionContainer>
+          <StepsSection>
             <SideBarHeader>steps</SideBarHeader>
-            {data.checkInTemplatesSteps.map(step => (
-              <StepContainer key={step.orderIndex}>
-                <StepIconContainer>
-                  <ChevronRightIcon icon="Chevron-Left" iconColor="white" size="16px" />
-                </StepIconContainer>
-                <StepText>{step.variant || step.question}</StepText>
-              </StepContainer>
-            ))}
-          </SectionContainer>
+            <StepsContainer>
+              {data.checkInTemplatesSteps.map(step => (
+                <StepContainer key={step.orderIndex}>
+                  <StepIconContainer>
+                    <ChevronRightIcon icon="Chevron-Left" iconColor="white" size="16px" />
+                  </StepIconContainer>
+                  <StepText>{step.variant || step.question}</StepText>
+                </StepContainer>
+              ))}
+            </StepsContainer>
+          </StepsSection>
+          <DateInfoSection>
+            <DateInfo>
+              Created{" "}
+              <DateText>{`${new Date(createdAt).toDateString()}, ${moment(createdAt).format(
+                "hh:mm a",
+              )}`}</DateText>
+            </DateInfo>
+            <DateInfo>
+              Last updated{" "}
+              <DateText>{`${new Date(updatedAt).toDateString()}, ${moment(updatedAt).format(
+                "hh:mm a",
+              )}`}</DateText>
+            </DateInfo>
+          </DateInfoSection>
         </SideBar>
         <InsightsContainer>
           <CheckinName>{data.name.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}</CheckinName>
@@ -327,6 +349,10 @@ const DesktopLoadingContainer = styled.div`
   }
 `;
 
+const SideBarContentContainer = styled.div`
+  position: relative;
+`;
+
 const Container = styled.div`
   height: 100%;
   margin-left: -40px;
@@ -345,7 +371,7 @@ const SideBar = styled.div`
   height: 100%;
   padding: 32px;
   position: fixed;
-  overflow-y: auto;
+  // overflow-y: auto;
 
   @media only screen and (min-width: 1600px) {
     left: 96px;
@@ -382,6 +408,34 @@ const CheckinName = styled(Text)`
   margin-bottom: 1em;
 `;
 
+export const StepsContainer = styled.div`
+  flex: 1;
+  overflow-y: auto;
+`;
+
+export const StepsSection = styled.div`
+  margin-bottom: 1em;
+  height: 40%;
+  display: flex;
+  flex-direction: column;
+
+  @media only screen and (min-height: 2000px) {
+    height: 80%;
+  }
+
+  @media only screen and (min-height: 1200px) {
+    height: 60%;
+  }
+`;
+
+export const DateInfoSection = styled.div``;
+
+export const DateText = styled(Text)`
+  font-size: 12px;
+  font-weight: normal;
+  margin: 0;
+`;
+
 export const SideBarHeader = styled(Text)`
   font-size: 16px;
   color: ${props => props.theme.colors.grey100};
@@ -401,6 +455,11 @@ export const InfoText = styled(Text)`
   color: ${props => props.theme.colors.black};
   margin: 0;
   padding-left: 1em;
+`;
+
+export const DateInfo = styled(InfoText)`
+  font-size: 12px;
+  margin-bottom: 1em;
 `;
 
 export const StepIconContainer = styled.div`
@@ -445,6 +504,7 @@ type IconContainerProps = {
 export const IconContainer = styled.div<IconContainerProps>`
   cursor: pointer;
   pointer-events: ${props => (props.disabled ? "none" : "auto")};
+  display: flex;
 `;
 
 export const DateContainer = styled.div`

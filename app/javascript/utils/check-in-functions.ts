@@ -26,7 +26,7 @@ export const getTimezone = {
 
 export const getTotalNumberOfResponses = (question, logs, questionType) => {
   const totalNumberOfResponses = logs.reduce((acc, log) => {
-    const response = log.responses.find(
+    const response = log.responses?.find(
       response => response.prompt == question && response.questionType == questionType,
     );
     if (response) {
@@ -51,7 +51,7 @@ export const getAverage = ansArr => ansArr.reduce((acc, ans) => acc + ans, 0) / 
 export const getResponses = (question, logs, questionType) => {
   const responseArray = [];
   logs.forEach(log => {
-    const response = log.responses.find(
+    const response = log.responses?.find(
       response => response.prompt == question && response.questionType == questionType,
     );
     if (response) {

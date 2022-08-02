@@ -286,7 +286,7 @@ const QuarterSummary = ({
         setLastWeekPercent(+currentQuarterData[currentQuarterData.length - 2]);
       }
     }
-    console.log(currentQuarterWeeks);
+    
     setData({
       labels: R.range(startWeek, startWeek + 13).map((i: number) => `Week ${i}`),
       datasets: [

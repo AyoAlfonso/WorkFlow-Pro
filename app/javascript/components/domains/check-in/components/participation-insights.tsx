@@ -1,10 +1,29 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Doughnut } from "react-chartjs-2";
 import { baseTheme } from "~/themes";
 import { Text } from "~/components/shared";
 
-const ParticipationInsights = ({ responseNumber, totalNumberOfParticipants }): JSX.Element => {
+interface ParticipationInsightsProps {
+  responseNumber: number;
+  totalNumberOfParticipants: number;
+}
+
+const ParticipationInsights = ({
+  responseNumber,
+  totalNumberOfParticipants,
+}: ParticipationInsightsProps): JSX.Element => {
+  const [participationPercentage, setParticipationPercentage] = useState(0);
+
+  useEffect(() => {
+    const percentage = (responseNumber / totalNumberOfParticipants) * 100;
+    if (percentage == Infinity) {
+      setParticipationPercentage(0);
+    } else {
+      setParticipationPercentage(percentage);
+    }
+  }, [totalNumberOfParticipants, responseNumber]);
+
   const chartOptions = {
     legend: {
       display: false,
@@ -13,20 +32,17 @@ const ParticipationInsights = ({ responseNumber, totalNumberOfParticipants }): J
     cutoutPercentage: 60,
   };
 
-  const participationPercentage =
-    (Number(responseNumber) / Number(totalNumberOfParticipants)) * 100;
-
   const data = {
     labels: ["Response", "No Response"],
     datasets: [
       {
-        data: [participationPercentage, 100 - participationPercentage],
+        data: [participationPercentage.toFixed(), (100 - participationPercentage).toFixed()],
         backgroundColor: [baseTheme.colors.primary100, baseTheme.colors.grey100],
       },
     ],
     hoveroffset: 0,
   };
-  
+
   return (
     <Container>
       <HeaderContainer>
@@ -42,7 +58,7 @@ const ParticipationInsights = ({ responseNumber, totalNumberOfParticipants }): J
       </DoughnutChartContainer>
       <InfoContainer>
         <InfoText>
-          Reported <b>{responseNumber}</b> {responseNumber == 1 ? "people" : "person"} out of{" "}
+          Reported <b>{responseNumber}</b> {responseNumber == 1 ? "person" : "people"} out of{" "}
           <b>{totalNumberOfParticipants}</b>
         </InfoText>
       </InfoContainer>
