@@ -10,6 +10,7 @@ import { useMst } from "~/setup/root";
 import { toJS } from "mobx";
 import moment from "moment";
 import { ParticipantsAvatars } from "~/components/shared/participants-avatars";
+import { baseTheme } from "~/themes";
 
 interface CheckInCardProps {
   checkin: ICheckInArtifact;
@@ -102,6 +103,20 @@ export const CheckInCard = observer(
       return diff < 24;
     };
 
+    const isPastDueDate = () => {
+      const dateA = moment(new Date(checkin.startTime));
+      const dateB = moment(new Date());
+      const diff = dateB.diff(dateA, "hours");
+      return diff > 24;
+    };
+
+    const canCheckIn = () => {
+      const dateA = moment(new Date(checkin.startTime));
+      const dateB = moment(new Date());
+      const diff = dateA.diff(dateB, "days");
+      return diff < 1;
+    }
+
     return (
       <Container>
         <TitleContainer>
@@ -121,7 +136,9 @@ export const CheckInCard = observer(
               {isViewer && !isParticipant ? (
                 <EntryBadge>{isEntryNeeded() == true && `• Response Expected`}</EntryBadge>
               ) : (
-                <EntryBadge>{isEntryNeeded() == true && ` • Entry Needed`}</EntryBadge>
+                <EntryBadge color={isPastDueDate() && baseTheme.colors.warningRed}>
+                  {isEntryNeeded() == true && ` • Entry Needed`}
+                </EntryBadge>
               )}
             </>
           ) : (
@@ -140,6 +157,7 @@ export const CheckInCard = observer(
                   onClick={() => history.push(`/check-in/run/${checkin.id}`)}
                   small
                   style={{ whiteSpace: "nowrap" }}
+                  disabled={!canCheckIn()}
                 >
                   Check-in
                 </Button>
@@ -233,8 +251,12 @@ const DueDate = styled.span`
   margin-right: 2px;
 `;
 
-const EntryBadge = styled.span`
-  color: ${props => props.theme.colors.grey100};
+type EntryBadgeProps = {
+  color?: string;
+};
+
+const EntryBadge = styled.span<EntryBadgeProps>`
+  color: ${props => (props.color ? props.color : props.theme.colors.grey100)};
   font-size: 0.75em;
 `;
 
