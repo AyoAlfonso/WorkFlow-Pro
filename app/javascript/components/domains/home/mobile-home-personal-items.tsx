@@ -65,7 +65,6 @@ export const MobileHomePersonalItems = observer(
       return () => {
         document.removeEventListener("click", externalEventHandler);
       };
-      setCurrentTab(0);
     }, [showNavOptions]);
 
     const renderMobileKeyActivitiesBody = (): JSX.Element => {

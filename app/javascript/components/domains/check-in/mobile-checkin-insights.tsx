@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import moment from "moment";
@@ -7,6 +7,7 @@ import { useMst } from "~/setup/root";
 import {
   ChevronRightIcon,
   DateContainer,
+  DateDropdownContainer,
   DateInfo,
   DateInfoSection,
   DateText,
@@ -54,6 +55,8 @@ const MobileCheckinInsights = (): JSX.Element => {
     companyStore,
   } = useMst();
 
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     getCheckInTemplateInsights(id).then(temp => {
       setData(temp);
@@ -65,6 +68,29 @@ const MobileCheckinInsights = (): JSX.Element => {
       setLoading(false);
     });
   }, []);
+
+    useEffect(() => {
+      const externalEventHandler = e => {
+        if (!showDropdown) return;
+
+        const node = dropdownRef.current;
+
+        if (node && node.contains(e.target)) {
+          return;
+        }
+        setShowDropdown(false);
+      };
+
+      if (showDropdown) {
+        document.addEventListener("click", externalEventHandler);
+      } else {
+        document.removeEventListener("click", externalEventHandler);
+      }
+
+      return () => {
+        document.removeEventListener("click", externalEventHandler);
+      };
+    }, [showDropdown]);
 
   const getEntityArray = entityArray => {
     const entityArrayToReturn = [];
@@ -298,36 +324,39 @@ const MobileCheckinInsights = (): JSX.Element => {
             icon={"Chevron-Left"}
             size={"12px"}
             iconColor={isPrevDisabled() ? "greyInactive" : "greyActive"}
+            mr="1em"
           />
         </IconContainer>
-        <DateContainer onClick={() => setShowDropdown(!showDropdown)}>
-          {moment(currentInsightDate).format("dddd, MMMM Do, YYYY")}
-          <Icon icon={"Chevron-Down"} size={"12px"} iconColor={"grey100"} />
-        </DateContainer>
+        <DateDropdownContainer ref={dropdownRef}>
+          <DateContainer onClick={() => setShowDropdown(!showDropdown)}>
+            {moment(currentInsightDate).format("dddd, MMMM Do, YYYY")}
+            <Icon icon={"Chevron-Down"} size={"12px"} iconColor={"grey100"} />
+          </DateContainer>
+          {showDropdown && (
+            <DropdownContainer>
+              {insightDates.map(insightDate => (
+                <Option
+                  key={`${insightDate}`}
+                  onClick={() => {
+                    setCurrentInsightDate(insightDate);
+                    setInsightsToShow(data.period[insightDate]);
+                    setShowDropdown(false);
+                  }}
+                >
+                  {moment(insightDate).format("dddd, MMMM Do, YYYY")}
+                </Option>
+              ))}
+            </DropdownContainer>
+          )}
+        </DateDropdownContainer>
         <IconContainer disabled={isNextDisabled()} onClick={() => handleClick("next")}>
           <RightIcon
             icon={"Chevron-Left"}
             size={"12px"}
             iconColor={isNextDisabled() ? "greyInactive" : "greyActive"}
+            ml="1em"
           />
         </IconContainer>
-
-        {showDropdown && (
-          <DropdownContainer>
-            {insightDates.map(insightDate => (
-              <Option
-                key={`${insightDate}`}
-                onClick={() => {
-                  setCurrentInsightDate(insightDate);
-                  setInsightsToShow(data.period[insightDate]);
-                  setShowDropdown(false);
-                }}
-              >
-                {moment(insightDate).format("dddd, MMMM Do, YYYY")}
-              </Option>
-            ))}
-          </DropdownContainer>
-        )}
       </FlexContainer>
       <ParticipationInsights
         responseNumber={responseNumber}
@@ -398,6 +427,7 @@ const SideBar = styled.div<SideBarProps>`
   padding: 1em;
   z-index: 10;
   box-sizing: border-box;
+  overflow-y: auto;
 
   @media only screen and (max-width: 768px) {
     display: block;

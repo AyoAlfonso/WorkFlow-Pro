@@ -1,7 +1,7 @@
 import { object } from "@storybook/addon-knobs";
 import { observer } from "mobx-react";
 import moment from "moment";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { Icon, Loading, Text } from "~/components/shared";
@@ -38,6 +38,8 @@ export const CheckinInsights = observer(
       companyStore,
     } = useMst();
 
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
       getCheckInTemplateInsights(id).then(temp => {
         setData(temp);
@@ -49,6 +51,29 @@ export const CheckinInsights = observer(
         setLoading(false);
       });
     }, []);
+
+    useEffect(() => {
+      const externalEventHandler = e => {
+        if (!showDropdown) return;
+
+        const node = dropdownRef.current;
+
+        if (node && node.contains(e.target)) {
+          return;
+        }
+        setShowDropdown(false);
+      };
+
+      if (showDropdown) {
+        document.addEventListener("click", externalEventHandler);
+      } else {
+        document.removeEventListener("click", externalEventHandler);
+      }
+
+      return () => {
+        document.removeEventListener("click", externalEventHandler);
+      };
+    }, [showDropdown]);
 
     const getEntityArray = entityArray => {
       const entityArrayToReturn = [];
@@ -217,7 +242,9 @@ export const CheckinInsights = observer(
     const responseNumber = getNumberOfResponses();
     const totalParticipants = getUsers(data.participants);
     const { createdAt, updatedAt } = data;
-    const userArtifact = data.period[currentInsightDate].find(artifact => artifact.ownedBy === userStore.user?.id);
+    const userArtifact = data.period[currentInsightDate].find(
+      artifact => artifact.ownedBy === userStore.user?.id,
+    );
 
     return (
       <Container>
@@ -278,36 +305,39 @@ export const CheckinInsights = observer(
                 icon={"Chevron-Left"}
                 size={"12px"}
                 iconColor={isPrevDisabled() ? "greyInactive" : "greyActive"}
+                mr="1em"
               />
             </IconContainer>
-            <DateContainer onClick={() => setShowDropdown(!showDropdown)}>
-              {moment(currentInsightDate).format("dddd, MMMM Do, YYYY")}
-              <Icon icon={"Chevron-Down"} size={"12px"} iconColor={"grey100"} />
-            </DateContainer>
+            <DateDropdownContainer ref={dropdownRef}>
+              <DateContainer onClick={() => setShowDropdown(!showDropdown)}>
+                {moment(currentInsightDate).format("dddd, MMMM Do, YYYY")}
+                <Icon icon={"Chevron-Down"} size={"12px"} iconColor={"grey100"} />
+              </DateContainer>
+              {showDropdown && (
+                <DropdownContainer>
+                  {insightDates.map(insightDate => (
+                    <Option
+                      key={`${insightDate}`}
+                      onClick={() => {
+                        setCurrentInsightDate(insightDate);
+                        setInsightsToShow(data.period[insightDate]);
+                        setShowDropdown(false);
+                      }}
+                    >
+                      {moment(insightDate).format("dddd, MMMM Do, YYYY")}
+                    </Option>
+                  ))}
+                </DropdownContainer>
+              )}
+            </DateDropdownContainer>
             <IconContainer disabled={isNextDisabled()} onClick={() => handleClick("next")}>
               <RightIcon
                 icon={"Chevron-Left"}
                 size={"12px"}
                 iconColor={isNextDisabled() ? "greyInactive" : "greyActive"}
+                ml="1em"
               />
             </IconContainer>
-
-            {showDropdown && (
-              <DropdownContainer>
-                {insightDates.map(insightDate => (
-                  <Option
-                    key={`${insightDate}`}
-                    onClick={() => {
-                      setCurrentInsightDate(insightDate);
-                      setInsightsToShow(data.period[insightDate]);
-                      setShowDropdown(false);
-                    }}
-                  >
-                    {moment(insightDate).format("dddd, MMMM Do, YYYY")}
-                  </Option>
-                ))}
-              </DropdownContainer>
-            )}
           </FlexContainer>
           <ContentContainer>
             <LeftContainer>
@@ -349,10 +379,6 @@ const DesktopLoadingContainer = styled.div`
   }
 `;
 
-const SideBarContentContainer = styled.div`
-  position: relative;
-`;
-
 const Container = styled.div`
   height: 100%;
   margin-left: -40px;
@@ -371,7 +397,7 @@ const SideBar = styled.div`
   height: 100%;
   padding: 32px;
   position: fixed;
-  // overflow-y: auto;
+  overflow-y: auto;
 
   @media only screen and (min-width: 1600px) {
     left: 96px;
@@ -381,6 +407,10 @@ const SideBar = styled.div`
 const ContentContainer = styled.div`
   display: flex;
   gap: 0 2em;
+`;
+
+export const DateDropdownContainer = styled.div`
+  position: relative;
 `;
 
 const InsightsContainer = styled.div`
@@ -408,32 +438,27 @@ const CheckinName = styled(Text)`
   margin-bottom: 1em;
 `;
 
-export const StepsContainer = styled.div`
-  flex: 1;
-  overflow-y: auto;
-`;
+export const StepsContainer = styled.div``;
 
 export const StepsSection = styled.div`
   margin-bottom: 1em;
-  height: 40%;
   display: flex;
   flex-direction: column;
-
-  @media only screen and (min-height: 2000px) {
-    height: 80%;
-  }
-
-  @media only screen and (min-height: 1200px) {
-    height: 60%;
-  }
 `;
 
-export const DateInfoSection = styled.div``;
+export const DateInfoSection = styled.div`
+  margin-bottom: 10em;
+
+  @media only screen and (max-width: 768px) {
+    margin-bottom: 1em;
+  }
+`;
 
 export const DateText = styled(Text)`
   font-size: 12px;
   font-weight: normal;
   margin: 0;
+  color: ${props => props.theme.colors.black};
 `;
 
 export const SideBarHeader = styled(Text)`
@@ -457,7 +482,10 @@ export const InfoText = styled(Text)`
   padding-left: 1em;
 `;
 
-export const DateInfo = styled(InfoText)`
+export const DateInfo = styled.div`
+  font-size: 15px;
+  color: ${props => props.theme.colors.grey100};
+  margin: 0;
   font-size: 12px;
   margin-bottom: 1em;
 `;
@@ -513,7 +541,6 @@ export const DateContainer = styled.div`
   padding: 0.5em 1em;
   font-size: 0.75em;
   font-weight: bold;
-  margin: 0 1em;
   display: flex;
   align-items: center;
   justify-content: space-between;

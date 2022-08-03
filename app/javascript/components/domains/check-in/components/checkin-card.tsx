@@ -100,14 +100,14 @@ export const CheckInCard = observer(
       const dateA = moment(new Date(checkin.startTime));
       const dateB = moment(new Date());
       const diff = dateA.diff(dateB, "hours");
-      return diff < 24;
+      return diff < 24 && diff > 0;
     };
 
     const isPastDueDate = () => {
       const dateA = moment(new Date(checkin.startTime));
       const dateB = moment(new Date());
-      const diff = dateB.diff(dateA, "hours");
-      return diff > 24;
+      const diff = dateB.diff(dateA, "seconds");
+      return diff > 1;
     };
 
     const canCheckIn = () => {
@@ -115,7 +115,17 @@ export const CheckInCard = observer(
       const dateB = moment(new Date());
       const diff = dateA.diff(dateB, "days");
       return diff < 1;
-    }
+    };
+    
+    const getStatusBadge = () => {
+      if (toJS(checkin).checkInArtifactLogs[0]) {
+        return <EntryBadge color={baseTheme.colors.cautionYellow}>{`• In Progress`}</EntryBadge>;
+      } else if (isPastDueDate()) {
+        return <EntryBadge color={baseTheme.colors.warningRed}>{`• Overdue`}</EntryBadge>;
+      } else if (isEntryNeeded()) {
+        return <EntryBadge color={baseTheme.colors.successGreen}>{`• Entry Needed`}</EntryBadge>;
+      }
+    };
 
     return (
       <Container>
@@ -136,9 +146,7 @@ export const CheckInCard = observer(
               {isViewer && !isParticipant ? (
                 <EntryBadge>{isEntryNeeded() == true && `• Response Expected`}</EntryBadge>
               ) : (
-                <EntryBadge color={isPastDueDate() && baseTheme.colors.warningRed}>
-                  {isEntryNeeded() == true && ` • Entry Needed`}
-                </EntryBadge>
+                getStatusBadge()
               )}
             </>
           ) : (
