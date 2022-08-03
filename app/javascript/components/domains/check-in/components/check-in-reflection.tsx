@@ -62,6 +62,17 @@ export const CheckinReflection = (props: ICheckinReflection): JSX.Element => {
 
   const stringValidator = value => (value ? true : "Write just a little bit!");
 
+  const formatSteps = steps => {
+    const formattedSteps = steps.map(step => {
+      if (!step.metadata || !step.message) {
+        return {...step, message: "", metadata: {}}
+      } else {
+        return step
+      }
+    })
+    return formattedSteps;
+  }
+
   // Customized Steps
   const steps = R.pipe(
     R.clone,
@@ -136,7 +147,6 @@ export const CheckinReflection = (props: ICheckinReflection): JSX.Element => {
       }
     }),
   )(questionnaireVariant?.steps);
-
   // End of Customized Steps
 
   if (R.isNil(steps)) {
@@ -176,7 +186,7 @@ export const CheckinReflection = (props: ICheckinReflection): JSX.Element => {
           await questionnaireStore.createQuestionnaireAttempt(
             questionnaireVariant.id,
             {
-              renderedSteps,
+              renderedSteps: formatSteps(renderedSteps),
               steps,
               answers,
             },

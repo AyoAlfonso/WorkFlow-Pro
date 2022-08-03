@@ -27,6 +27,7 @@ export const CheckInTemplateModel = types
     reminder: types.maybeNull(ReminderModel),
     ownerType: types.maybeNull(types.string),
     createdById: types.maybeNull(types.number),
+    status: types.maybeNull(types.string),
   })
   .views(self => ({
     get currentStepDetails() {

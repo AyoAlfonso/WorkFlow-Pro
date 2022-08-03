@@ -161,7 +161,7 @@ export const SetupTemplatePage = observer(
           const date = !template.dateTimeConfig.date
             ? new Date()
             : new Date(template.dateTimeConfig.date);
-          
+
           setCurrentStep(0);
           setCheckinName(template?.name);
           setCheckinDescription(template.description);
@@ -267,7 +267,7 @@ export const SetupTemplatePage = observer(
     const showDateTime = cadence == "Once" || cadence == "Monthly" || cadence == "Quarterly";
     const showDayTime = cadence == "Weekly" || cadence == "Bi-weekly";
 
-    const createCheckin = () => {
+    const createCheckin = action => {
       const checkin = {
         name: checkinName,
         checkInTemplatesStepsAttributes: selectedSteps,
@@ -292,21 +292,30 @@ export const SetupTemplatePage = observer(
         parent: id ? template.id : null,
         tag: id ? [] : ["custom"],
       };
-      if (id) {
+
+      if (action == "draft") {
         checkInTemplateStore.createCheckinTemplate(checkin).then(id => {
           checkInTemplateStore.publishCheckinTemplate(id).then(() => {
             history.push("/check-in");
           });
         });
       } else {
-        const templateId = checkInTemplateStore.currentCheckInArtifact.checkInTemplate.id;
-        checkInTemplateStore.updateCheckinTemplate(templateId, checkin).then(id => {
-          if (id) {
-            return checkInTemplateStore.publishCheckinTemplate(id).then(() => {
+        if (id) {
+          checkInTemplateStore.createCheckinTemplate(checkin).then(id => {
+            checkInTemplateStore.publishCheckinTemplate(id).then(() => {
               history.push("/check-in");
             });
-          }
-        });
+          });
+        } else {
+          const templateId = checkInTemplateStore.currentCheckInArtifact.checkInTemplate.id;
+          checkInTemplateStore.updateCheckinTemplate(templateId, checkin).then(id => {
+            if (id) {
+              return checkInTemplateStore.publishCheckinTemplate(id).then(() => {
+                history.push("/check-in");
+              });
+            }
+          });
+        }
       }
     };
 
@@ -361,14 +370,26 @@ export const SetupTemplatePage = observer(
 
     const finishCheckIn = () => {
       return (
-        <StopButton
-          disabled={currentStep == 2 && !participants.length}
-          variant={"primary"}
-          onClick={createCheckin}
-          small
-        >
-          Publish
-        </StopButton>
+        <ButtonsContainer>
+          {id && (
+            <StopButton
+              disabled={currentStep == 2 && !participants.length}
+              variant="primaryOutline"
+              onClick={() => createCheckin("draft")}
+              small
+            >
+              Draft
+            </StopButton>
+          )}
+          <StopButton
+            disabled={currentStep == 2 && !participants.length}
+            variant={"primary"}
+            onClick={() => createCheckin("publish")}
+            small
+          >
+            Publish
+          </StopButton>
+        </ButtonsContainer>
       );
     };
 
@@ -478,4 +499,9 @@ const LoadingContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
+`;
+
+const ButtonsContainer = styled.div`
+  display: flex;
+  gap: 1em;
 `;

@@ -7,6 +7,8 @@ import { Button } from "~/components/shared/button";
 import { baseTheme } from "~/themes";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
+import { showToast } from "~/utils/toast-message";
+import { ToastMessageConstants } from "~/constants/toast-types";
 import moment from "moment";
 
 interface CheckInTemplateCardProps {
@@ -15,14 +17,22 @@ interface CheckInTemplateCardProps {
   tags: Array<string>;
   id: number;
   checkInTemplate: any;
+  updateStatus?: (id: number) => void;
 }
 
 export const CheckInTemplateCard = observer(
-  ({ name, description, tags, id, checkInTemplate }: CheckInTemplateCardProps): JSX.Element => {
+  ({
+    name,
+    description,
+    tags,
+    id,
+    checkInTemplate,
+    updateStatus,
+  }: CheckInTemplateCardProps): JSX.Element => {
     const [showOptions, setShowOptions] = useState<boolean>(false);
 
     const {
-      checkInTemplateStore: { runCheckinOnce, createCheckinTemplate },
+      checkInTemplateStore: { runCheckinOnce, createCheckinTemplate, publishCheckinTemplate },
       sessionStore: { profile },
     } = useMst();
 
@@ -104,12 +114,35 @@ export const CheckInTemplateCard = observer(
         <HeaderContainer>
           <Title>{name}</Title>
           <OptionsIconContainer ref={optionsRef}>
+            {checkInTemplate.status == "draft" && (
+              <DraftTag bgColor={baseTheme.colors.lightYellow} color={baseTheme.colors.tango}>
+                Draft
+              </DraftTag>
+            )}
             <IconContainer onClick={() => setShowOptions(!showOptions)}>
               <StyledOptionIcon icon={"Options"} size={"13px"} iconColor={"grey80"} />
             </IconContainer>
             {showOptions && (
               <OptionsContainer>
                 <Option>Make a copy</Option>
+                {checkInTemplate.status == "draft" && (
+                  <Option
+                    onClick={() => {
+                      publishCheckinTemplate(checkInTemplate.id).then(res => {
+                        if (res) {
+                          setShowOptions(false);
+                          showToast(
+                            "Template published successfully",
+                            ToastMessageConstants.SUCCESS,
+                          );
+                          updateStatus(checkInTemplate.id);
+                        }
+                      });
+                    }}
+                  >
+                    Publish
+                  </Option>
+                )}
               </OptionsContainer>
             )}
           </OptionsIconContainer>
@@ -175,6 +208,7 @@ const HeaderContainer = styled.div`
 
 const OptionsIconContainer = styled.div`
   position: relative;
+  display: flex;
 `;
 
 const IconContainer = styled.div`
@@ -214,7 +248,6 @@ const Title = styled.span`
   font-size: 20px;
   font-weight: bold;
   display: block;
-  margin-bottom: 0.5em;
   font-family: "Exo";
 `;
 
@@ -244,13 +277,14 @@ const TagsContainer = styled.div`
 
 type TagProps = {
   color?: string;
+  bgColor?: string;
 };
 
 const Tag = styled.span<TagProps>`
   display: inline-block;
   padding: 0.5em;
   color: ${props => (props.color ? props.color : props.theme.colors.grey100)};
-  background-color: ${props => props.theme.colors.grey20};
+  background-color: ${props => (props.bgColor ? props.bgColor : props.theme.colors.grey20)};
   font-size: 0.75em;
   margin-right: 0.75em;
   border-radius: 4px;
@@ -259,4 +293,10 @@ const Tag = styled.span<TagProps>`
   &:last-child {
     margin-right: 0;
   }
+`;
+
+const DraftTag = styled(Tag)`
+  padding: 0 0.5em;
+  display: flex;
+  align-items: center;
 `;
