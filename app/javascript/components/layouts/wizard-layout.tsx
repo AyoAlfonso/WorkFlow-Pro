@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import * as R from "ramda";
 import styled from "styled-components";
 import { Heading } from "../shared";
@@ -7,6 +7,7 @@ import { Button } from "~/components/shared/button";
 import { SignUpWizardProgressBar } from "../shared/sign-up-wizard/sign-up-wizard-progress-bar";
 import { Icon } from "~/components/shared/icon";
 import { Onboarding } from "../domains/onboarding";
+import { HtmlTooltip } from "~/components/shared/tooltip";
 interface IWizardLayoutProps {
   title: string;
   description: string;
@@ -66,6 +67,8 @@ export const WizardLayout = ({
   bodyContainerOverflow,
   stepTitle,
 }: IWizardLayoutProps): JSX.Element => {
+  const [showTooltip, setShowTooltip] = useState(false);
+
   const renderActionButtons = (): JSX.Element => {
     return (
       customActionButton || (
@@ -154,7 +157,16 @@ export const WizardLayout = ({
       >
         {stepsForMobile && (
           <MobileCloseButtonContainer>
-            {stepTitle && <MobileStepTitle>{stepTitle}</MobileStepTitle>}
+            <MobileStepTitle
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+            >
+              {stepTitle && (
+                <HtmlTooltip arrow={true} open={showTooltip} title={<span>{description}</span>}>
+                  <span>{stepTitle}</span>
+                </HtmlTooltip>
+              )}
+            </MobileStepTitle>
             {stepsForMobile}
             {showCloseButton && (
               <CloseButtonContainer onClick={onCloseButtonClick}>
@@ -188,7 +200,7 @@ export const WizardLayout = ({
 const Container = styled.div`
   display: flex;
   height: 100vh;
-  overflow: hidden;
+  overflow: auto;
   position: relative;
 `;
 
@@ -209,12 +221,13 @@ const DesktopCloseButtonContainer = styled.div`
   }
 `;
 
-const MobileStepTitle = styled(Text)`
+const MobileStepTitle = styled("div")`
   margin: 0px;
   font-size: 12px;
   color: ${props => props.theme.colors.grey100};
   position: absolute;
   left: 16px;
+  z-index: 10;
 `;
 
 const MobileButtonContainer = styled.div`
@@ -236,6 +249,8 @@ const DescriptionContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: inherit;
+  position: fixed;
+  z-index: 10;
   @media only screen and (max-width: 768px) {
     display: none;
   }
@@ -268,7 +283,12 @@ const BodyContainer = styled.div<BodyContainerProps>`
   // height: 100%;
   flex-direction: column;
   // overflow-x: auto;
-  overflow: ${props => props.overflow && props.overflow};
+  // overflow: ${props => props.overflow && props.overflow};
+  padding-left: 350px;
+
+  @media only screen and (min-width: 1400px) {
+    padding-left: 390px;
+  }
   @media only screen and (max-width: 768px) {
     width: 100%;
     padding: 0;
@@ -289,7 +309,7 @@ type BodyContentContainerProps = {
 
 const BodyContentContainer = styled.div<BodyContentContainerProps>`
   height: 100%;
-  overflow-y: auto;
+  // overflow-y: auto;
   display: ${props => (props.hasStepsForMobile ? "block" : "flex")};
 `;
 

@@ -489,7 +489,7 @@ export const KeyElement = observer(
                 arrow={true}
                 open={showTooltip}
                 enterDelay={500}
-                leaveDelay={200}
+                // leaveDelay={200}
                 title={
                   <span>
                     {!isOwner

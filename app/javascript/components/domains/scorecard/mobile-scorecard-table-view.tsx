@@ -14,14 +14,12 @@ import { StatusBadge } from "~/components/shared/status-badge";
 import { AddKPIDropdown } from "./shared/add-kpi-dropdown";
 import { ViewEditKPIModal } from "./shared/view-kpi-modal";
 import { MiniUpdateKPIModal } from "./shared/update-kpi-modal";
-import { AddExistingManualKPIModal } from "./shared/edit-existing-manual-kpi-modal";
 import { titleCase } from "~/utils/camelize";
 import { sortByDateReverse } from "~/utils/sorting";
 import { findNextMonday, resetYearOfDateToCurrent } from "~/utils/date-time";
 import { toJS } from "mobx";
 import Tooltip from "@material-ui/core/Tooltip";
 import { RoleNormalUser } from "~/lib/constants";
-import { useSticky } from 'react-table-sticky';
 import moment from "moment";
 
 // TODO: figure out better function for percent scores.
@@ -40,7 +38,7 @@ type ScorecardTableViewProps = {
   isMiniEmbed?: boolean;
 };
 
-export const ScorecardTableView = observer(
+export const MobileScorecardTableView = observer(
   ({
     tableKPIs,
     allKPIs,
@@ -355,7 +353,7 @@ export const ScorecardTableView = observer(
     };
 
     const findNumberText = logic => {
-      const t = logic.match(/[0-9]+[.]?[0-9]*/g);
+      let t = logic.match(/[0-9]+[.]?[0-9]*/g);
       return t;
     };
 
@@ -383,7 +381,6 @@ export const ScorecardTableView = observer(
           accessor: "updateKPI",
           width: "31px",
           minWidth: "31px",
-          sticky: 'left',
           Cell: ({ value }) => {
             return (
               <UpdateKPIWrapper
@@ -429,7 +426,6 @@ export const ScorecardTableView = observer(
           },
         },
         {
-          sitcky: "left",
           Header: () => (
             <div
               style={{
@@ -466,7 +462,6 @@ export const ScorecardTableView = observer(
           accessor: "score",
           width: "8%",
           minWidth: "86px",
-          sticky: 'left',
           Cell: ({ value, row }) => {
             const quarterValue = value[quarter - 1];
             const { relatedParentKpis, parentKpi, id } = row.original.updateKPI;
@@ -505,7 +500,6 @@ export const ScorecardTableView = observer(
         },
         {
           Header: () => <div style={{ fontSize: "14px" }}>Status</div>,
-          sticky: 'left',
           accessor: "status",
           Cell: ({ value, row }) => {
             const quarterValue = value[quarter - 1];
@@ -532,13 +526,11 @@ export const ScorecardTableView = observer(
               </StatusContainer>
             );
           },
-
           width: "8%",
           minWidth: "86px",
         },
         {
           Header: () => <div style={{ fontSize: "14px" }}>Owner</div>,
-          sticky: 'left',
           accessor: "owner",
           Cell: ({ value }) => {
             return (
@@ -550,121 +542,6 @@ export const ScorecardTableView = observer(
           width: "17%",
           minWidth: "160px",
         },
-        ...R.range(1, 53).map((n, i) => ({
-          Header: () => (
-            <div style={{ fontSize: "14px" }}>
-              {" "}
-              {`Week ${n}`} <br />{" "}
-              <span style={{ fontSize: "12px", fontWeight: "normal" }}>{weekToDate(n)}</span>{" "}
-            </div>
-          ),
-          accessor: `wk_${n}`,
-          sticky:'right',
-          Cell: ({ value, row }) => {
-            const i = row.id;
-            const { parentType } = row.original.updateKPI;
-            if (parentType) {
-              return (
-                <EmptyWeekContainer>
-                  {value === undefined ? (
-                    <EmptyWeekContainer>
-                      <EmptyWeek />
-                    </EmptyWeekContainer>
-                  ) : (
-                    <WeekContainer>
-                      <WeekText color={value.color}>{convertNumberInLogic(value.score)}</WeekText>
-                    </WeekContainer>
-                  )}
-                </EmptyWeekContainer>
-              );
-            }
-            if (value === undefined) {
-              if (company.currentFiscalWeek < n) {
-                return (
-                  <EmptyWeekContainer>
-                    <EmptyWeek />
-                  </EmptyWeekContainer>
-                );
-              }
-              return (
-                // TODO: REPETITION TURN INTO A PARENT COMPONENT AND PASS THE CHILDREN
-                <EmptyWeekContainer
-                  onMouseEnter={() => {
-                    setSelectedKPIWeek(`wk_${n}_${i}`);
-                  }}
-                  onMouseLeave={() => {
-                    setSelectedKPIWeek(null);
-                  }}
-                >
-                  <UpdateKPICellContainer
-                    disabled={
-                      parentType ||
-                      (currentUser.role == RoleNormalUser &&
-                        currentUser.id != row.original.updateKPI.ownedById) ||
-                      false
-                    }
-                    onClick={() => {
-                      if (parentType) return;
-                      if (!isMiniEmbed) {
-                        setTargetWeek(n);
-                        setTargetValue(0);
-                        setUpdateKPI(row.original.updateKPI);
-                        setUpdateKPIModalOpen(true);
-                      }
-                    }}
-                    hover={selectedKPIWeek == `wk_${n}_${i}` ? true : false}
-                  >
-                    {selectedKPIWeek == `wk_${n}_${i}` ? (
-                      <WhiteUpdateKpiIcon icon={"Update_KPI_New"} size={16} />
-                    ) : (
-                      <> </>
-                    )}
-                  </UpdateKPICellContainer>
-                  {selectedKPIWeek !== `wk_${n}_${i}` ? <EmptyWeek /> : <> </>}
-                </EmptyWeekContainer>
-              );
-            }
-            return (
-              <EmptyWeekContainer
-                onMouseEnter={() => {
-                  setSelectedKPIWeek(`wk_${n}_${i}`);
-                }}
-                onMouseLeave={() => {
-                  setSelectedKPIWeek(null);
-                }}
-              >
-                <UpdateKPICellContainer
-                  disabled={
-                    parentType ||
-                    (currentUser.role == RoleNormalUser &&
-                      currentUser.id != row.original.updateKPI.ownedById) ||
-                    false
-                  }
-                  onClick={() => {
-                    if (parentType) return;
-                    if (!isMiniEmbed) {
-                      setTargetWeek(n);
-                      setTargetValue(value.score);
-                      setUpdateKPI(row.original.updateKPI);
-                      setUpdateKPIModalOpen(true);
-                    }
-                  }}
-                  hover={selectedKPIWeek == `wk_${n}_${i}` || value}
-                >
-                  {selectedKPIWeek == `wk_${n}_${i}` ? (
-                    <WhiteUpdateKpiIcon icon={"Update_KPI_New"} size={16} />
-                  ) : (
-                    <WeekContainer>
-                      <WeekText color={value.color}>{convertNumberInLogic(value.score)}</WeekText>
-                    </WeekContainer>
-                  )}
-                </UpdateKPICellContainer>
-              </EmptyWeekContainer>
-            );
-          },
-          width: "1fr",
-          minWidth: "64px",
-        })),
       ],
       [quarter, year, selectedKPIIcon, selectedKPIWeek],
     );
@@ -682,7 +559,6 @@ export const ScorecardTableView = observer(
       columns,
       data,
       initialState,
-      useSticky,
     });
 
     const {
@@ -762,8 +638,8 @@ export const ScorecardTableView = observer(
           </TopRow>
           {tab == "KPIs" && (
             <TableContainer>
-              <Table {...getTableProps()} className="table sticky">
-                <TableHead className="header">
+              <Table {...getTableProps()}>
+                <TableHead>
                   {headerGroups.map(headerGroup => (
                     <TableRow {...headerGroup.getHeaderGroupProps()}>
                       {headerGroup.headers.map(column => (
@@ -772,7 +648,6 @@ export const ScorecardTableView = observer(
                             style: {
                               width: column.width,
                               minWidth: column.minWidth,
-                              position: "sticky",
                             },
                           })}
                         >
@@ -814,16 +689,6 @@ export const ScorecardTableView = observer(
           />
         )}
 
-        {showEditExistingKPIContainer && (
-          <AddExistingManualKPIModal
-            kpiId={currentSelectedKpi}
-            showAddManualKPIModal={showEditExistingKPIContainer}
-            setShowAddManualKPIModal={setShowEditExistingKPIContainer}
-            headerText={"Edit KPI"}
-            kpis={allKPIs}
-          />
-        )}
-
         {updateKPI && (
           <MiniUpdateKPIModal
             kpiId={updateKPI.id}
@@ -851,16 +716,16 @@ export const ScorecardTableView = observer(
 const Container = styled.div`
   width: 100%;
   font-family: Lato;
-
+  display: none;
   @media (max-width: 768px) {
-    display: none;
+    display: block;
   }
 `;
 
-// const TableContainer = styled.div`
-//   width: 100%;
-//   font-family: Lato;
-// `;
+const TableContainer = styled.div`
+  width: 100%;
+  font-family: Lato;
+`;
 
 const TopRow = styled.div`
   // width: 30%;
@@ -916,32 +781,6 @@ const TableBody = styled.tbody`
 const TableHeader = styled.th`
   border: 1px solid ${props => props.theme.colors.borderGrey};
   padding: 16px 8px;
-`;
-
-const TableContainer = styled.div`
- &.sticky {
-      overflow: scroll;
-      .header,
-      .footer {
-        position: sticky;
-        z-index: 1;
-        width: fit-content;
-      }
-         .body {
-        position: relative;
-        z-index: 0;
-      }
-      [data-sticky-td] {
-        position: sticky;
-      }
-
-      [data-sticky-last-left-td] {
-        box-shadow: 2px 0px 3px #ccc;
-      }
-
-      [data-sticky-first-right-td] {
-        box-shadow: -2px 0px 3px #ccc;
-      }
 `;
 
 const KPITitle = styled.div`

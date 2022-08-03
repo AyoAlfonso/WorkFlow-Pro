@@ -1,10 +1,29 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Doughnut } from "react-chartjs-2";
 import { baseTheme } from "~/themes";
 import { Text } from "~/components/shared";
 
-const ParticipationInsights = (): JSX.Element => {
+interface ParticipationInsightsProps {
+  responseNumber: number;
+  totalNumberOfParticipants: number;
+}
+
+const ParticipationInsights = ({
+  responseNumber,
+  totalNumberOfParticipants,
+}: ParticipationInsightsProps): JSX.Element => {
+  const [participationPercentage, setParticipationPercentage] = useState(0);
+
+  useEffect(() => {
+    const percentage = (responseNumber / totalNumberOfParticipants) * 100;
+    if (percentage == Infinity) {
+      setParticipationPercentage(0);
+    } else {
+      setParticipationPercentage(percentage);
+    }
+  }, [totalNumberOfParticipants, responseNumber]);
+
   const chartOptions = {
     legend: {
       display: false,
@@ -14,10 +33,10 @@ const ParticipationInsights = (): JSX.Element => {
   };
 
   const data = {
-    labels: ["Participation"],
+    labels: ["Response", "No Response"],
     datasets: [
       {
-        data: [33, 67],
+        data: [participationPercentage.toFixed(), (100 - participationPercentage).toFixed()],
         backgroundColor: [baseTheme.colors.primary100, baseTheme.colors.grey100],
       },
     ],
@@ -31,13 +50,16 @@ const ParticipationInsights = (): JSX.Element => {
       </HeaderContainer>
       <DoughnutChartContainer>
         <DoughnutTextContainer>
-          <ParticipationPercentage>33%</ParticipationPercentage>
+          <ParticipationPercentage>{`${
+            !participationPercentage.toFixed() ? 0 : participationPercentage.toFixed()
+          }%`}</ParticipationPercentage>
         </DoughnutTextContainer>
         <Doughnut data={data} options={chartOptions} width={200} height={200} />
       </DoughnutChartContainer>
       <InfoContainer>
         <InfoText>
-          Reported <b>2</b> people out of <b>6</b>
+          Reported <b>{responseNumber}</b> {responseNumber == 1 ? "person" : "people"} out of{" "}
+          <b>{totalNumberOfParticipants}</b>
         </InfoText>
       </InfoContainer>
     </Container>
@@ -57,10 +79,11 @@ const Container = styled.div`
   padding: 16px;
   height: fit-content;
   position: sticky;
-  top: 0;
+  top: 96px;
 
   @media only screen and (max-width: 768px) {
     position: static;
+    margin-bottom: 1em;
   }
 `;
 

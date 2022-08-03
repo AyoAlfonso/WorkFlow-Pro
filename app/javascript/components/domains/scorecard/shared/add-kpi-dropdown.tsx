@@ -175,6 +175,10 @@ export const AddKPIDropdown = observer(
 
 const Container = styled.div`
   position: relative;
+
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
 type StyledButtonType = {

@@ -133,6 +133,7 @@ const FlexContainer = styled(Flex)`
   gap: 0 10px;
   @media (max-width: 768px) {
     flex-direction: column;
+    gap: 1em;
   }
 `;
 
