@@ -740,7 +740,7 @@ export class Api {
   }
 
   async getWeeklyCheckinKeyElements() {
-    return this.client.get(`/key_elements/check_in`);
+    return this.client.get(`/check_in_key_elements`);
   }
 
   async updateWeeklyCheckInKeyElements(id, value) {
@@ -773,6 +773,10 @@ export class Api {
 
   async updateCheckinTemplate(id, checkinTemplate) {
     return this.client.patch(`/check_in_templates/${id}`, checkinTemplate);
+  }
+
+  async getTemplateInsights(id) {
+    return this.client.get(`/check_in_templates_report/${id}`);
   }
   //async setJWT(jwt) {}
 }

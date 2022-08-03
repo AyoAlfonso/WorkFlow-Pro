@@ -18,10 +18,11 @@ export const CheckInTemplateStoreModel = types
     currentCheckIn: types.maybeNull(CheckInTemplateModel),
     checkIns: types.array(CheckInArtifactsModel),
     currentCheckInArtifact: types.maybeNull(CheckInArtifactsModel),
+    checkInTemplateInsights: types.maybeNull(types.frozen()),
   })
   .extend(withEnvironment())
   .actions(self => ({
-    fetchCheckInTemplates: flow(function* () {
+    fetchCheckInTemplates: flow(function*() {
       try {
         const response: ApiResponse<any> = yield self.environment.api.getCheckInTemplates();
         self.checkInTemplates = response.data;
@@ -29,7 +30,7 @@ export const CheckInTemplateStoreModel = types
         // caught by Api Monitor
       }
     }),
-    getCheckIn: flow(function* (checkInName) {
+    getCheckIn: flow(function*(checkInName) {
       try {
         const response: ApiResponse<any> = yield self.environment.api.getCheckInTemplates();
         const checkIn = {
@@ -41,7 +42,7 @@ export const CheckInTemplateStoreModel = types
         // caught by Api Monitor
       }
     }),
-    getCheckIns: flow(function* () {
+    getCheckIns: flow(function*() {
       try {
         const response: ApiResponse<any> = yield self.environment.api.getCheckins();
         self.checkIns = response.data.checkInArtifacts;
@@ -51,7 +52,7 @@ export const CheckInTemplateStoreModel = types
         // caught by Api Monitor
       }
     }),
-    createCheckinTemplate: flow(function* (checkInTemplate) {
+    createCheckinTemplate: flow(function*(checkInTemplate) {
       const response: ApiResponse<any> = yield self.environment.api.createCheckinTemplate(
         checkInTemplate,
       );
@@ -66,7 +67,7 @@ export const CheckInTemplateStoreModel = types
         return false;
       }
     }),
-    publishCheckinTemplate: flow(function* (id) {
+    publishCheckinTemplate: flow(function*(id) {
       const response: ApiResponse<any> = yield self.environment.api.publishCheckin(id);
       if (response.ok) {
         return true;
@@ -78,19 +79,16 @@ export const CheckInTemplateStoreModel = types
         return false;
       }
     }),
-    runCheckinOnce: flow(function* (checkInId) {
+    runCheckinOnce: flow(function*(checkInId) {
       const response = yield self.environment.api.runCheckinOnce(checkInId);
       if (response.ok) {
         return response.data.checkInArtifact?.id;
       } else {
-        showToast(
-          "Error running check-in template, please try again",
-          ToastMessageConstants.ERROR,
-        );
+        showToast("Error running check-in template, please try again", ToastMessageConstants.ERROR);
         return false;
       }
     }),
-    updateCheckinArtifact: flow(function* (id, value) {
+    updateCheckinArtifact: flow(function*(id, value) {
       const response: ApiResponse<any> = yield self.environment.api.updateCheckinArtifact(
         id,
         value,
@@ -100,14 +98,11 @@ export const CheckInTemplateStoreModel = types
         self.currentCheckInArtifact = response.data.checkInArtifact;
         return true;
       } else {
-        showToast(
-          "Something went wrong, please try again",
-          ToastMessageConstants.ERROR,
-        );
+        showToast("Something went wrong, please try again", ToastMessageConstants.ERROR);
         return false;
       }
     }),
-    updateCheckinTemplate: flow(function* (id, value) {
+    updateCheckinTemplate: flow(function*(id, value) {
       const response: ApiResponse<any> = yield self.environment.api.updateCheckinTemplate(
         id,
         value,
@@ -117,14 +112,11 @@ export const CheckInTemplateStoreModel = types
         self.currentCheckIn = response.data.template;
         return response.data.checkInTemplate.id;
       } else {
-        showToast(
-          "Something went wrong, please try again",
-          ToastMessageConstants.ERROR,
-        );
+        showToast("Something went wrong, please try again", ToastMessageConstants.ERROR);
         return false;
       }
     }),
-    skipCheckIn: flow(function* (checkInId) {
+    skipCheckIn: flow(function*(checkInId) {
       const response: ApiResponse<any> = yield self.environment.api.updateCheckinArtifact(
         checkInId,
         { skip: true },
@@ -136,13 +128,20 @@ export const CheckInTemplateStoreModel = types
         self.checkIns = newCheckins as any;
         return true;
       } else {
-        showToast(
-          "Something went wrong, please try again",
-          ToastMessageConstants.ERROR,
-        );
+        showToast("Something went wrong, please try again", ToastMessageConstants.ERROR);
         return false;
       }
-    })
+    }),
+    getCheckInTemplateInsights: flow(function* (id) {
+      const response: ApiResponse<any> = yield self.environment.api.getTemplateInsights(id);
+      if (response.ok) {
+        self.checkInTemplateInsights = response.data.template;
+        return response.data.template;
+      } else {
+        showToast("Something went wrong, please try again", ToastMessageConstants.ERROR);
+        return false;
+      }
+    }),
   }))
   .actions(self => ({
     updateCurrentCheckIn(checkInObj) {
@@ -150,23 +149,23 @@ export const CheckInTemplateStoreModel = types
     },
     findCheckinTemplate(id) {
       const checkin = toJS(self.checkIns).find(checkin => checkin.id == id);
-      const currentCheckIn = {...checkin?.checkInTemplate, currentStep: 1};
+      const currentCheckIn = { ...checkin?.checkInTemplate, currentStep: 1 };
       self.currentCheckIn = currentCheckIn;
       self.currentCheckInArtifact = checkin;
-      return {checkin, currentCheckIn};
+      return { checkin, currentCheckIn };
     },
     updateCheckInArtifactResponse(index, response) {
       const responseArray = toJS(self.currentCheckInArtifact).checkInArtifactLogs[0]?.responses;
       responseArray[index] = response;
       const item = {
         responses: responseArray,
-      }
+      };
       self.updateCheckinArtifact(self.currentCheckInArtifact.id, item);
     },
     getTemplateById(id) {
       const checkin = toJS(self.checkInTemplates).find(checkin => checkin.id == id);
       self.currentCheckIn = checkin;
-      return checkin
+      return checkin;
     },
     sortArtifacts(sortBy) {
       const checkIns = self.checkIns;
@@ -184,10 +183,10 @@ export const CheckInTemplateStoreModel = types
 
         sortedCheckins = [...data, ...filteredArtifacts];
       } else if (sortBy === "name") {
-        sortedCheckins = checkIns.slice().sort(sortByName)
+        sortedCheckins = checkIns.slice().sort(sortByName);
       }
       self.checkIns = sortedCheckins;
-    }
+    },
   }))
   .actions(self => ({
     load: flow(function*() {

@@ -10,6 +10,7 @@ import { ScorecardSelector } from "./scorecard-selector";
 import { ScorecardSummary } from "./scorecard-summary";
 import { AddKPIDropdown } from "./shared/add-kpi-dropdown";
 import { toJS, autorun } from "mobx";
+import { MobileScorecardTableView } from "./mobile-scorecard-table-view";
 
 interface IScorecardsIndexProps {
   ownerType?: string;
@@ -34,6 +35,7 @@ export const ScorecardsIndex = observer(
     const [kpis, setKpis] = useState([]);
     const [tableKPIs, setTableKPIs] = useState([]);
     const [scorecardOwner, setScorecardOwner] = useState<any>({});
+    const [weekToShow, setWeekToShow] = useState<number>(companyStore.company?.currentFiscalWeek);
     const { allKPIs } = keyPerformanceIndicatorStore;
     const [viewEditKPIModalOpen, setViewEditKPIModalOpen] = useState(true);
     const [kpiFilter, setkpiFilter] = useState<string>("open");
@@ -54,6 +56,7 @@ export const ScorecardsIndex = observer(
           .then(() => {
             setKpis(scorecardStore.kpis);
             setTableKPIs(scorecardStore.kpis);
+            setWeekToShow(companyStore.company?.currentFiscalWeek);
           })
           .then(() => setLoading(false));
       }
@@ -115,13 +118,22 @@ export const ScorecardsIndex = observer(
         />
         <ScorecardSummary
           kpis={tableKPIsToShow()}
-          currentWeek={companyStore.company.currentFiscalWeek}
+          currentWeek={weekToShow}
+          setWeekToShow={setWeekToShow}
           currentQuarter={companyStore.company.currentFiscalQuarter}
           fiscalYearStart={companyStore.company.fiscalYearStart}
           currentFiscalYear={companyStore.company.yearForCreatingAnnualInitiatives}
         />
         {renderFilterOptions()}
         <ScorecardTableView
+          tableKPIs={tableKPIsToShow()}
+          allKPIs={allKPIs}
+          setKpis={setKPIs}
+          viewEditKPIModalOpen={viewEditKPIModalOpen}
+          setViewEditKPIModalOpen={setViewEditKPIModalOpen}
+          isMiniEmbed={isMiniEmbed}
+        />
+        <MobileScorecardTableView
           tableKPIs={tableKPIsToShow()}
           allKPIs={allKPIs}
           setKpis={setKPIs}
@@ -157,7 +169,11 @@ export const ScorecardsIndex = observer(
   },
 );
 
-const Container = styled.div``;
+const Container = styled.div`
+  @media only screen and (max-width: 768px) {
+    padding: 1em;
+  }
+`;
 
 const EmptyContainer = styled.div`
   display: flex;

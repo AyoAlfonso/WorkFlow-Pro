@@ -92,40 +92,42 @@ export const StepsSelectorPage = ({
   return (
     <DragDropContext onDragEnd={result => onDragEnd(result, selectedSteps, setSelectedSteps)}>
       <Container>
-        <StepsContainer>
+        <StepsSection>
           <SectionHeader>Steps</SectionHeader>
-          <Droppable droppableId="StepPreviewCardsContainer" type="StepPreviewCard">
-            {provided => (
-              <StepCardsContainer {...provided.droppableProps} ref={provided.innerRef}>
-                {selectedSteps.map((step, index) => (
-                  <StepPreviewCard
-                    key={step.orderIndex}
-                    deleteStep={() => deleteStep(step)}
-                    step={step}
-                    setShowStepsModal={setShowStepsModal}
-                    setIsChanging={setIsChanging}
-                    setSelectedSteps={setSelectedSteps}
-                    selectedSteps={selectedSteps}
-                    selected={
-                      stepToPreview?.question === step.question &&
-                      step.instructions == stepToPreview?.instructions
-                    }
-                    handleClick={() => setStepToPreview(step)}
-                    index={index}
-                    disabled={disabled}
-                  />
-                ))}
-                {provided.placeholder}
-              </StepCardsContainer>
+          <StepsContainer>
+            <Droppable droppableId="StepPreviewCardsContainer" type="StepPreviewCard">
+              {provided => (
+                <StepCardsContainer {...provided.droppableProps} ref={provided.innerRef}>
+                  {selectedSteps.map((step, index) => (
+                    <StepPreviewCard
+                      key={step.orderIndex}
+                      deleteStep={() => deleteStep(step)}
+                      step={step}
+                      setShowStepsModal={setShowStepsModal}
+                      setIsChanging={setIsChanging}
+                      setSelectedSteps={setSelectedSteps}
+                      selectedSteps={selectedSteps}
+                      selected={
+                        stepToPreview?.question === step.question &&
+                        step.instructions == stepToPreview?.instructions
+                      }
+                      handleClick={() => setStepToPreview(step)}
+                      index={index}
+                      disabled={disabled}
+                    />
+                  ))}
+                  {provided.placeholder}
+                </StepCardsContainer>
+              )}
+            </Droppable>
+            {!disabled && (
+              <StyledButton small variant={"grey"} onClick={() => setShowStepsModal(true)}>
+                <CircularIcon icon={"Plus"} size={"12px"} />
+                <AddStepText> Add Step </AddStepText>
+              </StyledButton>
             )}
-          </Droppable>
-          {!disabled && (
-            <StyledButton small variant={"grey"} onClick={() => setShowStepsModal(true)}>
-              <CircularIcon icon={"Plus"} size={"12px"} />
-              <AddStepText> Add Step </AddStepText>
-            </StyledButton>
-          )}
-        </StepsContainer>
+          </StepsContainer>
+        </StepsSection>
         <PreviewContainer>
           <SectionHeader>Preview</SectionHeader>
           {!selectedSteps.length ? (
@@ -175,11 +177,18 @@ const StepCardsContainer = styled.div`
   margin: 0 1px;
 `;
 
-const StepsContainer = styled.div`
+const StepsSection = styled.div`
   width: 40%;
   // padding-right: 1em;
   min-width: 320px;
+  display: flex;
+  flex-direction: column;
 `;
+
+const StepsContainer = styled.div`
+  flex: 1;
+  // overflow-y: scroll;
+`
 
 const PreviewContainer = styled.div`
   width: 60%;

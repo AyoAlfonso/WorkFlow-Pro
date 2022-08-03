@@ -136,6 +136,7 @@ export const SetupTemplatePage = observer(
           setCheckinName(template.name);
           setCheckinDescription(template.description);
           setCheckinType(template.ownerType);
+          setParticipants([currentUser]);
           const steps = template.checkInTemplatesSteps.map(step => {
             return {
               stepType: step.stepType,

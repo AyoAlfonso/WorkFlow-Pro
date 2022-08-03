@@ -37,3 +37,11 @@ export const sortByName = (a: any, b: any) => {
   }
   return 0;
 }
+
+export const sortUsersListByName = (a: any, b: any) => {
+  if (!a.firstName || !b.firstName) {
+    return 0
+  } else {
+    return a.firstName.localeCompare(b.firstName);
+  }
+}
