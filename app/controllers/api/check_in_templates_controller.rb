@@ -57,8 +57,10 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def update
-    @step_atrributes = params[:check_in_templates_steps_attributes]
-  
+  @step_atrributes = params[:check_in_templates_steps_attributes]
+  @check_in_template.status = params[:status]
+  @check_in_template.save!
+
     if (params[:check_in_template]["participants"].present? || params[:child_check_in_template_params]["participants"].present?)
       @check_in_template.participants.each do |participant|
           if(participant["type"] == "user")
@@ -148,7 +150,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   hour_as_int = IceCube::RuleHelper.hour_of_day_as_int(date_time_config)
   minute_as_int = IceCube::RuleHelper.minute_of_hour_as_int(date_time_config)
   @check_in_template.status = 1
-  
+  @check_in_template.save!
    day = Time.parse(date_time_config["date"]).day if date_time_config["date"].present?
     begin
       case date_time_config["cadence"] 
@@ -365,7 +367,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def child_check_in_template_params
-    params.require(:check_in_template).permit(:anonymous, :run_once, :time_zone, :reminder, date_time_config: [:cadence,:time,:date,:day], viewers: [:id, :type], participants: [:id, :type])
+    params.require(:check_in_template).permit(:anonymous, :run_once, :time_zone, :status, :reminder, date_time_config: [:cadence,:time,:date,:day], viewers: [:id, :type], participants: [:id, :type])
   end
 
   def set_check_in_template

@@ -20,6 +20,7 @@ import { sortByDateReverse } from "~/utils/sorting";
 import { toJS } from "mobx";
 import Tooltip from "@material-ui/core/Tooltip";
 import { RoleNormalUser } from "~/lib/constants";
+import { useSticky } from 'react-table-sticky';
 
 // TODO: figure out better function for percent scores.
 export const getScorePercent = (value: number, target: number, greaterThan: boolean) =>
@@ -352,7 +353,7 @@ export const ScorecardTableView = observer(
     };
 
     const findNumberText = logic => {
-      let t = logic.match(/[0-9]+[.]?[0-9]*/g);
+      const t = logic.match(/[0-9]+[.]?[0-9]*/g);
       return t;
     };
 
@@ -366,8 +367,8 @@ export const ScorecardTableView = observer(
           Header: "",
           accessor: "updateKPI",
           width: "31px",
-          sticky: true,
           minWidth: "31px",
+          sticky: 'left',
           Cell: ({ value }) => {
             return (
               <UpdateKPIWrapper
@@ -413,7 +414,7 @@ export const ScorecardTableView = observer(
           },
         },
         {
-          sticky: true,
+          sitcky: "left",
           Header: () => (
             <div
               style={{
@@ -448,9 +449,9 @@ export const ScorecardTableView = observer(
         {
           Header: () => <div style={{ fontSize: "14px" }}>Score</div>,
           accessor: "score",
-          sticky: true,
           width: "8%",
           minWidth: "86px",
+          sticky: 'left',
           Cell: ({ value, row }) => {
             const quarterValue = value[quarter - 1];
             const { relatedParentKpis, parentKpi, id } = row.original.updateKPI;
@@ -489,7 +490,7 @@ export const ScorecardTableView = observer(
         },
         {
           Header: () => <div style={{ fontSize: "14px" }}>Status</div>,
-          sticky: true,
+          sticky: 'left',
           accessor: "status",
           Cell: ({ value, row }) => {
             const quarterValue = value[quarter - 1];
@@ -522,7 +523,7 @@ export const ScorecardTableView = observer(
         },
         {
           Header: () => <div style={{ fontSize: "14px" }}>Owner</div>,
-          sticky: true,
+          sticky: 'left',
           accessor: "owner",
           Cell: ({ value }) => {
             return (
@@ -537,6 +538,7 @@ export const ScorecardTableView = observer(
         ...R.range(1, 53).map((n, i) => ({
           Header: () => <div style={{ fontSize: "14px" }}> {`WK ${n}`} </div>,
           accessor: `wk_${n}`,
+          sticky:'right',
           Cell: ({ value, row }) => {
             const i = row.id;
             const { parentType } = row.original.updateKPI;
@@ -659,6 +661,7 @@ export const ScorecardTableView = observer(
       columns,
       data,
       initialState,
+      useSticky,
     });
 
     const {
@@ -738,8 +741,8 @@ export const ScorecardTableView = observer(
           </TopRow>
           {tab == "KPIs" && (
             <TableContainer>
-              <Table {...getTableProps()}>
-                <TableHead>
+              <Table {...getTableProps()} className="table sticky">
+                <TableHead className="header">
                   {headerGroups.map(headerGroup => (
                     <TableRow {...headerGroup.getHeaderGroupProps()}>
                       {headerGroup.headers.map(column => (
@@ -748,6 +751,7 @@ export const ScorecardTableView = observer(
                             style: {
                               width: column.width,
                               minWidth: column.minWidth,
+                              position: "sticky",
                             },
                           })}
                         >
@@ -756,22 +760,6 @@ export const ScorecardTableView = observer(
                       ))}
                     </TableRow>
                   ))}
-                  {/* {headerGroups.map(headerGroup => (
-                    <TableRow {...headerGroup.getHeaderGroupProps()}>
-                      {headerGroup.headers.map(column => (
-                        <TableHeader
-                          {...column.getHeaderProps({
-                            style: {
-                              width: column.width,
-                              minWidth: column.minWidth,
-                            },
-                          })}
-                        >
-                          {column.render("Header")}
-                        </TableHeader>
-                      ))}
-                    </TableRow>
-                  ))} */}
                 </TableHead>
                 <TableBody {...getTableBodyProps()}>
                   {rows.map(row => {
@@ -844,10 +832,10 @@ const Container = styled.div`
   font-family: Lato;
 `;
 
-const TableContainer = styled.div`
-  width: 100%;
-  font-family: Lato;
-`;
+// const TableContainer = styled.div`
+//   width: 100%;
+//   font-family: Lato;
+// `;
 
 const TopRow = styled.div`
   width: 30%;
@@ -902,6 +890,32 @@ const TableBody = styled.tbody`
 const TableHeader = styled.th`
   border: 1px solid ${props => props.theme.colors.borderGrey};
   padding: 16px 8px;
+`;
+
+const TableContainer = styled.div`
+ &.sticky {
+      overflow: scroll;
+      .header,
+      .footer {
+        position: sticky;
+        z-index: 1;
+        width: fit-content;
+      }
+         .body {
+        position: relative;
+        z-index: 0;
+      }
+      [data-sticky-td] {
+        position: sticky;
+      }
+
+      [data-sticky-last-left-td] {
+        box-shadow: 2px 0px 3px #ccc;
+      }
+
+      [data-sticky-first-right-td] {
+        box-shadow: -2px 0px 3px #ccc;
+      }
 `;
 
 const KPITitle = styled.div`
