@@ -35,7 +35,8 @@ class Api::QuestionnaireAttemptsController < Api::ApplicationController
     })
     authorize @questionnaire_attempt
 
-    if @questionnaire_attempt.save_and_create_journal_entry
+    journal_entry = @questionnaire_attempt.save_and_create_journal_entry
+    if journal_entry
       if params[:log_date]
         @current_daily_log = DailyLog.find_by(log_date: log_date)
         @current_daily_log[questionnaire.name.delete(" ").underscore] = true unless (questionnaire.name == "Monthly Reflection")
@@ -49,7 +50,7 @@ class Api::QuestionnaireAttemptsController < Api::ApplicationController
       #TODO IF PARAMS HAS A DATE TO IT, WE UPDATE IT FOR THAT DAILY LOG  CURRENT_USER.FIND
 
     end
-    render json: @current_daily_log
+    render json: { current_daily_log:  @current_daily_log, journal_entry: journal_entry }
   end
 
   def questionnaire_summary

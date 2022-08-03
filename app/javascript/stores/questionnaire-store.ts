@@ -46,14 +46,14 @@ export const QuestionnaireStoreModel = types
         if (response.ok) {
           if (optionalParams["logDate"]) {
             //if the log applies to the dslected daily log update it
-            sessionStore.updateSelectedDailyLog(response.data);
+            sessionStore.updateSelectedDailyLog(response.data.currentDailyLog);
           } else {
             //if the log applies to current daily log merge it
             sessionStore.updateUser(
               {
                 dailyLogsAttributes: [
                   {
-                    ...response.data,
+                    ...response.data.currentDailyLog,
                   },
                 ],
               },

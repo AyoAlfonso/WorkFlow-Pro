@@ -21,7 +21,7 @@ import { findNextMonday, resetYearOfDateToCurrent } from "~/utils/date-time";
 import { toJS } from "mobx";
 import Tooltip from "@material-ui/core/Tooltip";
 import { RoleNormalUser } from "~/lib/constants";
-import { useSticky } from 'react-table-sticky';
+import { useSticky } from "react-table-sticky";
 import moment from "moment";
 
 // TODO: figure out better function for percent scores.
@@ -383,7 +383,8 @@ export const ScorecardTableView = observer(
           accessor: "updateKPI",
           width: "31px",
           minWidth: "31px",
-          sticky: 'left',
+          sticky: "left",
+          leftWidth: "0%",
           Cell: ({ value }) => {
             return (
               <UpdateKPIWrapper
@@ -430,6 +431,7 @@ export const ScorecardTableView = observer(
         },
         {
           sitcky: "left",
+          leftWidth: "4%",
           Header: () => (
             <div
               style={{
@@ -466,7 +468,8 @@ export const ScorecardTableView = observer(
           accessor: "score",
           width: "8%",
           minWidth: "86px",
-          sticky: 'left',
+          sticky: "left",
+          leftWidth: "20%",
           Cell: ({ value, row }) => {
             const quarterValue = value[quarter - 1];
             const { relatedParentKpis, parentKpi, id } = row.original.updateKPI;
@@ -505,8 +508,9 @@ export const ScorecardTableView = observer(
         },
         {
           Header: () => <div style={{ fontSize: "14px" }}>Status</div>,
-          sticky: 'left',
+          sticky: "left",
           accessor: "status",
+          leftWidth: "27%",
           Cell: ({ value, row }) => {
             const quarterValue = value[quarter - 1];
             const { relatedParentKpis, parentKpi } = row.original.updateKPI;
@@ -538,8 +542,9 @@ export const ScorecardTableView = observer(
         },
         {
           Header: () => <div style={{ fontSize: "14px" }}>Owner</div>,
-          sticky: 'left',
+          sticky: "left",
           accessor: "owner",
+          leftWidth: "34%",
           Cell: ({ value }) => {
             return (
               <OwnerContainer>
@@ -559,7 +564,7 @@ export const ScorecardTableView = observer(
             </div>
           ),
           accessor: `wk_${n}`,
-          sticky:'right',
+          // sticky: "right",
           Cell: ({ value, row }) => {
             const i = row.id;
             const { parentType } = row.original.updateKPI;
@@ -762,44 +767,56 @@ export const ScorecardTableView = observer(
           </TopRow>
           {tab == "KPIs" && (
             <TableContainer>
-              <Table {...getTableProps()} className="table sticky">
-                <TableHead className="header">
-                  {headerGroups.map(headerGroup => (
-                    <TableRow {...headerGroup.getHeaderGroupProps()}>
-                      {headerGroup.headers.map(column => (
-                        <TableHeader
-                          {...column.getHeaderProps({
-                            style: {
-                              width: column.width,
-                              minWidth: column.minWidth,
-                              position: "sticky",
-                            },
-                          })}
-                        >
-                          {column.render("Header")}
-                        </TableHeader>
-                      ))}
-                    </TableRow>
-                  ))}
-                </TableHead>
-                <TableBody {...getTableBodyProps()}>
-                  {rows.map(row => {
-                    prepareRow(row);
-                    return (
-                      <TableRow hover={true} {...row.getRowProps()}>
-                        {row.cells.map(cell => {
-                          return (
-                            <td {...cell.getCellProps()}>
-                              {cell.render("Cell", cell.getCellProps())}
-                            </td>
-                          );
-                        })}
+              <Styles>
+                <Table {...getTableProps()} className="table sticky">
+                  <TableHead className="header">
+                    {headerGroups.map(headerGroup => (
+                      <TableRow {...headerGroup.getHeaderGroupProps()} className="tr">
+                        {headerGroup.headers.map(column => (
+                          <TableHeader
+                            {...column.getHeaderProps({
+                              style: {
+                                width: column.width,
+                                minWidth: column.minWidth,
+                                position: column.leftWidth ? "sticky" : null,
+                                left: column.leftWidth,
+                              },
+                            })}
+                            className="th"
+                          >
+                            {column.render("Header")}
+                          </TableHeader>
+                        ))}
                       </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-              {!isMiniEmbed && <AddKPIDropdown dropdownDirectionUp={true} kpis={allKPIs} />}
+                    ))}
+                  </TableHead>
+                  <TableBody {...getTableBodyProps()} className="body">
+                    {rows.map(row => {
+                      prepareRow(row);
+                      return (
+                        <TableRow hover={true} {...row.getRowProps()} className="tr">
+                          {row.cells.map(cell => {
+                            return (
+                              <TableD
+                                {...cell.getCellProps({
+                                  style: {
+                                    position: cell.column.leftWidth ? "sticky" : null,
+                                    backgroundColor: "#fff",
+                                    left: cell.column.leftWidth,
+                                  },
+                                })}
+                              >
+                                {cell.render("Cell")}
+                              </TableD>
+                            );
+                          })}
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+                {!isMiniEmbed && <AddKPIDropdown dropdownDirectionUp={true} kpis={allKPIs} />}
+              </Styles>
             </TableContainer>
           )}
         </Container>
@@ -861,6 +878,69 @@ const Container = styled.div`
 //   width: 100%;
 //   font-family: Lato;
 // `;
+const Styles = styled.div`
+  .table {
+    border: 1px solid #ddd;
+
+    .tr {
+      :last-child {
+        .td {
+          border-bottom: 0;
+        }
+      }
+    }
+
+    .th,
+    .td {
+      padding: 5px;
+      border-bottom: 1px solid #ddd;
+      border-right: 1px solid #ddd;
+      background-color: #fff;
+      overflow: hidden;
+
+      :last-child {
+        border-right: 0;
+      }
+    }
+
+    &.sticky {
+      overflow: scroll;
+      .header,
+      .footer {
+        position: sticky;
+        z-index: 1;
+        width: fit-content;
+      }
+
+      .header {
+        top: 0;
+        box-shadow: 0px 3px 3px #ccc;
+      }
+
+      .footer {
+        bottom: 0;
+        box-shadow: 0px -3px 3px #ccc;
+      }
+
+      .body {
+        position: relative;
+        z-index: 0;
+      }
+
+      [data-sticky-td] {
+        position: sticky;
+      }
+
+      [data-sticky-last-left-td] {
+        box-shadow: 2px 0px 3px #ccc;
+      }
+
+      [data-sticky-first-right-td] {
+        box-shadow: -2px 0px 3px #ccc;
+      }
+    }
+  }
+`;
 
 const TopRow = styled.div`
   // width: 30%;
@@ -911,6 +991,13 @@ const TableHead = styled.thead`
 
 const TableBody = styled.tbody`
   width: 100%;
+`;
+
+type TableDProps = {
+  leftWidth?: number;
+};
+const TableD = styled.td<TableDProps>`
+  left: ${props => props.leftWidth};
 `;
 
 const TableHeader = styled.th`
