@@ -8,7 +8,7 @@ class Api::KeyElementsController < Api::ApplicationController
   before_action :skip_authorization, only: :check_in_key_elements
 
   def check_in_key_elements
-    @quarterly_goal_key_elements = policy_scope(KeyElement).current_user_and_elementable_type(current_user, "QuarterlyGoal")
+    @quarterly_goal_key_elements = policy_scope(KeyElement).current_user_and_elementable_type(current_user, "QuarterlyInitiative")
     @subinitiative_key_elements = policy_scope(KeyElement).current_user_and_elementable_type(current_user, "SubInitiative")
     authorize  @subinitiative_key_elements
     authorize @quarterly_goal_key_elements

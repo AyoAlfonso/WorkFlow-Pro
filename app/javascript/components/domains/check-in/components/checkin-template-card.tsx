@@ -114,18 +114,13 @@ export const CheckInTemplateCard = observer(
         <HeaderContainer>
           <Title>{name}</Title>
           <OptionsIconContainer ref={optionsRef}>
-            {checkInTemplate.status == "draft" && (
-              <DraftTag bgColor={baseTheme.colors.lightYellow} color={baseTheme.colors.tango}>
-                Draft
-              </DraftTag>
-            )}
             <IconContainer onClick={() => setShowOptions(!showOptions)}>
               <StyledOptionIcon icon={"Options"} size={"13px"} iconColor={"grey80"} />
             </IconContainer>
             {showOptions && (
               <OptionsContainer>
                 <Option>Make a copy</Option>
-                {checkInTemplate.status == "draft" && (
+                {checkInTemplate.status == "draft" ? (
                   <Option
                     onClick={() => {
                       publishCheckinTemplate(checkInTemplate.id).then(res => {
@@ -141,6 +136,14 @@ export const CheckInTemplateCard = observer(
                     }}
                   >
                     Publish
+                  </Option>
+                ) : (
+                  <Option
+                    onClick={() => {
+                      history.push(`/check-in/template/edit/${checkInTemplate.id}`);
+                    }}
+                  >
+                    Edit
                   </Option>
                 )}
               </OptionsContainer>
@@ -173,16 +176,23 @@ export const CheckInTemplateCard = observer(
               Run now
             </Button>
           </ButtonsContainer>
-          <TagsContainer>
-            {filteredTags.map((tag, index) => (
-              <Tag
-                color={tag == "Custom" ? baseTheme.colors.primary100 : ""}
-                key={`${tag}-${index}`}
-              >
-                {tag.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}
-              </Tag>
-            ))}
-          </TagsContainer>
+
+          {checkInTemplate.status == "draft" ? (
+            <Tag bgColor={baseTheme.colors.lightYellow} color={baseTheme.colors.tango}>
+              Draft
+            </Tag>
+          ) : (
+            <TagsContainer>
+              {filteredTags.map((tag, index) => (
+                <Tag
+                  color={tag == "Custom" ? baseTheme.colors.primary100 : ""}
+                  key={`${tag}-${index}`}
+                >
+                  {tag.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}
+                </Tag>
+              ))}
+            </TagsContainer>
+          )}
         </BottomRow>
       </Container>
     );

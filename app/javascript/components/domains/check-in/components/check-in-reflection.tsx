@@ -33,7 +33,10 @@ export const CheckinReflection = (props: ICheckinReflection): JSX.Element => {
     questionnaireStore,
     keyActivityStore,
     companyStore,
+    checkInTemplateStore,
   } = useMst();
+
+    const { currentCheckInArtifact, updateCheckinArtifact } = checkInTemplateStore;
 
   useEffect(() => {
     async function setUp() {
@@ -157,6 +160,19 @@ export const CheckinReflection = (props: ICheckinReflection): JSX.Element => {
     );
   }
 
+  const submitCheckinResponse = id => {
+    const isCheckInArtifactLogsEmpty = R.isEmpty(currentCheckInArtifact.checkInArtifactLogs);
+    const isJournalLogsEmpty = R.isEmpty(
+      currentCheckInArtifact.checkInArtifactLogs[0]?.journalLogs,
+    );
+    const journalLogIdArray = toJS(currentCheckInArtifact).checkInArtifactLogs[0]?.journalLogs;
+    const item = {
+      journalLogIds:
+        !isCheckInArtifactLogsEmpty && !isJournalLogsEmpty ? [...journalLogIdArray, id] : [id],
+    };
+    updateCheckinArtifact(currentCheckInArtifact.id, item);
+  };
+
   return (
     <ChatBotContainer disabled={props.disabled}>
       <ChatBot
@@ -183,16 +199,21 @@ export const CheckinReflection = (props: ICheckinReflection): JSX.Element => {
         zIndex={1}
         handleEnd={async ({ renderedSteps, steps, values: answers }) => {
           const optionalParams = selectedDailyLog ? { logDate: selectedDailyLog.logDate } : {};
-          await questionnaireStore.createQuestionnaireAttempt(
+          const res = await questionnaireStore.createQuestionnaireAttempt(
             questionnaireVariant.id,
             {
-              renderedSteps: formatSteps(renderedSteps),
+              renderedSteps,
               steps,
               answers,
             },
             questionnaireVariant.title,
             optionalParams,
           );
+          if (res === true) {
+            return 
+          } else {
+            submitCheckinResponse(res.id)
+          }
           // if (typeof props.endFn === "function") {
           //   setTimeout(() => {
           //     props.endFn();

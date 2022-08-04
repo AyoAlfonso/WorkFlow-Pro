@@ -32,7 +32,7 @@ export const CheckinInsights = observer(
     const history = useHistory();
 
     const {
-      checkInTemplateStore: { getCheckInTemplateInsights, checkInTemplateInsights },
+      checkInTemplateStore: { getCheckInTemplateInsights },
       userStore,
       teamStore,
       companyStore,
@@ -356,9 +356,13 @@ export const CheckinInsights = observer(
               {getSteps.includes("Yes/No") && (
                 <YesNoInsights insightsToShow={insightsToShow} steps={steps} />
               )}
-              <KpiInsights />
-              <InitiativeInsights />
-              <JournalInsights />
+              {getSteps.includes("KPIs") && <KpiInsights insightsToShow={insightsToShow} />}
+              {getSteps.includes("Initiatives") && <InitiativeInsights insightsToShow={insightsToShow} />}
+              {getSteps.includes("Evening Reflection") ||
+                getSteps.includes("Weekly Reflection") ||
+                (getSteps.includes("Monthly Reflection") && (
+                  <JournalInsights insightsToShow={insightsToShow} />
+                ))}
             </LeftContainer>
             <ParticipationInsights
               responseNumber={responseNumber || 0}
@@ -371,7 +375,10 @@ export const CheckinInsights = observer(
   },
 );
 
-const LeftContainer = styled.div``;
+const LeftContainer = styled.div`
+  width: 70%
+
+`;
 
 const DesktopLoadingContainer = styled.div`
   @media only screen and (max-width: 768px) {

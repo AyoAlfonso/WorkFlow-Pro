@@ -30,6 +30,15 @@ export const CheckInTemplateStoreModel = types
         // caught by Api Monitor
       }
     }),
+    getCheckInTemplateById: flow(function* (id) {
+      try {
+        const response: ApiResponse<any> = yield self.environment.api.getCheckInTemplate(id);
+        self.currentCheckIn = response.data.template
+        return response.data.template
+      } catch {
+      //
+      }
+    }),
     getCheckIn: flow(function*(checkInName) {
       try {
         const response: ApiResponse<any> = yield self.environment.api.getCheckInTemplates();
@@ -43,9 +52,11 @@ export const CheckInTemplateStoreModel = types
       }
     }),
     getCheckIns: flow(function*() {
+      console.log("in getCheckIns");
       try {
         const response: ApiResponse<any> = yield self.environment.api.getCheckins();
         self.checkIns = response.data.checkInArtifacts;
+        console.log(self.checkIns, response.data.checkInArtifacts);
         return response.data.checkInArtifacts;
       } catch {
         // showToast("Something went wrong", ToastMessageConstants.ERROR);
@@ -132,7 +143,7 @@ export const CheckInTemplateStoreModel = types
         return false;
       }
     }),
-    getCheckInTemplateInsights: flow(function* (id) {
+    getCheckInTemplateInsights: flow(function*(id) {
       const response: ApiResponse<any> = yield self.environment.api.getTemplateInsights(id);
       if (response.ok) {
         self.checkInTemplateInsights = response.data.template;
@@ -153,6 +164,11 @@ export const CheckInTemplateStoreModel = types
       self.currentCheckIn = currentCheckIn;
       self.currentCheckInArtifact = checkin;
       return { checkin, currentCheckIn };
+    },
+    getOnlyCheckInTemplate(id) {
+      const checkInTemplates = toJS(self.checkInTemplates);
+      const currentCheckInTemplate = checkInTemplates.find(template => template.id == id);
+      self.currentCheckIn = currentCheckInTemplate;
     },
     updateCheckInArtifactResponse(index, response) {
       const responseArray = toJS(self.currentCheckInArtifact).checkInArtifactLogs[0]?.responses;

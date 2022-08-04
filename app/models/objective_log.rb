@@ -17,7 +17,18 @@ class ObjectiveLog < ApplicationRecord
   scope :owned_by_user, ->(user) { where(owned_by_id: user) }
   scope :created_between, ->(date_start, date_end) { where("created_at >= ? AND created_at < ?", date_start, date_end) }
   scope :sort_by_adjusted_date, -> { order(adjusted_date: :desc) }
+  # scope :optimized, -> { includes([:annual_initiative, :owned_by, :quarterly_goal, :sub_initiative]) }
 
   # after_save :verify_company_static_data, :verify_description_templates
 
+
+  def as_json(options = [])
+    super({
+          include: [:objecteable_data]
+    })
+  end
+
+  def objecteable_data
+    self.objecteable
+  end
 end

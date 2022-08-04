@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_28_120054) do
+ActiveRecord::Schema.define(version: 2022_08_04_180439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -116,6 +116,7 @@ ActiveRecord::Schema.define(version: 2022_07_28_120054) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "objective_logs", default: [], array: true
     t.integer "scorecard_logs", default: [], array: true
+    t.integer "journal_logs", default: [], array: true
     t.index ["check_in_artifact_id"], name: "index_check_in_artifact_logs_on_check_in_artifact_id"
     t.index ["created_by_id"], name: "index_check_in_artifact_logs_on_created_by_id"
   end

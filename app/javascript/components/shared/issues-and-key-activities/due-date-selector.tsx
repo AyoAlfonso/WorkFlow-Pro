@@ -14,11 +14,13 @@ import { Button } from "~/components/shared/button";
 interface IDueDateSelectorProps {
   selectedDueDate: any;
   setSelectedDueDate: any;
+  maxDate?: boolean;
 }
 
 export const DueDateSelector = ({
   selectedDueDate,
   setSelectedDueDate,
+  maxDate,
 }: IDueDateSelectorProps): JSX.Element => {
   const { t } = useTranslation();
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
@@ -80,7 +82,7 @@ export const DueDateSelector = ({
               direction={"vertical"}
               shownDate={new Date()}
               minDate={new Date()}
-              maxDate={addDays(new Date(), 30)}
+              maxDate={maxDate && addDays(new Date(), 30)}
               scroll={{
                 enabled: true,
                 calendarWidth: 320,

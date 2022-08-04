@@ -11,7 +11,6 @@ export const AuditLogStoreModel = types
   .model("AuditLogModel")
   .props({
     auditLogs: types.array(AuditLogModel),
-    //objectiveLogs: types.maybeNull(types.array(ObjectiveLogModel)),
   })
   .extend(withEnvironment())
   .views(self => ({}))

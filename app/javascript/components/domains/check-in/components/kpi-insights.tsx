@@ -4,117 +4,176 @@ import { Avatar, Text } from "~/components/shared";
 import { StatusBadge } from "~/components/shared/status-badge";
 import { useMst } from "~/setup/root";
 import { baseTheme } from "~/themes";
+import { Loading } from "~/components/shared/loading";
 
-export const KpiInsights = () => {
-  const { sessionStore } = useMst();
+interface InitiativeInsightsProps {
+  insightsToShow: Array<any>;
+}
+export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.Element => {
+  const {
+    sessionStore,
+    userStore,
+    companyStore: { company },
+  } = useMst();
+  if (!userStore.users.length) {
+    return <Loading />;
+  }
+
+  const setDefaultSelectionQuarter = week => {
+    return week == 13 ? 1 : week == 26 ? 2 : week == 39 ? 3 : 4;
+  };
+  // const [quarter, setQuarter] = useState<number>(
+  //   setDefaultSelectionQuarter(company.currentFiscalWeek),
+  // );
+
+  const participants = new Set();
+
+  const checkInArtifactLogs = insightsToShow
+    .map(artifact => {
+      if (artifact.checkInArtifactLogs[0]) {
+        return {
+          ...artifact.checkInArtifactLogs[0],
+          ownedBy: artifact.ownedById,
+          updatedAt: artifact.updatedAt,
+        };
+      }
+    })
+    .filter(Boolean);
+
+  const findUser = owner_id => {
+    return userStore.users.find(user => user.id == owner_id);
+  };
+
+  const getScorePercent = (value: number, target: number, greaterThan: boolean) =>
+    greaterThan ? (value / target) * 100 : ((target + target - value) / target) * 100;
+
+  const formatValue = (unitType: string, value: number) => {
+    switch (unitType) {
+      case "percentage":
+        return `${Math.round(value * 1000) / 1000}%`;
+      case "currency":
+        return `$${value.toFixed(2)}`;
+      default:
+        return `${value}`;
+    }
+  };
+
   return (
     <Container>
       <HeaderContainer>
         <HeaderText>KPIs</HeaderText>
       </HeaderContainer>
       <KpisContainer>
-        <KpiComponent>
-          <AvatarContainer>
-            <Avatar
-              size={32}
-              marginLeft={"0px"}
-              marginTop={"0px"}
-              marginRight={"16px"}
-              firstName={sessionStore.profile.firstName}
-              lastName={sessionStore.profile.lastName}
-              defaultAvatarColor={sessionStore.profile.defaultAvatarColor}
-              avatarUrl={sessionStore.profile.avatarUrl}
-            />
-            <StyledText>{`${sessionStore.profile.firstName} ${sessionStore.profile.lastName}`}</StyledText>
-          </AvatarContainer>
-          <Divider />
-          <DataContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableHeadText pb="2em" left={true} scope="col">
-                    KPIs
-                  </TableHeadText>
-                  <TableHeadText pb="2em" scope="col">
-                    Status
-                  </TableHeadText>
-                  <TableHeadText pb="2em" scope="col">
-                    Score
-                  </TableHeadText>
-                  <TableHeadText pb="2em" scope="col">
-                    Week 16
-                  </TableHeadText>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow>
-                  <TableData left>
-                    <KpiNameContainer>
-                      <KpiName>Booked Work $1500</KpiName>
-                      <KpiDescription>Greater than or equal to $5000</KpiDescription>
-                    </KpiNameContainer>
-                  </TableData>
-                  <TableData>
-                    <StatusBadge
-                      background={baseTheme.colors.fadedYellow}
-                      color={baseTheme.colors.poppySunrise}
-                    >
-                      Needs Attention
-                    </StatusBadge>
-                  </TableData>
-                  <TableData>
-                    <StatusBadge
-                      fontSize={"12px"}
-                      background={baseTheme.colors.fadedYellow}
-                      color={baseTheme.colors.poppySunrise}
-                    >
-                      84%
-                    </StatusBadge>
-                  </TableData>
-                  <TableData>
-                    <WeekContainer>
-                      <WeekText color={baseTheme.colors.successGreen}>$1500</WeekText>
-                    </WeekContainer>
-                  </TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData left>
-                    <KpiNameContainer>
-                      <KpiName>Booked Work $1500</KpiName>
-                      <KpiDescription>Greater than or equal to $5000</KpiDescription>
-                    </KpiNameContainer>
-                  </TableData>
-                  <TableData>
-                    <StatusBadge
-                      background={baseTheme.colors.fadedYellow}
-                      color={baseTheme.colors.poppySunrise}
-                    >
-                      Needs Attention
-                    </StatusBadge>
-                  </TableData>
-                  <TableData>
-                    <StatusBadge
-                      fontSize={"12px"}
-                      background={baseTheme.colors.fadedYellow}
-                      color={baseTheme.colors.poppySunrise}
-                    >
-                      84%
-                    </StatusBadge>
-                  </TableData>
-                  <TableData>
-                    <WeekContainer>
-                      <WeekText color={baseTheme.colors.successGreen}>$1500</WeekText>
-                    </WeekContainer>
-                  </TableData>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </DataContainer>
-        </KpiComponent>
+        {checkInArtifactLogs.map(artifactLog => {
+          const keys = ["fiscalQuarter", "week", "fiscalYear", "keyPerformanceIndicatorId"];
+
+          const user = findUser(artifactLog.ownedBy);
+          participants.add(user?.id);
+
+          return (
+            <>
+              <KpiComponent>
+                <AvatarContainer>
+                  <Avatar
+                    size={32}
+                    marginLeft={"0px"}
+                    marginTop={"0px"}
+                    marginRight={"16px"}
+                    firstName={user.firstName}
+                    lastName={user.lastName}
+                    defaultAvatarColor={user.defaultAvatarColor}
+                    avatarUrl={user.avatarUrl}
+                  />
+                  <StyledText>{`${user.firstName} ${user.lastName}`}</StyledText>
+                </AvatarContainer>
+                <Divider />
+                <DataContainer>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableHeadText pb="2em" left={true} scope="col">
+                          KPIs
+                        </TableHeadText>
+                        <TableHeadText pb="2em" scope="col">
+                          Status
+                        </TableHeadText>
+                        <TableHeadText pb="2em" scope="col">
+                          Score
+                        </TableHeadText>
+                        <TableHeadText pb="2em" scope="col">
+                          Week 16
+                        </TableHeadText>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {artifactLog.scorecardLogsFull
+                        ?.filter(
+                          (s => o => (k => !s.has(k) && s.add(k))(keys.map(k => o[k]).join("|")))(
+                            new Set(),
+                          ),
+                        )
+                        .map(log => {
+                          return (
+                            <TableRow>
+                              <TableData left>
+                                <KpiNameContainer>
+                                  <KpiName>{log.keyPerformanceIndicator.title}</KpiName>
+                                  <KpiDescription>
+                                    {" "}
+                                    {log.keyPerformanceIndicator.greaterThan
+                                      ? `Greater than or equal
+                                  to  ${formatValue(
+                                    log.keyPerformanceIndicator.unitType,
+                                    log.keyPerformanceIndicator.targetValue,
+                                  )}`
+                                      : `Less than or equal to ${formatValue(
+                                          log.keyPerformanceIndicator.unitType,
+                                          log.keyPerformanceIndicator.targetValue,
+                                        )}`}
+                                  </KpiDescription>
+                                </KpiNameContainer>
+                              </TableData>
+                              <TableData>
+                                <StatusBadge
+                                  background={baseTheme.colors.fadedYellow}
+                                  color={baseTheme.colors.poppySunrise}
+                                ></StatusBadge>
+                              </TableData>
+                              <TableData>
+                                <StatusBadge
+                                  fontSize={"12px"}
+                                  background={baseTheme.colors.fadedYellow}
+                                  color={baseTheme.colors.poppySunrise}
+                                >
+                                  {getScorePercent(
+                                    log.score,
+                                    log.keyPerformanceIndicator.targetValue,
+                                    log.keyPerformanceIndicator.greaterThan,
+                                  ).toFixed()}
+                                </StatusBadge>
+                              </TableData>
+                              <TableData>
+                                <WeekContainer>
+                                  <WeekText color={baseTheme.colors.successGreen}>
+                                    {log.score}
+                                  </WeekText>
+                                </WeekContainer>
+                              </TableData>
+                            </TableRow>
+                          );
+                        })}
+                    </TableBody>
+                  </Table>
+                </DataContainer>
+              </KpiComponent>
+            </>
+          );
+          // });
+        })}
       </KpisContainer>
       <Divider />
       <InfoContainer>
-        <InfoText>2 total responses</InfoText>
+        <InfoText>{participants.size} total responses</InfoText>
       </InfoContainer>
     </Container>
   );
@@ -246,4 +305,4 @@ const WeekText = styled.p<WeekTextProps>`
 
 const RowContainer = styled.div`
   margin-bottom: 1em;
-`
+`;

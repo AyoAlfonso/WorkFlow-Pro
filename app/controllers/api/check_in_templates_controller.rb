@@ -329,6 +329,12 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     }
   end
 
+  if params[:journal_logs_ids].present?
+     check_in_artifact_log.attributes = {
+     journal_logs: params[:journal_logs_ids]
+    }
+  end
+
   check_in_artifact_log.save!
   if params[:skip] == true
     check_in_artifact.update(skip: params[:skip]) 
@@ -343,7 +349,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
    authorize check_in_artifact
-   render json: {check_in_artifact: check_in_artifact, status: :ok }
+   render json: {check_in_artifact: check_in_artifact.as_json(), status: :ok }
   end
 
   def show

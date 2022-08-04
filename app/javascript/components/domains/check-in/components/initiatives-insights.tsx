@@ -3,9 +3,33 @@ import styled from "styled-components";
 import { Avatar, StripedProgressBar, Text } from "~/components/shared";
 import { useMst } from "~/setup/root";
 import { determineStatusLabel } from "../../goals/shared/key-element";
+import { Loading } from "~/components/shared/loading";
 
-const InitiativeInsights = (): JSX.Element => {
-  const { sessionStore } = useMst();
+interface InitiativeInsightsProps {
+  insightsToShow: Array<any>;
+}
+const InitiativeInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.Element => {
+  const { sessionStore, userStore } = useMst();
+  let participants;
+  if (!userStore.users.length) {
+    return <Loading />;
+  }
+
+  const checkInArtifactLogs = insightsToShow
+    .map(artifact => {
+      if (artifact.checkInArtifactLogs[0]) {
+        return {
+          ...artifact.checkInArtifactLogs[0],
+          ownedBy: artifact.ownedById,
+          updatedAt: artifact.updatedAt,
+        };
+      }
+    })
+    .filter(Boolean);
+
+  const findUser = owner_id => {
+    return userStore.users.find(user => user.id == owner_id);
+  };
 
   const completion = element => {
     const starting = element.completionStartingValue;
@@ -16,8 +40,20 @@ const InitiativeInsights = (): JSX.Element => {
         : element.completionCurrentValue;
 
     if (element.greaterThan === 1) {
+      console.log(
+        Math.min(Math.max(current - starting, 0) / (target - starting), 1) * 100,
+        "first",
+      );
       return Math.min(Math.max(current - starting, 0) / (target - starting), 1) * 100;
     } else {
+      console.log(
+        current <= target
+          ? 100
+          : current >= target * 2
+          ? 0
+          : ((target + target - current) / target) * 100,
+        "second",
+      );
       return current <= target
         ? 100
         : current >= target * 2
@@ -26,65 +62,90 @@ const InitiativeInsights = (): JSX.Element => {
     }
   };
 
-  const element = {
-    completionStartingValue: null,
-    completionTargetValue: 100,
-    completionCurrentValue: 50,
-    greaterThan: 1,
-  };
-
   return (
     <Container>
       <HeaderContainer>
         <HeaderText>Initiatives</HeaderText>
       </HeaderContainer>
       <InitiativesContainer>
-        <InitiativeContainer>
-          <AvatarContainer>
-            <Avatar
-              size={32}
-              marginLeft={"0px"}
-              marginTop={"0px"}
-              marginRight={"16px"}
-              firstName={sessionStore.profile.firstName}
-              lastName={sessionStore.profile.lastName}
-              defaultAvatarColor={sessionStore.profile.defaultAvatarColor}
-              avatarUrl={sessionStore.profile.avatarUrl}
-            />
-            <StyledText>{`${sessionStore.profile.firstName} ${sessionStore.profile.lastName}`}</StyledText>
-          </AvatarContainer>
-          <Divider /> <br />
-          <AvatarContainer>
-            <Avatar
-              size={32}
-              marginLeft={"0px"}
-              marginTop={"0px"}
-              marginRight={"16px"}
-              firstName={sessionStore.profile.firstName}
-              lastName={sessionStore.profile.lastName}
-              defaultAvatarColor={sessionStore.profile.defaultAvatarColor}
-              avatarUrl={sessionStore.profile.avatarUrl}
-            />
-            <StyledText>Prevent overworking, boost morale, and improve quality of work</StyledText>
-          </AvatarContainer>{" "}
-          <br />
-          <KeyElementName>Improve profitability by 20%</KeyElementName>
-          <KeyElementContainer>
-            {determineStatusLabel("completed")}
-            <TargetValueContainer>
-              <TargetValue>
-                <b>15%</b>/ 20%
-              </TargetValue>
-            </TargetValueContainer>
-            <ProgressBarContainer>
-              <StripedProgressBar variant={"completed"} completed={completion(element)} />
-            </ProgressBarContainer>
-          </KeyElementContainer>
-        </InitiativeContainer>
+        {checkInArtifactLogs.map(artifactLog => {
+          const keys = ["objecteableId, objecteableType"];
+          participants = new Set();
+          return artifactLog.objectiveLogsFull
+            ?.filter(
+              (s => o => (k => !s.has(k) && s.add(k))(keys.map(k => o[k]).join("|")))(new Set()),
+            )
+            .map(objectiveLogsFull => {
+              const user = findUser(artifactLog.ownedBy);
+              participants.add(user?.id);
+              return (
+                <InitiativeContainer>
+                  <AvatarContainer>
+                    <Avatar
+                      size={32}
+                      marginLeft={"0px"}
+                      marginTop={"0px"}
+                      marginRight={"16px"}
+                      firstName={user.firstName}
+                      lastName={user.lastName}
+                      defaultAvatarColor={user.defaultAvatarColor}
+                      avatarUrl={user.avatarUrl}
+                    />
+                    <StyledText>{`${user.firstName} ${user.lastName}`}</StyledText>
+                  </AvatarContainer>
+                  <Divider />
+                  <br />
+                  <AvatarContainer>
+                    <Avatar
+                      size={32}
+                      marginLeft={"0px"}
+                      marginTop={"0px"}
+                      marginRight={"16px"}
+                      firstName={user.firstName}
+                      lastName={user.lastName}
+                      defaultAvatarColor={user.defaultAvatarColor}
+                      avatarUrl={user.avatarUrl}
+                    />
+                    <StyledText>
+                      {objectiveLogsFull.objecteableData.contextDescription.replace(
+                        /<\/?[a-z][a-z0-9]*[^<>]*>/gi,
+                        "",
+                      )}
+                    </StyledText>
+                  </AvatarContainer>{" "}
+                  <br />
+                  {objectiveLogsFull.objecteableData?.keyElements.map(keyElement => {
+                    return (
+                      <>
+                        <KeyElementName>{objectiveLogsFull.value}</KeyElementName>
+                        <KeyElementContainer>
+                          <CompletiontStatus>
+                            {determineStatusLabel(keyElement.status)}
+                          </CompletiontStatus>
+                          <TargetValueContainer>
+                            <TargetValue>
+                              <b>{keyElement.completionCurrentValue}</b>/{" "}
+                              {keyElement.completionTargetValue}
+                            </TargetValue>
+                          </TargetValueContainer>
+                          <ProgressBarContainer>
+                            <StripedProgressBar
+                              variant={keyElement.status}
+                              completed={completion(keyElement)}
+                            />
+                          </ProgressBarContainer>
+                        </KeyElementContainer>
+                      </>
+                    );
+                  })}
+                </InitiativeContainer>
+              );
+            });
+        })}
       </InitiativesContainer>
       <Divider />
       <InfoContainer>
-        <InfoText>2 total responses</InfoText>
+        <InfoText>{participants.size} total responses</InfoText>
       </InfoContainer>
     </Container>
   );
@@ -166,10 +227,16 @@ const ProgressBarContainer = styled.div`
 `;
 
 const TargetValueContainer = styled.div`
-  margin-left: 1em;
-  margin-right: 2em;
+  // margin-left: 1em;
+  margin-right: 1em;
 `;
 
 const TargetValue = styled.span`
   display: inline-block;
+  font-size: 10px;
+`;
+
+const CompletiontStatus = styled.div`
+  display: inline-block;
+  font-size: 10px;
 `;

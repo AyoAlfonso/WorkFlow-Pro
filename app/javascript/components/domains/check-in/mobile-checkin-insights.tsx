@@ -49,7 +49,7 @@ const MobileCheckinInsights = (): JSX.Element => {
   const { id } = useParams();
 
   const {
-    checkInTemplateStore: { getCheckInTemplateInsights, checkInTemplateInsights },
+    checkInTemplateStore: { getCheckInTemplateInsights },
     userStore,
     teamStore,
     companyStore,
@@ -377,9 +377,13 @@ const MobileCheckinInsights = (): JSX.Element => {
       {getSteps.includes("Yes/No") && (
         <YesNoInsights insightsToShow={insightsToShow} steps={steps} />
       )}
-      <KpiInsights />
-      <InitiativeInsights />
-      <JournalInsights />
+      <KpiInsights insightsToShow={insightsToShow} />
+      {getSteps.includes("KPIs") && <KpiInsights insightsToShow={insightsToShow} />}
+      {getSteps.includes("Evening Reflection") ||
+        getSteps.includes("Weekly Reflection") ||
+        (getSteps.includes("Monthly Reflection") && (
+          <JournalInsights insightsToShow={insightsToShow} />
+        ))}
     </Container>
   );
 };
