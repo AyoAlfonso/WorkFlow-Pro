@@ -329,6 +329,12 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     }
   end
 
+  if params[:journal_logs_ids].present?
+     check_in_artifact_log.attributes = {
+     journal_logs: params[:journal_logs_ids]
+    }
+  end
+
   check_in_artifact_log.save!
   if params[:skip] == true
     check_in_artifact.update(skip: params[:skip]) 

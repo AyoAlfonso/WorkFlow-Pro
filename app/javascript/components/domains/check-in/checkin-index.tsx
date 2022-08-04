@@ -21,7 +21,6 @@ export const CheckIn = observer(
       teamStore.fetchTeams().then(() => {
         userStore.fetchUsers().then(() => {
           checkInTemplateStore.getCheckIns().then(() => {
-            console.log("getCheckins");
             checkInTemplateStore.sortArtifacts("dueDate");
             setLoading(false);
           });
@@ -37,8 +36,6 @@ export const CheckIn = observer(
     if (loading) {
       return <Loading />;
     }
-
-    console.log(toJS(checkIns), "checkIns");
 
     return (
       <Container>

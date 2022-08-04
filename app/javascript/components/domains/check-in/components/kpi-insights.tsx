@@ -22,9 +22,9 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
   const setDefaultSelectionQuarter = week => {
     return week == 13 ? 1 : week == 26 ? 2 : week == 39 ? 3 : 4;
   };
-  const [quarter, setQuarter] = useState<number>(
-    setDefaultSelectionQuarter(company.currentFiscalWeek),
-  );
+  // const [quarter, setQuarter] = useState<number>(
+  //   setDefaultSelectionQuarter(company.currentFiscalWeek),
+  // );
 
   const participants = new Set();
 

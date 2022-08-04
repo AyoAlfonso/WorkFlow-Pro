@@ -34,4 +34,8 @@ class CheckInArtifactLog < ApplicationRecord
     ScorecardLog.where(id: self.scorecard_logs)
     # .group_by(&:user_id)
   end
+
+  def journal_logs_full
+    JournalEntry.where(id: self.journal_logs)
+  end
 end

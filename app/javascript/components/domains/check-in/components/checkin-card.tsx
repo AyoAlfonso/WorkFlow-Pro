@@ -27,7 +27,7 @@ export const CheckInCard = observer(
     const { checkInTemplate } = checkin;
 
     const { name, ownerType, id, viewers, participants, runOnce } = checkInTemplate;
-    console.log(checkin, "checkin");
+
     const getParticipantsAvatar = entityArray => {
       const entityArrayToReturn = [];
       entityArray.map(entity => {

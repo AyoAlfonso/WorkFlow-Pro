@@ -28,7 +28,7 @@ class CheckInArtifact < ApplicationRecord
         }, 
         check_in_artifact_logs: {
          except: [:updated_at],
-         methods: [:objective_logs_full, :scorecard_logs_full]
+         methods: [:objective_logs_full, :scorecard_logs_full, :journal_logs_full]
         }
       ],
      })
