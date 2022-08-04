@@ -1,7 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { getAverage, getPercentage, getResponses, getTotalNumberOfResponses } from "~/utils/check-in-functions";
+import {
+  getAverage,
+  getPercentage,
+  getResponses,
+  getTotalNumberOfResponses,
+} from "~/utils/check-in-functions";
 
 interface NumericalStepInsightsProps {
   insightsToShow: Array<any>;
@@ -54,36 +59,46 @@ export const NumericalStepInsights = ({
 
   return (
     <>
-      {stepQuestions.map((question, index) => (
-        <Container key={`${question}-${index}`}>
-          <HeaderContainer>
-            <QuestionText>{question}</QuestionText>
-            <Tag>{`Avg. ${getAverage(getResponses(question, checkInArtifactLogs, "numeric")) || 0}`}</Tag>
-          </HeaderContainer>
-          <ColumnsContainer>
-            {numbers.map(num => {
-              const average = getPercentage(getResponses(question, checkInArtifactLogs, "numeric"));
-              const value = average.find(item => item.value === num.toString());
-              return (
-                <ColumnContainer key={num}>
-                  <ColumnBar average={value?.percentage || 0} num={num}/>
-                  <Percentage>{`${value?.percentage || 0}%`}</Percentage>
-                </ColumnContainer>
-              );
-            })}
-          </ColumnsContainer>
-          <Divider />
-          <InfoContainer>
-            <InfoText>
-              {!getTotalNumberOfResponses(question, checkInArtifactLogs, "numeric")
-                ? "No response"
-                : getTotalNumberOfResponses(question, checkInArtifactLogs, "numeric") == 1
-                ? "1 response"
-                : `${getTotalNumberOfResponses(question, checkInArtifactLogs, "numeric")} total responses`}
-            </InfoText>
-          </InfoContainer>
-        </Container>
-      ))}
+      {stepQuestions.map((question, index) => {
+        const totalNumberOfResponses = getTotalNumberOfResponses(
+          question,
+          checkInArtifactLogs,
+          "numeric",
+        );
+        return (
+          <Container key={`${question}-${index}`}>
+            <HeaderContainer>
+              <QuestionText>{question}</QuestionText>
+              <Tag>{`Avg. ${getAverage(getResponses(question, checkInArtifactLogs, "numeric")) ||
+                0}`}</Tag>
+            </HeaderContainer>
+            <ColumnsContainer>
+              {numbers.map(num => {
+                const average = getPercentage(
+                  getResponses(question, checkInArtifactLogs, "numeric"),
+                );
+                const value = average.find(item => item.value === num.toString());
+                return (
+                  <ColumnContainer key={num}>
+                    <ColumnBar average={value?.percentage || 0} num={num} />
+                    <Percentage>{`${value?.percentage || 0}%`}</Percentage>
+                  </ColumnContainer>
+                );
+              })}
+            </ColumnsContainer>
+            <Divider />
+            <InfoContainer>
+              <InfoText>
+                {!totalNumberOfResponses
+                  ? "No response"
+                  : totalNumberOfResponses == 1
+                  ? "1 response"
+                  : `${totalNumberOfResponses} total responses`}
+              </InfoText>
+            </InfoContainer>
+          </Container>
+        );
+      })}
     </>
   );
 };

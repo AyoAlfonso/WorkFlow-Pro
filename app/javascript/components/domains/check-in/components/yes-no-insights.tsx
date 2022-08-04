@@ -69,7 +69,12 @@ export const YesNoInsights = ({ insightsToShow, steps }: YesNoInsightsProps): JS
       {stepQuestions.map((question, index) => {
         const ansSummary = getPercentage(getResponses(question, checkInArtifactLogs, "yes_no"));
         const value = val => ansSummary.find(item => item.value === val);
-        
+        const totalNumberOfResponses = getTotalNumberOfResponses(
+          question,
+          checkInArtifactLogs,
+          "yes_no",
+        );
+
         return (
           <Container key={`${question}-${index}`}>
             <HeaderContainer>
@@ -88,15 +93,11 @@ export const YesNoInsights = ({ insightsToShow, steps }: YesNoInsightsProps): JS
             <Divider />
             <InfoContainer>
               <InfoText>
-                {!getTotalNumberOfResponses(question, checkInArtifactLogs, "yes_no")
+                {!totalNumberOfResponses
                   ? "No response"
-                  : getTotalNumberOfResponses(question, checkInArtifactLogs, "yes_no") == 1
+                  : totalNumberOfResponses == 1
                   ? "1 response"
-                  : `${getTotalNumberOfResponses(
-                      question,
-                      checkInArtifactLogs,
-                      "yes_no",
-                    )} total responses`}
+                  : `${totalNumberOfResponses} total responses`}
               </InfoText>
             </InfoContainer>
           </Container>

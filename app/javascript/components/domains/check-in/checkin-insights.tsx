@@ -565,7 +565,6 @@ export const DropdownContainer = styled.div`
   box-shadow: 0px 3px 6px #00000029;
   width: 100%;
   // z-index: 5;
-  bottom: -80px;
 `;
 
 export const Option = styled.div`
