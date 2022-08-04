@@ -53,7 +53,7 @@ class Api::ObjectiveLogsController < Api::ApplicationController
 
   def objective_log_params
     #Having changed our model mid way we have to implement checks as so
-    params[:objecteable_type]  == "QuarterlyGoal"  if  params[:objecteable_type] == "QuarterlyInitiative"
+    params[:objecteable_type]  = "QuarterlyGoal"  if  params[:objecteable_type] == "QuarterlyInitiative"
     params.permit(:owned_by_id, :score, :note, :objecteable_id, :objecteable_type, :child_id, :child_type, :fiscal_quarter, :fiscal_year, :week, :status, :created_at, :adjusted_date)
   end
 

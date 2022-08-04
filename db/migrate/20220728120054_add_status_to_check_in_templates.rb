@@ -5,10 +5,8 @@ class AddStatusToCheckInTemplates < ActiveRecord::Migration[6.1]
 
   def data
     CheckInTemplate.all.each do |template|
-      # if template.check_in_type != 1
          template.status = 1
          template.save
-      # end
     end
     Notification.where(notification_type: 6).each do |notification|
       notification.destroy

@@ -27,7 +27,7 @@ export const CheckInCard = observer(
     const { checkInTemplate } = checkin;
 
     const { name, ownerType, id, viewers, participants, runOnce } = checkInTemplate;
-
+    console.log(checkin, "checkin");
     const getParticipantsAvatar = entityArray => {
       const entityArrayToReturn = [];
       entityArray.map(entity => {
@@ -115,7 +115,7 @@ export const CheckInCard = observer(
       const dateB = moment(new Date());
       const diff = dateA.diff(dateB, "days");
       return diff < 1;
-    }
+    };
 
     return (
       <Container>

@@ -19,6 +19,7 @@ export const CheckinTemplates = (): JSX.Element => {
 
   useEffect(() => {
     checkInTemplateStore.fetchCheckInTemplates().then(() => {
+      console.log("fetchCheckInTemplates");
       setCheckInTemplatesState(toJS(checkInTemplates));
       setIsLoading(false);
     });

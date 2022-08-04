@@ -31,7 +31,6 @@ export const CheckinInsights = observer(
     const { id } = useParams();
     const history = useHistory();
 
-    
     const {
       checkInTemplateStore: { getCheckInTemplateInsights, checkInTemplateInsights },
       userStore,
@@ -329,7 +328,7 @@ export const CheckinInsights = observer(
               {getSteps.includes("Yes/No") && (
                 <YesNoInsights insightsToShow={insightsToShow} steps={steps} />
               )}
-              <KpiInsights />
+              <KpiInsights insightsToShow={insightsToShow} />
               <InitiativeInsights insightsToShow={insightsToShow} />
               <JournalInsights />
             </LeftContainer>

@@ -348,7 +348,7 @@ const MobileCheckinInsights = (): JSX.Element => {
       {getSteps.includes("Yes/No") && (
         <YesNoInsights insightsToShow={insightsToShow} steps={steps} />
       )}
-      <KpiInsights />
+      <KpiInsights insightsToShow={insightsToShow} />
       <InitiativeInsights insightsToShow={insightsToShow} />
       <JournalInsights />
     </Container>

@@ -5,6 +5,7 @@ import { useMst } from "../../../setup/root";
 import Select from "../../shared/select";
 import { CheckInCard } from "./components/checkin-card";
 import { Loading } from "~/components/shared";
+import { toJS } from "mobx";
 
 export const CheckIn = observer(
   (): JSX.Element => {
@@ -20,6 +21,7 @@ export const CheckIn = observer(
       teamStore.fetchTeams().then(() => {
         userStore.fetchUsers().then(() => {
           checkInTemplateStore.getCheckIns().then(() => {
+            console.log("getCheckins");
             checkInTemplateStore.sortArtifacts("dueDate");
             setLoading(false);
           });
@@ -36,7 +38,7 @@ export const CheckIn = observer(
       return <Loading />;
     }
 
-    console.log(checkIns, "checkIns");
+    console.log(toJS(checkIns), "checkIns");
 
     return (
       <Container>

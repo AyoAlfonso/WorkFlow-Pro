@@ -25,7 +25,9 @@ export const CheckInTemplateStoreModel = types
     fetchCheckInTemplates: flow(function*() {
       try {
         const response: ApiResponse<any> = yield self.environment.api.getCheckInTemplates();
+
         self.checkInTemplates = response.data;
+        console.log(self.checkInTemplates, "self.checkInTemplates ");
       } catch {
         // caught by Api Monitor
       }
@@ -43,9 +45,11 @@ export const CheckInTemplateStoreModel = types
       }
     }),
     getCheckIns: flow(function*() {
+      console.log("in getCheckIns");
       try {
         const response: ApiResponse<any> = yield self.environment.api.getCheckins();
         self.checkIns = response.data.checkInArtifacts;
+        console.log(self.checkIns, response.data.checkInArtifacts);
         return response.data.checkInArtifacts;
       } catch {
         // showToast("Something went wrong", ToastMessageConstants.ERROR);
@@ -132,7 +136,7 @@ export const CheckInTemplateStoreModel = types
         return false;
       }
     }),
-    getCheckInTemplateInsights: flow(function* (id) {
+    getCheckInTemplateInsights: flow(function*(id) {
       const response: ApiResponse<any> = yield self.environment.api.getTemplateInsights(id);
       if (response.ok) {
         self.checkInTemplateInsights = response.data.template;
