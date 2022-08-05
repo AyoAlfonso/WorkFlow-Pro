@@ -1,9 +1,27 @@
-import React from 'react'
+import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { agreementScale } from "../data/selection-scale-data";
-import { getAverage, getPercentage, getResponses, getTotalNumberOfResponses } from "~/utils/check-in-functions";
-import { ColumnBar, ColumnContainer, ColumnsContainer, Container, DescriptionText, Divider, HeaderContainer, InfoContainer, InfoText, Percentage, QuestionText, Tag } from './sentiment-insights';
+import {
+  getAverage,
+  getPercentage,
+  getResponses,
+  getTotalNumberOfResponses,
+} from "~/utils/check-in-functions";
+import {
+  ColumnBar,
+  ColumnContainer,
+  ColumnsContainer,
+  Container,
+  DescriptionText,
+  Divider,
+  HeaderContainer,
+  InfoContainer,
+  InfoText,
+  Percentage,
+  QuestionText,
+  Tag,
+} from "./sentiment-insights";
 
 interface AgreementInsightsProps {
   insightsToShow: Array<any>;
@@ -30,49 +48,53 @@ const AgreementInsights = ({ insightsToShow, steps }: AgreementInsightsProps): J
       }
     })
     .filter(Boolean);
-  
+
   return (
     <>
-      {stepQuestions.map((question, index) => (
-        <Container key={`${question}-${index}`}>
-          <HeaderContainer>
-            <QuestionText>{question}</QuestionText>
-            <Tag>{`Avg. ${getAverage(getResponses(question, checkInArtifactLogs, "agreement_scale")) ||
-              0}`}</Tag>
-          </HeaderContainer>
-          <ColumnsContainer>
-            {agreementScale.map(({ option, label }) => {
-              const average = getPercentage(
+      {stepQuestions.map((question, index) => {
+        const totalNumberOfResponses = getTotalNumberOfResponses(
+          question,
+          checkInArtifactLogs,
+          "agreement_scale",
+        );
+        return (
+          <Container key={`${question}-${index}`}>
+            <HeaderContainer>
+              <QuestionText>{question}</QuestionText>
+              <Tag>{`Avg. ${getAverage(
                 getResponses(question, checkInArtifactLogs, "agreement_scale"),
-              );
-              const value = average.find(item => item.value === option.toString());
-              return (
-                <ColumnContainer key={option}>
-                  <ColumnBar average={value?.percentage || 0} num={option} />
-                  <Percentage>{`${value?.percentage || 0}%`}</Percentage>
-                  <DescriptionText>{label}</DescriptionText>
-                </ColumnContainer>
-              );
-            })}
-          </ColumnsContainer>
-          <Divider />
-          <InfoContainer>
-            <InfoText>
-              {!getTotalNumberOfResponses(question, checkInArtifactLogs, "agreement_scale")
-                ? "No response"
-                : getTotalNumberOfResponses(question, checkInArtifactLogs, "agreement_scale") == 1
-                ? "1 response"
-                : `${getTotalNumberOfResponses(
-                    question,
-                    checkInArtifactLogs,
-                    "agreement_scale",
-                  )} total responses`}
-            </InfoText>
-          </InfoContainer>
-        </Container>
-      ))}
+              ) || 0}`}</Tag>
+            </HeaderContainer>
+            <ColumnsContainer>
+              {agreementScale.map(({ option, label }) => {
+                const average = getPercentage(
+                  getResponses(question, checkInArtifactLogs, "agreement_scale"),
+                );
+                const value = average.find(item => item.value === option.toString());
+                return (
+                  <ColumnContainer key={option}>
+                    <ColumnBar average={value?.percentage || 0} num={option} />
+                    <Percentage>{`${value?.percentage || 0}%`}</Percentage>
+                    <DescriptionText>{label}</DescriptionText>
+                  </ColumnContainer>
+                );
+              })}
+            </ColumnsContainer>
+            <Divider />
+            <InfoContainer>
+              <InfoText>
+                {!totalNumberOfResponses
+                  ? "No response"
+                  : totalNumberOfResponses == 1
+                  ? "1 response"
+                  : `${totalNumberOfResponses} total responses`}
+              </InfoText>
+            </InfoContainer>
+          </Container>
+        );
+      })}
     </>
   );
 };
 
-export default AgreementInsights
+export default AgreementInsights;

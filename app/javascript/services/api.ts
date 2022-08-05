@@ -731,6 +731,10 @@ export class Api {
     return this.client.get(`/check_in_templates`);
   }
 
+  async getCheckInTemplate(id) {
+    return this.client.get(`/check_in_templates/${id}`);
+  }
+
   async getWeeklyCheckInData(userId, dueDate) {
     return this.client.get(`/weekly-check-in/${userId}/${dueDate}`);
   }

@@ -33,7 +33,10 @@ export const CheckinReflection = (props: ICheckinReflection): JSX.Element => {
     questionnaireStore,
     keyActivityStore,
     companyStore,
+    checkInTemplateStore,
   } = useMst();
+
+    const { currentCheckInArtifact, updateCheckinArtifact } = checkInTemplateStore;
 
   useEffect(() => {
     async function setUp() {
@@ -61,6 +64,17 @@ export const CheckinReflection = (props: ICheckinReflection): JSX.Element => {
   const summaryData = questionnaireStore.questionnaireAttemptsSummaryForReflections;
 
   const stringValidator = value => (value ? true : "Write just a little bit!");
+
+  const formatSteps = steps => {
+    const formattedSteps = steps.map(step => {
+      if (!step.metadata || !step.message) {
+        return {...step, message: "", metadata: {}}
+      } else {
+        return step
+      }
+    })
+    return formattedSteps;
+  }
 
   // Customized Steps
   const steps = R.pipe(
@@ -136,7 +150,6 @@ export const CheckinReflection = (props: ICheckinReflection): JSX.Element => {
       }
     }),
   )(questionnaireVariant?.steps);
-
   // End of Customized Steps
 
   if (R.isNil(steps)) {
@@ -146,6 +159,19 @@ export const CheckinReflection = (props: ICheckinReflection): JSX.Element => {
       </LoadingContainer>
     );
   }
+
+  const submitCheckinResponse = id => {
+    const isCheckInArtifactLogsEmpty = R.isEmpty(currentCheckInArtifact.checkInArtifactLogs);
+    const isJournalLogsEmpty = R.isEmpty(
+      currentCheckInArtifact.checkInArtifactLogs[0]?.journalLogs,
+    );
+    const journalLogIdArray = toJS(currentCheckInArtifact).checkInArtifactLogs[0]?.journalLogs;
+    const item = {
+      journalLogIds:
+        !isCheckInArtifactLogsEmpty && !isJournalLogsEmpty ? [...journalLogIdArray, id] : [id],
+    };
+    updateCheckinArtifact(currentCheckInArtifact.id, item);
+  };
 
   return (
     <ChatBotContainer disabled={props.disabled}>
@@ -173,7 +199,7 @@ export const CheckinReflection = (props: ICheckinReflection): JSX.Element => {
         zIndex={1}
         handleEnd={async ({ renderedSteps, steps, values: answers }) => {
           const optionalParams = selectedDailyLog ? { logDate: selectedDailyLog.logDate } : {};
-          await questionnaireStore.createQuestionnaireAttempt(
+          const res = await questionnaireStore.createQuestionnaireAttempt(
             questionnaireVariant.id,
             {
               renderedSteps,
@@ -183,6 +209,11 @@ export const CheckinReflection = (props: ICheckinReflection): JSX.Element => {
             questionnaireVariant.title,
             optionalParams,
           );
+          if (res === true) {
+            return 
+          } else {
+            submitCheckinResponse(res.id)
+          }
           // if (typeof props.endFn === "function") {
           //   setTimeout(() => {
           //     props.endFn();

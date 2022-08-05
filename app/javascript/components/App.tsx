@@ -394,6 +394,7 @@ export const App = observer(
                     <Route exact path="/check-in/run/:id" component={CheckInWizard} />
                     <Route exact path="/check-in/setup/:id" component={SetupTemplatePage} />
                     <Route exact path="/check-in/edit/:artifactId" component={SetupTemplatePage} />
+                    <Route exact path="/check-in/template/edit/:templateId" component={SetupTemplatePage} />
                   </>
                 </Switch>
               ) : (

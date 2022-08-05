@@ -17,23 +17,36 @@ import { Icon } from "~/components/shared/icon";
 import { Avatar } from "~/components/shared/avatar";
 import moment from "moment";
 
-const JournalInsights = (): JSX.Element => {
-  const { journalStore, sessionStore } = useMst();
+interface JournalInsightsProps {
+  insightsToShow: Array<any>;
+}
+
+const JournalInsights = ({ insightsToShow }: JournalInsightsProps): JSX.Element => {
+  const { userStore } = useMst();
   const { t } = useTranslation();
 
-  const data = {
-    id: 1,
-    userId: 3,
-    body:
-      "<p><strong>Gratitude:</strong></p><p>waking up</p><p><strong>How I need to feel today:</strong></p><p>great</p><p><strong>How I will lean in today:</strong></p><p>hmm</p>",
-    title: "Create My Day",
-    preview: "Gratitude:waking upHow I need to feel today:greatHow I will lean in today:hmm",
-    createdAt: "2022-06-20T16:07:58.574Z",
-    loggedAt: "2022-06-20T16:07:58.281Z",
-  };
+  const checkInArtifactLogs = insightsToShow
+    .map(artifact => {
+      if (artifact.checkInArtifactLogs[0]) {
+        return {
+          ...artifact.checkInArtifactLogs[0],
+          ownedBy: artifact.ownedById,
+          updatedAt: artifact.updatedAt,
+        };
+      }
+    })
+    .filter(Boolean);
+
+  const getUser = userId => {
+      const user = userStore.users?.find(user => user.id === userId);
+      if (user) {
+        return user;
+      }
+    };
 
   const renderSelectedEntryHeading = selectedEntry => {
-    const { avatarUrl, defaultAvatarColor, firstName, lastName } = sessionStore.profile;
+    const user = getUser(selectedEntry.userId);
+    const { avatarUrl, defaultAvatarColor, firstName, lastName } = user;
     return (
       <>
         <Text fontSize={"16px"} fontWeight={600}>
@@ -63,7 +76,7 @@ const JournalInsights = (): JSX.Element => {
     );
   };
 
-  const renderSelectedEntry = () => {
+  const renderSelectedEntry = (data) => {
     return R.isNil(data) ? (
       <NoSelectedItems text={t("journals.startAdding")} />
     ) : (
@@ -90,12 +103,21 @@ const JournalInsights = (): JSX.Element => {
   };
 
   return (
-    <Container>
-      <EntryContainer>{renderSelectedEntry()}</EntryContainer>
-    </Container>
+    <>
+      {checkInArtifactLogs.length && checkInArtifactLogs.map(log => {
+        const journalLogs = log.journalLogsFull;
+        return journalLogs.map(journalLog => (
+          <Container key={journalLog.id}>
+            <EntryContainer>{renderSelectedEntry(journalLog)}</EntryContainer>
+          </Container>
+        ))
+      })}
+    </>
   );
 };
 
 export default JournalInsights;
 
-const Container = styled.div``;
+const Container = styled.div`
+  margin-bottom: 1em;
+`;

@@ -37,7 +37,7 @@ export interface ParticipantsProps {
 export const CheckInBuilderLayout = observer(
   (): JSX.Element => {
     const { companyStore, sessionStore, checkInTemplateStore } = useMst();
-    
+
     const [currentStep, setCurrentStep] = useState(0);
     const [checkinName, setCheckinName] = useState<string>("New Check-in");
     const [selectedSteps, setSelectedSteps] = useState<Array<SelectedStepType>>([]);
@@ -143,7 +143,7 @@ export const CheckInBuilderLayout = observer(
     const showDateTime = cadence == "Once" || cadence == "Monthly" || cadence == "Quarterly";
     const showDayTime = cadence == "Weekly" || cadence == "Bi-weekly";
 
-    const createCheckin = () => {
+    const createCheckin = action => {
       const checkin = {
         name: checkinName,
         checkInTemplatesStepsAttributes: selectedSteps,
@@ -168,11 +168,17 @@ export const CheckInBuilderLayout = observer(
         tag: ["custom"],
       };
 
-      checkInTemplateStore.createCheckinTemplate(checkin).then(id => {
-        checkInTemplateStore.publishCheckinTemplate(id).then(() => {
-          history.push("/check-in");
+      if (action == "draft") {
+        checkInTemplateStore.createCheckinTemplate(checkin).then(() => {
+          history.push("/check-in/templates");
         });
-      });
+      } else {
+        checkInTemplateStore.createCheckinTemplate(checkin).then(id => {
+          checkInTemplateStore.publishCheckinTemplate(id).then(() => {
+            history.push("/check-in");
+          });
+        });
+      }
     };
 
     const title = () => R.path([currentStep, "name"], steps);
@@ -223,14 +229,24 @@ export const CheckInBuilderLayout = observer(
 
     const finishCheckIn = () => {
       return (
-        <StopButton
-          disabled={currentStep == 2 && !participants.length}
-          variant={"primary"}
-          onClick={createCheckin}
-          small
-        >
-          Publish
-        </StopButton>
+        <ButtonsContainer>
+          <StopButton
+            disabled={currentStep == 2 && !participants.length}
+            variant="primaryOutline"
+            onClick={() => createCheckin("draft")}
+            small
+          >
+            Draft
+          </StopButton>
+          <StopButton
+            disabled={currentStep == 2 && !participants.length}
+            variant={"primary"}
+            onClick={() => createCheckin("publish")}
+            small
+          >
+            Publish
+          </StopButton>
+        </ButtonsContainer>
       );
     };
 
@@ -326,4 +342,9 @@ export const StopButton = styled(Button)<IStopMeetingButton>`
   width: 100%;
   margin: 0;
   font-size: 16px;
+`;
+
+const ButtonsContainer = styled.div`
+  display: flex;
+  gap: 1em;
 `;

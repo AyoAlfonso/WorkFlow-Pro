@@ -155,7 +155,7 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
                                     log.score,
                                     log.keyPerformanceIndicator.targetValue,
                                     log.keyPerformanceIndicator.greaterThan,
-                                  )}
+                                  ).toFixed()}
                                 </StatusBadge>
                               </TableData>
                               <TableData>

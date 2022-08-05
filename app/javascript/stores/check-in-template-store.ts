@@ -25,10 +25,18 @@ export const CheckInTemplateStoreModel = types
     fetchCheckInTemplates: flow(function*() {
       try {
         const response: ApiResponse<any> = yield self.environment.api.getCheckInTemplates();
-
         self.checkInTemplates = response.data;
       } catch {
         // caught by Api Monitor
+      }
+    }),
+    getCheckInTemplateById: flow(function* (id) {
+      try {
+        const response: ApiResponse<any> = yield self.environment.api.getCheckInTemplate(id);
+        self.currentCheckIn = response.data.template
+        return response.data.template
+      } catch {
+      //
       }
     }),
     getCheckIn: flow(function*(checkInName) {
@@ -154,6 +162,11 @@ export const CheckInTemplateStoreModel = types
       self.currentCheckIn = currentCheckIn;
       self.currentCheckInArtifact = checkin;
       return { checkin, currentCheckIn };
+    },
+    getOnlyCheckInTemplate(id) {
+      const checkInTemplates = toJS(self.checkInTemplates);
+      const currentCheckInTemplate = checkInTemplates.find(template => template.id == id);
+      self.currentCheckIn = currentCheckInTemplate;
     },
     updateCheckInArtifactResponse(index, response) {
       const responseArray = toJS(self.currentCheckInArtifact).checkInArtifactLogs[0]?.responses;

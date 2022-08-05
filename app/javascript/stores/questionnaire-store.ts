@@ -61,6 +61,7 @@ export const QuestionnaireStoreModel = types
             );
           }
           showToast("Responses saved", ToastMessageConstants.SUCCESS);
+          return response.data.journalEntry
         }
       } catch {
         // error messaging handled by API monitor

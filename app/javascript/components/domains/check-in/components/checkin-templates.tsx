@@ -53,6 +53,15 @@ export const CheckinTemplates = (): JSX.Element => {
     }
   };
 
+  const updateStatus = (id) => {
+    const templates = [...checkInTemplatesState];
+    const template = templates.find(template => template.id == id);
+    if (template) {
+      template.status = "published";
+      setCheckInTemplatesState(templates);
+    }
+  }
+
   return (
     <Container>
       <StyledHeader>Check-in Templates</StyledHeader>
@@ -83,6 +92,7 @@ export const CheckinTemplates = (): JSX.Element => {
             description={checkin.description}
             checkInTemplate={checkin}
             tags={[checkin.ownerType, checkin.checkInType == "dynamic" ? "Custom" : ""]}
+            updateStatus={updateStatus}
           />
         ))}
       </CheckInTemplateCardsContainer>

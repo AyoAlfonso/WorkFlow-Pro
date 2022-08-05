@@ -13,8 +13,10 @@ export const CheckInArtifactsLogsModel = types.model("CheckInArtifactsLogsModel"
   createdById: types.number,
   scorecardLogs: types.maybeNull(types.array(types.number)),
   objectiveLogs: types.maybeNull(types.array(types.number)),
+  journalLogs: types.maybeNull(types.array(types.number)),
   objectiveLogsFull: types.maybeNull(types.array(types.frozen<object>())),
   scorecardLogsFull: types.maybeNull(types.array(types.frozen<object>())),
+  journalLogsFull: types.maybeNull(types.array(types.frozen<object>())),
   deletedAt: types.maybeNull(types.string),
 });
 

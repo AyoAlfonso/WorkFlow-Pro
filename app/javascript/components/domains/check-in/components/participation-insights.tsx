@@ -80,10 +80,13 @@ const Container = styled.div`
   height: fit-content;
   position: sticky;
   top: 96px;
+  min-width: 200px;
+  width: 30%;
 
   @media only screen and (max-width: 768px) {
     position: static;
     margin-bottom: 1em;
+    width: auto;
   }
 `;
 

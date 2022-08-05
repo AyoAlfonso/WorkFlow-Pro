@@ -2,7 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { sentimentScale } from "../data/selection-scale-data";
-import { getAverage, getPercentage, getResponses, getTotalNumberOfResponses } from "~/utils/check-in-functions";
+import {
+  getAverage,
+  getPercentage,
+  getResponses,
+  getTotalNumberOfResponses,
+} from "~/utils/check-in-functions";
 
 interface SentimentInsightsProps {
   insightsToShow: Array<any>;
@@ -37,41 +42,47 @@ const SentimentInsights = ({ insightsToShow, steps }: SentimentInsightsProps): J
 
   return (
     <>
-      {stepQuestions.map((question, index) => (
-        <Container key={`${question}-${index}`}>
-          <HeaderContainer>
-            <QuestionText>{question}</QuestionText>
-            <Tag>{`Avg. ${getAverage(getResponses(question, checkInArtifactLogs, "sentiment")) || 0}`}</Tag>
-          </HeaderContainer>
-          <ColumnsContainer>
-            {sentimentScale.map(({ option, label }) => {
-              const average = getPercentage(getResponses(question, checkInArtifactLogs, "sentiment"));
-              const value = average.find(item => item.value === option.toString());
-              return (
-                <ColumnContainer key={option}>
-                  <ColumnBar average={value?.percentage || 0} num={option} />
-                  <Percentage>{`${value?.percentage || 0}%`}</Percentage>
-                  <DescriptionText>{label}</DescriptionText>
-                </ColumnContainer>
-              );
-            })}
-          </ColumnsContainer>
-          <Divider />
-          <InfoContainer>
-            <InfoText>
-              {!getTotalNumberOfResponses(question, checkInArtifactLogs, "sentiment")
-                ? "No response"
-                : getTotalNumberOfResponses(question, checkInArtifactLogs, "sentiment") == 1
-                ? "1 response"
-                : `${getTotalNumberOfResponses(
-                    question,
-                    checkInArtifactLogs,
-                    "sentiment",
-                  )} total responses`}
-            </InfoText>
-          </InfoContainer>
-        </Container>
-      ))}
+      {stepQuestions.map((question, index) => {
+        const totalNumberOfResponses = getTotalNumberOfResponses(
+          question,
+          checkInArtifactLogs,
+          "sentiment",
+        );
+        return (
+          <Container key={`${question}-${index}`}>
+            <HeaderContainer>
+              <QuestionText>{question}</QuestionText>
+              <Tag>{`Avg. ${getAverage(getResponses(question, checkInArtifactLogs, "sentiment")) ||
+                0}`}</Tag>
+            </HeaderContainer>
+            <ColumnsContainer>
+              {sentimentScale.map(({ option, label }) => {
+                const average = getPercentage(
+                  getResponses(question, checkInArtifactLogs, "sentiment"),
+                );
+                const value = average.find(item => item.value === option.toString());
+                return (
+                  <ColumnContainer key={option}>
+                    <ColumnBar average={value?.percentage || 0} num={option} />
+                    <Percentage>{`${value?.percentage || 0}%`}</Percentage>
+                    <DescriptionText>{label}</DescriptionText>
+                  </ColumnContainer>
+                );
+              })}
+            </ColumnsContainer>
+            <Divider />
+            <InfoContainer>
+              <InfoText>
+                {!totalNumberOfResponses
+                  ? "No response"
+                  : totalNumberOfResponses == 1
+                  ? "1 response"
+                  : `${totalNumberOfResponses} total responses`}
+              </InfoText>
+            </InfoContainer>
+          </Container>
+        );
+      })}
     </>
   );
 };
@@ -79,17 +90,17 @@ const SentimentInsights = ({ insightsToShow, steps }: SentimentInsightsProps): J
 export default SentimentInsights;
 
 export const ColumnBar = (props: ColumnBarProps): JSX.Element => {
-    const { average, num } = props;
+  const { average, num } = props;
 
-    const height = (average / 100) * 150;
+  const height = (average / 100) * 150;
 
-    return (
-      <Column>
-        <ColumnText color={height <= 125 ? "#000" : "#fff"}>{num}</ColumnText>
-        <ColumnBarFillDiv completed={average} animate={{ height: `${height}px` }} />
-      </Column>
-    );
-  };
+  return (
+    <Column>
+      <ColumnText color={height <= 125 ? "#000" : "#fff"}>{num}</ColumnText>
+      <ColumnBarFillDiv completed={average} animate={{ height: `${height}px` }} />
+    </Column>
+  );
+};
 
 export const Container = styled.div`
   box-shadow: 0px 3px 6px #00000029;
