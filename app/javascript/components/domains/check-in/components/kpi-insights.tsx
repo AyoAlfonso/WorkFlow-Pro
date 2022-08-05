@@ -65,7 +65,13 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
       </HeaderContainer>
       <KpisContainer>
         {checkInArtifactLogs.map(artifactLog => {
-          const keys = ["fiscalQuarter", "week", "fiscalYear", "keyPerformanceIndicatorId"];
+          const keys = [
+            "fiscalQuarter",
+            "week",
+            "fiscalYear",
+            "userId",
+            "keyPerformanceIndicatorId",
+          ];
 
           const user = findUser(artifactLog.ownedBy);
           participants.add(user?.id);

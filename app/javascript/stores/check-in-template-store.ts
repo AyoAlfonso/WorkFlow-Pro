@@ -27,7 +27,6 @@ export const CheckInTemplateStoreModel = types
         const response: ApiResponse<any> = yield self.environment.api.getCheckInTemplates();
 
         self.checkInTemplates = response.data;
-        console.log(self.checkInTemplates, "self.checkInTemplates ");
       } catch {
         // caught by Api Monitor
       }
@@ -45,11 +44,9 @@ export const CheckInTemplateStoreModel = types
       }
     }),
     getCheckIns: flow(function*() {
-      console.log("in getCheckIns");
       try {
         const response: ApiResponse<any> = yield self.environment.api.getCheckins();
         self.checkIns = response.data.checkInArtifacts;
-        console.log(self.checkIns, response.data.checkInArtifacts);
         return response.data.checkInArtifacts;
       } catch {
         // showToast("Something went wrong", ToastMessageConstants.ERROR);

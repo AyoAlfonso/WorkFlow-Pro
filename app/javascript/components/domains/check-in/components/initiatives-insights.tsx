@@ -40,20 +40,8 @@ const InitiativeInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
         : element.completionCurrentValue;
 
     if (element.greaterThan === 1) {
-      console.log(
-        Math.min(Math.max(current - starting, 0) / (target - starting), 1) * 100,
-        "first",
-      );
       return Math.min(Math.max(current - starting, 0) / (target - starting), 1) * 100;
     } else {
-      console.log(
-        current <= target
-          ? 100
-          : current >= target * 2
-          ? 0
-          : ((target + target - current) / target) * 100,
-        "second",
-      );
       return current <= target
         ? 100
         : current >= target * 2
@@ -62,87 +50,105 @@ const InitiativeInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
     }
   };
 
+  const keys = ["objecteableId, objecteableType, ownedById"];
+  const keyElementsNoDuplicateKeys = ["elementableType, elementableId, ownedById"];
+
   return (
     <Container>
       <HeaderContainer>
-        <HeaderText>Initiatives</HeaderText>
+        <HeaderText>Initiative</HeaderText>
       </HeaderContainer>
       <InitiativesContainer>
-        {checkInArtifactLogs.map(artifactLog => {
-          const keys = ["objecteableId, objecteableType"];
+        {checkInArtifactLogs.map((artifactLog, i) => {
           participants = new Set();
-          return artifactLog.objectiveLogsFull
-            ?.filter(
-              (s => o => (k => !s.has(k) && s.add(k))(keys.map(k => o[k]).join("|")))(new Set()),
-            )
-            .map(objectiveLogsFull => {
-              const user = findUser(artifactLog.ownedBy);
-              participants.add(user?.id);
-              return (
-                <InitiativeContainer>
-                  <AvatarContainer>
-                    <Avatar
-                      size={32}
-                      marginLeft={"0px"}
-                      marginTop={"0px"}
-                      marginRight={"16px"}
-                      firstName={user.firstName}
-                      lastName={user.lastName}
-                      defaultAvatarColor={user.defaultAvatarColor}
-                      avatarUrl={user.avatarUrl}
-                    />
-                    <StyledText>{`${user.firstName} ${user.lastName}`}</StyledText>
-                  </AvatarContainer>
-                  <Divider />
-                  <br />
-                  <AvatarContainer>
-                    <Avatar
-                      size={32}
-                      marginLeft={"0px"}
-                      marginTop={"0px"}
-                      marginRight={"16px"}
-                      firstName={user.firstName}
-                      lastName={user.lastName}
-                      defaultAvatarColor={user.defaultAvatarColor}
-                      avatarUrl={user.avatarUrl}
-                    />
-                    <StyledText>
-                      {objectiveLogsFull.objecteableData.contextDescription.replace(
-                        /<\/?[a-z][a-z0-9]*[^<>]*>/gi,
-                        "",
-                      )}
-                    </StyledText>
-                  </AvatarContainer>{" "}
-                  <br />
-                  {objectiveLogsFull.objecteableData?.keyElements.map(keyElement => {
-                    return (
-                      <>
-                        <KeyElementName>{objectiveLogsFull.value}</KeyElementName>
-                        <KeyElementContainer>
-                          <CompletiontStatus>
-                            {determineStatusLabel(keyElement.status)}
-                          </CompletiontStatus>
-                          <TargetValueContainer>
-                            <TargetValue>
-                              <b>{keyElement.completionCurrentValue}</b>/{" "}
-                              {keyElement.completionTargetValue}
-                            </TargetValue>
-                          </TargetValueContainer>
-                          <ProgressBarContainer>
-                            <StripedProgressBar
-                              variant={keyElement.status}
-                              completed={completion(keyElement)}
-                            />
-                          </ProgressBarContainer>
-                        </KeyElementContainer>
-                      </>
-                    );
-                  })}
-                </InitiativeContainer>
-              );
-            });
+          let user = findUser(artifactLog.ownedBy);
+          const filteredArtifactLogs = artifactLog.objectiveLogsFull?.filter(
+            (s => o => (k => !s.has(k) && s.add(k))(keys.map(k => o[k]).join("|")))(new Set()),
+          );
+          return (
+            <>
+              <AvatarContainer>
+                <br />
+                <Divider />
+                <Avatar
+                  size={32}
+                  marginLeft={"0px"}
+                  marginTop={"0px"}
+                  marginRight={"16px"}
+                  firstName={user.firstName}
+                  lastName={user.lastName}
+                  defaultAvatarColor={user.defaultAvatarColor}
+                  avatarUrl={user.avatarUrl}
+                />
+                <StyledText>{`${user.firstName} ${user.lastName}`}</StyledText>
+              </AvatarContainer>
+              {filteredArtifactLogs.map(objectiveLogsFull => {
+                user = findUser(artifactLog.ownedBy);
+                participants.add(user?.id);
+
+                return (
+                  <InitiativeContainer>
+                    {/* { i > 0 ? : return ( <Divider />) : null} */}
+                    <Divider />
+                    <br />
+                    <AvatarContainer>
+                      <Avatar
+                        size={32}
+                        marginLeft={"0px"}
+                        marginTop={"0px"}
+                        marginRight={"16px"}
+                        firstName={user.firstName}
+                        lastName={user.lastName}
+                        defaultAvatarColor={user.defaultAvatarColor}
+                        avatarUrl={user.avatarUrl}
+                      />
+                      <StyledText>
+                        {objectiveLogsFull.objecteableData.contextDescription.replace(
+                          /<\/?[a-z][a-z0-9]*[^<>]*>/gi,
+                          "",
+                        )}
+                      </StyledText>
+                    </AvatarContainer>{" "}
+                    <br />
+                    {objectiveLogsFull.objecteableData?.keyElements
+                      ?.filter(
+                        (s => o =>
+                          (k => !s.has(k) && s.add(k))(
+                            keyElementsNoDuplicateKeys.map(k => o[k]).join("|"),
+                          ))(new Set()),
+                      )
+                      .map(keyElement => {
+                        return (
+                          <>
+                            <KeyElementName>{objectiveLogsFull.value}</KeyElementName>
+                            <KeyElementContainer>
+                              <CompletiontStatus>
+                                {determineStatusLabel(keyElement.status)}
+                              </CompletiontStatus>
+                              <TargetValueContainer>
+                                <TargetValue>
+                                  <b>{keyElement.completionCurrentValue}</b>/{" "}
+                                  {keyElement.completionTargetValue}
+                                </TargetValue>
+                              </TargetValueContainer>
+                              <ProgressBarContainer>
+                                <StripedProgressBar
+                                  variant={keyElement.status}
+                                  completed={completion(keyElement)}
+                                />
+                              </ProgressBarContainer>
+                            </KeyElementContainer>
+                          </>
+                        );
+                      })}
+                  </InitiativeContainer>
+                );
+              })}
+            </>
+          );
         })}
       </InitiativesContainer>
+
       <Divider />
       <InfoContainer>
         <InfoText>{participants.size} total responses</InfoText>
