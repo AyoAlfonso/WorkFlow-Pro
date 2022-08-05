@@ -343,7 +343,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
    authorize check_in_artifact
-   render json: {check_in_artifact: check_in_artifact, status: :ok }
+   render json: {check_in_artifact: check_in_artifact.as_json(), status: :ok }
   end
 
   def show

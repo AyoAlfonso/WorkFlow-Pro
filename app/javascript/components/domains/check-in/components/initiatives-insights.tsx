@@ -4,8 +4,28 @@ import { Avatar, StripedProgressBar, Text } from "~/components/shared";
 import { useMst } from "~/setup/root";
 import { determineStatusLabel } from "../../goals/shared/key-element";
 
-const InitiativeInsights = (): JSX.Element => {
-  const { sessionStore } = useMst();
+interface InitiativeInsightsProps {
+  insightsToShow: Array<any>;
+}
+const InitiativeInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.Element => {
+  const { sessionStore, userStore } = useMst();
+  // artifact = CheckInTemplateStore.currentCheckInArtifact;
+
+  const checkInArtifactLogs = insightsToShow
+    .map(artifact => {
+      if (artifact.checkInArtifactLogs[0]) {
+        return {
+          ...artifact.checkInArtifactLogs[0],
+          ownedBy: artifact.ownedById,
+          updatedAt: artifact.updatedAt,
+        };
+      }
+    })
+    .filter(Boolean);
+    
+  const findUser = owner_id => {
+    return userStore.users.find(id => id === owner_id);
+  };
 
   const completion = element => {
     const starting = element.completionStartingValue;

@@ -349,7 +349,7 @@ const MobileCheckinInsights = (): JSX.Element => {
         <YesNoInsights insightsToShow={insightsToShow} steps={steps} />
       )}
       <KpiInsights />
-      <InitiativeInsights />
+      <InitiativeInsights insightsToShow={insightsToShow} />
       <JournalInsights />
     </Container>
   );

@@ -31,6 +31,7 @@ export const CheckinInsights = observer(
     const { id } = useParams();
     const history = useHistory();
 
+    
     const {
       checkInTemplateStore: { getCheckInTemplateInsights, checkInTemplateInsights },
       userStore,
@@ -217,7 +218,9 @@ export const CheckinInsights = observer(
     const responseNumber = getNumberOfResponses();
     const totalParticipants = getUsers(data.participants);
     const { createdAt, updatedAt } = data;
-    const userArtifact = data.period[currentInsightDate].find(artifact => artifact.ownedBy === userStore.user?.id);
+    const userArtifact = data.period[currentInsightDate].find(
+      artifact => artifact.ownedBy === userStore.user?.id,
+    );
 
     return (
       <Container>
@@ -327,7 +330,7 @@ export const CheckinInsights = observer(
                 <YesNoInsights insightsToShow={insightsToShow} steps={steps} />
               )}
               <KpiInsights />
-              <InitiativeInsights />
+              <InitiativeInsights insightsToShow={insightsToShow} />
               <JournalInsights />
             </LeftContainer>
             <ParticipationInsights

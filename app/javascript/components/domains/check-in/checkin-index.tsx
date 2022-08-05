@@ -36,6 +36,8 @@ export const CheckIn = observer(
       return <Loading />;
     }
 
+    console.log(checkIns, "checkIns");
+
     return (
       <Container>
         <TopContainer>

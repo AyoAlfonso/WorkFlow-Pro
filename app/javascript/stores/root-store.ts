@@ -28,7 +28,7 @@ import {
 import { CheckInTemplateStoreModel, ICheckInTemplateStore } from "./check-in-template-store";
 import { IKeyElementStore, KeyElementStoreModel } from "./key-element-store";
 import { AuditLogStoreModel, IAuditLogStore } from "./audit-log-store"
-
+// import {CheckInArtifactsModel,   }
 export const RootStoreModel = types
   .model("RootStoreModel")
   .props({
@@ -58,6 +58,7 @@ export const RootStoreModel = types
     checkInTemplateStore: CheckInTemplateStoreModel,
     keyElementStore: KeyElementStoreModel,
     auditLogStore: AuditLogStoreModel,
+
   })
   .views(self => ({}))
   .actions(self => ({
