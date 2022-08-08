@@ -83,7 +83,7 @@ const InitiativeInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
                 <StyledText>{`${user.firstName} ${user.lastName}`}</StyledText>
               </AvatarContainer>
               {filteredArtifactLogs.map(objectiveLogsFull => {
-                user = findUser(artifactLog.ownedBy);
+                user = findUser(objectiveLogsFull.ownedById);
                 participants.add(user?.id);
 
                 return (
@@ -111,16 +111,16 @@ const InitiativeInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
                     </AvatarContainer>{" "}
                     <br />
                     {objectiveLogsFull.objecteableData?.keyElements
-                      ?.filter(
-                        (s => o =>
-                          (k => !s.has(k) && s.add(k))(
-                            keyElementsNoDuplicateKeys.map(k => o[k]).join("|"),
-                          ))(new Set()),
-                      )
+                      // ?.filter(
+                      //   (s => o =>
+                      //     (k => !s.has(k) && s.add(k))(
+                      //       keyElementsNoDuplicateKeys.map(k => o[k]).join("|"),
+                      //     ))(new Set()),
+                      // )
                       .map(keyElement => {
                         return (
                           <>
-                            <KeyElementName>{objectiveLogsFull.value}</KeyElementName>
+                            <KeyElementName>{keyElement.value}</KeyElementName>
                             <KeyElementContainer>
                               <CompletiontStatus>
                                 {determineStatusLabel(keyElement.status)}
