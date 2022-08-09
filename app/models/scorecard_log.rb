@@ -33,19 +33,20 @@ class ScorecardLog < ApplicationRecord
 
   def as_json(options = [])
     super({
-          include: [:user_data,:key_performance_indicator]
+        include: [:user_data, :key_performance_indicator]
     })
   end
 
   def def(logger)
     #Getting model by logger
   end
+
   def kpi_data
     self.key_performance_indicator
   end
 
   def user_data
-      self.user
+    self.user
   end
 
   #protect route

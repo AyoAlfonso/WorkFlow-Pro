@@ -16,17 +16,30 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
     userStore,
     companyStore: { company },
   } = useMst();
+  const {
+    fadedYellow,
+    fadedGreen,
+    fadedRed,
+    successGreen,
+    poppySunrise,
+    warningRed,
+    primary100,
+    backgroundGrey,
+    greyActive,
+    white,
+    tango,
+    dairyCream,
+  } = baseTheme.colors;
+  const year = company.yearForCreatingAnnualInitiatives;
+  const setDefaultSelectionQuarter = week => {
+    return week == 13 ? 1 : week == 26 ? 2 : week == 39 ? 3 : 4;
+  };
+
+  const quarter = setDefaultSelectionQuarter(company.currentFiscalWeek);
   let participants;
   if (!userStore.users.length) {
     return <Loading />;
   }
-
-  const setDefaultSelectionQuarter = week => {
-    return week == 13 ? 1 : week == 26 ? 2 : week == 39 ? 3 : 4;
-  };
-  // const [quarter, setQuarter] = useState<number>(
-  //   setDefaultSelectionQuarter(company.currentFiscalWeek),
-  // );
 
   const checkInArtifactLogs = insightsToShow
     .map(artifact => {
@@ -116,37 +129,118 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
                     )}
                     <TableBody>
                       {artifactLog.scorecardLogsFull
-                        ?.sort(sortByDate).filter(
+                        ?.sort(sortByDate)
+                        .filter(
                           (s => o => (k => !s.has(k) && s.add(k))(keys.map(k => o[k]).join("|")))(
                             new Set(),
                           ),
                         )
                         .map(log => {
+                          const kpi = log.keyPerformanceIndicator;
+                          const getStatusValue = (percentScore, needsAttentionThreshold) => {
+                            const percent = Math.round(percentScore);
+                            if (percentScore === null) {
+                              return {
+                                color: greyActive,
+                                background: backgroundGrey,
+                                percent,
+                                text: "No Update",
+                              };
+                            } else if (percentScore >= 100) {
+                              return {
+                                color: successGreen,
+                                background: fadedGreen,
+                                percent,
+                                text: "On Track",
+                              };
+                            } else if (percentScore >= needsAttentionThreshold) {
+                              return {
+                                color: poppySunrise,
+                                background: fadedYellow,
+                                percent,
+                                text: "Needs Attention",
+                              };
+                            } else {
+                              return {
+                                color: warningRed,
+                                background: fadedRed,
+                                percent,
+                                text: "Behind",
+                              };
+                            }
+                          };
+                          const weeks = Object.values(kpi?.period?.[year] || {});
+                          const calcQuarterAverageScores = (
+                            weeks: any,
+                            target: number,
+                            greaterThan: boolean,
+                            parentType: string,
+                          ) => {
+                            const quarterScores = [
+                              [null, 0],
+                              [null, 0],
+                              [null, 0],
+                              [null, 0],
+                            ];
+                            weeks.forEach(({ week, score }) => {
+                              const q = Math.floor((week - 1) / 13);
+                              if (target == 0) {
+                                quarterScores[q][0] -= score;
+                                quarterScores[q][1]++;
+                              } else if (quarterScores[q]) {
+                                quarterScores[q][0] += score;
+                                quarterScores[q][1]++;
+                              }
+                            });
+                            return quarterScores.map(tuple =>
+                              tuple[0] === null
+                                ? null
+                                : target == 0 && tuple[0] == 0
+                                ? 100
+                                : target == 0 && tuple[0] != 0
+                                ? tuple[0]
+                                : getScorePercent(tuple[0] / tuple[1], target, greaterThan),
+                            );
+                          };
+                          const percentScores = calcQuarterAverageScores(
+                            weeks,
+                            kpi.targetValue,
+                            kpi.greaterThan,
+                            kpi.parentType,
+                          ).map(score => getStatusValue(score, kpi.needsAttentionThreshold));
+
+                          const quarterValue = percentScores[quarter - 1];
+                          console.log(
+                            quarterValue,
+                            percentScores,
+                            kpi.targetValue,
+                            weeks,
+                            "quarterValue",
+                          );
                           return (
                             <TableRow>
                               <TableData left>
                                 <KpiNameContainer>
-                                  <KpiName>{log.keyPerformanceIndicator.title}</KpiName>
+                                  <KpiName>{kpi.title}</KpiName>
                                   <KpiDescription>
                                     {" "}
-                                    {log.keyPerformanceIndicator.greaterThan
+                                    {kpi.greaterThan
                                       ? `Greater than or equal
-                                  to  ${formatValue(
-                                    log.keyPerformanceIndicator.unitType,
-                                    log.keyPerformanceIndicator.targetValue,
-                                  )}`
+                                  to  ${formatValue(kpi.unitType, kpi.targetValue)}`
                                       : `Less than or equal to ${formatValue(
-                                          log.keyPerformanceIndicator.unitType,
-                                          log.keyPerformanceIndicator.targetValue,
+                                          kpi.unitType,
+                                          kpi.targetValue,
                                         )}`}
                                   </KpiDescription>
                                 </KpiNameContainer>
                               </TableData>
                               <TableData>
                                 <StatusBadge
-                                  background={baseTheme.colors.fadedYellow}
-                                  color={baseTheme.colors.poppySunrise}
-                                ></StatusBadge>
+                                  background={quarterValue?.background}
+                                  color={quarterValue?.color}
+                                >
+                                  {quarterValue?.text}
+                                </StatusBadge>
                               </TableData>
                               <TableData>
                                 <StatusBadge
@@ -156,8 +250,8 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
                                 >
                                   {getScorePercent(
                                     log.score,
-                                    log.keyPerformanceIndicator.targetValue,
-                                    log.keyPerformanceIndicator.greaterThan,
+                                    kpi.targetValue,
+                                    kpi.greaterThan,
                                   ).toFixed()}
                                 </StatusBadge>
                               </TableData>
