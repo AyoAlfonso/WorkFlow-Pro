@@ -1,9 +1,9 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
 import { Avatar, StripedProgressBar, Text } from "~/components/shared";
 import { useMst } from "~/setup/root";
 import { determineStatusLabel } from "../../goals/shared/key-element";
 import { Loading } from "~/components/shared/loading";
+import styled from "styled-components";
 
 interface InitiativeInsightsProps {
   insightsToShow: Array<any>;
@@ -51,7 +51,6 @@ const InitiativeInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
   };
 
   const keys = ["objecteableId, objecteableType, ownedById"];
-  const keyElementsNoDuplicateKeys = ["elementableType, elementableId, ownedById"];
 
   return (
     <Container>
@@ -65,6 +64,8 @@ const InitiativeInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
           const filteredArtifactLogs = artifactLog.objectiveLogsFull?.filter(
             (s => o => (k => !s.has(k) && s.add(k))(keys.map(k => o[k]).join("|")))(new Set()),
           );
+          participants.add(artifactLog.ownedBy);
+
           return (
             <>
               <AvatarContainer>
@@ -83,8 +84,8 @@ const InitiativeInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
                 <StyledText>{`${user.firstName} ${user.lastName}`}</StyledText>
               </AvatarContainer>
               {filteredArtifactLogs.map(objectiveLogsFull => {
-                user = findUser(artifactLog.ownedBy);
-                participants.add(user?.id);
+                user = findUser(objectiveLogsFull.ownedById);
+                console.log(user.id, objectiveLogsFull.ownedById, "userid");
 
                 return (
                   <InitiativeContainer>
@@ -110,37 +111,30 @@ const InitiativeInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
                       </StyledText>
                     </AvatarContainer>{" "}
                     <br />
-                    {objectiveLogsFull.objecteableData?.keyElements
-                      ?.filter(
-                        (s => o =>
-                          (k => !s.has(k) && s.add(k))(
-                            keyElementsNoDuplicateKeys.map(k => o[k]).join("|"),
-                          ))(new Set()),
-                      )
-                      .map(keyElement => {
-                        return (
-                          <>
-                            <KeyElementName>{objectiveLogsFull.value}</KeyElementName>
-                            <KeyElementContainer>
-                              <CompletiontStatus>
-                                {determineStatusLabel(keyElement.status)}
-                              </CompletiontStatus>
-                              <TargetValueContainer>
-                                <TargetValue>
-                                  <b>{keyElement.completionCurrentValue}</b>/{" "}
-                                  {keyElement.completionTargetValue}
-                                </TargetValue>
-                              </TargetValueContainer>
-                              <ProgressBarContainer>
-                                <StripedProgressBar
-                                  variant={keyElement.status}
-                                  completed={completion(keyElement)}
-                                />
-                              </ProgressBarContainer>
-                            </KeyElementContainer>
-                          </>
-                        );
-                      })}
+                    {objectiveLogsFull.objecteableData?.keyElements.map(keyElement => {
+                      return (
+                        <>
+                          <KeyElementName>{keyElement.value}</KeyElementName>
+                          <KeyElementContainer>
+                            <CompletiontStatus>
+                              {determineStatusLabel(keyElement.status)}
+                            </CompletiontStatus>
+                            <TargetValueContainer>
+                              <TargetValue>
+                                <b>{keyElement.completionCurrentValue}</b>/{" "}
+                                {keyElement.completionTargetValue}
+                              </TargetValue>
+                            </TargetValueContainer>
+                            <ProgressBarContainer>
+                              <StripedProgressBar
+                                variant={keyElement.status}
+                                completed={completion(keyElement)}
+                              />
+                            </ProgressBarContainer>
+                          </KeyElementContainer>
+                        </>
+                      );
+                    })}
                   </InitiativeContainer>
                 );
               })}
@@ -151,7 +145,7 @@ const InitiativeInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
 
       <Divider />
       <InfoContainer>
-        <InfoText>{participants.size} total responses</InfoText>
+        <InfoText>{Array.from(participants.size).length} total responses</InfoText>
       </InfoContainer>
     </Container>
   );

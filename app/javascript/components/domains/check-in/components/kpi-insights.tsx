@@ -5,6 +5,7 @@ import { StatusBadge } from "~/components/shared/status-badge";
 import { useMst } from "~/setup/root";
 import { baseTheme } from "~/themes";
 import { Loading } from "~/components/shared/loading";
+import { sortByDate } from "~/utils/sorting";
 
 interface InitiativeInsightsProps {
   insightsToShow: Array<any>;
@@ -15,6 +16,7 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
     userStore,
     companyStore: { company },
   } = useMst();
+  let participants;
   if (!userStore.users.length) {
     return <Loading />;
   }
@@ -25,8 +27,6 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
   // const [quarter, setQuarter] = useState<number>(
   //   setDefaultSelectionQuarter(company.currentFiscalWeek),
   // );
-
-  const participants = new Set();
 
   const checkInArtifactLogs = insightsToShow
     .map(artifact => {
@@ -58,6 +58,8 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
     }
   };
 
+  const keys = ["fiscalQuarter", "week", "fiscalYear", "userId", "keyPerformanceIndicatorId"];
+
   return (
     <Container>
       <HeaderContainer>
@@ -65,55 +67,56 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
       </HeaderContainer>
       <KpisContainer>
         {checkInArtifactLogs.map(artifactLog => {
-          const keys = [
-            "fiscalQuarter",
-            "week",
-            "fiscalYear",
-            "userId",
-            "keyPerformanceIndicatorId",
-          ];
-
+          participants = new Set();
           const user = findUser(artifactLog.ownedBy);
-          participants.add(user?.id);
-
+          participants.add(artifactLog.ownedBy);
           return (
             <>
               <KpiComponent>
-                <AvatarContainer>
-                  <Avatar
-                    size={32}
-                    marginLeft={"0px"}
-                    marginTop={"0px"}
-                    marginRight={"16px"}
-                    firstName={user.firstName}
-                    lastName={user.lastName}
-                    defaultAvatarColor={user.defaultAvatarColor}
-                    avatarUrl={user.avatarUrl}
-                  />
-                  <StyledText>{`${user.firstName} ${user.lastName}`}</StyledText>
-                </AvatarContainer>
+                {artifactLog.scorecardLogsFull.length > 0 ? (
+                  <AvatarContainer>
+                    <Avatar
+                      size={32}
+                      marginLeft={"0px"}
+                      marginTop={"0px"}
+                      marginRight={"16px"}
+                      firstName={user.firstName}
+                      lastName={user.lastName}
+                      defaultAvatarColor={user.defaultAvatarColor}
+                      avatarUrl={user.avatarUrl}
+                    />
+                    <StyledText>{`${user.firstName} ${user.lastName}`}</StyledText>
+                  </AvatarContainer>
+                ) : (
+                  <></>
+                )}
                 <Divider />
+
                 <DataContainer>
                   <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableHeadText pb="2em" left={true} scope="col">
-                          KPIs
-                        </TableHeadText>
-                        <TableHeadText pb="2em" scope="col">
-                          Status
-                        </TableHeadText>
-                        <TableHeadText pb="2em" scope="col">
-                          Score
-                        </TableHeadText>
-                        <TableHeadText pb="2em" scope="col">
-                          Week 16
-                        </TableHeadText>
-                      </TableRow>
-                    </TableHead>
+                    {artifactLog.scorecardLogsFull.length > 0 ? (
+                      <TableHead>
+                        <TableRow>
+                          <TableHeadText pb="2em" left={true} scope="col">
+                            KPIs
+                          </TableHeadText>
+                          <TableHeadText pb="2em" scope="col">
+                            Status
+                          </TableHeadText>
+                          <TableHeadText pb="2em" scope="col">
+                            Score
+                          </TableHeadText>
+                          <TableHeadText pb="2em" scope="col">
+                            Week {artifactLog?.scorecardLogsFull[0]?.week}
+                          </TableHeadText>
+                        </TableRow>
+                      </TableHead>
+                    ) : (
+                      <></>
+                    )}
                     <TableBody>
                       {artifactLog.scorecardLogsFull
-                        ?.filter(
+                        ?.sort(sortByDate).filter(
                           (s => o => (k => !s.has(k) && s.add(k))(keys.map(k => o[k]).join("|")))(
                             new Set(),
                           ),
@@ -179,7 +182,7 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
       </KpisContainer>
       <Divider />
       <InfoContainer>
-        <InfoText>{participants.size} total responses</InfoText>
+        <InfoText>{Array.from(participants.size).length} total responses</InfoText>
       </InfoContainer>
     </Container>
   );

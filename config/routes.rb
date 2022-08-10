@@ -127,7 +127,7 @@ Rails.application.routes.draw do
     #sub_initiatives
     resources :sub_initiatives, only: [:create, :show, :update, :destroy]
     post '/sub_initiatives/create_key_element/:id', to: 'sub_initiatives#create_key_element'
-    post 'sub_initiatives/:id/update_key_element/:key_element_id',  to: 'quarterly_goals#update_key_element'
+    post 'sub_initiatives/:id/update_key_element/:key_element_id',  to: 'sub_initiatives#update_key_element'
     patch '/sub_initiatives/close_goal/:id', to: 'sub_initiatives#close_goal'
     delete '/sub_initiatives/delete_key_element/:key_element_id', to: 'sub_initiatives#delete_key_element'
     post '/sub_initiatives/create_milestones/:id', to: 'sub_initiatives#create_milestones'
