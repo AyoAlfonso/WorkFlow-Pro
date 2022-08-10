@@ -10,7 +10,7 @@ interface InitiativeInsightsProps {
 }
 const InitiativeInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.Element => {
   const { sessionStore, userStore } = useMst();
-  let participants;
+  const participants = new Set();
   if (!userStore.users.length) {
     return <Loading />;
   }
@@ -59,34 +59,36 @@ const InitiativeInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
       </HeaderContainer>
       <InitiativesContainer>
         {checkInArtifactLogs.map((artifactLog, i) => {
-          participants = new Set();
           let user = findUser(artifactLog.ownedBy);
           const filteredArtifactLogs = artifactLog.objectiveLogsFull?.filter(
             (s => o => (k => !s.has(k) && s.add(k))(keys.map(k => o[k]).join("|")))(new Set()),
           );
-          participants.add(artifactLog.ownedBy);
 
           return (
             <>
-              <AvatarContainer>
-                <br />
-                <Divider />
-                <Avatar
-                  size={32}
-                  marginLeft={"0px"}
-                  marginTop={"0px"}
-                  marginRight={"16px"}
-                  firstName={user.firstName}
-                  lastName={user.lastName}
-                  defaultAvatarColor={user.defaultAvatarColor}
-                  avatarUrl={user.avatarUrl}
-                />
-                <StyledText>{`${user.firstName} ${user.lastName}`}</StyledText>
-              </AvatarContainer>
+              {filteredArtifactLogs.length > 0 ? (
+                <AvatarContainer>
+                  <br />
+                  <Divider />
+                  <Avatar
+                    size={32}
+                    marginLeft={"0px"}
+                    marginTop={"0px"}
+                    marginRight={"16px"}
+                    firstName={user.firstName}
+                    lastName={user.lastName}
+                    defaultAvatarColor={user.defaultAvatarColor}
+                    avatarUrl={user.avatarUrl}
+                  />
+                  <StyledText>{`${user.firstName} ${user.lastName}`}</StyledText>
+                </AvatarContainer>
+              ) : (
+                <></>
+              )}
               {filteredArtifactLogs.map(objectiveLogsFull => {
                 user = findUser(objectiveLogsFull.ownedById);
-                console.log(user.id, objectiveLogsFull.ownedById, "userid");
 
+                participants.add(objectiveLogsFull.id);
                 return (
                   <InitiativeContainer>
                     {/* { i > 0 ? : return ( <Divider />) : null} */}
@@ -145,7 +147,7 @@ const InitiativeInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
 
       <Divider />
       <InfoContainer>
-        <InfoText>{participants?.size} total responses</InfoText>
+        <InfoText>{participants?.size} total response(s)</InfoText>
       </InfoContainer>
     </Container>
   );

@@ -110,7 +110,6 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
       </HeaderContainer>
       <KpisContainer>
         {checkInArtifactLogs.map(artifactLog => {
-          // participants = new Set();
           const user = findUser(artifactLog.ownedBy);
 
           return (
@@ -166,7 +165,7 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
                           ),
                         )
                         .map(log => {
-                          participants.add(log.id);
+                          participants.add(log.ownedBy);
                           const kpi = log.keyPerformanceIndicator;
                           const getStatusValue = (percentScore, needsAttentionThreshold) => {
                             const percent = Math.round(percentScore);
@@ -317,7 +316,7 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
       </KpisContainer>
       <Divider />
       <InfoContainer>
-        <InfoText>{participants?.size} total responses</InfoText>
+        <InfoText>{participants?.size} total response(s)</InfoText>
       </InfoContainer>
     </Container>
   );

@@ -17,7 +17,7 @@ const ParticipationInsights = ({
 
   useEffect(() => {
     const percentage = (responseNumber / totalNumberOfParticipants) * 100;
-    if (percentage == Infinity) {
+    if (percentage == Infinity || isNaN(percentage)) {
       setParticipationPercentage(0);
     } else {
       setParticipationPercentage(percentage);
