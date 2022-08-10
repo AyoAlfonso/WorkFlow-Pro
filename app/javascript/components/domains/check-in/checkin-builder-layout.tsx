@@ -236,7 +236,7 @@ export const CheckInBuilderLayout = observer(
             onClick={() => createCheckin("draft")}
             small
           >
-            Draft
+            Save as draft
           </StopButton>
           <StopButton
             disabled={currentStep == 2 && !participants.length}
@@ -303,6 +303,9 @@ export const CheckInBuilderLayout = observer(
 
 export const Container = styled.div`
   height: 100%;
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
 type IButtonProps = {
@@ -341,7 +344,10 @@ type IStopMeetingButton = {
 export const StopButton = styled(Button)<IStopMeetingButton>`
   width: 100%;
   margin: 0;
-  font-size: 16px;
+  font-size: 14px;
+  padding: 8px;
+  white-space: nowrap;
+  min-width: 100px;
 `;
 
 const ButtonsContainer = styled.div`

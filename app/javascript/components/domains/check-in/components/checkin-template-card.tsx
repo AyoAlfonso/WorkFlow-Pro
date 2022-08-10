@@ -10,6 +10,7 @@ import { useMst } from "~/setup/root";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import moment from "moment";
+import { createTemplate } from "~/utils/check-in-functions";
 
 interface CheckInTemplateCardProps {
   name: string;
@@ -32,6 +33,7 @@ export const CheckInTemplateCard = observer(
     const [showOptions, setShowOptions] = useState<boolean>(false);
 
     const {
+      checkInTemplateStore,
       checkInTemplateStore: { runCheckinOnce, createCheckinTemplate, publishCheckinTemplate },
       sessionStore: { profile },
     } = useMst();
@@ -109,6 +111,20 @@ export const CheckInTemplateCard = observer(
       });
     };
 
+    const handlePublish = () => {
+      publishCheckinTemplate(checkInTemplate.id).then(res => {
+        if (res) {
+          setShowOptions(false);
+          showToast("Template published successfully", ToastMessageConstants.SUCCESS);
+          updateStatus(checkInTemplate.id);
+        }
+      });
+    };
+
+    const makeACopy = () => {
+      createTemplate(checkInTemplate, checkInTemplateStore, history);
+    };
+
     return (
       <Container>
         <HeaderContainer>
@@ -119,24 +135,9 @@ export const CheckInTemplateCard = observer(
             </IconContainer>
             {showOptions && (
               <OptionsContainer>
-                <Option>Make a copy</Option>
+                <Option onClick={makeACopy}>Make a copy</Option>
                 {checkInTemplate.status == "draft" ? (
-                  <Option
-                    onClick={() => {
-                      publishCheckinTemplate(checkInTemplate.id).then(res => {
-                        if (res) {
-                          setShowOptions(false);
-                          showToast(
-                            "Template published successfully",
-                            ToastMessageConstants.SUCCESS,
-                          );
-                          updateStatus(checkInTemplate.id);
-                        }
-                      });
-                    }}
-                  >
-                    Publish
-                  </Option>
+                  <Option onClick={handlePublish}>Publish</Option>
                 ) : (
                   <Option
                     onClick={() => {
@@ -164,17 +165,31 @@ export const CheckInTemplateCard = observer(
             >
               Set up
             </Button>
-            <Button
-              variant={"primaryOutline"}
-              mr="1em"
-              width="70px"
-              fontSize="12px"
-              onClick={handleRunNow}
-              small
-              style={{ whiteSpace: "nowrap" }}
-            >
-              Run now
-            </Button>
+            {checkInTemplate.status == "draft" ? (
+              <Button
+                variant={"primaryOutline"}
+                mr="1em"
+                width="70px"
+                fontSize="12px"
+                onClick={handlePublish}
+                small
+                style={{ whiteSpace: "nowrap" }}
+              >
+                Publish
+              </Button>
+            ) : (
+              <Button
+                variant={"primaryOutline"}
+                mr="1em"
+                width="70px"
+                fontSize="12px"
+                onClick={handleRunNow}
+                small
+                style={{ whiteSpace: "nowrap" }}
+              >
+                Run now
+              </Button>
+            )}
           </ButtonsContainer>
 
           {checkInTemplate.status == "draft" ? (

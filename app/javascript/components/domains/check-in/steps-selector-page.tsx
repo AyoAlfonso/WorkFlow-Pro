@@ -1,5 +1,8 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
+import { observer } from "mobx-react";
+import { useMst } from "~/setup/root";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { Button, Icon, TextDiv } from "~/components/shared";
 import { StepOptions } from "./components/step-options";
@@ -9,6 +12,7 @@ import { TodoComponentSelectorModal } from "./components/todo-component-selector
 import { widgetArray } from "./data/step-data";
 import { StepsPreview } from "./steps-preview";
 import { Droppable, DragDropContext } from "react-beautiful-dnd";
+import { createTemplate } from "~/utils/check-in-functions";
 
 export interface SelectedStepType {
   stepType: string;
@@ -27,146 +31,161 @@ interface StepsSelectorPageProps {
   disabled?: boolean;
 }
 
-export const StepsSelectorPage = ({
-  selectedSteps,
-  setSelectedSteps,
-  disabled,
-}: StepsSelectorPageProps): JSX.Element => {
-  const [showStepsModal, setShowStepsModal] = useState<boolean>(false);
-  const [stepToPreview, setStepToPreview] = useState<SelectedStepType>({
-    stepType: "",
-    name: "",
-    iconName: "",
-    instructions: "",
-    question: "",
-    componentToRender: "",
-    orderIndex: 0,
-  });
-  const [isChanging, setIsChanging] = useState<boolean>(false);
-  const [todoModalOpen, setTodoModalOpen] = useState<boolean>(false);
-  const todoStep = widgetArray.find(step => step.name === "ToDos");
-
-  useEffect(() => {
-    setStepToPreview(selectedSteps[selectedSteps.length - 1]);
-  }, [selectedSteps.length]);
-
-  const deleteStep = step => {
-    if (disabled) return
-    let orderIndex = 0;
-    const filteredSteps = selectedSteps.filter(s => s.orderIndex !== step.orderIndex);
-    const updatedSelectedSteps = filteredSteps.map(newStep => {
-      orderIndex += 1;
-      return {
-        ...newStep,
-        orderIndex,
-      };
+export const StepsSelectorPage = observer(
+  ({ selectedSteps, setSelectedSteps, disabled }: StepsSelectorPageProps): JSX.Element => {
+    const [showStepsModal, setShowStepsModal] = useState<boolean>(false);
+    const [stepToPreview, setStepToPreview] = useState<SelectedStepType>({
+      stepType: "",
+      name: "",
+      iconName: "",
+      instructions: "",
+      question: "",
+      componentToRender: "",
+      orderIndex: 0,
     });
-    setSelectedSteps(updatedSelectedSteps);
-  };
+    const [isChanging, setIsChanging] = useState<boolean>(false);
+    const [todoModalOpen, setTodoModalOpen] = useState<boolean>(false);
+    const todoStep = widgetArray.find(step => step.name === "ToDos");
 
-  const reorder = (list, startIndex, endIndex) => {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
+    const history = useHistory();
 
-    return result;
-  };
+    const { checkInTemplateStore } = useMst();
 
-  const onDragEnd = (result, selectedSteps, setSelectedSteps) => {
-    let orderIndex = 0;
-    if (!result.destination) {
-      return;
-    }
-    const { source, destination } = result;
-    const items = reorder(selectedSteps, source.index, destination.index);
-    const updatedSelectedSteps = items.map(newStep => {
-      orderIndex += 1;
-      return {
-        ...(newStep as SelectedStepType),
-        orderIndex,
-      };
-    });
-    setSelectedSteps(updatedSelectedSteps);
-  };
+    const { currentCheckIn } = checkInTemplateStore;
 
-  return (
-    <DragDropContext onDragEnd={result => onDragEnd(result, selectedSteps, setSelectedSteps)}>
-      <Container>
-        <StepsSection>
-          <SectionHeader>Steps</SectionHeader>
-          <StepsContainer>
-            <Droppable droppableId="StepPreviewCardsContainer" type="StepPreviewCard">
-              {provided => (
-                <StepCardsContainer {...provided.droppableProps} ref={provided.innerRef}>
-                  {selectedSteps.map((step, index) => (
-                    <StepPreviewCard
-                      key={step.orderIndex}
-                      deleteStep={() => deleteStep(step)}
-                      step={step}
-                      setShowStepsModal={setShowStepsModal}
-                      setIsChanging={setIsChanging}
-                      setSelectedSteps={setSelectedSteps}
-                      selectedSteps={selectedSteps}
-                      selected={
-                        stepToPreview?.question === step.question &&
-                        step.instructions == stepToPreview?.instructions
-                      }
-                      handleClick={() => setStepToPreview(step)}
-                      index={index}
-                      disabled={disabled}
-                    />
-                  ))}
-                  {provided.placeholder}
-                </StepCardsContainer>
+    useEffect(() => {
+      setStepToPreview(selectedSteps[selectedSteps.length - 1]);
+    }, [selectedSteps.length]);
+
+    const deleteStep = step => {
+      if (disabled) return;
+      let orderIndex = 0;
+      const filteredSteps = selectedSteps.filter(s => s.orderIndex !== step.orderIndex);
+      const updatedSelectedSteps = filteredSteps.map(newStep => {
+        orderIndex += 1;
+        return {
+          ...newStep,
+          orderIndex,
+        };
+      });
+      setSelectedSteps(updatedSelectedSteps);
+    };
+
+    const reorder = (list, startIndex, endIndex) => {
+      const result = Array.from(list);
+      const [removed] = result.splice(startIndex, 1);
+      result.splice(endIndex, 0, removed);
+
+      return result;
+    };
+
+    const onDragEnd = (result, selectedSteps, setSelectedSteps) => {
+      let orderIndex = 0;
+      if (!result.destination) {
+        return;
+      }
+      const { source, destination } = result;
+      const items = reorder(selectedSteps, source.index, destination.index);
+      const updatedSelectedSteps = items.map(newStep => {
+        orderIndex += 1;
+        return {
+          ...(newStep as SelectedStepType),
+          orderIndex,
+        };
+      });
+      setSelectedSteps(updatedSelectedSteps);
+    };
+
+    const handleDisabledClick = () => {
+      if (!disabled) return;
+      if (
+        confirm(
+          "You can't make changes to a global template. Do you want to make a copy and customize the template?",
+        )
+      ) {
+        createTemplate(currentCheckIn, checkInTemplateStore, history);
+      }
+    };
+
+    return (
+      <DragDropContext onDragEnd={result => onDragEnd(result, selectedSteps, setSelectedSteps)}>
+        <Container>
+          <StepsSection onClick={handleDisabledClick}>
+            <SectionHeader>Steps</SectionHeader>
+            <StepsContainer>
+              <Droppable droppableId="StepPreviewCardsContainer" type="StepPreviewCard">
+                {provided => (
+                  <StepCardsContainer {...provided.droppableProps} ref={provided.innerRef}>
+                    {selectedSteps.map((step, index) => (
+                      <StepPreviewCard
+                        key={step.orderIndex}
+                        deleteStep={() => deleteStep(step)}
+                        step={step}
+                        setShowStepsModal={setShowStepsModal}
+                        setIsChanging={setIsChanging}
+                        setSelectedSteps={setSelectedSteps}
+                        selectedSteps={selectedSteps}
+                        selected={
+                          stepToPreview?.question === step.question &&
+                          step.instructions == stepToPreview?.instructions
+                        }
+                        handleClick={() => setStepToPreview(step)}
+                        index={index}
+                        disabled={disabled}
+                      />
+                    ))}
+                    {provided.placeholder}
+                  </StepCardsContainer>
+                )}
+              </Droppable>
+              {!disabled && (
+                <StyledButton small variant={"grey"} onClick={() => setShowStepsModal(true)}>
+                  <CircularIcon icon={"Plus"} size={"12px"} />
+                  <AddStepText> Add Step </AddStepText>
+                </StyledButton>
               )}
-            </Droppable>
-            {!disabled && (
-              <StyledButton small variant={"grey"} onClick={() => setShowStepsModal(true)}>
-                <CircularIcon icon={"Plus"} size={"12px"} />
-                <AddStepText> Add Step </AddStepText>
-              </StyledButton>
+            </StepsContainer>
+          </StepsSection>
+          <PreviewContainer>
+            <SectionHeader>Preview</SectionHeader>
+            {!selectedSteps.length ? (
+              <>
+                <QuestionText>What step type do you want to start with?</QuestionText>
+                <StepOptions
+                  setTodoModalOpen={setTodoModalOpen}
+                  setSelectedSteps={setSelectedSteps}
+                />
+              </>
+            ) : (
+              <StepsPreview step={stepToPreview} />
             )}
-          </StepsContainer>
-        </StepsSection>
-        <PreviewContainer>
-          <SectionHeader>Preview</SectionHeader>
-          {!selectedSteps.length ? (
-            <>
-              <QuestionText>What step type do you want to start with?</QuestionText>
-              <StepOptions
-                setTodoModalOpen={setTodoModalOpen}
-                setSelectedSteps={setSelectedSteps}
-              />
-            </>
-          ) : (
-            <StepsPreview step={stepToPreview} />
-          )}
-        </PreviewContainer>
-        <StepOptionsModal
-          setSelectedSteps={setSelectedSteps}
-          setModalOpen={setShowStepsModal}
-          modalOpen={showStepsModal}
-          isChanging={isChanging}
-          setIsChanging={setIsChanging}
-          stepToPreview={stepToPreview}
-          selectedSteps={selectedSteps}
-          setStepToPreview={setStepToPreview}
-          setTodoModalOpen={setTodoModalOpen}
-        />
-        <TodoComponentSelectorModal
-          step={todoStep}
-          setSelectedSteps={setSelectedSteps}
-          todoModalOpen={todoModalOpen}
-          setTodoModalOpen={setTodoModalOpen}
-          stepToPreview={stepToPreview}
-          isChanging={isChanging}
-          setIsChanging={setIsChanging}
-          selectedSteps={selectedSteps}
-        />
-      </Container>
-    </DragDropContext>
-  );
-};
+          </PreviewContainer>
+          <StepOptionsModal
+            setSelectedSteps={setSelectedSteps}
+            setModalOpen={setShowStepsModal}
+            modalOpen={showStepsModal}
+            isChanging={isChanging}
+            setIsChanging={setIsChanging}
+            stepToPreview={stepToPreview}
+            selectedSteps={selectedSteps}
+            setStepToPreview={setStepToPreview}
+            setTodoModalOpen={setTodoModalOpen}
+          />
+          <TodoComponentSelectorModal
+            step={todoStep}
+            setSelectedSteps={setSelectedSteps}
+            todoModalOpen={todoModalOpen}
+            setTodoModalOpen={setTodoModalOpen}
+            stepToPreview={stepToPreview}
+            isChanging={isChanging}
+            setIsChanging={setIsChanging}
+            selectedSteps={selectedSteps}
+          />
+        </Container>
+      </DragDropContext>
+    );
+  },
+);
 
 const Container = styled.div`
   display: flex;
@@ -188,7 +207,7 @@ const StepsSection = styled.div`
 const StepsContainer = styled.div`
   flex: 1;
   // overflow-y: scroll;
-`
+`;
 
 const PreviewContainer = styled.div`
   width: 60%;

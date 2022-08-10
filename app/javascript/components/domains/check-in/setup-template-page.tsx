@@ -92,6 +92,8 @@ export const SetupTemplatePage = observer(
     };
 
     const getEntityArray = entityArray => {
+      if (!entityArray) return [];
+
       const entityArrayToReturn = [];
       entityArray.forEach(entity => {
         if (entity.type === "user") {
@@ -128,11 +130,11 @@ export const SetupTemplatePage = observer(
       });
       return entityArrayToReturn;
     };
-
+    
     const setupTemplate = template => {
       const participantsArray = getEntityArray(template.participants);
       const viewersArray = getEntityArray(template.viewers);
-      const date = !template.dateTimeConfig.date
+      const date = !template.dateTimeConfig?.date
         ? new Date()
         : new Date(template.dateTimeConfig.date);
 
@@ -142,14 +144,14 @@ export const SetupTemplatePage = observer(
       setCheckinType(template.ownerType);
       setParticipants(participantsArray);
       setResponseViewers("Custom");
-      setCadence(getCadence(template.dateTimeConfig.cadence));
-      setCheckinTime(moment(template.dateTimeConfig.time, ["HH:mm"]).format("hh:mm A"));
-      setCheckinDay(template.dateTimeConfig.day);
+      setCadence(getCadence(template.dateTimeConfig?.cadence));
+      setCheckinTime(moment(template.dateTimeConfig?.time, ["HH:mm"]).format("hh:mm A"));
+      setCheckinDay(template.dateTimeConfig?.day);
       setSelectedDate(date);
       setTimeZone(getTimezone[template.timeZone]);
       setSelectedResponseViewers(viewersArray);
-      setReminderUnit(template.reminder.unit);
-      setReminderValue(template.reminder.value);
+      setReminderUnit(template.reminder?.unit || "Hour(s)");
+      setReminderValue(template.reminder?.value || "1");
       const steps = template.checkInTemplatesSteps.map(step => {
         return {
           stepType: step.stepType,
@@ -394,7 +396,7 @@ export const SetupTemplatePage = observer(
               onClick={() => createCheckin("draft")}
               small
             >
-              Draft
+              Save as draft
             </StopButton>
           )}
           <StopButton
@@ -459,7 +461,6 @@ export const SetupTemplatePage = observer(
           showCloseButton={true}
           onCloseButtonClick={closeButtonClick}
           showBackButton={false}
-          bodyContainerOverflow={"hidden"}
         />
       </Container>
     );
@@ -468,6 +469,10 @@ export const SetupTemplatePage = observer(
 
 export const Container = styled.div`
   height: 100%;
+
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
 type IButtonProps = {
@@ -506,7 +511,10 @@ type IStopMeetingButton = {
 export const StopButton = styled(Button)<IStopMeetingButton>`
   width: 100%;
   margin: 0;
-  font-size: 16px;
+  font-size: 14px;
+  padding: 8px;
+  white-space: nowrap;
+  min-width: 100px;
 `;
 
 const LoadingContainer = styled.div`

@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { Button } from "~/components/shared/button";
@@ -21,12 +21,15 @@ export const CheckInCard = observer(
     const { checkInTemplateStore, sessionStore, teamStore, userStore, companyStore } = useMst();
 
     const [participantsArray, setParticipantsArray] = useState([]);
+    const [showOptions, setShowOptions] = useState<boolean>(false);
+
+    const optionsRef = useRef(null);
 
     const history = useHistory();
 
-    const { checkInTemplate } = checkin;
+    const { checkInTemplate, id: artifactId } = checkin;
 
-    const { name, ownerType, id, viewers, participants, runOnce } = checkInTemplate;
+    const { name, ownerType, id, viewers, participants, runOnce, createdById } = checkInTemplate;
 
     const getParticipantsAvatar = entityArray => {
       const entityArrayToReturn = [];
@@ -66,6 +69,29 @@ export const CheckInCard = observer(
       });
       setParticipantsArray(entityArrayToReturn);
     };
+
+    useEffect(() => {
+      const externalEventHandler = e => {
+        if (!showOptions) return;
+
+        const node = optionsRef.current;
+
+        if (node && node.contains(e.target)) {
+          return;
+        }
+        setShowOptions(false);
+      };
+
+      if (showOptions) {
+        document.addEventListener("click", externalEventHandler);
+      } else {
+        document.removeEventListener("click", externalEventHandler);
+      }
+
+      return () => {
+        document.removeEventListener("click", externalEventHandler);
+      };
+    }, [showOptions]);
 
     useEffect(() => {
       getParticipantsAvatar(participants);
@@ -116,7 +142,7 @@ export const CheckInCard = observer(
       const diff = dateA.diff(dateB, "days");
       return diff < 1;
     };
-    
+
     const getStatusBadge = () => {
       if (toJS(checkin).checkInArtifactLogs[0]) {
         return <EntryBadge color={baseTheme.colors.cautionYellow}>{`• In Progress`}</EntryBadge>;
@@ -127,15 +153,34 @@ export const CheckInCard = observer(
       }
     };
 
+    const isOwner = createdById === sessionStore.profile.id;
+    const isAdmin = sessionStore.profile.role === "Admin";
+
+    const canArchive = isAdmin || isOwner;
+    
+    const handleArchive = () => {
+      if (!canArchive) return;
+
+      // checkInTemplateStore.archiveCheckIn(artifactId);
+    };
+
     return (
       <Container>
         <TitleContainer>
           <Title disabled={!isViewer} onClick={() => history.push(`/check-in/insights/${id}`)}>
             {name.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}
           </Title>
-          <IconContainer onClick={() => history.push(`/check-in/edit/${checkin.id}`)}>
-            <Icon icon={"Settings"} size="18px" iconColor={"greyActive"} />
-          </IconContainer>
+          <OptionsSection>
+            <IconContainer onClick={() => setShowOptions(!showOptions)}>
+              <StyledOptionIcon icon={"Options"} size={"14px"} iconColor={"grey80"} />
+            </IconContainer>
+            {showOptions && (
+              <OptionsContainer>
+                <Option onClick={() => history.push(`/check-in/edit/${checkin.id}`)}>Edit</Option>
+                {canArchive && <Option onClick={handleArchive}>Archive</Option>}
+              </OptionsContainer>
+            )}
+          </OptionsSection>
         </TitleContainer>
         <InfoContainer>
           <Tag>{ownerType.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}</Tag>
@@ -215,6 +260,10 @@ const Container = styled.div`
     background-color: ${props => props.theme.colors.backgroundBlue};
     ${IconContainer} {
       display: block;
+
+      @media only screen and (max-width: 768px) {
+        display: none;
+      }
     }
   }
 `;
@@ -302,4 +351,35 @@ const StreakCount = styled.span`
   border: 1px solid ${props => props.theme.colors.greyActive};
   font-size: 0.75em;
   color: ${props => props.theme.colors.greyActive};
+`;
+
+const OptionsContainer = styled.div`
+  position: absolute;
+  padding: 0.5em 0;
+  z-index: 10;
+  border-radius: 0.5em;
+  background-color: ${props => props.theme.colors.white};
+  box-shadow: 0px 3px 6px #00000029;
+  width: max-content;
+  right: 0;
+`;
+
+const OptionsSection = styled.div`
+  position: relative;
+`;
+
+const StyledOptionIcon = styled(Icon)`
+  transform: rotate(90deg);
+  pointer-events: none;
+`;
+
+const Option = styled.div`
+  padding: 0.5em 1em;
+  font-size: 0.75em;
+  cursor: pointer;
+  color: ${props => props.theme.colors.black};
+
+  &:hover {
+    background: ${props => props.theme.colors.backgroundGrey};
+  }
 `;

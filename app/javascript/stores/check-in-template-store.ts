@@ -52,11 +52,9 @@ export const CheckInTemplateStoreModel = types
       }
     }),
     getCheckIns: flow(function*() {
-      console.log("in getCheckIns");
       try {
         const response: ApiResponse<any> = yield self.environment.api.getCheckins();
         self.checkIns = response.data.checkInArtifacts;
-        console.log(self.checkIns, response.data.checkInArtifacts);
         return response.data.checkInArtifacts;
       } catch {
         // showToast("Something went wrong", ToastMessageConstants.ERROR);
@@ -143,6 +141,22 @@ export const CheckInTemplateStoreModel = types
         return false;
       }
     }),
+    // archiveCheckIn: flow(function*(checkInId) {
+    //   const response: ApiResponse<any> = yield self.environment.api.updateCheckinArtifact(
+    //     checkInId,
+    //     { status: "archived" },
+    //   );
+    //   if (response.ok) {
+    //     showToast("Check-in archived successfully", ToastMessageConstants.SUCCESS);
+    //     // const checkins = self.checkIns.filter(checkin => checkin.id !== checkInId);
+    //     // const newCheckins = [...checkins, response.data.checkInArtifact];
+    //     // self.checkIns = newCheckins as any;
+    //     return true;
+    //   } else {
+    //     showToast("Something went wrong, please try again", ToastMessageConstants.ERROR);
+    //     return false;
+    //   }
+    // }),
     getCheckInTemplateInsights: flow(function*(id) {
       const response: ApiResponse<any> = yield self.environment.api.getTemplateInsights(id);
       if (response.ok) {

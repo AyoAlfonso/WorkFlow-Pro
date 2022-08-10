@@ -44,14 +44,17 @@ export const CheckIn = observer(
             <OverviewTab active={activeTab === "active"} onClick={() => setActiveTab("active")}>
               Active
             </OverviewTab>
-            {/* <OverviewTab active={activeTab === "archived"} onClick={() => setActiveTab("archived")}>
+            <OverviewTab active={activeTab === "archived"} onClick={() => setActiveTab("archived")}>
               Archived
-            </OverviewTab> */}
+            </OverviewTab>
           </OverviewTabsContainer>
           <SelectContainer>
             <Select selection={selection} setSelection={handleSort}>
               <option value="dueDate">Sort by due date</option>
               <option value="name">Sort by name</option>
+              {activeTab === "archived" && (
+                <option value="archivedDate">Sort by archived date</option>
+              )}
             </Select>
           </SelectContainer>
         </TopContainer>

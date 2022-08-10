@@ -208,6 +208,12 @@ export const StepsPreview = ({ step }: StepsPreviewProps): JSX.Element => {
             <CheckinReflection variant={QuestionnaireTypeConstants.eveningReflection} disabled />
           </Container>
         );
+      case "Morning Reflection":
+        return (
+          <Container>
+            <CheckinReflection variant={QuestionnaireTypeConstants.createMyDay} disabled />
+          </Container>
+        );
       default:
         return <></>;
     }

@@ -250,7 +250,9 @@ export const CheckinInsights = observer(
       <Container>
         <SideBar>
           <SectionContainer>
-            <IconContainer onClick={() => history.push(`/check-in/edit/${userArtifact?.id}`)}>
+            <IconContainer
+              onClick={() => history.push(`/check-in/template/edit/${data.id}`)}
+            >
               <Icon icon={"Settings"} size="18px" iconColor={"greyActive"} ml="auto" />
             </IconContainer>
             <SideBarHeader>participants</SideBarHeader>
@@ -357,7 +359,9 @@ export const CheckinInsights = observer(
                 <YesNoInsights insightsToShow={insightsToShow} steps={steps} />
               )}
               {getSteps.includes("KPIs") && <KpiInsights insightsToShow={insightsToShow} />}
-              {getSteps.includes("Initiatives") && <InitiativeInsights insightsToShow={insightsToShow} />}
+              {getSteps.includes("Initiatives") && (
+                <InitiativeInsights insightsToShow={insightsToShow} />
+              )}
               {getSteps.includes("Evening Reflection") ||
                 getSteps.includes("Weekly Reflection") ||
                 (getSteps.includes("Monthly Reflection") && (
@@ -571,7 +575,9 @@ export const DropdownContainer = styled.div`
   position: absolute;
   box-shadow: 0px 3px 6px #00000029;
   width: 100%;
-  // z-index: 5;
+  z-index: 10;
+  max-height: 200px;
+  overflow-y: auto;
 `;
 
 export const Option = styled.div`

@@ -258,13 +258,7 @@ export const SideNavNoMst = (
     switch (teamLength) {
       case 0:
         return (
-          <StyledNavLinkChildrenActive
-            to={`/team/`}
-            icon={"Team"}
-            currentPathName={currentPathName}
-          >
-            {t<string>("navigation.team")}
-          </StyledNavLinkChildrenActive>
+          <></>
         );
       case 1:
         return (
