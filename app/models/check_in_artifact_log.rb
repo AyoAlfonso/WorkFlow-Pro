@@ -24,15 +24,11 @@ class CheckInArtifactLog < ApplicationRecord
   end
  
   def objective_logs_full
-    # binding.pry
     ObjectiveLog.where(id: self.objective_logs)
-    # .group_by(&:owned_by_id)
   end
 
   def scorecard_logs_full
-        # binding.pry
     ScorecardLog.where(id: self.scorecard_logs)
-    # .group_by(&:user_id)
   end
 
   def journal_logs_full
