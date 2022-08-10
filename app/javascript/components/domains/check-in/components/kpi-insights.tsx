@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Avatar, Text } from "~/components/shared";
 import { StatusBadge } from "~/components/shared/status-badge";
@@ -6,16 +6,20 @@ import { useMst } from "~/setup/root";
 import { baseTheme } from "~/themes";
 import { Loading } from "~/components/shared/loading";
 import { sortByDate } from "~/utils/sorting";
-
+import { toJS } from "mobx";
+import { titleCase } from "~/utils/camelize";
 interface InitiativeInsightsProps {
   insightsToShow: Array<any>;
 }
+
 export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.Element => {
   const {
     sessionStore,
     userStore,
     companyStore: { company },
+    keyPerformanceIndicatorStore,
   } = useMst();
+  const { allKPIs } = keyPerformanceIndicatorStore;
   const {
     fadedYellow,
     fadedGreen,
@@ -30,16 +34,42 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
     tango,
     dairyCream,
   } = baseTheme.colors;
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    async function setUp() {
+      setLoading(true);
+      await keyPerformanceIndicatorStore.load();
+      setLoading(false);
+    }
+    setUp();
+  }, []);
   const year = company.yearForCreatingAnnualInitiatives;
   const setDefaultSelectionQuarter = week => {
     return week == 13 ? 1 : week == 26 ? 2 : week == 39 ? 3 : 4;
   };
+  const largeNumToText = (n: number) => {
+    if (n === Infinity) {
+      return n;
+    } else if (n >= 1000000000000) {
+      return `${Math.round((n / 1000000000000 + Number.EPSILON) * 100) / 100}T`;
+    } else if (n >= 1000000000) {
+      return `${Math.round((n / 1000000000 + Number.EPSILON) * 100) / 100}B`;
+    } else if (n >= 1000000) {
+      return `${Math.round((n / 1000000 + Number.EPSILON) * 100) / 100}M`;
+    } else if (n >= 1000) {
+      return `${Math.round((n / 1000 + Number.EPSILON) * 100) / 100}K`;
+    } else {
+      return `${n}`;
+    }
+  };
 
   const quarter = setDefaultSelectionQuarter(company.currentFiscalWeek);
-  let participants;
-  if (!userStore.users.length) {
+  const participants = new Set();
+  if (!userStore.users.length || loading) {
     return <Loading />;
   }
+
+  const formatKpiType = kpiType => titleCase(kpiType);
 
   const checkInArtifactLogs = insightsToShow
     .map(artifact => {
@@ -80,9 +110,9 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
       </HeaderContainer>
       <KpisContainer>
         {checkInArtifactLogs.map(artifactLog => {
-          participants = new Set();
+          // participants = new Set();
           const user = findUser(artifactLog.ownedBy);
-          participants.add(artifactLog.ownedBy);
+
           return (
             <>
               <KpiComponent>
@@ -136,6 +166,7 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
                           ),
                         )
                         .map(log => {
+                          participants.add(log.id);
                           const kpi = log.keyPerformanceIndicator;
                           const getStatusValue = (percentScore, needsAttentionThreshold) => {
                             const percent = Math.round(percentScore);
@@ -169,7 +200,14 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
                               };
                             }
                           };
-                          const weeks = Object.values(kpi?.period?.[year] || {});
+
+                          const findKPI = kpi => {
+                            return toJS(allKPIs).find(e => kpi.id == e.id);
+                          };
+
+                          const foundKpi = findKPI(kpi);
+                          const weeks = Object.values(foundKpi?.period?.[year] || {});
+
                           const calcQuarterAverageScores = (
                             weeks: any,
                             target: number,
@@ -210,18 +248,18 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
                           ).map(score => getStatusValue(score, kpi.needsAttentionThreshold));
 
                           const quarterValue = percentScores[quarter - 1];
-                          console.log(
-                            quarterValue,
-                            percentScores,
-                            kpi.targetValue,
-                            weeks,
-                            "quarterValue",
-                          );
+
+                          const currrentScore =
+                            foundKpi?.scorecardLogs[foundKpi?.scorecardLogs.length - 1]?.score;
+
                           return (
                             <TableRow>
                               <TableData left>
                                 <KpiNameContainer>
-                                  <KpiName>{kpi.title}</KpiName>
+                                  <KpiName>
+                                    {kpi.title}{" "}
+                                    {kpi.parentType && `[${formatKpiType(kpi.parentType)}]`}
+                                  </KpiName>
                                   <KpiDescription>
                                     {" "}
                                     {kpi.greaterThan
@@ -245,20 +283,23 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
                               <TableData>
                                 <StatusBadge
                                   fontSize={"12px"}
-                                  background={baseTheme.colors.fadedYellow}
-                                  color={baseTheme.colors.poppySunrise}
+                                  background={quarterValue?.background}
+                                  color={quarterValue?.color}
                                 >
-                                  {getScorePercent(
-                                    log.score,
-                                    kpi.targetValue,
-                                    kpi.greaterThan,
-                                  ).toFixed()}
+                                  {/* {quarterValue?.percent} */}
+                                  {kpi.parentKpi.length > foundKpi?.relatedParentKpis.length
+                                    ? "—"
+                                    : quarterValue?.percent
+                                    ? `${largeNumToText(quarterValue?.percent)}%`
+                                    : kpi.greaterThan
+                                    ? "0%"
+                                    : "—"}
                                 </StatusBadge>
                               </TableData>
                               <TableData>
                                 <WeekContainer>
-                                  <WeekText color={baseTheme.colors.successGreen}>
-                                    {log.score}
+                                  <WeekText color={quarterValue?.color}>
+                                    {"" + currrentScore}
                                   </WeekText>
                                 </WeekContainer>
                               </TableData>
@@ -276,7 +317,7 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
       </KpisContainer>
       <Divider />
       <InfoContainer>
-        <InfoText>{Array.from(participants.size).length} total responses</InfoText>
+        <InfoText>{participants?.size} total responses</InfoText>
       </InfoContainer>
     </Container>
   );

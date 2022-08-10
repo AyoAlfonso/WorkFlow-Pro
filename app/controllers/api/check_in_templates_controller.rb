@@ -268,6 +268,10 @@ class Api::CheckInTemplatesController < Api::ApplicationController
 
   def general_check_in
     check_in_artifacts = CheckInArtifact.owned_by_user(current_user).not_skipped.incomplete.with_parents
+    if params[:status].present?
+     check_in_artifacts = check_in_artifacts.with_status(params[:status])
+    end
+
     @check_in_artifacts_for_day = check_in_artifacts
     authorize @check_in_artifacts_for_day
     render json: {check_in_artifacts: @check_in_artifacts_for_day, status: :ok }

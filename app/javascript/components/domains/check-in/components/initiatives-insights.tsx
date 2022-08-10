@@ -145,7 +145,7 @@ const InitiativeInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
 
       <Divider />
       <InfoContainer>
-        <InfoText>{Array.from(participants.size).length} total responses</InfoText>
+        <InfoText>{participants?.size} total responses</InfoText>
       </InfoContainer>
     </Container>
   );
