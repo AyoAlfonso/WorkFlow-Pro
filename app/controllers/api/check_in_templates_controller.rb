@@ -57,14 +57,15 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def update
+
   @step_atrributes = params[:check_in_templates_steps_attributes]
   @check_in_template.status = params[:status]
   if(params[:status] == 2)
      @check_in_template.archived_date = Time.now 
   end
   @check_in_template.save!
-
-    if (params[:check_in_template]["participants"].present? || params[:child_check_in_template_params]["participants"].present?)
+  binding.pry
+    if (params[:check_in_template]["participants"].present? || params[:child_check_in_template_params].try(["participants"]).present?)
       @check_in_template.participants.each do |participant|
           if(participant["type"] == "user")
             destroy_notifications(participant["id"])
@@ -84,7 +85,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
       end
     end
 
-   if (params[:check_in_template]["viewers"].present? || params[:child_check_in_template_params]["viewers"].present?)
+   if (params[:check_in_template]["viewers"].present? || params[:child_check_in_template_params].try(["viewers"]).present?)
           @check_in_template.viewers.each do |viewer|
             if(viewer["type"] == "user")
               destroy_notifications(viewer["id"])
@@ -313,7 +314,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     end
   end
 
-  next_occurence = schedule.first(2)[1]
+  next_occurence = schedule&.first(2)[1]
   next_start = date_time_config["cadence"] == "once" ? Time.now : Time.new(next_occurence.year, next_occurence.month,next_occurence.day, next_occurence.hour)
     
   check_in_artifact_log = CheckInArtifactLog.find_or_initialize_by(check_in_artifact_id: check_in_artifact.id, created_by_id: current_user.id)
