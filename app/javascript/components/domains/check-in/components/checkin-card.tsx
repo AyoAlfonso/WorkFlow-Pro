@@ -14,10 +14,11 @@ import { baseTheme } from "~/themes";
 
 interface CheckInCardProps {
   checkin: ICheckInArtifact;
+  activeTab: string;
 }
 
 export const CheckInCard = observer(
-  ({ checkin }: CheckInCardProps): JSX.Element => {
+  ({ checkin, activeTab }: CheckInCardProps): JSX.Element => {
     const { checkInTemplateStore, sessionStore, teamStore, userStore, companyStore } = useMst();
 
     const [participantsArray, setParticipantsArray] = useState([]);
@@ -29,7 +30,17 @@ export const CheckInCard = observer(
 
     const { checkInTemplate, id: artifactId } = checkin;
 
-    const { name, ownerType, id, viewers, participants, runOnce, createdById } = checkInTemplate;
+    const {
+      name,
+      ownerType,
+      id,
+      viewers,
+      participants,
+      runOnce,
+      createdById,
+      archivedDate,
+      status,
+    } = checkInTemplate;
 
     const getParticipantsAvatar = entityArray => {
       const entityArrayToReturn = [];
@@ -120,7 +131,22 @@ export const CheckInCard = observer(
     const isViewer = getStatus(viewers);
     const isParticipant = getStatus(participants);
 
+    const canViewCheckInCard = () => {
+      if (activeTab !== "archived") {
+        return true
+      } else {
+        if ((status === "archived" && isViewer) || createdById === sessionStore.profile?.id) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    };
+
+    const archived = activeTab === "archived";
+
     const dueDate = new Date(checkin.startTime).toDateString();
+    const archivedAt = new Date(archivedDate).toDateString();
 
     const isEntryNeeded = () => {
       const dateA = moment(new Date(checkin.startTime));
@@ -157,87 +183,94 @@ export const CheckInCard = observer(
     const isAdmin = sessionStore.profile.role === "Admin";
 
     const canArchive = isAdmin || isOwner;
-    
+
     const handleArchive = () => {
       if (!canArchive) return;
 
-      // checkInTemplateStore.archiveCheckIn(artifactId);
+      checkInTemplateStore.archiveCheckIn(artifactId, id);
     };
 
     return (
-      <Container>
-        <TitleContainer>
-          <Title disabled={!isViewer} onClick={() => history.push(`/check-in/insights/${id}`)}>
-            {name.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}
-          </Title>
-          <OptionsSection>
-            <IconContainer onClick={() => setShowOptions(!showOptions)}>
-              <StyledOptionIcon icon={"Options"} size={"14px"} iconColor={"grey80"} />
-            </IconContainer>
-            {showOptions && (
-              <OptionsContainer>
-                <Option onClick={() => history.push(`/check-in/edit/${checkin.id}`)}>Edit</Option>
-                {canArchive && <Option onClick={handleArchive}>Archive</Option>}
-              </OptionsContainer>
-            )}
-          </OptionsSection>
-        </TitleContainer>
-        <InfoContainer>
-          <Tag>{ownerType.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}</Tag>
-          {!runOnce ? (
-            <>
-              <DueDate>{`Due: ${dueDate}`}</DueDate>
+      <>
+        {canViewCheckInCard() && (
+          <Container>
+            <TitleContainer>
+              <Title disabled={!isViewer} onClick={() => history.push(`/check-in/insights/${id}`)}>
+                {name.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}
+              </Title>
+              <OptionsSection>
+                <IconContainer onClick={() => setShowOptions(!showOptions)}>
+                  <StyledOptionIcon icon={"Options"} size={"14px"} iconColor={"grey80"} />
+                </IconContainer>
+                {showOptions && (
+                  <OptionsContainer>
+                    <Option onClick={() => history.push(`/check-in/edit/${checkin.id}`)}>
+                      Edit
+                    </Option>
+                    {canArchive && <Option onClick={handleArchive}>Archive</Option>}
+                  </OptionsContainer>
+                )}
+              </OptionsSection>
+            </TitleContainer>
+            <InfoContainer>
+              <Tag>{ownerType.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}</Tag>
+              {!runOnce && !archivedDate ? (
+                <>
+                  <DueDate>{`Due: ${dueDate}`}</DueDate>
 
-              {isViewer && !isParticipant ? (
-                <EntryBadge>{isEntryNeeded() == true && `• Response Expected`}</EntryBadge>
+                  {isViewer && !isParticipant ? (
+                    <EntryBadge>{isEntryNeeded() == true && `• Response Expected`}</EntryBadge>
+                  ) : (
+                    getStatusBadge()
+                  )}
+                </>
               ) : (
-                getStatusBadge()
+                !archivedDate && <EntryBadge>{`• Completed`}</EntryBadge>
               )}
-            </>
-          ) : (
-            <EntryBadge>{`• Completed`}</EntryBadge>
-          )}
-        </InfoContainer>
-        <ActionsContainer>
-          {isParticipant && !runOnce && (
-            <>
-              <ButtonsContainer>
-                <Button
-                  variant={"primary"}
-                  mr="1em"
-                  width="80px"
-                  fontSize="12px"
-                  onClick={() => history.push(`/check-in/run/${checkin.id}`)}
-                  small
-                  style={{ whiteSpace: "nowrap" }}
-                  disabled={!canCheckIn()}
-                >
-                  Check-in
-                </Button>
-                <Button
-                  variant={"greyOutline"}
-                  mr="1em"
-                  width="80px"
-                  fontSize="12px"
-                  onClick={() => {
-                    checkInTemplateStore.skipCheckIn(checkin.id);
-                  }}
-                  small
-                >
-                  Skip
-                </Button>
-              </ButtonsContainer>
-              {/* <StreakContainer>
+              {archivedDate && <DueDate>{`Archived: ${archivedAt}`}</DueDate>}
+            </InfoContainer>
+            <ActionsContainer>
+              {isParticipant && !runOnce && !archived && (
+                <>
+                  <ButtonsContainer>
+                    <Button
+                      variant={"primary"}
+                      mr="1em"
+                      width="80px"
+                      fontSize="12px"
+                      onClick={() => history.push(`/check-in/run/${checkin.id}`)}
+                      small
+                      style={{ whiteSpace: "nowrap" }}
+                      disabled={!canCheckIn()}
+                    >
+                      Check-in
+                    </Button>
+                    <Button
+                      variant={"greyOutline"}
+                      mr="1em"
+                      width="80px"
+                      fontSize="12px"
+                      onClick={() => {
+                        checkInTemplateStore.skipCheckIn(checkin.id);
+                      }}
+                      small
+                    >
+                      Skip
+                    </Button>
+                  </ButtonsContainer>
+                  {/* <StreakContainer>
               <Icon icon={"Streak"} size="24px" mr="0.5em" iconColor={"greyActive"} />
               <StreakCount>0</StreakCount>
             </StreakContainer> */}
-            </>
-          )}
-          <ParticipantsContainer>
-            <ParticipantsAvatars entityList={participantsArray} />
-          </ParticipantsContainer>
-        </ActionsContainer>
-      </Container>
+                </>
+              )}
+              <ParticipantsContainer>
+                <ParticipantsAvatars entityList={participantsArray} />
+              </ParticipantsContainer>
+            </ActionsContainer>
+          </Container>
+        )}
+      </>
     );
   },
 );

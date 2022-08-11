@@ -9,7 +9,7 @@ import * as R from "ramda";
 import { StepModel } from "~/models/step";
 import { toJS } from "mobx";
 import { CheckInArtifactsModel } from "~/models/check-in-artifacts";
-import { sortByDueDate, sortByName } from "~/utils/sorting";
+import { sortByArchivedDate, sortByDueDate, sortByName } from "~/utils/sorting";
 
 export const CheckInTemplateStoreModel = types
   .model("CheckInTemplateStoreModel")
@@ -19,6 +19,7 @@ export const CheckInTemplateStoreModel = types
     checkIns: types.array(CheckInArtifactsModel),
     currentCheckInArtifact: types.maybeNull(CheckInArtifactsModel),
     checkInTemplateInsights: types.maybeNull(types.frozen()),
+    archivedCheckIns: types.maybeNull(types.array(CheckInArtifactsModel)),
   })
   .extend(withEnvironment())
   .actions(self => ({
@@ -30,13 +31,13 @@ export const CheckInTemplateStoreModel = types
         // caught by Api Monitor
       }
     }),
-    getCheckInTemplateById: flow(function* (id) {
+    getCheckInTemplateById: flow(function*(id) {
       try {
         const response: ApiResponse<any> = yield self.environment.api.getCheckInTemplate(id);
-        self.currentCheckIn = response.data.template
-        return response.data.template
+        self.currentCheckIn = response.data.template;
+        return response.data.template;
       } catch {
-      //
+        //
       }
     }),
     getCheckIn: flow(function*(checkInName) {
@@ -55,6 +56,16 @@ export const CheckInTemplateStoreModel = types
       try {
         const response: ApiResponse<any> = yield self.environment.api.getCheckins();
         self.checkIns = response.data.checkInArtifacts;
+        return response.data.checkInArtifacts;
+      } catch {
+        // showToast("Something went wrong", ToastMessageConstants.ERROR);
+        // caught by Api Monitor
+      }
+    }),
+    getArchivedCheckIns: flow(function*(status = "archived") {
+      try {
+        const response: ApiResponse<any> = yield self.environment.api.getCheckins(status);
+        self.archivedCheckIns = response.data.checkInArtifacts;
         return response.data.checkInArtifacts;
       } catch {
         // showToast("Something went wrong", ToastMessageConstants.ERROR);
@@ -141,22 +152,22 @@ export const CheckInTemplateStoreModel = types
         return false;
       }
     }),
-    // archiveCheckIn: flow(function*(checkInId) {
-    //   const response: ApiResponse<any> = yield self.environment.api.updateCheckinArtifact(
-    //     checkInId,
-    //     { status: "archived" },
-    //   );
-    //   if (response.ok) {
-    //     showToast("Check-in archived successfully", ToastMessageConstants.SUCCESS);
-    //     // const checkins = self.checkIns.filter(checkin => checkin.id !== checkInId);
-    //     // const newCheckins = [...checkins, response.data.checkInArtifact];
-    //     // self.checkIns = newCheckins as any;
-    //     return true;
-    //   } else {
-    //     showToast("Something went wrong, please try again", ToastMessageConstants.ERROR);
-    //     return false;
-    //   }
-    // }),
+    archiveCheckIn: flow(function*(artifactId, templateId) {
+      const response: ApiResponse<any> = yield self.environment.api.updateCheckinTemplate(
+        templateId,
+        { status: 2 },
+      );
+      if (response.ok) {
+        showToast("Check-in archived successfully", ToastMessageConstants.SUCCESS);
+        const checkins = self.checkIns.filter(checkin => checkin.id == artifactId);
+        const newCheckins = [...checkins];
+        self.checkIns = newCheckins as any;
+        return true;
+      } else {
+        showToast("Something went wrong, please try again", ToastMessageConstants.ERROR);
+        return false;
+      }
+    }),
     getCheckInTemplateInsights: flow(function*(id) {
       const response: ApiResponse<any> = yield self.environment.api.getTemplateInsights(id);
       if (response.ok) {
@@ -212,10 +223,16 @@ export const CheckInTemplateStoreModel = types
           .sort(sortByDueDate);
 
         sortedCheckins = [...data, ...filteredArtifacts];
+        self.checkIns = sortedCheckins;
       } else if (sortBy === "name") {
         sortedCheckins = checkIns.slice().sort(sortByName);
+        const archivedCheckIns = self.archivedCheckIns.slice().sort(sortByName);
+        self.checkIns = sortedCheckins;
+        self.archivedCheckIns = archivedCheckIns as any;
+      } else if (sortBy === "archivedDate") {
+        const archivedCheckIns = self.archivedCheckIns.slice().sort(sortByArchivedDate);
+        self.archivedCheckIns = archivedCheckIns as any;
       }
-      self.checkIns = sortedCheckins;
     },
   }))
   .actions(self => ({

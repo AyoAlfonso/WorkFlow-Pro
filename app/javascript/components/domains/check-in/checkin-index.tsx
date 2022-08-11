@@ -15,7 +15,7 @@ export const CheckIn = observer(
 
     const { checkInTemplateStore, teamStore, userStore } = useMst();
 
-    const { checkIns } = checkInTemplateStore;
+    const { checkIns, archivedCheckIns } = checkInTemplateStore;
 
     useEffect(() => {
       teamStore.fetchTeams().then(() => {
@@ -28,40 +28,66 @@ export const CheckIn = observer(
       });
     }, []);
 
+    useEffect(() => {
+      handleSort("dueDate");
+    }, [checkIns.length]);
+
     const handleSort = e => {
       setSelection(e);
       checkInTemplateStore.sortArtifacts(e);
     };
 
-    if (loading) {
-      return <Loading />;
-    }
+    const getArchivedCheckIns = () => {
+      setLoading(true);
+      checkInTemplateStore.getArchivedCheckIns().then(() => {
+        setLoading(false);
+        handleSort("archivedDate");
+      });
+    };
+
+    const checkInToRender = activeTab === "active" ? checkIns : archivedCheckIns;
 
     return (
       <Container>
         <TopContainer>
           <OverviewTabsContainer>
-            <OverviewTab active={activeTab === "active"} onClick={() => setActiveTab("active")}>
+            <OverviewTab
+              active={activeTab === "active"}
+              onClick={() => {
+                setActiveTab("active");
+                handleSort("dueDate");
+              }}
+            >
               Active
             </OverviewTab>
-            <OverviewTab active={activeTab === "archived"} onClick={() => setActiveTab("archived")}>
+            <OverviewTab
+              active={activeTab === "archived"}
+              onClick={() => {
+                setActiveTab("archived");
+                getArchivedCheckIns();
+              }}
+            >
               Archived
             </OverviewTab>
           </OverviewTabsContainer>
           <SelectContainer>
             <Select selection={selection} setSelection={handleSort}>
-              <option value="dueDate">Sort by due date</option>
-              <option value="name">Sort by name</option>
+              {activeTab === "active" && <option value="dueDate">Sort by due date</option>}
               {activeTab === "archived" && (
                 <option value="archivedDate">Sort by archived date</option>
               )}
+              <option value="name">Sort by name</option>
             </Select>
           </SelectContainer>
         </TopContainer>
         <CheckinsContainer>
-          {checkIns.map(checkIn => (
-            <CheckInCard checkin={checkIn} key={checkIn.id} />
-          ))}
+          {loading ? (
+            <Loading />
+          ) : (
+            checkInToRender.map(checkIn => (
+              <CheckInCard checkin={checkIn} key={checkIn.id} activeTab={activeTab} />
+            ))
+          )}
         </CheckinsContainer>
       </Container>
     );

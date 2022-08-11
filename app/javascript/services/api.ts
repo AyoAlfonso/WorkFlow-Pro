@@ -763,8 +763,8 @@ export class Api {
     return this.client.post(`/check_in_templates/run/${id}`, {});
   }
 
-  async getCheckins() {
-    return this.client.get(`/general_check_in`);
+  async getCheckins(status = "published") {
+    return this.client.get(`/general_check_in?status=${status}`);
   }
 
   async updateCheckinArtifact(id, value) {

@@ -24,8 +24,14 @@ export const sortByDateReverse = (a: any, b: any) => {
 };
 
 export const sortByDueDate = (a: any, b: any) => {
-  if (!a.startTime || !b.startTime) return -1
+  if (!a.startTime || !b.startTime) return -1;
   return moment(new Date(a.startTime)).diff(moment(new Date(b.startTime)));
+};
+
+export const sortByArchivedDate = (a: any, b: any) => {
+  return moment(new Date(a.checkInTemplate.archivedDate)).diff(
+    moment(new Date(b.checkInTemplate.archivedDate)),
+  );
 };
 
 export const sortByName = (a: any, b: any) => {
@@ -36,12 +42,12 @@ export const sortByName = (a: any, b: any) => {
     return 1;
   }
   return 0;
-}
+};
 
 export const sortUsersListByName = (a: any, b: any) => {
   if (!a.firstName || !b.firstName) {
-    return 0
+    return 0;
   } else {
     return a.firstName.localeCompare(b.firstName);
   }
-}
+};
