@@ -20,7 +20,7 @@ class CheckInTemplatePolicy < ApplicationPolicy
   end
 
   def report?
-     @record.created_by == @user || !user_is_company_admin_of_current_company?
+    @record.viewers.pluck("id").include? @user.id || @record.created_by == @user || !user_is_company_admin_of_current_company? 
   end
 
   def update?

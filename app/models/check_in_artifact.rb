@@ -11,6 +11,7 @@ class CheckInArtifact < ApplicationRecord
   scope :owned_by_user, ->(user) { where(owned_by_id: user) }
   scope :not_skipped, ->  { where(skip: false) }
   scope :with_parents, ->() { joins(:check_in_template).where.not(check_in_templates: { parent: nil, tag: ['global']}) }
+  scope :with_status, ->(status) { joins(:check_in_template).where(check_in_templates: { status: status}) }
   
   belongs_to :check_in_template
   has_many :check_in_artifact_logs, dependent: :destroy
@@ -36,6 +37,9 @@ class CheckInArtifact < ApplicationRecord
   end
 
   # def streaks
+  # use the new field you're adding to the artifact from the time the last artficat was closed. compare with expected date on the 
+  # cadence. Take that former date get the next occurence, if it is not equal to the start time of the current artifact the streak is broken
+  # move up like that and count + 1  backwards from most recent to older until you reach a break
   #   return 1
   # end
   

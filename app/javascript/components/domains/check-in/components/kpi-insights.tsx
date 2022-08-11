@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Avatar, Text } from "~/components/shared";
 import { StatusBadge } from "~/components/shared/status-badge";
@@ -6,27 +6,70 @@ import { useMst } from "~/setup/root";
 import { baseTheme } from "~/themes";
 import { Loading } from "~/components/shared/loading";
 import { sortByDate } from "~/utils/sorting";
-
+import { toJS } from "mobx";
+import { titleCase } from "~/utils/camelize";
 interface InitiativeInsightsProps {
   insightsToShow: Array<any>;
 }
+
 export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.Element => {
   const {
     sessionStore,
     userStore,
     companyStore: { company },
+    keyPerformanceIndicatorStore,
   } = useMst();
-  let participants;
-  if (!userStore.users.length) {
-    return <Loading />;
-  }
-
+  const { allKPIs } = keyPerformanceIndicatorStore;
+  const {
+    fadedYellow,
+    fadedGreen,
+    fadedRed,
+    successGreen,
+    poppySunrise,
+    warningRed,
+    primary100,
+    backgroundGrey,
+    greyActive,
+    white,
+    tango,
+    dairyCream,
+  } = baseTheme.colors;
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    async function setUp() {
+      setLoading(true);
+      await keyPerformanceIndicatorStore.load();
+      setLoading(false);
+    }
+    setUp();
+  }, []);
+  const year = company.yearForCreatingAnnualInitiatives;
   const setDefaultSelectionQuarter = week => {
     return week == 13 ? 1 : week == 26 ? 2 : week == 39 ? 3 : 4;
   };
-  // const [quarter, setQuarter] = useState<number>(
-  //   setDefaultSelectionQuarter(company.currentFiscalWeek),
-  // );
+  const largeNumToText = (n: number) => {
+    if (n === Infinity) {
+      return n;
+    } else if (n >= 1000000000000) {
+      return `${Math.round((n / 1000000000000 + Number.EPSILON) * 100) / 100}T`;
+    } else if (n >= 1000000000) {
+      return `${Math.round((n / 1000000000 + Number.EPSILON) * 100) / 100}B`;
+    } else if (n >= 1000000) {
+      return `${Math.round((n / 1000000 + Number.EPSILON) * 100) / 100}M`;
+    } else if (n >= 1000) {
+      return `${Math.round((n / 1000 + Number.EPSILON) * 100) / 100}K`;
+    } else {
+      return `${n}`;
+    }
+  };
+
+  const quarter = setDefaultSelectionQuarter(company.currentFiscalWeek);
+  const participants = new Set();
+  if (!userStore.users.length || loading) {
+    return <Loading />;
+  }
+
+  const formatKpiType = kpiType => titleCase(kpiType);
 
   const checkInArtifactLogs = insightsToShow
     .map(artifact => {
@@ -67,9 +110,8 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
       </HeaderContainer>
       <KpisContainer>
         {checkInArtifactLogs.map(artifactLog => {
-          participants = new Set();
           const user = findUser(artifactLog.ownedBy);
-          participants.add(artifactLog.ownedBy);
+
           return (
             <>
               <KpiComponent>
@@ -116,55 +158,147 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
                     )}
                     <TableBody>
                       {artifactLog.scorecardLogsFull
-                        ?.sort(sortByDate).filter(
+                        ?.sort(sortByDate)
+                        .filter(
                           (s => o => (k => !s.has(k) && s.add(k))(keys.map(k => o[k]).join("|")))(
                             new Set(),
                           ),
                         )
                         .map(log => {
+                          participants.add(log.ownedBy);
+                          const kpi = log.keyPerformanceIndicator;
+                          const getStatusValue = (percentScore, needsAttentionThreshold) => {
+                            const percent = Math.round(percentScore);
+                            if (percentScore === null) {
+                              return {
+                                color: greyActive,
+                                background: backgroundGrey,
+                                percent,
+                                text: "No Update",
+                              };
+                            } else if (percentScore >= 100) {
+                              return {
+                                color: successGreen,
+                                background: fadedGreen,
+                                percent,
+                                text: "On Track",
+                              };
+                            } else if (percentScore >= needsAttentionThreshold) {
+                              return {
+                                color: poppySunrise,
+                                background: fadedYellow,
+                                percent,
+                                text: "Needs Attention",
+                              };
+                            } else {
+                              return {
+                                color: warningRed,
+                                background: fadedRed,
+                                percent,
+                                text: "Behind",
+                              };
+                            }
+                          };
+
+                          const findKPI = kpi => {
+                            return toJS(allKPIs).find(e => kpi.id == e.id);
+                          };
+
+                          const foundKpi = findKPI(kpi);
+                          const weeks = Object.values(foundKpi?.period?.[year] || {});
+
+                          const calcQuarterAverageScores = (
+                            weeks: any,
+                            target: number,
+                            greaterThan: boolean,
+                            parentType: string,
+                          ) => {
+                            const quarterScores = [
+                              [null, 0],
+                              [null, 0],
+                              [null, 0],
+                              [null, 0],
+                            ];
+                            weeks.forEach(({ week, score }) => {
+                              const q = Math.floor((week - 1) / 13);
+                              if (target == 0) {
+                                quarterScores[q][0] -= score;
+                                quarterScores[q][1]++;
+                              } else if (quarterScores[q]) {
+                                quarterScores[q][0] += score;
+                                quarterScores[q][1]++;
+                              }
+                            });
+                            return quarterScores.map(tuple =>
+                              tuple[0] === null
+                                ? null
+                                : target == 0 && tuple[0] == 0
+                                ? 100
+                                : target == 0 && tuple[0] != 0
+                                ? tuple[0]
+                                : getScorePercent(tuple[0] / tuple[1], target, greaterThan),
+                            );
+                          };
+                          const percentScores = calcQuarterAverageScores(
+                            weeks,
+                            kpi.targetValue,
+                            kpi.greaterThan,
+                            kpi.parentType,
+                          ).map(score => getStatusValue(score, kpi.needsAttentionThreshold));
+
+                          const quarterValue = percentScores[quarter - 1];
+
+                          const currrentScore =
+                            foundKpi?.scorecardLogs[foundKpi?.scorecardLogs.length - 1]?.score;
+
                           return (
                             <TableRow>
                               <TableData left>
                                 <KpiNameContainer>
-                                  <KpiName>{log.keyPerformanceIndicator.title}</KpiName>
+                                  <KpiName>
+                                    {kpi.title}{" "}
+                                    {kpi.parentType && `[${formatKpiType(kpi.parentType)}]`}
+                                  </KpiName>
                                   <KpiDescription>
                                     {" "}
-                                    {log.keyPerformanceIndicator.greaterThan
+                                    {kpi.greaterThan
                                       ? `Greater than or equal
-                                  to  ${formatValue(
-                                    log.keyPerformanceIndicator.unitType,
-                                    log.keyPerformanceIndicator.targetValue,
-                                  )}`
+                                  to  ${formatValue(kpi.unitType, kpi.targetValue)}`
                                       : `Less than or equal to ${formatValue(
-                                          log.keyPerformanceIndicator.unitType,
-                                          log.keyPerformanceIndicator.targetValue,
+                                          kpi.unitType,
+                                          kpi.targetValue,
                                         )}`}
                                   </KpiDescription>
                                 </KpiNameContainer>
                               </TableData>
                               <TableData>
                                 <StatusBadge
-                                  background={baseTheme.colors.fadedYellow}
-                                  color={baseTheme.colors.poppySunrise}
-                                ></StatusBadge>
+                                  background={quarterValue?.background}
+                                  color={quarterValue?.color}
+                                >
+                                  {quarterValue?.text}
+                                </StatusBadge>
                               </TableData>
                               <TableData>
                                 <StatusBadge
                                   fontSize={"12px"}
-                                  background={baseTheme.colors.fadedYellow}
-                                  color={baseTheme.colors.poppySunrise}
+                                  background={quarterValue?.background}
+                                  color={quarterValue?.color}
                                 >
-                                  {getScorePercent(
-                                    log.score,
-                                    log.keyPerformanceIndicator.targetValue,
-                                    log.keyPerformanceIndicator.greaterThan,
-                                  ).toFixed()}
+                                  {/* {quarterValue?.percent} */}
+                                  {kpi.parentKpi.length > foundKpi?.relatedParentKpis.length
+                                    ? "—"
+                                    : quarterValue?.percent
+                                    ? `${largeNumToText(quarterValue?.percent)}%`
+                                    : kpi.greaterThan
+                                    ? "0%"
+                                    : "—"}
                                 </StatusBadge>
                               </TableData>
                               <TableData>
                                 <WeekContainer>
-                                  <WeekText color={baseTheme.colors.successGreen}>
-                                    {log.score}
+                                  <WeekText color={quarterValue?.color}>
+                                    {"" + currrentScore}
                                   </WeekText>
                                 </WeekContainer>
                               </TableData>
@@ -182,7 +316,7 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
       </KpisContainer>
       <Divider />
       <InfoContainer>
-        <InfoText>{Array.from(participants.size).length} total responses</InfoText>
+        <InfoText>{participants?.size} total response(s)</InfoText>
       </InfoContainer>
     </Container>
   );

@@ -59,6 +59,9 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   def update
   @step_atrributes = params[:check_in_templates_steps_attributes]
   @check_in_template.status = params[:status]
+  if(params[:status] == 2)
+     @check_in_template.archived_date = Time.now 
+  end
   @check_in_template.save!
 
     if (params[:check_in_template]["participants"].present? || params[:child_check_in_template_params]["participants"].present?)
@@ -265,6 +268,10 @@ class Api::CheckInTemplatesController < Api::ApplicationController
 
   def general_check_in
     check_in_artifacts = CheckInArtifact.owned_by_user(current_user).not_skipped.incomplete.with_parents
+    if params[:status].present?
+     check_in_artifacts = check_in_artifacts.with_status(params[:status])
+    end
+
     @check_in_artifacts_for_day = check_in_artifacts
     authorize @check_in_artifacts_for_day
     render json: {check_in_artifacts: @check_in_artifacts_for_day, status: :ok }

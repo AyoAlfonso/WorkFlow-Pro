@@ -9,7 +9,7 @@ class CheckInTemplate < ApplicationRecord
   enum status: {
     draft: 0,
     published:1,
-    archive: 2,
+    archived: 2,
   }
   enum owner_type: {
     company: 0,
