@@ -64,7 +64,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
      @check_in_template.archived_date = Time.now 
   end
   @check_in_template.save!
-  binding.pry
+
     if (params[:check_in_template]["participants"].present? || params[:child_check_in_template_params].try(["participants"]).present?)
       @check_in_template.participants.each do |participant|
           if(participant["type"] == "user")
