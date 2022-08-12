@@ -7,9 +7,11 @@ import styled from "styled-components";
 import { Icon, Loading, Text } from "~/components/shared";
 import { ParticipantsAvatars } from "~/components/shared/participants-avatars";
 import { useMst } from "~/setup/root";
+import { useTranslation } from "react-i18next";
 import { getCadence, getTimezone } from "~/utils/check-in-functions";
 import AgreementInsights from "./components/agreement-insights";
 import DateSelector from "./components/date-selector";
+import { EmptyState } from "./components/empty-state";
 import InitiativeInsights from "./components/initiatives-insights";
 import JournalInsights from "./components/journal-insights";
 import { KpiInsights } from "./components/kpi-insights";
@@ -30,6 +32,7 @@ export const CheckinInsights = observer(
 
     const { id } = useParams();
     const history = useHistory();
+    const { t } = useTranslation();
 
     const {
       checkInTemplateStore: { getCheckInTemplateInsights },
@@ -242,17 +245,24 @@ export const CheckinInsights = observer(
     const responseNumber = getNumberOfResponses();
     const totalParticipants = getUsers(data.participants);
     const { createdAt, updatedAt } = data;
-    const userArtifact = data.period[currentInsightDate].find(
-      artifact => artifact.ownedBy === userStore.user?.id,
-    );
+
+    const isDataEmpty = () => {
+      const responses = [];
+
+      insightsToShow.map(artifact => {
+        if (artifact.checkInArtifactLogs[0]) {
+          responses.push(artifact.checkInArtifactLogs[0]);
+        }
+      });
+
+      return responses.length === 0;
+    };
 
     return (
       <Container>
         <SideBar>
           <SectionContainer>
-            <IconContainer
-              onClick={() => history.push(`/check-in/template/edit/${data.id}`)}
-            >
+            <IconContainer onClick={() => history.push(`/check-in/template/edit/${data.id}`)}>
               <Icon icon={"Settings"} size="18px" iconColor={"greyActive"} ml="auto" />
             </IconContainer>
             <SideBarHeader>participants</SideBarHeader>
@@ -342,36 +352,46 @@ export const CheckinInsights = observer(
             </IconContainer>
           </FlexContainer>
           <ContentContainer>
-            <LeftContainer>
-              {getSteps.includes("Open-ended") && (
-                <OpenEndedInsights insightsToShow={insightsToShow} steps={steps} />
-              )}
-              {getSteps.includes("Numeric") && (
-                <NumericalStepInsights insightsToShow={insightsToShow} steps={steps} />
-              )}
-              {getSteps.includes("Sentiment") && (
-                <SentimentInsights insightsToShow={insightsToShow} steps={steps} />
-              )}
-              {getSteps.includes("Agreement Scale") && (
-                <AgreementInsights insightsToShow={insightsToShow} steps={steps} />
-              )}
-              {getSteps.includes("Yes/No") && (
-                <YesNoInsights insightsToShow={insightsToShow} steps={steps} />
-              )}
-              {getSteps.includes("KPIs") && <KpiInsights insightsToShow={insightsToShow} />}
-              {getSteps.includes("Initiatives") && (
-                <InitiativeInsights insightsToShow={insightsToShow} />
-              )}
-              {getSteps.includes("Evening Reflection") ||
-                getSteps.includes("Weekly Reflection") ||
-                (getSteps.includes("Monthly Reflection") && (
-                  <JournalInsights insightsToShow={insightsToShow} />
-                ))}
-            </LeftContainer>
-            <ParticipationInsights
-              responseNumber={responseNumber || 0}
-              totalNumberOfParticipants={totalParticipants || 0}
-            />
+            {isDataEmpty() ? (
+              <EmptyContainer>
+                <Icon icon={"Empty-Pockets"} size={"100px"} iconColor={"greyInactive"} />
+                <Header>{t<string>("insights.emptyState")}</Header>
+                <EmptyText>{t<string>("insights.emptyDescription")}</EmptyText>
+              </EmptyContainer>
+            ) : (
+              <>
+                <LeftContainer>
+                  {getSteps.includes("Open-ended") && (
+                    <OpenEndedInsights insightsToShow={insightsToShow} steps={steps} />
+                  )}
+                  {getSteps.includes("Numeric") && (
+                    <NumericalStepInsights insightsToShow={insightsToShow} steps={steps} />
+                  )}
+                  {getSteps.includes("Sentiment") && (
+                    <SentimentInsights insightsToShow={insightsToShow} steps={steps} />
+                  )}
+                  {getSteps.includes("Agreement Scale") && (
+                    <AgreementInsights insightsToShow={insightsToShow} steps={steps} />
+                  )}
+                  {getSteps.includes("Yes/No") && (
+                    <YesNoInsights insightsToShow={insightsToShow} steps={steps} />
+                  )}
+                  {getSteps.includes("KPIs") && <KpiInsights insightsToShow={insightsToShow} />}
+                  {getSteps.includes("Initiatives") && (
+                    <InitiativeInsights insightsToShow={insightsToShow} />
+                  )}
+                  {getSteps.includes("Evening Reflection") ||
+                    getSteps.includes("Weekly Reflection") ||
+                    (getSteps.includes("Monthly Reflection") && (
+                      <JournalInsights insightsToShow={insightsToShow} />
+                    ))}
+                </LeftContainer>
+                <ParticipationInsights
+                  responseNumber={responseNumber || 0}
+                  totalNumberOfParticipants={totalParticipants || 0}
+                />
+              </>
+            )}
           </ContentContainer>
         </InsightsContainer>
       </Container>
@@ -380,8 +400,7 @@ export const CheckinInsights = observer(
 );
 
 const LeftContainer = styled.div`
-  width: 70%
-
+  width: 70%;
 `;
 
 const DesktopLoadingContainer = styled.div`
@@ -591,4 +610,36 @@ export const Option = styled.div`
 
 export const RightIcon = styled(Icon)`
   transform: rotate(180deg);
+`;
+
+export const EmptyContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 0 auto;
+  margin-top: 50px;
+  @media only screen and (max-width: 768px) {
+    height: auto;
+    margin: 30px 0;
+  }
+`;
+
+export const Header = styled.h1`
+  font-size: 50px;
+  font-weight: bold;
+  margin: 0;
+  margin: 25px 0;
+  @media only screen and (max-width: 768px) {
+    font-size: 30px;
+  }
+`;
+
+export const EmptyText = styled(Text)`
+  font-size: 24px;
+  margin: 0;
+  @media only screen and (max-width: 768px) {
+    font-size: 15px;
+  }
 `;
