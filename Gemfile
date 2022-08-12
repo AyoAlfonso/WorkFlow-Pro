@@ -65,8 +65,6 @@ gem "lograge"
 gem 'omniauth'
 gem 'omniauth-google-oauth2'
 gem 'exception_notification'
-gem 'bullet'
-gem 'listen', '~> 3.2'
 
 group :development, :test do
   gem 'factory_bot_rails'

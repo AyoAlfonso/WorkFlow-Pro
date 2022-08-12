@@ -1,0 +1,1898 @@
+trix-editor {
+  border: 1px solid #bbb;
+  border-radius: 3px;
+  margin: 0;
+  padding: 0.4em 0.6em;
+  min-height: 5em;
+  outline: none; }
+
+trix-toolbar * {
+  box-sizing: border-box; }
+
+trix-toolbar .trix-button-row {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  overflow-x: auto; }
+
+trix-toolbar .trix-button-group {
+  display: flex;
+  margin-bottom: 10px;
+  border: 1px solid #bbb;
+  border-top-color: #ccc;
+  border-bottom-color: #888;
+  border-radius: 3px; }
+  trix-toolbar .trix-button-group:not(:first-child) {
+    margin-left: 1.5vw; }
+    @media (max-device-width: 768px) {
+      trix-toolbar .trix-button-group:not(:first-child) {
+        margin-left: 0; } }
+
+trix-toolbar .trix-button-group-spacer {
+  flex-grow: 1; }
+  @media (max-device-width: 768px) {
+    trix-toolbar .trix-button-group-spacer {
+      display: none; } }
+
+trix-toolbar .trix-button {
+  position: relative;
+  float: left;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.75em;
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 0 0.5em;
+  margin: 0;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  border-radius: 0;
+  background: transparent; }
+  trix-toolbar .trix-button:not(:first-child) {
+    border-left: 1px solid #ccc; }
+  trix-toolbar .trix-button.trix-active {
+    background: #cbeefa;
+    color: black; }
+  trix-toolbar .trix-button:not(:disabled) {
+    cursor: pointer; }
+  trix-toolbar .trix-button:disabled {
+    color: rgba(0, 0, 0, 0.125); }
+  @media (max-device-width: 768px) {
+    trix-toolbar .trix-button {
+      letter-spacing: -0.01em;
+      padding: 0 0.3em; } }
+
+trix-toolbar .trix-button--icon {
+  font-size: inherit;
+  width: 2.6em;
+  height: 1.6em;
+  max-width: calc(0.8em + 4vw);
+  text-indent: -9999px; }
+  @media (max-device-width: 768px) {
+    trix-toolbar .trix-button--icon {
+      height: 2em;
+      max-width: calc(0.8em + 3.5vw); } }
+  trix-toolbar .trix-button--icon::before {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0.6;
+    content: "";
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain; }
+    @media (max-device-width: 768px) {
+      trix-toolbar .trix-button--icon::before {
+        right: 6%;
+        left: 6%; } }
+  trix-toolbar .trix-button--icon.trix-active::before {
+    opacity: 1; }
+  trix-toolbar .trix-button--icon:disabled::before {
+    opacity: 0.125; }
+
+trix-toolbar .trix-button--icon-attach::before {
+  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M10.5%2018V7.5c0-2.25%203-2.25%203%200V18c0%204.125-6%204.125-6%200V7.5c0-6.375%209-6.375%209%200V18%22%20stroke%3D%22%23000%22%20stroke-width%3D%222%22%20stroke-miterlimit%3D%2210%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E");
+  top: 8%;
+  bottom: 4%; }
+
+trix-toolbar .trix-button--icon-bold::before {
+  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M6.522%2019.242a.5.5%200%200%201-.5-.5V5.35a.5.5%200%200%201%20.5-.5h5.783c1.347%200%202.46.345%203.24.982.783.64%201.216%201.562%201.216%202.683%200%201.13-.587%202.129-1.476%202.71a.35.35%200%200%200%20.049.613c1.259.56%202.101%201.742%202.101%203.22%200%201.282-.483%202.334-1.363%203.063-.876.726-2.132%201.12-3.66%201.12h-5.89ZM9.27%207.347v3.362h1.97c.766%200%201.347-.17%201.733-.464.38-.291.587-.716.587-1.27%200-.53-.183-.928-.513-1.198-.334-.273-.838-.43-1.505-.43H9.27Zm0%205.606v3.791h2.389c.832%200%201.448-.177%201.853-.497.399-.315.614-.786.614-1.423%200-.62-.22-1.077-.63-1.385-.418-.313-1.053-.486-1.905-.486H9.27Z%22%20fill%3D%22%23000%22%2F%3E%3C%2Fsvg%3E"); }
+
+trix-toolbar .trix-button--icon-italic::before {
+  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M9%205h6.5v2h-2.23l-2.31%2010H13v2H6v-2h2.461l2.306-10H9V5Z%22%20fill%3D%22%23000%22%2F%3E%3C%2Fsvg%3E"); }
+
+trix-toolbar .trix-button--icon-link::before {
+  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M18.948%205.258a4.337%204.337%200%200%200-6.108%200L11.217%206.87a.993.993%200%200%200%200%201.41c.392.39%201.027.39%201.418%200l1.623-1.613a2.323%202.323%200%200%201%203.271%200%202.29%202.29%200%200%201%200%203.251l-2.393%202.38a3.021%203.021%200%200%201-4.255%200l-.05-.049a1.007%201.007%200%200%200-1.418%200%20.993.993%200%200%200%200%201.41l.05.049a5.036%205.036%200%200%200%207.091%200l2.394-2.38a4.275%204.275%200%200%200%200-6.072Zm-13.683%2013.6a4.337%204.337%200%200%200%206.108%200l1.262-1.255a.993.993%200%200%200%200-1.41%201.007%201.007%200%200%200-1.418%200L9.954%2017.45a2.323%202.323%200%200%201-3.27%200%202.29%202.29%200%200%201%200-3.251l2.344-2.331a2.579%202.579%200%200%201%203.631%200c.392.39%201.027.39%201.419%200a.993.993%200%200%200%200-1.41%204.593%204.593%200%200%200-6.468%200l-2.345%202.33a4.275%204.275%200%200%200%200%206.072Z%22%20fill%3D%22%23000%22%2F%3E%3C%2Fsvg%3E"); }
+
+trix-toolbar .trix-button--icon-strike::before {
+  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M6%2014.986c.088%202.647%202.246%204.258%205.635%204.258%203.496%200%205.713-1.728%205.713-4.463%200-.275-.02-.536-.062-.781h-3.461c.398.293.573.654.573%201.123%200%201.035-1.074%201.787-2.646%201.787-1.563%200-2.773-.762-2.91-1.924H6ZM6.432%2010h3.763c-.632-.314-.914-.715-.914-1.273%200-1.045.977-1.739%202.432-1.739%201.475%200%202.52.723%202.617%201.914h2.764c-.05-2.548-2.11-4.238-5.39-4.238-3.145%200-5.392%201.719-5.392%204.316%200%20.363.04.703.12%201.02ZM4%2011a1%201%200%201%200%200%202h15a1%201%200%201%200%200-2H4Z%22%20fill%3D%22%23000%22%2F%3E%3C%2Fsvg%3E"); }
+
+trix-toolbar .trix-button--icon-quote::before {
+  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M4.581%208.471c.44-.5%201.056-.834%201.758-.995C8.074%207.17%209.201%207.822%2010%208.752c1.354%201.578%201.33%203.555.394%205.277-.941%201.731-2.788%203.163-4.988%203.56a.622.622%200%200%201-.653-.317c-.113-.205-.121-.49.16-.764.294-.286.567-.566.791-.835.222-.266.413-.54.524-.815.113-.28.156-.597.026-.908-.128-.303-.39-.524-.72-.69a3.02%203.02%200%200%201-1.674-2.7c0-.905.283-1.59.72-2.088Zm9.419%200c.44-.5%201.055-.834%201.758-.995%201.734-.306%202.862.346%203.66%201.276%201.355%201.578%201.33%203.555.395%205.277-.941%201.731-2.789%203.163-4.988%203.56a.622.622%200%200%201-.653-.317c-.113-.205-.122-.49.16-.764.294-.286.567-.566.791-.835.222-.266.412-.54.523-.815.114-.28.157-.597.026-.908-.127-.303-.39-.524-.72-.69a3.02%203.02%200%200%201-1.672-2.701c0-.905.283-1.59.72-2.088Z%22%20fill%3D%22%23000%22%2F%3E%3C%2Fsvg%3E"); }
+
+trix-toolbar .trix-button--icon-heading-1::before {
+  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M21.5%207.5v-3h-12v3H14v13h3v-13h4.5ZM9%2013.5h3.5v-3h-10v3H6v7h3v-7Z%22%20fill%3D%22%23000%22%2F%3E%3C%2Fsvg%3E"); }
+
+trix-toolbar .trix-button--icon-code::before {
+  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M3.293%2011.293a1%201%200%200%200%200%201.414l4%204a1%201%200%201%200%201.414-1.414L5.414%2012l3.293-3.293a1%201%200%200%200-1.414-1.414l-4%204Zm13.414%205.414%204-4a1%201%200%200%200%200-1.414l-4-4a1%201%200%201%200-1.414%201.414L18.586%2012l-3.293%203.293a1%201%200%200%200%201.414%201.414Z%22%20fill%3D%22%23000%22%2F%3E%3C%2Fsvg%3E"); }
+
+trix-toolbar .trix-button--icon-bullet-list::before {
+  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M5%207.5a1.5%201.5%200%201%200%200-3%201.5%201.5%200%200%200%200%203ZM8%206a1%201%200%200%201%201-1h11a1%201%200%201%201%200%202H9a1%201%200%200%201-1-1Zm1%205a1%201%200%201%200%200%202h11a1%201%200%201%200%200-2H9Zm0%206a1%201%200%201%200%200%202h11a1%201%200%201%200%200-2H9Zm-2.5-5a1.5%201.5%200%201%201-3%200%201.5%201.5%200%200%201%203%200ZM5%2019.5a1.5%201.5%200%201%200%200-3%201.5%201.5%200%200%200%200%203Z%22%20fill%3D%22%23000%22%2F%3E%3C%2Fsvg%3E"); }
+
+trix-toolbar .trix-button--icon-number-list::before {
+  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M3%204h2v4H4V5H3V4Zm5%202a1%201%200%200%201%201-1h11a1%201%200%201%201%200%202H9a1%201%200%200%201-1-1Zm1%205a1%201%200%201%200%200%202h11a1%201%200%201%200%200-2H9Zm0%206a1%201%200%201%200%200%202h11a1%201%200%201%200%200-2H9Zm-3.5-7H6v1l-1.5%202H6v1H3v-1l1.667-2H3v-1h2.5ZM3%2017v-1h3v4H3v-1h2v-.5H4v-1h1V17H3Z%22%20fill%3D%22%23000%22%2F%3E%3C%2Fsvg%3E"); }
+
+trix-toolbar .trix-button--icon-undo::before {
+  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M3%2014a1%201%200%200%200%201%201h6a1%201%200%201%200%200-2H6.257c2.247-2.764%205.151-3.668%207.579-3.264%202.589.432%204.739%202.356%205.174%205.405a1%201%200%200%200%201.98-.283c-.564-3.95-3.415-6.526-6.825-7.095C11.084%207.25%207.63%208.377%205%2011.39V8a1%201%200%200%200-2%200v6Zm2-1Z%22%20fill%3D%22%23000%22%2F%3E%3C%2Fsvg%3E"); }
+
+trix-toolbar .trix-button--icon-redo::before {
+  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M21%2014a1%201%200%200%201-1%201h-6a1%201%200%201%201%200-2h3.743c-2.247-2.764-5.151-3.668-7.579-3.264-2.589.432-4.739%202.356-5.174%205.405a1%201%200%200%201-1.98-.283c.564-3.95%203.415-6.526%206.826-7.095%203.08-.513%206.534.614%209.164%203.626V8a1%201%200%201%201%202%200v6Zm-2-1Z%22%20fill%3D%22%23000%22%2F%3E%3C%2Fsvg%3E"); }
+
+trix-toolbar .trix-button--icon-decrease-nesting-level::before {
+  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M5%206a1%201%200%200%201%201-1h12a1%201%200%201%201%200%202H6a1%201%200%200%201-1-1Zm4%205a1%201%200%201%200%200%202h9a1%201%200%201%200%200-2H9Zm-3%206a1%201%200%201%200%200%202h12a1%201%200%201%200%200-2H6Zm-3.707-5.707a1%201%200%200%200%200%201.414l2%202a1%201%200%201%200%201.414-1.414L4.414%2012l1.293-1.293a1%201%200%200%200-1.414-1.414l-2%202Z%22%20fill%3D%22%23000%22%2F%3E%3C%2Fsvg%3E"); }
+
+trix-toolbar .trix-button--icon-increase-nesting-level::before {
+  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M5%206a1%201%200%200%201%201-1h12a1%201%200%201%201%200%202H6a1%201%200%200%201-1-1Zm4%205a1%201%200%201%200%200%202h9a1%201%200%201%200%200-2H9Zm-3%206a1%201%200%201%200%200%202h12a1%201%200%201%200%200-2H6Zm-2.293-2.293%202-2a1%201%200%200%200%200-1.414l-2-2a1%201%200%201%200-1.414%201.414L3.586%2012l-1.293%201.293a1%201%200%201%200%201.414%201.414Z%22%20fill%3D%22%23000%22%2F%3E%3C%2Fsvg%3E"); }
+
+trix-toolbar .trix-dialogs {
+  position: relative; }
+
+trix-toolbar .trix-dialog {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  font-size: 0.75em;
+  padding: 15px 10px;
+  background: #fff;
+  box-shadow: 0 0.3em 1em #ccc;
+  border-top: 2px solid #888;
+  border-radius: 5px;
+  z-index: 5; }
+
+trix-toolbar .trix-input--dialog {
+  font-size: inherit;
+  font-weight: normal;
+  padding: 0.5em 0.8em;
+  margin: 0 10px 0 0;
+  border-radius: 3px;
+  border: 1px solid #bbb;
+  background-color: #fff;
+  box-shadow: none;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none; }
+  trix-toolbar .trix-input--dialog.validate:invalid {
+    box-shadow: #F00 0px 0px 1.5px 1px; }
+
+trix-toolbar .trix-button--dialog {
+  font-size: inherit;
+  padding: 0.5em;
+  border-bottom: none; }
+
+trix-toolbar .trix-dialog--link {
+  max-width: 600px; }
+
+trix-toolbar .trix-dialog__link-fields {
+  display: flex;
+  align-items: baseline; }
+  trix-toolbar .trix-dialog__link-fields .trix-input {
+    flex: 1; }
+  trix-toolbar .trix-dialog__link-fields .trix-button-group {
+    flex: 0 0 content;
+    margin: 0; }
+
+trix-editor [data-trix-mutable]:not(.attachment__caption-editor) {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
+
+trix-editor [data-trix-mutable]::-moz-selection,
+trix-editor [data-trix-cursor-target]::-moz-selection, trix-editor [data-trix-mutable] ::-moz-selection {
+  background: none; }
+
+trix-editor [data-trix-mutable]::selection,
+trix-editor [data-trix-cursor-target]::selection, trix-editor [data-trix-mutable] ::selection {
+  background: none; }
+
+trix-editor .attachment__caption-editor:focus[data-trix-mutable]::-moz-selection {
+  background: highlight; }
+
+trix-editor .attachment__caption-editor:focus[data-trix-mutable]::selection {
+  background: highlight; }
+
+trix-editor [data-trix-mutable].attachment.attachment--file {
+  box-shadow: 0 0 0 2px highlight;
+  border-color: transparent; }
+
+trix-editor [data-trix-mutable].attachment img {
+  box-shadow: 0 0 0 2px highlight; }
+
+trix-editor .attachment {
+  position: relative; }
+  trix-editor .attachment:hover {
+    cursor: default; }
+
+trix-editor .attachment--preview .attachment__caption:hover {
+  cursor: text; }
+
+trix-editor .attachment__progress {
+  position: absolute;
+  z-index: 1;
+  height: 20px;
+  top: calc(50% - 10px);
+  left: 5%;
+  width: 90%;
+  opacity: 0.9;
+  transition: opacity 200ms ease-in; }
+  trix-editor .attachment__progress[value="100"] {
+    opacity: 0; }
+
+trix-editor .attachment__caption-editor {
+  display: inline-block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: inherit;
+  color: inherit;
+  text-align: center;
+  vertical-align: top;
+  border: none;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none; }
+
+trix-editor .attachment__toolbar {
+  position: absolute;
+  z-index: 1;
+  top: -0.9em;
+  left: 0;
+  width: 100%;
+  text-align: center; }
+
+trix-editor .trix-button-group {
+  display: inline-flex; }
+
+trix-editor .trix-button {
+  position: relative;
+  float: left;
+  color: #666;
+  white-space: nowrap;
+  font-size: 80%;
+  padding: 0 0.8em;
+  margin: 0;
+  outline: none;
+  border: none;
+  border-radius: 0;
+  background: transparent; }
+  trix-editor .trix-button:not(:first-child) {
+    border-left: 1px solid #ccc; }
+  trix-editor .trix-button.trix-active {
+    background: #cbeefa; }
+  trix-editor .trix-button:not(:disabled) {
+    cursor: pointer; }
+
+trix-editor .trix-button--remove {
+  text-indent: -9999px;
+  display: inline-block;
+  padding: 0;
+  outline: none;
+  width: 1.8em;
+  height: 1.8em;
+  line-height: 1.8em;
+  border-radius: 50%;
+  background-color: #fff;
+  border: 2px solid highlight;
+  box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.25); }
+  trix-editor .trix-button--remove::before {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0.7;
+    content: "";
+    background-image: url("data:image/svg+xml,%3Csvg%20height%3D%2224%22%20width%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M19%206.41%2017.59%205%2012%2010.59%206.41%205%205%206.41%2010.59%2012%205%2017.59%206.41%2019%2012%2013.41%2017.59%2019%2019%2017.59%2013.41%2012z%22%2F%3E%3Cpath%20d%3D%22M0%200h24v24H0z%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 90%; }
+  trix-editor .trix-button--remove:hover {
+    border-color: #333; }
+    trix-editor .trix-button--remove:hover::before {
+      opacity: 1; }
+
+trix-editor .attachment__metadata-container {
+  position: relative; }
+
+trix-editor .attachment__metadata {
+  position: absolute;
+  left: 50%;
+  top: 2em;
+  transform: translate(-50%, 0);
+  max-width: 90%;
+  padding: 0.1em 0.6em;
+  font-size: 0.8em;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 3px; }
+  trix-editor .attachment__metadata .attachment__name {
+    display: inline-block;
+    max-width: 100%;
+    vertical-align: bottom;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; }
+  trix-editor .attachment__metadata .attachment__size {
+    margin-left: 0.2em;
+    white-space: nowrap; }
+
+.trix-content {
+  line-height: 1.5; }
+  .trix-content * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0; }
+  .trix-content h1 {
+    font-size: 1.2em;
+    line-height: 1.2; }
+  .trix-content blockquote {
+    border: 0 solid #ccc;
+    border-left-width: 0.3em;
+    margin-left: 0.3em;
+    padding-left: 0.6em; }
+  .trix-content [dir=rtl] blockquote,
+  .trix-content blockquote[dir=rtl] {
+    border-width: 0;
+    border-right-width: 0.3em;
+    margin-right: 0.3em;
+    padding-right: 0.6em; }
+  .trix-content li {
+    margin-left: 1em; }
+  .trix-content [dir=rtl] li {
+    margin-right: 1em; }
+  .trix-content pre {
+    display: inline-block;
+    width: 100%;
+    vertical-align: top;
+    font-family: monospace;
+    font-size: 0.9em;
+    padding: 0.5em;
+    white-space: pre;
+    background-color: #eee;
+    overflow-x: auto; }
+  .trix-content img {
+    max-width: 100%;
+    height: auto; }
+  .trix-content .attachment {
+    display: inline-block;
+    position: relative;
+    max-width: 100%; }
+    .trix-content .attachment a {
+      color: inherit;
+      text-decoration: none; }
+      .trix-content .attachment a:hover, .trix-content .attachment a:visited:hover {
+        color: inherit; }
+  .trix-content .attachment__caption {
+    text-align: center; }
+    .trix-content .attachment__caption .attachment__name + .attachment__size::before {
+      content: ' \2022 '; }
+  .trix-content .attachment--preview {
+    width: 100%;
+    text-align: center; }
+    .trix-content .attachment--preview .attachment__caption {
+      color: #666;
+      font-size: 0.9em;
+      line-height: 1.2; }
+  .trix-content .attachment--file {
+    color: #333;
+    line-height: 1;
+    margin: 0 2px 2px 2px;
+    padding: 0.4em 1em;
+    border: 1px solid #bbb;
+    border-radius: 5px; }
+  .trix-content .attachment-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    position: relative; }
+    .trix-content .attachment-gallery .attachment {
+      flex: 1 0 33%;
+      padding: 0 0.5em;
+      max-width: 33%; }
+    .trix-content .attachment-gallery.attachment-gallery--2 .attachment, .trix-content .attachment-gallery.attachment-gallery--4 .attachment {
+      flex-basis: 50%;
+      max-width: 50%; }
+/*!
+ * Quill Editor v1.3.7
+ * https://quilljs.com/
+ * Copyright (c) 2014, Jason Chen
+ * Copyright (c) 2013, salesforce.com
+ */
+/* line 7, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-container {
+  box-sizing: border-box;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  height: 100%;
+  margin: 0px;
+  position: relative;
+}
+
+/* line 15, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-container.ql-disabled .ql-tooltip {
+  visibility: hidden;
+}
+
+/* line 18, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-container.ql-disabled .ql-editor ul[data-checked] > li::before {
+  pointer-events: none;
+}
+
+/* line 21, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-clipboard {
+  left: -100000px;
+  height: 1px;
+  overflow-y: hidden;
+  position: absolute;
+  top: 50%;
+}
+
+/* line 28, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-clipboard p {
+  margin: 0;
+  padding: 0;
+}
+
+/* line 32, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor {
+  box-sizing: border-box;
+  line-height: 1.42;
+  height: 100%;
+  outline: none;
+  overflow-y: auto;
+  padding: 12px 15px;
+  tab-size: 4;
+  -moz-tab-size: 4;
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* line 45, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor > * {
+  cursor: text;
+}
+
+/* line 48, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor p,
+.ql-editor ol,
+.ql-editor ul,
+.ql-editor pre,
+.ql-editor blockquote,
+.ql-editor h1,
+.ql-editor h2,
+.ql-editor h3,
+.ql-editor h4,
+.ql-editor h5,
+.ql-editor h6 {
+  margin: 0;
+  padding: 0;
+  counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+}
+
+/* line 63, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol,
+.ql-editor ul {
+  padding-left: 1.5em;
+}
+
+/* line 67, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol > li,
+.ql-editor ul > li {
+  list-style-type: none;
+}
+
+/* line 71, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ul > li::before {
+  content: '\2022';
+}
+
+/* line 74, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ul[data-checked=true],
+.ql-editor ul[data-checked=false] {
+  pointer-events: none;
+}
+
+/* line 78, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ul[data-checked=true] > li *,
+.ql-editor ul[data-checked=false] > li * {
+  pointer-events: all;
+}
+
+/* line 82, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ul[data-checked=true] > li::before,
+.ql-editor ul[data-checked=false] > li::before {
+  color: #777;
+  cursor: pointer;
+  pointer-events: all;
+}
+
+/* line 88, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ul[data-checked=true] > li::before {
+  content: '\2611';
+}
+
+/* line 91, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ul[data-checked=false] > li::before {
+  content: '\2610';
+}
+
+/* line 94, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor li::before {
+  display: inline-block;
+  white-space: nowrap;
+  width: 1.2em;
+}
+
+/* line 99, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor li:not(.ql-direction-rtl)::before {
+  margin-left: -1.5em;
+  margin-right: 0.3em;
+  text-align: right;
+}
+
+/* line 104, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor li.ql-direction-rtl::before {
+  margin-left: 0.3em;
+  margin-right: -1.5em;
+}
+
+/* line 108, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li:not(.ql-direction-rtl),
+.ql-editor ul li:not(.ql-direction-rtl) {
+  padding-left: 1.5em;
+}
+
+/* line 112, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-direction-rtl,
+.ql-editor ul li.ql-direction-rtl {
+  padding-right: 1.5em;
+}
+
+/* line 116, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li {
+  counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+  counter-increment: list-0;
+}
+
+/* line 120, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li:before {
+  content: counter(list-0, decimal) ". ";
+}
+
+/* line 123, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-1 {
+  counter-increment: list-1;
+}
+
+/* line 126, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-1:before {
+  content: counter(list-1, lower-alpha) ". ";
+}
+
+/* line 129, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-1 {
+  counter-reset: list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+}
+
+/* line 132, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-2 {
+  counter-increment: list-2;
+}
+
+/* line 135, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-2:before {
+  content: counter(list-2, lower-roman) ". ";
+}
+
+/* line 138, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-2 {
+  counter-reset: list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+}
+
+/* line 141, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-3 {
+  counter-increment: list-3;
+}
+
+/* line 144, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-3:before {
+  content: counter(list-3, decimal) ". ";
+}
+
+/* line 147, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-3 {
+  counter-reset: list-4 list-5 list-6 list-7 list-8 list-9;
+}
+
+/* line 150, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-4 {
+  counter-increment: list-4;
+}
+
+/* line 153, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-4:before {
+  content: counter(list-4, lower-alpha) ". ";
+}
+
+/* line 156, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-4 {
+  counter-reset: list-5 list-6 list-7 list-8 list-9;
+}
+
+/* line 159, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-5 {
+  counter-increment: list-5;
+}
+
+/* line 162, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-5:before {
+  content: counter(list-5, lower-roman) ". ";
+}
+
+/* line 165, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-5 {
+  counter-reset: list-6 list-7 list-8 list-9;
+}
+
+/* line 168, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-6 {
+  counter-increment: list-6;
+}
+
+/* line 171, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-6:before {
+  content: counter(list-6, decimal) ". ";
+}
+
+/* line 174, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-6 {
+  counter-reset: list-7 list-8 list-9;
+}
+
+/* line 177, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-7 {
+  counter-increment: list-7;
+}
+
+/* line 180, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-7:before {
+  content: counter(list-7, lower-alpha) ". ";
+}
+
+/* line 183, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-7 {
+  counter-reset: list-8 list-9;
+}
+
+/* line 186, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-8 {
+  counter-increment: list-8;
+}
+
+/* line 189, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-8:before {
+  content: counter(list-8, lower-roman) ". ";
+}
+
+/* line 192, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-8 {
+  counter-reset: list-9;
+}
+
+/* line 195, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-9 {
+  counter-increment: list-9;
+}
+
+/* line 198, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor ol li.ql-indent-9:before {
+  content: counter(list-9, decimal) ". ";
+}
+
+/* line 201, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-indent-1:not(.ql-direction-rtl) {
+  padding-left: 3em;
+}
+
+/* line 204, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor li.ql-indent-1:not(.ql-direction-rtl) {
+  padding-left: 4.5em;
+}
+
+/* line 207, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-indent-1.ql-direction-rtl.ql-align-right {
+  padding-right: 3em;
+}
+
+/* line 210, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor li.ql-indent-1.ql-direction-rtl.ql-align-right {
+  padding-right: 4.5em;
+}
+
+/* line 213, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-indent-2:not(.ql-direction-rtl) {
+  padding-left: 6em;
+}
+
+/* line 216, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor li.ql-indent-2:not(.ql-direction-rtl) {
+  padding-left: 7.5em;
+}
+
+/* line 219, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-indent-2.ql-direction-rtl.ql-align-right {
+  padding-right: 6em;
+}
+
+/* line 222, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor li.ql-indent-2.ql-direction-rtl.ql-align-right {
+  padding-right: 7.5em;
+}
+
+/* line 225, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-indent-3:not(.ql-direction-rtl) {
+  padding-left: 9em;
+}
+
+/* line 228, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor li.ql-indent-3:not(.ql-direction-rtl) {
+  padding-left: 10.5em;
+}
+
+/* line 231, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-indent-3.ql-direction-rtl.ql-align-right {
+  padding-right: 9em;
+}
+
+/* line 234, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor li.ql-indent-3.ql-direction-rtl.ql-align-right {
+  padding-right: 10.5em;
+}
+
+/* line 237, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-indent-4:not(.ql-direction-rtl) {
+  padding-left: 12em;
+}
+
+/* line 240, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor li.ql-indent-4:not(.ql-direction-rtl) {
+  padding-left: 13.5em;
+}
+
+/* line 243, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-indent-4.ql-direction-rtl.ql-align-right {
+  padding-right: 12em;
+}
+
+/* line 246, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor li.ql-indent-4.ql-direction-rtl.ql-align-right {
+  padding-right: 13.5em;
+}
+
+/* line 249, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-indent-5:not(.ql-direction-rtl) {
+  padding-left: 15em;
+}
+
+/* line 252, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor li.ql-indent-5:not(.ql-direction-rtl) {
+  padding-left: 16.5em;
+}
+
+/* line 255, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-indent-5.ql-direction-rtl.ql-align-right {
+  padding-right: 15em;
+}
+
+/* line 258, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor li.ql-indent-5.ql-direction-rtl.ql-align-right {
+  padding-right: 16.5em;
+}
+
+/* line 261, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-indent-6:not(.ql-direction-rtl) {
+  padding-left: 18em;
+}
+
+/* line 264, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor li.ql-indent-6:not(.ql-direction-rtl) {
+  padding-left: 19.5em;
+}
+
+/* line 267, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-indent-6.ql-direction-rtl.ql-align-right {
+  padding-right: 18em;
+}
+
+/* line 270, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor li.ql-indent-6.ql-direction-rtl.ql-align-right {
+  padding-right: 19.5em;
+}
+
+/* line 273, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-indent-7:not(.ql-direction-rtl) {
+  padding-left: 21em;
+}
+
+/* line 276, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor li.ql-indent-7:not(.ql-direction-rtl) {
+  padding-left: 22.5em;
+}
+
+/* line 279, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-indent-7.ql-direction-rtl.ql-align-right {
+  padding-right: 21em;
+}
+
+/* line 282, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor li.ql-indent-7.ql-direction-rtl.ql-align-right {
+  padding-right: 22.5em;
+}
+
+/* line 285, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-indent-8:not(.ql-direction-rtl) {
+  padding-left: 24em;
+}
+
+/* line 288, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor li.ql-indent-8:not(.ql-direction-rtl) {
+  padding-left: 25.5em;
+}
+
+/* line 291, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-indent-8.ql-direction-rtl.ql-align-right {
+  padding-right: 24em;
+}
+
+/* line 294, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor li.ql-indent-8.ql-direction-rtl.ql-align-right {
+  padding-right: 25.5em;
+}
+
+/* line 297, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-indent-9:not(.ql-direction-rtl) {
+  padding-left: 27em;
+}
+
+/* line 300, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor li.ql-indent-9:not(.ql-direction-rtl) {
+  padding-left: 28.5em;
+}
+
+/* line 303, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-indent-9.ql-direction-rtl.ql-align-right {
+  padding-right: 27em;
+}
+
+/* line 306, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor li.ql-indent-9.ql-direction-rtl.ql-align-right {
+  padding-right: 28.5em;
+}
+
+/* line 309, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-video {
+  display: block;
+  max-width: 100%;
+}
+
+/* line 313, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-video.ql-align-center {
+  margin: 0 auto;
+}
+
+/* line 316, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-video.ql-align-right {
+  margin: 0 0 0 auto;
+}
+
+/* line 319, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-bg-black {
+  background-color: #000;
+}
+
+/* line 322, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-bg-red {
+  background-color: #e60000;
+}
+
+/* line 325, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-bg-orange {
+  background-color: #f90;
+}
+
+/* line 328, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-bg-yellow {
+  background-color: #ff0;
+}
+
+/* line 331, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-bg-green {
+  background-color: #008a00;
+}
+
+/* line 334, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-bg-blue {
+  background-color: #06c;
+}
+
+/* line 337, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-bg-purple {
+  background-color: #93f;
+}
+
+/* line 340, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-color-white {
+  color: #fff;
+}
+
+/* line 343, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-color-red {
+  color: #e60000;
+}
+
+/* line 346, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-color-orange {
+  color: #f90;
+}
+
+/* line 349, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-color-yellow {
+  color: #ff0;
+}
+
+/* line 352, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-color-green {
+  color: #008a00;
+}
+
+/* line 355, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-color-blue {
+  color: #06c;
+}
+
+/* line 358, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-color-purple {
+  color: #93f;
+}
+
+/* line 361, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-font-serif {
+  font-family: Georgia, Times New Roman, serif;
+}
+
+/* line 364, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-font-monospace {
+  font-family: Monaco, Courier New, monospace;
+}
+
+/* line 367, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-size-small {
+  font-size: 0.75em;
+}
+
+/* line 370, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-size-large {
+  font-size: 1.5em;
+}
+
+/* line 373, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-size-huge {
+  font-size: 2.5em;
+}
+
+/* line 376, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-direction-rtl {
+  direction: rtl;
+  text-align: inherit;
+}
+
+/* line 380, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-align-center {
+  text-align: center;
+}
+
+/* line 383, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-align-justify {
+  text-align: justify;
+}
+
+/* line 386, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor .ql-align-right {
+  text-align: right;
+}
+
+/* line 389, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-editor.ql-blank::before {
+  color: rgba(0, 0, 0, 0.6);
+  content: attr(data-placeholder);
+  font-style: italic;
+  left: 15px;
+  pointer-events: none;
+  position: absolute;
+  right: 15px;
+}
+
+/* line 398, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow.ql-toolbar:after,
+.ql-snow .ql-toolbar:after {
+  clear: both;
+  content: '';
+  display: table;
+}
+
+/* line 404, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow.ql-toolbar button,
+.ql-snow .ql-toolbar button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+  float: left;
+  height: 24px;
+  padding: 3px 5px;
+  width: 28px;
+}
+
+/* line 415, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow.ql-toolbar button svg,
+.ql-snow .ql-toolbar button svg {
+  float: left;
+  height: 100%;
+}
+
+/* line 420, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow.ql-toolbar button:active:hover,
+.ql-snow .ql-toolbar button:active:hover {
+  outline: none;
+}
+
+/* line 424, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow.ql-toolbar input.ql-image[type=file],
+.ql-snow .ql-toolbar input.ql-image[type=file] {
+  display: none;
+}
+
+/* line 428, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow.ql-toolbar button:hover,
+.ql-snow .ql-toolbar button:hover,
+.ql-snow.ql-toolbar button:focus,
+.ql-snow .ql-toolbar button:focus,
+.ql-snow.ql-toolbar button.ql-active,
+.ql-snow .ql-toolbar button.ql-active,
+.ql-snow.ql-toolbar .ql-picker-label:hover,
+.ql-snow .ql-toolbar .ql-picker-label:hover,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active,
+.ql-snow.ql-toolbar .ql-picker-item:hover,
+.ql-snow .ql-toolbar .ql-picker-item:hover,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected {
+  color: #06c;
+}
+
+/* line 444, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow.ql-toolbar button:hover .ql-fill,
+.ql-snow .ql-toolbar button:hover .ql-fill,
+.ql-snow.ql-toolbar button:focus .ql-fill,
+.ql-snow .ql-toolbar button:focus .ql-fill,
+.ql-snow.ql-toolbar button.ql-active .ql-fill,
+.ql-snow .ql-toolbar button.ql-active .ql-fill,
+.ql-snow.ql-toolbar .ql-picker-label:hover .ql-fill,
+.ql-snow .ql-toolbar .ql-picker-label:hover .ql-fill,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-fill,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-fill,
+.ql-snow.ql-toolbar .ql-picker-item:hover .ql-fill,
+.ql-snow .ql-toolbar .ql-picker-item:hover .ql-fill,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-fill,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-fill,
+.ql-snow.ql-toolbar button:hover .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar button:hover .ql-stroke.ql-fill,
+.ql-snow.ql-toolbar button:focus .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar button:focus .ql-stroke.ql-fill,
+.ql-snow.ql-toolbar button.ql-active .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar button.ql-active .ql-stroke.ql-fill,
+.ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke.ql-fill,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke.ql-fill,
+.ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke.ql-fill,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke.ql-fill {
+  fill: #06c;
+}
+
+/* line 474, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow.ql-toolbar button:hover .ql-stroke,
+.ql-snow .ql-toolbar button:hover .ql-stroke,
+.ql-snow.ql-toolbar button:focus .ql-stroke,
+.ql-snow .ql-toolbar button:focus .ql-stroke,
+.ql-snow.ql-toolbar button.ql-active .ql-stroke,
+.ql-snow .ql-toolbar button.ql-active .ql-stroke,
+.ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke,
+.ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke,
+.ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke,
+.ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke,
+.ql-snow.ql-toolbar button:hover .ql-stroke-miter,
+.ql-snow .ql-toolbar button:hover .ql-stroke-miter,
+.ql-snow.ql-toolbar button:focus .ql-stroke-miter,
+.ql-snow .ql-toolbar button:focus .ql-stroke-miter,
+.ql-snow.ql-toolbar button.ql-active .ql-stroke-miter,
+.ql-snow .ql-toolbar button.ql-active .ql-stroke-miter,
+.ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke-miter,
+.ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke-miter,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter,
+.ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke-miter,
+.ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke-miter,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter {
+  stroke: #06c;
+}
+
+@media (pointer: coarse) {
+  /* line 505, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+  .ql-snow.ql-toolbar button:hover:not(.ql-active),
+.ql-snow .ql-toolbar button:hover:not(.ql-active) {
+    color: #444;
+  }
+  /* line 509, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+  .ql-snow.ql-toolbar button:hover:not(.ql-active) .ql-fill,
+.ql-snow .ql-toolbar button:hover:not(.ql-active) .ql-fill,
+.ql-snow.ql-toolbar button:hover:not(.ql-active) .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar button:hover:not(.ql-active) .ql-stroke.ql-fill {
+    fill: #444;
+  }
+  /* line 515, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+  .ql-snow.ql-toolbar button:hover:not(.ql-active) .ql-stroke,
+.ql-snow .ql-toolbar button:hover:not(.ql-active) .ql-stroke,
+.ql-snow.ql-toolbar button:hover:not(.ql-active) .ql-stroke-miter,
+.ql-snow .ql-toolbar button:hover:not(.ql-active) .ql-stroke-miter {
+    stroke: #444;
+  }
+}
+
+/* line 522, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow {
+  box-sizing: border-box;
+}
+
+/* line 525, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow * {
+  box-sizing: border-box;
+}
+
+/* line 528, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-hidden {
+  display: none;
+}
+
+/* line 531, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-out-bottom,
+.ql-snow .ql-out-top {
+  visibility: hidden;
+}
+
+/* line 535, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-tooltip {
+  position: absolute;
+  transform: translateY(10px);
+}
+
+/* line 539, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-tooltip a {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* line 543, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-tooltip.ql-flip {
+  transform: translateY(-10px);
+}
+
+/* line 546, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-formats {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* line 550, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-formats:after {
+  clear: both;
+  content: '';
+  display: table;
+}
+
+/* line 555, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-stroke {
+  fill: none;
+  stroke: #444;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+/* line 562, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-stroke-miter {
+  fill: none;
+  stroke: #444;
+  stroke-miterlimit: 10;
+  stroke-width: 2;
+}
+
+/* line 568, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-fill,
+.ql-snow .ql-stroke.ql-fill {
+  fill: #444;
+}
+
+/* line 572, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-empty {
+  fill: none;
+}
+
+/* line 575, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-even {
+  fill-rule: evenodd;
+}
+
+/* line 578, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-thin,
+.ql-snow .ql-stroke.ql-thin {
+  stroke-width: 1;
+}
+
+/* line 582, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-transparent {
+  opacity: 0.4;
+}
+
+/* line 585, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-direction svg:last-child {
+  display: none;
+}
+
+/* line 588, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-direction.ql-active svg:last-child {
+  display: inline;
+}
+
+/* line 591, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-direction.ql-active svg:first-child {
+  display: none;
+}
+
+/* line 594, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-editor h1 {
+  font-size: 2em;
+}
+
+/* line 597, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-editor h2 {
+  font-size: 1.5em;
+}
+
+/* line 600, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-editor h3 {
+  font-size: 1.17em;
+}
+
+/* line 603, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-editor h4 {
+  font-size: 1em;
+}
+
+/* line 606, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-editor h5 {
+  font-size: 0.83em;
+}
+
+/* line 609, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-editor h6 {
+  font-size: 0.67em;
+}
+
+/* line 612, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-editor a {
+  text-decoration: underline;
+}
+
+/* line 615, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-editor blockquote {
+  border-left: 4px solid #ccc;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  padding-left: 16px;
+}
+
+/* line 621, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-editor code,
+.ql-snow .ql-editor pre {
+  background-color: #f0f0f0;
+  border-radius: 3px;
+}
+
+/* line 626, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-editor pre {
+  white-space: pre-wrap;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  padding: 5px 10px;
+}
+
+/* line 632, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-editor code {
+  font-size: 85%;
+  padding: 2px 4px;
+}
+
+/* line 636, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-editor pre.ql-syntax {
+  background-color: #23241f;
+  color: #f8f8f2;
+  overflow: visible;
+}
+
+/* line 641, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-editor img {
+  max-width: 100%;
+}
+
+/* line 644, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker {
+  color: #444;
+  display: inline-block;
+  float: left;
+  font-size: 14px;
+  font-weight: 500;
+  height: 24px;
+  position: relative;
+  vertical-align: middle;
+}
+
+/* line 654, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker-label {
+  cursor: pointer;
+  display: inline-block;
+  height: 100%;
+  padding-left: 8px;
+  padding-right: 2px;
+  position: relative;
+  width: 100%;
+}
+
+/* line 663, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker-label::before {
+  display: inline-block;
+  line-height: 22px;
+}
+
+/* line 667, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker-options {
+  background-color: #fff;
+  display: none;
+  min-width: 100%;
+  padding: 4px 8px;
+  position: absolute;
+  white-space: nowrap;
+}
+
+/* line 675, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker-options .ql-picker-item {
+  cursor: pointer;
+  display: block;
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+
+/* line 681, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-expanded .ql-picker-label {
+  color: #ccc;
+  z-index: 2;
+}
+
+/* line 685, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-expanded .ql-picker-label .ql-fill {
+  fill: #ccc;
+}
+
+/* line 688, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-expanded .ql-picker-label .ql-stroke {
+  stroke: #ccc;
+}
+
+/* line 691, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-expanded .ql-picker-options {
+  display: block;
+  margin-top: -1px;
+  top: 100%;
+  z-index: 1;
+}
+
+/* line 697, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-color-picker,
+.ql-snow .ql-icon-picker {
+  width: 28px;
+}
+
+/* line 701, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-color-picker .ql-picker-label,
+.ql-snow .ql-icon-picker .ql-picker-label {
+  padding: 2px 4px;
+}
+
+/* line 705, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-color-picker .ql-picker-label svg,
+.ql-snow .ql-icon-picker .ql-picker-label svg {
+  right: 4px;
+}
+
+/* line 709, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-icon-picker .ql-picker-options {
+  padding: 4px 0px;
+}
+
+/* line 712, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-icon-picker .ql-picker-item {
+  height: 24px;
+  width: 24px;
+  padding: 2px 4px;
+}
+
+/* line 717, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-color-picker .ql-picker-options {
+  padding: 3px 5px;
+  width: 152px;
+}
+
+/* line 721, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-color-picker .ql-picker-item {
+  border: 1px solid transparent;
+  float: left;
+  height: 16px;
+  margin: 2px;
+  padding: 0px;
+  width: 16px;
+}
+
+/* line 729, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker:not(.ql-color-picker):not(.ql-icon-picker) svg {
+  position: absolute;
+  margin-top: -9px;
+  right: 0;
+  top: 50%;
+  width: 18px;
+}
+
+/* line 736, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-label]:not([data-label=''])::before,
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-label]:not([data-label=''])::before,
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-label]:not([data-label=''])::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-label]:not([data-label=''])::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-label]:not([data-label=''])::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-label]:not([data-label=''])::before {
+  content: attr(data-label);
+}
+
+/* line 744, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-header {
+  width: 98px;
+}
+
+/* line 747, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-header .ql-picker-label::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item::before {
+  content: 'Normal';
+}
+
+/* line 751, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="1"]::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="1"]::before {
+  content: 'Heading 1';
+}
+
+/* line 755, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="2"]::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="2"]::before {
+  content: 'Heading 2';
+}
+
+/* line 759, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="3"]::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before {
+  content: 'Heading 3';
+}
+
+/* line 763, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="4"]::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="4"]::before {
+  content: 'Heading 4';
+}
+
+/* line 767, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="5"]::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="5"]::before {
+  content: 'Heading 5';
+}
+
+/* line 771, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="6"]::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="6"]::before {
+  content: 'Heading 6';
+}
+
+/* line 775, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="1"]::before {
+  font-size: 2em;
+}
+
+/* line 778, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="2"]::before {
+  font-size: 1.5em;
+}
+
+/* line 781, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before {
+  font-size: 1.17em;
+}
+
+/* line 784, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="4"]::before {
+  font-size: 1em;
+}
+
+/* line 787, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="5"]::before {
+  font-size: 0.83em;
+}
+
+/* line 790, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="6"]::before {
+  font-size: 0.67em;
+}
+
+/* line 793, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-font {
+  width: 108px;
+}
+
+/* line 796, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-font .ql-picker-label::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item::before {
+  content: 'Sans Serif';
+}
+
+/* line 800, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=serif]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=serif]::before {
+  content: 'Serif';
+}
+
+/* line 804, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=monospace]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=monospace]::before {
+  content: 'Monospace';
+}
+
+/* line 808, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=serif]::before {
+  font-family: Georgia, Times New Roman, serif;
+}
+
+/* line 811, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=monospace]::before {
+  font-family: Monaco, Courier New, monospace;
+}
+
+/* line 814, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-size {
+  width: 98px;
+}
+
+/* line 817, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-size .ql-picker-label::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item::before {
+  content: 'Normal';
+}
+
+/* line 821, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value=small]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value=small]::before {
+  content: 'Small';
+}
+
+/* line 825, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value=large]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value=large]::before {
+  content: 'Large';
+}
+
+/* line 829, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value=huge]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value=huge]::before {
+  content: 'Huge';
+}
+
+/* line 833, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value=small]::before {
+  font-size: 10px;
+}
+
+/* line 836, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value=large]::before {
+  font-size: 18px;
+}
+
+/* line 839, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value=huge]::before {
+  font-size: 32px;
+}
+
+/* line 842, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-color-picker.ql-background .ql-picker-item {
+  background-color: #fff;
+}
+
+/* line 845, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-color-picker.ql-color .ql-picker-item {
+  background-color: #000;
+}
+
+/* line 848, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-toolbar.ql-snow {
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  padding: 8px;
+}
+
+/* line 854, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-toolbar.ql-snow .ql-formats {
+  margin-right: 15px;
+}
+
+/* line 857, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-toolbar.ql-snow .ql-picker-label {
+  border: 1px solid transparent;
+}
+
+/* line 860, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-toolbar.ql-snow .ql-picker-options {
+  border: 1px solid transparent;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 2px 8px;
+}
+
+/* line 864, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-label {
+  border-color: #ccc;
+}
+
+/* line 867, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-options {
+  border-color: #ccc;
+}
+
+/* line 870, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-toolbar.ql-snow .ql-color-picker .ql-picker-item.ql-selected,
+.ql-toolbar.ql-snow .ql-color-picker .ql-picker-item:hover {
+  border-color: #000;
+}
+
+/* line 874, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-toolbar.ql-snow + .ql-container.ql-snow {
+  border-top: 0px;
+}
+
+/* line 877, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-tooltip {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0px 0px 5px #ddd;
+  color: #444;
+  padding: 5px 12px;
+  white-space: nowrap;
+}
+
+/* line 885, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-tooltip::before {
+  content: "Visit URL:";
+  line-height: 26px;
+  margin-right: 8px;
+}
+
+/* line 890, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-tooltip input[type=text] {
+  display: none;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  height: 26px;
+  margin: 0px;
+  padding: 3px 5px;
+  width: 170px;
+}
+
+/* line 899, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-tooltip a.ql-preview {
+  display: inline-block;
+  max-width: 200px;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  vertical-align: top;
+}
+
+/* line 906, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-tooltip a.ql-action::after {
+  border-right: 1px solid #ccc;
+  content: 'Edit';
+  margin-left: 16px;
+  padding-right: 8px;
+}
+
+/* line 912, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-tooltip a.ql-remove::before {
+  content: 'Remove';
+  margin-left: 8px;
+}
+
+/* line 916, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-tooltip a {
+  line-height: 26px;
+}
+
+/* line 919, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-tooltip.ql-editing a.ql-preview,
+.ql-snow .ql-tooltip.ql-editing a.ql-remove {
+  display: none;
+}
+
+/* line 923, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-tooltip.ql-editing input[type=text] {
+  display: inline-block;
+}
+
+/* line 926, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-tooltip.ql-editing a.ql-action::after {
+  border-right: 0px;
+  content: 'Save';
+  padding-right: 0px;
+}
+
+/* line 931, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-tooltip[data-mode=link]::before {
+  content: "Enter link:";
+}
+
+/* line 934, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-tooltip[data-mode=formula]::before {
+  content: "Enter formula:";
+}
+
+/* line 937, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow .ql-tooltip[data-mode=video]::before {
+  content: "Enter video:";
+}
+
+/* line 940, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-snow a {
+  color: #06c;
+}
+
+/* line 943, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/quill_editor/quill.snow.css */
+.ql-container.ql-snow {
+  border: 1px solid #ccc;
+}
+
+/* line 2, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/_quill_editor_input.scss */
+.ql-editor * {
+  margin: initial;
+  padding: initial;
+  text-align: initial;
+}
+
+/* line 8, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/_quill_editor_input.scss */
+body.active_admin [data-aa-quill-editor] {
+  display: inline-block;
+  width: calc(80% - 2px);
+}
+
+/* line 12, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/_quill_editor_input.scss */
+body.active_admin [data-aa-quill-editor] button {
+  text-shadow: none;
+  box-shadow: none;
+}
+
+/* line 16, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/_quill_editor_input.scss */
+body.active_admin [data-aa-quill-editor] button:hover {
+  background-image: none;
+  background-color: transparent;
+}
+
+/* line 22, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/_quill_editor_input.scss */
+body.active_admin [data-aa-quill-editor] .ql-container {
+  border: 1px solid #c9d0d6;
+  border-radius: 0 0 3px 3px;
+}
+
+/* line 27, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/_quill_editor_input.scss */
+body.active_admin [data-aa-quill-editor] .ql-editor {
+  background-color: #fff;
+  max-height: 300px;
+  min-height: 150px;
+  padding: 10px;
+  word-break: break-all;
+}
+
+/* line 34, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/_quill_editor_input.scss */
+body.active_admin [data-aa-quill-editor] .ql-editor ol {
+  list-style-type: decimal;
+}
+
+/* line 38, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/_quill_editor_input.scss */
+body.active_admin [data-aa-quill-editor] .ql-editor p {
+  margin-bottom: 1em;
+}
+
+/* line 42, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/_quill_editor_input.scss */
+body.active_admin [data-aa-quill-editor] .ql-editor ul {
+  list-style-type: disc;
+}
+
+/* line 46, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/_quill_editor_input.scss */
+body.active_admin [data-aa-quill-editor] .ql-editor ul, body.active_admin [data-aa-quill-editor] .ql-editor ol {
+  margin: 0 1.5em 1.5em 0;
+  padding-left: 1.5em;
+}
+
+/* line 52, ../../.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/activeadmin_quill_editor-0.3.4/app/assets/stylesheets/activeadmin/_quill_editor_input.scss */
+body.active_admin [data-aa-quill-editor] .ql-toolbar {
+  border: 1px solid #c9d0d6;
+  border-radius: 3px 3px 0 0;
+}
+
+/* line 17, app/assets/stylesheets/actiontext.scss */
+.trix-content .attachment-gallery > action-text-attachment,
+.trix-content .attachment-gallery > .attachment {
+  flex: 1 0 33%;
+  padding: 0 0.5em;
+  max-width: 33%;
+}
+
+/* line 26, app/assets/stylesheets/actiontext.scss */
+.trix-content .attachment-gallery.attachment-gallery--2 > action-text-attachment,
+.trix-content .attachment-gallery.attachment-gallery--2 > .attachment, .trix-content .attachment-gallery.attachment-gallery--4 > action-text-attachment,
+.trix-content .attachment-gallery.attachment-gallery--4 > .attachment {
+  flex-basis: 50%;
+  max-width: 50%;
+}
+
+/* line 35, app/assets/stylesheets/actiontext.scss */
+.trix-content action-text-attachment .attachment {
+  padding: 0 !important;
+  max-width: 100% !important;
+}
+
+/* line 42, app/assets/stylesheets/actiontext.scss */
+#trix-editor-top-level {
+  padding-bottom: 8px;
+}
