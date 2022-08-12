@@ -420,6 +420,15 @@ const Container = styled.div`
     display: none;
   }
 `;
+
+const SideBarWrapper = styled.div`
+  width: 18%;
+  max-width: 240px;
+  @media only screen and (min-width: 1600px) {
+    left: 96px;
+  }
+`;
+
 const SideBar = styled.div`
   width: 18%;
   max-width: 240px;

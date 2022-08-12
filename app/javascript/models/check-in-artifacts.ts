@@ -13,6 +13,7 @@ export const CheckInArtifactsModel = types.model("CheckInArtifactsModel").props(
   deletedAt: types.maybeNull(types.string),
   questions: types.frozen(),
   boolean: types.maybeNull(types.boolean),
+  streak: types.number,
   checkInArtifactLogs: types.maybeNull(types.array(CheckInArtifactsLogsModel))
 })
 

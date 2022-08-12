@@ -28,7 +28,7 @@ export const CheckInCard = observer(
 
     const history = useHistory();
 
-    const { checkInTemplate, id: artifactId } = checkin;
+    const { checkInTemplate, id: artifactId, streak } = checkin;
 
     const {
       name,
@@ -133,7 +133,7 @@ export const CheckInCard = observer(
 
     const canViewCheckInCard = () => {
       if (activeTab !== "archived") {
-        return true
+        return true;
       } else {
         if ((status === "archived" && isViewer) || createdById === sessionStore.profile?.id) {
           return true;
@@ -151,8 +151,8 @@ export const CheckInCard = observer(
     const isEntryNeeded = () => {
       const dateA = moment(new Date(checkin.startTime));
       const dateB = moment(new Date());
-      const diff = dateA.diff(dateB, "hours");
-      return diff < 24 && diff > 0;
+      const diff = dateA.diff(dateB, "minutes");
+      return diff < 1440 && diff > 0;
     };
 
     const isPastDueDate = () => {
@@ -189,6 +189,8 @@ export const CheckInCard = observer(
 
       checkInTemplateStore.archiveCheckIn(artifactId, id);
     };
+
+    const isColored = streak > 1;
 
     return (
       <>
@@ -231,7 +233,7 @@ export const CheckInCard = observer(
             </InfoContainer>
             <ActionsContainer>
               {isParticipant && !runOnce && !archived && (
-                <>
+                <ButtonsStreakContainer>
                   <ButtonsContainer>
                     <Button
                       variant={"primary"}
@@ -247,7 +249,7 @@ export const CheckInCard = observer(
                     </Button>
                     <Button
                       variant={"greyOutline"}
-                      mr="1em"
+                      // mr="1em"
                       width="80px"
                       fontSize="12px"
                       onClick={() => {
@@ -258,11 +260,16 @@ export const CheckInCard = observer(
                       Skip
                     </Button>
                   </ButtonsContainer>
-                  {/* <StreakContainer>
-              <Icon icon={"Streak"} size="24px" mr="0.5em" iconColor={"greyActive"} />
-              <StreakCount>0</StreakCount>
-            </StreakContainer> */}
-                </>
+                  <StreakContainer>
+                    <Icon
+                      icon={"Streak"}
+                      size="24px"
+                      mr="0.5em"
+                      iconColor={isColored ? "cavier" : "greyActive"}
+                    />
+                    <StreakCount streak={streak}>{streak}</StreakCount>
+                  </StreakContainer>
+                </ButtonsStreakContainer>
               )}
               <ParticipantsContainer>
                 <ParticipantsAvatars entityList={participantsArray} />
@@ -377,13 +384,28 @@ const StreakContainer = styled.div`
   display: flex;
 `;
 
-const StreakCount = styled.span`
-  display: inline-block;
+const ButtonsStreakContainer = styled.div`
+  display: flex;
+  gap: 0 1em;
+`;
+
+type StreakCountProps = {
+  streak: number;
+};
+
+const StreakCount = styled.div<StreakCountProps>`
   border-radius: 50%;
-  padding: 0.5em 0.8em;
-  border: 1px solid ${props => props.theme.colors.greyActive};
-  font-size: 0.75em;
-  color: ${props => props.theme.colors.greyActive};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.4em 0.7em;
+  border: 1px solid
+    ${props => (props.streak > 1 ? props.theme.colors.cavier : props.theme.colors.greyActive)};
+  font-size: 14px;
+  color: ${props => (props.streak > 1 ? props.theme.colors.white : props.theme.colors.greyActive)};
+  background-color: ${props =>
+    props.streak > 1 ? props.theme.colors.cavier : props.theme.colors.white};
+  font-weight: ${props => (props.streak > 1 ? "bold" : "normal")};
 `;
 
 const OptionsContainer = styled.div`
