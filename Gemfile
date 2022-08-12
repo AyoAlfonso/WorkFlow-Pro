@@ -65,15 +65,17 @@ gem "lograge"
 gem 'omniauth'
 gem 'omniauth-google-oauth2'
 gem 'exception_notification'
+gem 'bullet'
+gem 'listen', '~> 3.2'
 
-group :development, :test, :production  do
+group :development, :test do
   gem 'factory_bot_rails'
   gem 'pry-byebug'
   gem 'rspec-rails', '~> 4.0.0'
   gem 'bullet'
 end
 
-group :development, :production do
+group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'web-console', '>= 3.3.0'
   gem 'listen', '~> 3.2'
