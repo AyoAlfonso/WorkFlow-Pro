@@ -72,7 +72,7 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'pry-byebug'
   gem 'rspec-rails', '~> 4.0.0'
-  gem 'bullet'
+  gem 'bullet', require: true
 end
 
 group :development do
