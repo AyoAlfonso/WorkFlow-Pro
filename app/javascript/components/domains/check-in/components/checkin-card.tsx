@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { Button } from "~/components/shared/button";
@@ -14,19 +14,33 @@ import { baseTheme } from "~/themes";
 
 interface CheckInCardProps {
   checkin: ICheckInArtifact;
+  activeTab: string;
 }
 
 export const CheckInCard = observer(
-  ({ checkin }: CheckInCardProps): JSX.Element => {
+  ({ checkin, activeTab }: CheckInCardProps): JSX.Element => {
     const { checkInTemplateStore, sessionStore, teamStore, userStore, companyStore } = useMst();
 
     const [participantsArray, setParticipantsArray] = useState([]);
+    const [showOptions, setShowOptions] = useState<boolean>(false);
+
+    const optionsRef = useRef(null);
 
     const history = useHistory();
 
-    const { checkInTemplate } = checkin;
+    const { checkInTemplate, id: artifactId, streak } = checkin;
 
-    const { name, ownerType, id, viewers, participants, runOnce } = checkInTemplate;
+    const {
+      name,
+      ownerType,
+      id,
+      viewers,
+      participants,
+      runOnce,
+      createdById,
+      archivedDate,
+      status,
+    } = checkInTemplate;
 
     const getParticipantsAvatar = entityArray => {
       const entityArrayToReturn = [];
@@ -68,6 +82,29 @@ export const CheckInCard = observer(
     };
 
     useEffect(() => {
+      const externalEventHandler = e => {
+        if (!showOptions) return;
+
+        const node = optionsRef.current;
+
+        if (node && node.contains(e.target)) {
+          return;
+        }
+        setShowOptions(false);
+      };
+
+      if (showOptions) {
+        document.addEventListener("click", externalEventHandler);
+      } else {
+        document.removeEventListener("click", externalEventHandler);
+      }
+
+      return () => {
+        document.removeEventListener("click", externalEventHandler);
+      };
+    }, [showOptions]);
+
+    useEffect(() => {
       getParticipantsAvatar(participants);
     }, [participants]);
 
@@ -94,13 +131,28 @@ export const CheckInCard = observer(
     const isViewer = getStatus(viewers);
     const isParticipant = getStatus(participants);
 
+    const canViewCheckInCard = () => {
+      if (activeTab !== "archived") {
+        return true;
+      } else {
+        if ((status === "archived" && isViewer) || createdById === sessionStore.profile?.id) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    };
+
+    const archived = activeTab === "archived";
+
     const dueDate = new Date(checkin.startTime).toDateString();
+    const archivedAt = new Date(archivedDate).toDateString();
 
     const isEntryNeeded = () => {
       const dateA = moment(new Date(checkin.startTime));
       const dateB = moment(new Date());
-      const diff = dateA.diff(dateB, "hours");
-      return diff < 24 && diff > 0;
+      const diff = dateA.diff(dateB, "minutes");
+      return diff < 1440 && diff > 0;
     };
 
     const isPastDueDate = () => {
@@ -116,7 +168,7 @@ export const CheckInCard = observer(
       const diff = dateA.diff(dateB, "days");
       return diff < 1;
     };
-    
+
     const getStatusBadge = () => {
       if (toJS(checkin).checkInArtifactLogs[0]) {
         return <EntryBadge color={baseTheme.colors.cautionYellow}>{`• In Progress`}</EntryBadge>;
@@ -127,72 +179,105 @@ export const CheckInCard = observer(
       }
     };
 
-    return (
-      <Container>
-        <TitleContainer>
-          <Title disabled={!isViewer} onClick={() => history.push(`/check-in/insights/${id}`)}>
-            {name.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}
-          </Title>
-          <IconContainer onClick={() => history.push(`/check-in/edit/${checkin.id}`)}>
-            <Icon icon={"Settings"} size="18px" iconColor={"greyActive"} />
-          </IconContainer>
-        </TitleContainer>
-        <InfoContainer>
-          <Tag>{ownerType.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}</Tag>
-          {!runOnce ? (
-            <>
-              <DueDate>{`Due: ${dueDate}`}</DueDate>
+    const isOwner = createdById === sessionStore.profile.id;
+    const isAdmin = sessionStore.profile.role === "Admin";
 
-              {isViewer && !isParticipant ? (
-                <EntryBadge>{isEntryNeeded() == true && `• Response Expected`}</EntryBadge>
+    const canArchive = isAdmin || isOwner;
+
+    const handleArchive = () => {
+      if (!canArchive) return;
+
+      checkInTemplateStore.archiveCheckIn(artifactId, id);
+    };
+
+    const isColored = streak > 1;
+
+    return (
+      <>
+        {canViewCheckInCard() && (
+          <Container>
+            <TitleContainer>
+              <Title disabled={!isViewer} onClick={() => history.push(`/check-in/insights/${id}`)}>
+                {name.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}
+              </Title>
+              <OptionsSection>
+                <IconContainer onClick={() => setShowOptions(!showOptions)}>
+                  <StyledOptionIcon icon={"Options"} size={"14px"} iconColor={"grey80"} />
+                </IconContainer>
+                {showOptions && (
+                  <OptionsContainer>
+                    <Option onClick={() => history.push(`/check-in/edit/${checkin.id}`)}>
+                      Edit
+                    </Option>
+                    {canArchive && <Option onClick={handleArchive}>Archive</Option>}
+                  </OptionsContainer>
+                )}
+              </OptionsSection>
+            </TitleContainer>
+            <InfoContainer>
+              <Tag>{ownerType.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}</Tag>
+              {!runOnce && !archivedDate ? (
+                <>
+                  <DueDate>{`Due: ${dueDate}`}</DueDate>
+
+                  {isViewer && !isParticipant ? (
+                    <EntryBadge>{isEntryNeeded() == true && `• Response Expected`}</EntryBadge>
+                  ) : (
+                    getStatusBadge()
+                  )}
+                </>
               ) : (
-                getStatusBadge()
+                !archivedDate && <EntryBadge>{`• Completed`}</EntryBadge>
               )}
-            </>
-          ) : (
-            <EntryBadge>{`• Completed`}</EntryBadge>
-          )}
-        </InfoContainer>
-        <ActionsContainer>
-          {isParticipant && !runOnce && (
-            <>
-              <ButtonsContainer>
-                <Button
-                  variant={"primary"}
-                  mr="1em"
-                  width="80px"
-                  fontSize="12px"
-                  onClick={() => history.push(`/check-in/run/${checkin.id}`)}
-                  small
-                  style={{ whiteSpace: "nowrap" }}
-                  disabled={!canCheckIn()}
-                >
-                  Check-in
-                </Button>
-                <Button
-                  variant={"greyOutline"}
-                  mr="1em"
-                  width="80px"
-                  fontSize="12px"
-                  onClick={() => {
-                    checkInTemplateStore.skipCheckIn(checkin.id);
-                  }}
-                  small
-                >
-                  Skip
-                </Button>
-              </ButtonsContainer>
-              {/* <StreakContainer>
-              <Icon icon={"Streak"} size="24px" mr="0.5em" iconColor={"greyActive"} />
-              <StreakCount>0</StreakCount>
-            </StreakContainer> */}
-            </>
-          )}
-          <ParticipantsContainer>
-            <ParticipantsAvatars entityList={participantsArray} />
-          </ParticipantsContainer>
-        </ActionsContainer>
-      </Container>
+              {archivedDate && <DueDate>{`Archived: ${archivedAt}`}</DueDate>}
+            </InfoContainer>
+            <ActionsContainer>
+              {isParticipant && !runOnce && !archived && (
+                <ButtonsStreakContainer>
+                  <ButtonsContainer>
+                    <Button
+                      variant={"primary"}
+                      mr="1em"
+                      width="80px"
+                      fontSize="12px"
+                      onClick={() => history.push(`/check-in/run/${checkin.id}`)}
+                      small
+                      style={{ whiteSpace: "nowrap" }}
+                      disabled={!canCheckIn()}
+                    >
+                      Check-in
+                    </Button>
+                    <Button
+                      variant={"greyOutline"}
+                      // mr="1em"
+                      width="80px"
+                      fontSize="12px"
+                      onClick={() => {
+                        checkInTemplateStore.skipCheckIn(checkin.id);
+                      }}
+                      small
+                    >
+                      Skip
+                    </Button>
+                  </ButtonsContainer>
+                  <StreakContainer>
+                    <Icon
+                      icon={"Streak"}
+                      size="24px"
+                      mr="0.5em"
+                      iconColor={isColored ? "cavier" : "greyActive"}
+                    />
+                    <StreakCount streak={streak}>{streak}</StreakCount>
+                  </StreakContainer>
+                </ButtonsStreakContainer>
+              )}
+              <ParticipantsContainer>
+                <ParticipantsAvatars entityList={participantsArray} />
+              </ParticipantsContainer>
+            </ActionsContainer>
+          </Container>
+        )}
+      </>
     );
   },
 );
@@ -215,6 +300,10 @@ const Container = styled.div`
     background-color: ${props => props.theme.colors.backgroundBlue};
     ${IconContainer} {
       display: block;
+
+      @media only screen and (max-width: 768px) {
+        display: none;
+      }
     }
   }
 `;
@@ -295,11 +384,57 @@ const StreakContainer = styled.div`
   display: flex;
 `;
 
-const StreakCount = styled.span`
-  display: inline-block;
+const ButtonsStreakContainer = styled.div`
+  display: flex;
+  gap: 0 1em;
+`;
+
+type StreakCountProps = {
+  streak: number;
+};
+
+const StreakCount = styled.div<StreakCountProps>`
   border-radius: 50%;
-  padding: 0.5em 0.8em;
-  border: 1px solid ${props => props.theme.colors.greyActive};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.4em 0.7em;
+  border: 1px solid
+    ${props => (props.streak > 1 ? props.theme.colors.cavier : props.theme.colors.greyActive)};
+  font-size: 14px;
+  color: ${props => (props.streak > 1 ? props.theme.colors.white : props.theme.colors.greyActive)};
+  background-color: ${props =>
+    props.streak > 1 ? props.theme.colors.cavier : props.theme.colors.white};
+  font-weight: ${props => (props.streak > 1 ? "bold" : "normal")};
+`;
+
+const OptionsContainer = styled.div`
+  position: absolute;
+  padding: 0.5em 0;
+  z-index: 10;
+  border-radius: 0.5em;
+  background-color: ${props => props.theme.colors.white};
+  box-shadow: 0px 3px 6px #00000029;
+  width: max-content;
+  right: 0;
+`;
+
+const OptionsSection = styled.div`
+  position: relative;
+`;
+
+const StyledOptionIcon = styled(Icon)`
+  transform: rotate(90deg);
+  pointer-events: none;
+`;
+
+const Option = styled.div`
+  padding: 0.5em 1em;
   font-size: 0.75em;
-  color: ${props => props.theme.colors.greyActive};
+  cursor: pointer;
+  color: ${props => props.theme.colors.black};
+
+  &:hover {
+    background: ${props => props.theme.colors.backgroundGrey};
+  }
 `;

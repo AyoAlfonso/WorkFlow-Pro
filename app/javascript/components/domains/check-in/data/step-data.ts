@@ -128,6 +128,15 @@ export const widgetArray: Array<StepCardProps> = [
     description: "Summary of weekly activities and progress",
   },
   {
+    iconName: "AM-Check-in",
+    iconColor: "cautionYellow",
+    stepType: "component",
+    name: "Morning Reflection",
+    variant: "Morning Reflection",
+    instructions: "Chat with PynBot and use the prompts to complete your Morning Reflection.",
+    description: "Series of questions for a personal reflection at the start of each day",
+  },
+  {
     iconName: "PM-Check-in",
     iconColor: "mipBlue",
     stepType: "component",
@@ -165,36 +174,36 @@ export const getIconName = (stepType: string) => {
     case "Numeric":
       return "Numerical";
     case "Sentiment":
-      return "Sentiment"
+      return "Sentiment";
     case "Agreement Scale":
-      return "Agreement-Scale"
+      return "Agreement-Scale";
     case "Yes/No":
-      return "YesNo"
+      return "YesNo";
     case "Intiatives":
       return "Initiative";
     case "Objectives":
       return "New-Goals";
     case "ToDos":
-      return "Tasks"
+      return "Tasks";
     case "Issues":
-      return "Alert"
+      return "Alert";
     case "Topics":
       return "Alert";
     case "KPIs":
       return "Scorecard_New";
     case "Habits":
-      return "Habits"
+      return "Habits";
     case "Conversation Starter":
-      return "Conversation-Starter"
+      return "Conversation-Starter";
     case "Weekly Review":
-      return "Stats"
+      return "Stats";
     case "Evening Reflection":
-      return "PM-Check-in"
+      return "PM-Check-in";
     case "Weekly Reflection":
-      return "Weekly-Milestones"
+      return "Weekly-Milestones";
     case "Monthly Reflection":
-      return "EoM"
+      return "EoM";
     default:
-      return ""
+      return "";
   }
-}
+};

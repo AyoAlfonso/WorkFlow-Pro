@@ -12,7 +12,10 @@ import {
   DateInfoSection,
   DateText,
   DropdownContainer,
+  EmptyContainer,
+  EmptyText,
   FlexContainer,
+  Header,
   IconContainer,
   InfoText,
   RightIcon,
@@ -24,6 +27,7 @@ import {
   StepsSection,
   StepText,
 } from "./checkin-insights";
+import { useTranslation } from "react-i18next";
 import DateSelector from "./components/date-selector";
 import InitiativeInsights from "./components/initiatives-insights";
 import JournalInsights from "./components/journal-insights";
@@ -56,6 +60,7 @@ const MobileCheckinInsights = (): JSX.Element => {
   } = useMst();
 
   const dropdownRef = useRef<HTMLDivElement>(null);
+    const { t } = useTranslation();
 
   useEffect(() => {
     getCheckInTemplateInsights(id).then(temp => {
@@ -252,6 +257,18 @@ const MobileCheckinInsights = (): JSX.Element => {
   const totalParticipants = getUsers(data.participants);
   const { createdAt, updatedAt } = data;
 
+  const isDataEmpty = () => {
+    const responses = [];
+
+    insightsToShow.map(artifact => {
+      if (artifact.checkInArtifactLogs[0]) {
+        responses.push(artifact.checkInArtifactLogs[0]);
+      }
+    });
+
+    return responses.length === 0;
+  };
+
   if (loading) {
     return (
       <MobileLoadingContainer>
@@ -358,32 +375,42 @@ const MobileCheckinInsights = (): JSX.Element => {
           />
         </IconContainer>
       </FlexContainer>
-      <ParticipationInsights
-        responseNumber={responseNumber}
-        totalNumberOfParticipants={totalParticipants}
-      />
-      {getSteps.includes("Open-ended") && (
-        <OpenEndedInsights insightsToShow={insightsToShow} steps={steps} />
+      {isDataEmpty() ? (
+        <EmptyContainer>
+          <Icon icon={"Empty-Pockets"} size={"100px"} iconColor={"greyInactive"} />
+          <Header>{t<string>("insights.emptyState")}</Header>
+          <EmptyText>{t<string>("insights.emptyDescription")}</EmptyText>
+        </EmptyContainer>
+      ) : (
+        <>
+          <ParticipationInsights
+            responseNumber={responseNumber}
+            totalNumberOfParticipants={totalParticipants}
+          />
+          {getSteps.includes("Open-ended") && (
+            <OpenEndedInsights insightsToShow={insightsToShow} steps={steps} />
+          )}
+          {getSteps.includes("Numeric") && (
+            <NumericalStepInsights insightsToShow={insightsToShow} steps={steps} />
+          )}
+          {getSteps.includes("Sentiment") && (
+            <SentimentInsights insightsToShow={insightsToShow} steps={steps} />
+          )}
+          {getSteps.includes("Agreement Scale") && (
+            <AgreementInsights insightsToShow={insightsToShow} steps={steps} />
+          )}
+          {getSteps.includes("Yes/No") && (
+            <YesNoInsights insightsToShow={insightsToShow} steps={steps} />
+          )}
+          <KpiInsights insightsToShow={insightsToShow} />
+          {getSteps.includes("KPIs") && <KpiInsights insightsToShow={insightsToShow} />}
+          {getSteps.includes("Evening Reflection") ||
+            getSteps.includes("Weekly Reflection") ||
+            (getSteps.includes("Monthly Reflection") && (
+              <JournalInsights insightsToShow={insightsToShow} />
+            ))}
+        </>
       )}
-      {getSteps.includes("Numeric") && (
-        <NumericalStepInsights insightsToShow={insightsToShow} steps={steps} />
-      )}
-      {getSteps.includes("Sentiment") && (
-        <SentimentInsights insightsToShow={insightsToShow} steps={steps} />
-      )}
-      {getSteps.includes("Agreement Scale") && (
-        <AgreementInsights insightsToShow={insightsToShow} steps={steps} />
-      )}
-      {getSteps.includes("Yes/No") && (
-        <YesNoInsights insightsToShow={insightsToShow} steps={steps} />
-      )}
-      <KpiInsights insightsToShow={insightsToShow} />
-      {getSteps.includes("KPIs") && <KpiInsights insightsToShow={insightsToShow} />}
-      {getSteps.includes("Evening Reflection") ||
-        getSteps.includes("Weekly Reflection") ||
-        (getSteps.includes("Monthly Reflection") && (
-          <JournalInsights insightsToShow={insightsToShow} />
-        ))}
     </Container>
   );
 };

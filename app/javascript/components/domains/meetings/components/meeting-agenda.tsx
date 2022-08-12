@@ -54,6 +54,16 @@ export const MeetingAgenda = observer(
       }
     };
 
+    const stepName = (step): string => {
+      return meeting.meetingType == "personal_weekly" && step.name == "Milestones"
+        ? `${getStepLabelForObjectiveKeyType()} ${step.duration && `(${step.duration} minutes)`}`
+        : step.question
+        ? step.question
+        : step.variant
+        ? step.variant
+        : `${step.name} ${step.duration ? `(${step.duration} minutes)` : ""}`;
+    };
+
     const renderMeetingSteps = (): Array<JSX.Element> => {
       return steps.map((step, index) => {
         let iconBackgroundColor;
@@ -74,14 +84,7 @@ export const MeetingAgenda = observer(
               iconName={"Chevron-Left"}
             />
             <StepTopicContainer>
-              <StyledText>
-                {meeting.meetingType == "personal_weekly" && step.name == "Milestones"
-                  ? `${getStepLabelForObjectiveKeyType()} ${step.duration &&
-                      `(${step.duration} minutes)`}`
-                  : step.variant
-                  ? step.variant
-                  : `${step.name} ${step.duration ? `(${step.duration} minutes)` : ""}`}
-              </StyledText>
+              <StyledText>{stepName(step)}</StyledText>
               {renderExplorationTopicOwner(step)}
             </StepTopicContainer>
           </StepContainer>

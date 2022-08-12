@@ -115,11 +115,13 @@ export const App = observer(
         if (width) {
           if (location.pathname.includes("check-in")) return;
           if (location.pathname.includes("goals")) return;
+          if (location.pathname.includes("scorecard")) return;
           if (location.pathname === "/") return;
           if (id) return history.push(`/`);
         }
       };
-      // redirectHome();
+      window.addEventListener("resize", redirectHome);
+      return () => window.removeEventListener("resize", redirectHome);
     }, [profile]);
 
     // useEffect(() => {

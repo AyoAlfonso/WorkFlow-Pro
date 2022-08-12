@@ -133,24 +133,26 @@ export const WizardLayout = ({
 
   return (
     <Container>
-      <DescriptionContainer>
-        <DescriptionBody>
-          <DescriptionTitleContainer>
-            <Heading type={"h2"} mb={0}>
-              {title}
-            </Heading>
-            {stepTitle && <StepTitle>{stepTitle}</StepTitle>}
-          </DescriptionTitleContainer>
-          <DescriptionText>{description}</DescriptionText>
-          <ButtonsContainer>{renderActionButtons()}</ButtonsContainer>
-          {childrenUnderDescription}
-        </DescriptionBody>
-        {showLynchpynLogo && (
-          <LynchpynLogoContainer>
-            <img src={"/assets/LynchPyn-Logo_Horizontal-Blue"} width="200"></img>
-          </LynchpynLogoContainer>
-        )}
-      </DescriptionContainer>
+      <DescriptionWrapper>
+        <DescriptionContainer>
+          <DescriptionBody>
+            <DescriptionTitleContainer>
+              <Heading type={"h2"} mb={0}>
+                {title}
+              </Heading>
+              {stepTitle && <StepTitle>{stepTitle}</StepTitle>}
+            </DescriptionTitleContainer>
+            <DescriptionText>{description}</DescriptionText>
+            <ButtonsContainer>{renderActionButtons()}</ButtonsContainer>
+            {childrenUnderDescription}
+          </DescriptionBody>
+          {showLynchpynLogo && (
+            <LynchpynLogoContainer>
+              <img src={"/assets/LynchPyn-Logo_Horizontal-Blue"} width="200"></img>
+            </LynchpynLogoContainer>
+          )}
+        </DescriptionContainer>
+      </DescriptionWrapper>
       <BodyContainer
         overflow={bodyContainerOverflow}
         hasStepsForMobile={stepsForMobile ? true : false}
@@ -200,7 +202,7 @@ export const WizardLayout = ({
 const Container = styled.div`
   display: flex;
   height: 100vh;
-  overflow: auto;
+  overflow: hidden;
   position: relative;
 `;
 
@@ -239,18 +241,23 @@ const MobileButtonContainer = styled.div`
   }
 `;
 
+const DescriptionWrapper = styled.div`
+  position: relative;
+  min-width: 320px;
+  width: 25%;
+`;
+
 const DescriptionContainer = styled.div`
   min-width: 320px;
   width: 25%;
   overflow: hidden;
-  // -ms-overflow-style: none;
-  // scrollbar-width: none;
   background-color: ${props => props.theme.colors.backgroundGrey};
   display: flex;
   flex-direction: column;
   height: inherit;
   position: fixed;
   z-index: 10;
+  height: 100%;
   @media only screen and (max-width: 768px) {
     display: none;
   }
@@ -264,7 +271,6 @@ const DescriptionBody = styled.div`
   padding-right: 10%;
   margin-top: 32px;
   overflow: auto;
-  // height: 85%;
   height: inherit;
 `;
 
@@ -280,15 +286,7 @@ const BodyContainer = styled.div<BodyContainerProps>`
   width: 75%;
   position: relative;
   display: flex;
-  // height: 100%;
   flex-direction: column;
-  // overflow-x: auto;
-  // overflow: ${props => props.overflow && props.overflow};
-  padding-left: 350px;
-
-  @media only screen and (min-width: 1400px) {
-    padding-left: 390px;
-  }
   @media only screen and (max-width: 768px) {
     width: 100%;
     padding: 0;
@@ -307,9 +305,25 @@ type BodyContentContainerProps = {
   hasStepsForMobile: boolean;
 };
 
+const BodyContentWrapper = styled.div`
+  height: 97%;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
 const BodyContentContainer = styled.div<BodyContentContainerProps>`
   height: 100%;
-  // overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  overflow-y: auto;
   display: ${props => (props.hasStepsForMobile ? "block" : "flex")};
 `;
 

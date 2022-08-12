@@ -424,6 +424,10 @@
       },
       "keyElement": {
         "dateToolTip": "Update the date if you wish to provide an update on your Key Results for a previous date."
+      },
+      "insights": {
+        "emptyState": "Looks empty in here",
+        "emptyDescription": "There are no Check-ins for this date. Please select a new date"
       }
     }
   }

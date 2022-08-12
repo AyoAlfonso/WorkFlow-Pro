@@ -61,7 +61,7 @@ export const CheckInWizardLayout = observer(
 
     const renderStepsForMobile = () => (
       <QuestionText type={"small"}>
-        {`Step ${checkIn.currentStep + 1} / ${numberOfSteps}`}
+        {`Step ${checkIn.currentStep} / ${numberOfSteps}`}
       </QuestionText>
     );
 

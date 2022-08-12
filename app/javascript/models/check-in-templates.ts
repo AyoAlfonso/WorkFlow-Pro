@@ -21,6 +21,7 @@ export const CheckInTemplateModel = types
     viewers: types.maybeNull(types.array(EntityModel)),
     anonymous: types.maybeNull(types.boolean),
     runOnce: types.maybeNull(types.string),
+    archivedDate: types.maybeNull(types.string),
     tag: types.maybeNull(types.array(types.string)),
     dateTimeConfig: types.maybeNull(DayTimeConfigModel),
     timeZone: types.maybeNull(types.number),

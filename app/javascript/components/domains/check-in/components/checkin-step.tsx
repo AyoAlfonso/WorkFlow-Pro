@@ -143,6 +143,12 @@ export const CheckinStep = observer(
                   <WeeklyReview />
                 </Container>
               );
+            case "Morning Reflection":
+              return (
+                <Container>
+                  <CheckinReflection variant={QuestionnaireTypeConstants.createMyDay} />
+                </Container>
+              );
             case "Weekly Reflection":
               return (
                 <Container>
