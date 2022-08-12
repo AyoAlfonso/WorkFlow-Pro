@@ -251,8 +251,6 @@ const DescriptionContainer = styled.div`
   min-width: 320px;
   width: 25%;
   overflow: hidden;
-  // -ms-overflow-style: none;
-  // scrollbar-width: none;
   background-color: ${props => props.theme.colors.backgroundGrey};
   display: flex;
   flex-direction: column;
@@ -273,7 +271,6 @@ const DescriptionBody = styled.div`
   padding-right: 10%;
   margin-top: 32px;
   overflow: auto;
-  // height: 85%;
   height: inherit;
 `;
 
@@ -289,15 +286,7 @@ const BodyContainer = styled.div<BodyContainerProps>`
   width: 75%;
   position: relative;
   display: flex;
-  // height: 100%;
   flex-direction: column;
-  // overflow-x: auto;
-  // overflow: ${props => props.overflow && props.overflow};
-  // padding-left: 350px;
-
-  @media only screen and (min-width: 1400px) {
-    // padding-left: 390px;
-  }
   @media only screen and (max-width: 768px) {
     width: 100%;
     padding: 0;
