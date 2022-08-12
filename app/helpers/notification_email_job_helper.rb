@@ -88,6 +88,19 @@ module NotificationEmailJobHelper
     ).weekly_checkin_email.deliver_later
   end
 
+  def send_dynamic_checkin_email(user, notification_type, check_in_artifact_id)
+    UserMailer.with(
+      user: user,
+      subject:"Time To Check-in: Please add an update",
+      greeting: "",
+      name: "#{user&.first_name}",
+      message: "",
+      preheader: "Preheader: You have some updates to provide on LynchPyn.",
+      cta_text: "Complete Your Check-in",
+      cta_url: "/check-in/run/#{check_in_artifact_id}"
+    ).dynamic_checkin_email.deliver_later
+  end
+
   def send_sync_meeting_email(user, notification_type, team)
     UserMailer.with(
       user: user,
