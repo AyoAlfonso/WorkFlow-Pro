@@ -189,7 +189,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
                   check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: participant["id"])
                   check_in_artifact.update!(start_time: next_start )
                   check_in_artifacts << check_in_artifact
-                  create_notifications(participant["id"], schedule)
+                  create_notifications(participant["id"], schedule, check_in_artifact)
                 end
 
                 if(participant["type"] == "team")
@@ -197,7 +197,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
                       check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
                       check_in_artifact.update!(start_time: next_start)
                       check_in_artifacts << check_in_artifact
-                      create_notifications(user, schedule)
+                      create_notifications(user, schedule, check_in_artifact)
                   end
                 end
 
@@ -206,7 +206,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
                     check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
                     check_in_artifact.update!(start_time: next_start)
                     check_in_artifacts << check_in_artifact
-                    create_notifications(user, schedule)
+                    create_notifications(user, schedule, check_in_artifact)
                    end
                 end
               end
@@ -217,7 +217,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
                 check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: viewer["id"])
                 check_in_artifact.update!(start_time: next_start )
                 check_in_artifacts << check_in_artifact
-                create_notifications(viewer["id"], schedule)
+                create_notifications(viewer["id"], schedule, check_in_artifact)
               end
 
               if(viewer["type"] == "team")
@@ -225,7 +225,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
                     check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
                     check_in_artifact.update!(start_time: next_start)
                     check_in_artifacts << check_in_artifact
-                    create_notifications(user, schedule)
+                    create_notifications(user, schedule, check_in_artifact)
                 end
               end
 
@@ -234,17 +234,19 @@ class Api::CheckInTemplatesController < Api::ApplicationController
                     check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
                     check_in_artifact.update!(start_time: next_start)
                     check_in_artifacts << check_in_artifact
-                    create_notifications(user, schedule)
+                    create_notifications(user, schedule, check_in_artifact)
                   end
               end
             end
   render json: {check_in_artifacts: check_in_artifacts, status: :ok }
   end
 
-  def create_notifications(user_id,schedule ) 
+  def create_notifications(user_id, schedule, check_in_artifact) 
     notification = Notification.find_or_initialize_by(
                 user_id: user_id,
                 notification_type: Notification.notification_types["dynamic_check_in"],
+                parent_id: check_in_artifact.id,
+                parent_type: "CheckInArtifact"
             )
     notification.attributes = {
       rule: schedule.to_hash,
@@ -279,7 +281,6 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def artifact
-    # binding.pry
   check_in_artifact = CheckInArtifact.find(params[:id])
   @check_in_template = CheckInTemplate.find(check_in_artifact.check_in_template_id)
   date_time_config = @check_in_template.date_time_config
@@ -318,7 +319,6 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   next_occurence = schedule&.first(2)[1]
   previous_occurence = schedule&.first(2)[0]
   next_start = date_time_config["cadence"] == "once" ? Time.now : Time.new(next_occurence.year, next_occurence.month,next_occurence.day, next_occurence.hour)
-  # previous_start = date_time_config["cadence"] == "once" ? Time.now : Time.new(previous_occurence.year, previous_occurence.month,previous_occurence.day, previous_occurence.hour)
 
   check_in_artifact_log = CheckInArtifactLog.find_or_initialize_by(check_in_artifact_id: check_in_artifact.id, created_by_id: current_user.id)
 
@@ -354,14 +354,12 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     end
   elsif params[:end_now] == true
     check_in_artifact.update(end_time: Time.now.end_of_day)
-        # binding.pry
     if check_in_artifact.start_time.strftime('%Y-%m-%d') == previous_occurence.strftime('%Y-%m-%d')
         streak = check_in_artifact.streak + 1
     end
     if(date_time_config["cadence"] != "once")
      check_in_artifact = CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: next_start, 
-      streak: streak
-    )
+      streak: streak )
     end
   end
 

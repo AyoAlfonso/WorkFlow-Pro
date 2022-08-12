@@ -25,6 +25,8 @@ class NotificationEmailJob
             send_weekly_planning_email(@user, notification_type)
           elsif notification_type == "Weekly Checkin"
             send_weekly_checkin_email(@user, notification_type)
+          elsif notification_type ==  "Dynamic Checkin"
+            send_dynamic_checkin_email(@user, notification_type)
           elsif notification_type == "Weekly Checkin Report"
              @user.team_user_enablements.team_lead.each do |team_lead_enablement|
                  send_weekly_check_in_report_stats_email(@user, notification_type, team_lead_enablement&.team)
