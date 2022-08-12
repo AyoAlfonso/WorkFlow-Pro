@@ -66,14 +66,14 @@ gem 'omniauth'
 gem 'omniauth-google-oauth2'
 gem 'exception_notification'
 
-group :development, :test do
+group :development, :test, :production  do
   gem 'factory_bot_rails'
   gem 'pry-byebug'
   gem 'rspec-rails', '~> 4.0.0'
   gem 'bullet'
 end
 
-group :development do
+group :development, :production do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'web-console', '>= 3.3.0'
   gem 'listen', '~> 3.2'
