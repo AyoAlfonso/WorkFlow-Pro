@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_09_114914) do
+ActiveRecord::Schema.define(version: 2022_08_12_105532) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -131,6 +131,7 @@ ActiveRecord::Schema.define(version: 2022_08_09_114914) do
     t.datetime "deleted_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "streak", default: 0
     t.index ["check_in_template_id"], name: "index_check_in_artifacts_on_check_in_template_id"
     t.index ["owned_by_id"], name: "index_check_in_artifacts_on_owned_by_id"
   end

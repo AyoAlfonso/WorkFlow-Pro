@@ -279,6 +279,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def artifact
+    # binding.pry
   check_in_artifact = CheckInArtifact.find(params[:id])
   @check_in_template = CheckInTemplate.find(check_in_artifact.check_in_template_id)
   date_time_config = @check_in_template.date_time_config
@@ -315,8 +316,10 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   next_occurence = schedule&.first(2)[1]
+  previous_occurence = schedule&.first(2)[0]
   next_start = date_time_config["cadence"] == "once" ? Time.now : Time.new(next_occurence.year, next_occurence.month,next_occurence.day, next_occurence.hour)
-    
+  # previous_start = date_time_config["cadence"] == "once" ? Time.now : Time.new(previous_occurence.year, previous_occurence.month,previous_occurence.day, previous_occurence.hour)
+
   check_in_artifact_log = CheckInArtifactLog.find_or_initialize_by(check_in_artifact_id: check_in_artifact.id, created_by_id: current_user.id)
 
   if params[:scorecard_log_ids].present?
@@ -351,8 +354,14 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     end
   elsif params[:end_now] == true
     check_in_artifact.update(end_time: Time.now.end_of_day)
+        # binding.pry
+    if check_in_artifact.start_time.strftime('%Y-%m-%d') == previous_occurence.strftime('%Y-%m-%d')
+        streak = check_in_artifact.streak + 1
+    end
     if(date_time_config["cadence"] != "once")
-     check_in_artifact = CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: next_start)
+     check_in_artifact = CheckInArtifact.create!(check_in_template_id: check_in_artifact.check_in_template_id, owned_by: current_user, start_time: next_start, 
+      streak: streak
+    )
     end
   end
 
