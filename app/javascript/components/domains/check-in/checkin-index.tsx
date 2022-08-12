@@ -38,6 +38,7 @@ export const CheckIn = observer(
     };
 
     const getArchivedCheckIns = () => {
+      if (archivedCheckIns) return;
       setLoading(true);
       checkInTemplateStore.getArchivedCheckIns().then(() => {
         setLoading(false);

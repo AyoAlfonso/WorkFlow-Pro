@@ -159,9 +159,11 @@ export const CheckInTemplateStoreModel = types
       );
       if (response.ok) {
         showToast("Check-in archived successfully", ToastMessageConstants.SUCCESS);
-        const checkins = self.checkIns.filter(checkin => checkin.id == artifactId);
+        const checkins = self.checkIns.filter(checkin => checkin.id !== artifactId);
+        const checkIntoArchive = self.checkIns.find(checkIn => checkIn.id === artifactId);
         const newCheckins = [...checkins];
         self.checkIns = newCheckins as any;
+        self.archivedCheckIns = [...self.archivedCheckIns, checkIntoArchive] as any;
         return true;
       } else {
         showToast("Something went wrong, please try again", ToastMessageConstants.ERROR);
