@@ -31,7 +31,6 @@
 /config/database.yml
 /config/secrets.yml
 
-/public/packs-test
 /node_modules
 /yarn-error.log
 yarn-debug.log*
@@ -47,8 +46,6 @@ db/schema.rb
 
 coverage/
 
-/public/packs
-/public/packs-test
 /node_modules
 /yarn-error.log
 yarn-debug.log*
