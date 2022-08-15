@@ -32,15 +32,15 @@
     },
     "index": {
       "js": [
-        "/assets/packs/js/index-ab260eb4eaff969fe82b.js"
+        "/assets/packs/js/index-91eefb31e8e41c6d5587.js"
       ],
       "js.map": [
-        "/assets/packs/js/index-ab260eb4eaff969fe82b.js.map"
+        "/assets/packs/js/index-91eefb31e8e41c6d5587.js.map"
       ]
     }
   },
-  "index.js": "/assets/packs/js/index-ab260eb4eaff969fe82b.js",
-  "index.js.map": "/assets/packs/js/index-ab260eb4eaff969fe82b.js.map",
+  "index.js": "/assets/packs/js/index-91eefb31e8e41c6d5587.js",
+  "index.js.map": "/assets/packs/js/index-91eefb31e8e41c6d5587.js.map",
   "media/assets/fonts/exo-v10-latin-700.woff": "/assets/packs/media/assets/fonts/exo-v10-latin-700-195c90dfbf721b7359057494babe0da0.woff",
   "media/assets/fonts/exo-v10-latin-700.woff2": "/assets/packs/media/assets/fonts/exo-v10-latin-700-bd3b5750f9e549b44a46bdbccd2e3df6.woff2",
   "media/assets/fonts/exo-v10-latin-regular.woff": "/assets/packs/media/assets/fonts/exo-v10-latin-regular-3b1008fe8c4dabbf1bc0dba333cfc548.woff",
