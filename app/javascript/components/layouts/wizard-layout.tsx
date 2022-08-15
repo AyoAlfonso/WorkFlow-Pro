@@ -292,10 +292,10 @@ const BodyContainer = styled.div<BodyContainerProps>`
     padding: 0;
   }
   @media only screen and (min-width: 1600px) {
-    max-width: 1024px;
+    max-width: 1200px;
     margin: 0 auto;
   }
-  @media only screen and (min-width: 2048px) {
+  @media only screen and (min-width: 2400px) {
     max-width: 50%;
     margin: 0 auto;
   }

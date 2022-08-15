@@ -122,11 +122,10 @@ export const CheckinInsights = observer(
       const timezone = `${getTimezone[data.timeZone]} time zone`;
       const cadence = getCadence(dateTimeConfig.cadence);
       const time = moment(dateTimeConfig.time, ["HH:mm"]).format("hh:mm A");
+      const date = new Date(dateTimeConfig.date).toDateString();
 
       const deliveryStatement = `${cadence} at ${time} ${
-        dateTimeConfig.day || dateTimeConfig.date
-          ? `on ${dateTimeConfig.day || dateTimeConfig.date}`
-          : ""
+        dateTimeConfig.day || dateTimeConfig.date ? `on ${dateTimeConfig.day || date}` : ""
       } in the ${timezone}`;
 
       return deliveryStatement;
