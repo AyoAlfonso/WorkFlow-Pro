@@ -180,15 +180,15 @@ export const QuarterlyGoalCard = observer(
               </HtmlTooltip>
             </DescriptionContainer>
 
-            {!onboarding && (
-              quarterlyGoal.closedAt ? (
-              <IconContainer>
-                <RecordOptions
-                  type={"quarterlyGoal"}
-                  id={quarterlyGoal.id}
-                  iconColor={showOptions}
-                />
-              </IconContainer>
+            {!onboarding &&
+              (quarterlyGoal.closedAt ? (
+                <IconContainer>
+                  <RecordOptions
+                    type={"quarterlyGoal"}
+                    id={quarterlyGoal.id}
+                    iconColor={showOptions}
+                  />
+                </IconContainer>
               ) : (
                 <IconContainer>
                   <RecordOptions
@@ -198,8 +198,7 @@ export const QuarterlyGoalCard = observer(
                     quarter={quarterlyGoal.quarter}
                   />
                 </IconContainer>
-              )
-            )}
+              ))}
           </RowContainer>
           <RowContainer mt={0} mb={0}>
             {/* // TODOIST: refactor the values of this component to get only */}

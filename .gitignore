@@ -45,7 +45,9 @@ db/schema.rb
 /.out
 
 coverage/
-
+/public/packs
+/public/packs-test
+/public/assets
 /node_modules
 /yarn-error.log
 yarn-debug.log*
