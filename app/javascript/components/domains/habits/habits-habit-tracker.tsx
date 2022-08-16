@@ -28,7 +28,7 @@ export const HabitsHabitTracker = observer(
 
     const renderHabitLogs = () =>
       habitsToRender.map(log => (
-        <SelectionCell
+        <TableData
           key={`${habit.id}-${log.logDate}`}
           onClick={() => {
             onUpdate(habit.id, log.logDate);
@@ -37,36 +37,52 @@ export const HabitsHabitTracker = observer(
           {log.id ? (
             <RawIcon icon={"Checkmark"} color={habit.color} size={12} />
           ) : (
-              <RawIcon icon={"Close"} color={baseTheme.colors.greyInactive} size={12} />
-            )}
-        </SelectionCell>
+            <RawIcon icon={"Close"} color={baseTheme.colors.greyInactive} size={12} />
+          )}
+        </TableData>
       ));
 
     return (
       <>
-        <HabitsTableDataCell>
-          {habit.completedCurrentWeekLogs.length == 0 ? (
-            <HabitsTableCircularProgressBar color={baseTheme.colors.greyInactive} value={100} />
-          ) : (
-              <HabitsTableCircularProgressBar color={habit.color} value={habit.completedCurrentWeekLogs.length * 100 / habit.frequency} />
-            )}
-        </HabitsTableDataCell>
-        <HabitsTextContainer
-          onClick={() => {
-            setSelectedHabitId(habit.id);
-            setShowIndividualHabit(true);
-          }}
-        >
-          <NameContainer color={habit.color}>{`${habit.name}`}</NameContainer>
-        </HabitsTextContainer>
+        <td>
+          <NameIconContainer>
+            <>
+              {habit.completedCurrentWeekLogs.length == 0 ? (
+                <HabitsTableCircularProgressBar color={baseTheme.colors.greyInactive} value={100} />
+              ) : (
+                <HabitsTableCircularProgressBar
+                  color={habit.color}
+                  value={(habit.completedCurrentWeekLogs.length * 100) / habit.frequency}
+                />
+              )}
+            </>
+            <HabitNameContainer
+              onClick={() => {
+                setSelectedHabitId(habit.id);
+                setShowIndividualHabit(true);
+              }}
+            >
+              <NameContainer color={habit.color}>{`${habit.name}`}</NameContainer>
+            </HabitNameContainer>
+          </NameIconContainer>
+        </td>
         {renderHabitLogs()}
       </>
     );
   },
 );
 
-const NameContainer = styled.div`
+const NameContainer = styled.span`
   color: ${props => props.color};
+`;
+
+const HabitNameContainer = styled.div`
+  font-weight: 600;
+  margin-left: 10px;
+  width: 40%;
+  &: hover {
+    cursor: pointer;
+  }
 `;
 
 export const HabitsTextContainer = styled.td`
@@ -87,24 +103,24 @@ export const HabitsTableCircularProgressBar = ({
   color,
   value,
 }: IHabitsTableCircularProgressBar) => (
-    <CircularProgressbar
-      value={value}
-      strokeWidth={36}
-      styles={{
-        root: {
-          height: "16px",
-          width: "16px",
-        },
-        path: {
-          stroke: color,
-          strokeLinecap: "butt",
-        },
-        trail: {
-          stroke: "none",
-        },
-      }}
-    />
-  );
+  <CircularProgressbar
+    value={value}
+    strokeWidth={36}
+    styles={{
+      root: {
+        height: "16px",
+        width: "16px",
+      },
+      path: {
+        stroke: color,
+        strokeLinecap: "butt",
+      },
+      trail: {
+        stroke: "none",
+      },
+    }}
+  />
+);
 
 const SelectionCell = styled(HabitsTableDataCell)`
   padding-right: 5px;
@@ -113,4 +129,14 @@ const SelectionCell = styled(HabitsTableDataCell)`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const NameIconContainer = styled.div`
+  display: flex;
+  align-items: center;
+  height: 35px;
+`;
+
+const TableData = styled.td`
+  text-align: center;
 `;

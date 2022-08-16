@@ -19,6 +19,7 @@ import {
   HabitsTableHeaderCell,
 } from "./habits-styles";
 import { Icon, ModalWithHeader } from "~/components/shared";
+import { baseTheme } from "~/themes";
 
 interface IHabitsBodyProps {
   disabled?: boolean;
@@ -74,13 +75,11 @@ export const HabitsBody = observer(
     const daysToRender = windowDimensions.width > 300 ? lastFewDays : lastFourDays;
 
     const dayNames = daysToRender.map((day, index) => (
-      <HabitsTableHeaderCell fontWeight={"normal"} key={index} width={"50%"}>
-        {moment(day).format("ddd")}
-      </HabitsTableHeaderCell>
+      <TableHeader>{moment(day).format("ddd")}</TableHeader>
     ));
 
     const dayDates = daysToRender.map((day, index) => (
-      <HabitsTableHeaderCell key={index}>{moment(day).format("DD")}</HabitsTableHeaderCell>
+      <TableHeader key={index}>{moment(day).format("DD")}</TableHeader>
     ));
 
     return showIndividualHabit ? (
@@ -101,19 +100,15 @@ export const HabitsBody = observer(
         </AddNewHabitContainer>
         <AccordionDetailsContainer>
           <HabitsTable>
-            <HabitsTableHead>
-              <HabitsTableRow>
-                <HabitsTableHeaderCell />
-                <HabitsTableHeaderCellWide />
-                {dayNames}
-              </HabitsTableRow>
-              <HabitsTableRow>
-                <HabitsTableHeaderCell />
-                <HabitsTableHeaderCellWide />
-                {dayDates}
-              </HabitsTableRow>
-            </HabitsTableHead>
-            <HabitsTableBody>{renderHabits()}</HabitsTableBody>
+            <HabitsTableRow>
+              <NameHeader />
+              {dayNames}
+            </HabitsTableRow>
+            <HabitsTableRow>
+              <NameHeader />
+              {dayDates}
+            </HabitsTableRow>
+            {renderHabits()}
           </HabitsTable>
         </AccordionDetailsContainer>
         <ModalWithHeader
@@ -131,7 +126,7 @@ export const HabitsBody = observer(
 
 type ContainerProps = {
   disabled?: boolean;
-}
+};
 
 const Container = styled.div<ContainerProps>`
   pointer-events: ${props => (props.disabled ? "none" : "auto")};
@@ -196,4 +191,16 @@ const AddNewHabitContainer = styled.div`
   &:hover ${AddNewHabitPlus} {
     color: ${props => props.theme.colors.primary100};
   }
+`;
+
+const NameHeader = styled.th`
+  width: 50%;
+  text-align: left;
+`;
+
+const TableHeader = styled.th`
+  text-align: center;
+  width: 32px;
+  font-size: 12px;
+  color: ${baseTheme.colors.greyInactive};
 `;

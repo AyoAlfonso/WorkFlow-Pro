@@ -5,12 +5,12 @@ import { typography, TypographyProps } from "styled-system";
 
 export const HabitsTable = styled.table`
   width: auto;
-  border-collapse: collapse;
-  display: block;
+  // border-collapse: collapse;
   overflow-y: auto;
   min-height: 120px;
   padding-left: 8px;
   padding-right: 8px;
+  border-spacing: 4px;
 }
 `;
 

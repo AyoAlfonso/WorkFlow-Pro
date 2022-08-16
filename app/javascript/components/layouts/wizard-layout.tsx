@@ -229,7 +229,6 @@ const MobileStepTitle = styled("div")`
   color: ${props => props.theme.colors.grey100};
   position: absolute;
   left: 16px;
-  z-index: 10;
 `;
 
 const MobileButtonContainer = styled.div`
@@ -245,6 +244,10 @@ const DescriptionWrapper = styled.div`
   position: relative;
   min-width: 320px;
   width: 25%;
+
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const DescriptionContainer = styled.div`
