@@ -1,5 +1,15 @@
-process.env.NODE_ENV = process.env.NODE_ENV || 'production'
+// const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+// const path = require("path");
 
-const environment = require('./environment')
+process.env.NODE_ENV = process.env.NODE_ENV || "production";
 
-module.exports = environment.toWebpackConfig()
+const environment = require("./environment");
+
+// environment.plugins.append(
+//   "ForkTsCheckerWebpackPlugin",
+//   new ForkTsCheckerWebpackPlugin({
+//     tsconfig: path.resolve(__dirname, "../../tsconfig.json"),
+//     async: false,
+//   }),
+// );
+module.exports = environment.toWebpackConfig();
