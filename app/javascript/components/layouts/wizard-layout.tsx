@@ -290,6 +290,7 @@ const BodyContainer = styled.div<BodyContainerProps>`
   position: relative;
   display: flex;
   flex-direction: column;
+  overflow-x: auto;
   @media only screen and (max-width: 768px) {
     width: 100%;
     padding: 0;
