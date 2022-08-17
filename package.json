@@ -193,6 +193,7 @@
     "ts-jest": "^27.1.2",
     "ts-loader": "^7.0.5",
     "ts-node": "^10.4.0",
+    "tsconfig-paths-webpack-plugin": "^4.0.0",
     "turbolinks": "^5.2.0",
     "typescript": "^3.9.5",
     "yarn": "1.2.0"

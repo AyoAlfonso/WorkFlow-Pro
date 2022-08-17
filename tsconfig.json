@@ -9,6 +9,7 @@
     "esModuleInterop":true,
     "sourceMap": true,
     "target": "es5",
+    "noEmit": false,
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": false,
@@ -16,7 +17,7 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["app/javascript/*", "app/javascript/stores/*","app/javascript/models/*"]
+      "~/*": ["app/javascript/*.ts", "app/javascript/*.tsx","app/javascript/stores/*.ts", "app/javascript/stores/*.tsx","app/javascript/models/*.ts", "app/javascript/models/*.tsx"]
     }
   },
   "include": ["app/javascript", "app/javascript/stores/*","app/javascript/models/*", "stories", "typings",  "**/*.ts",
