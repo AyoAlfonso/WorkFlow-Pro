@@ -32,15 +32,15 @@
     },
     "index": {
       "js": [
-        "/packs/js/index-276ec9b9122940795c9a.js"
+        "/packs/js/index-40f4b9d3ed75339cd7e6.js"
       ],
       "js.map": [
-        "/packs/js/index-276ec9b9122940795c9a.js.map"
+        "/packs/js/index-40f4b9d3ed75339cd7e6.js.map"
       ]
     }
   },
-  "index.js": "/packs/js/index-276ec9b9122940795c9a.js",
-  "index.js.map": "/packs/js/index-276ec9b9122940795c9a.js.map",
+  "index.js": "/packs/js/index-40f4b9d3ed75339cd7e6.js",
+  "index.js.map": "/packs/js/index-40f4b9d3ed75339cd7e6.js.map",
   "media/assets/fonts/exo-v10-latin-700.woff": "/packs/media/assets/fonts/exo-v10-latin-700-195c90dfbf721b7359057494babe0da0.woff",
   "media/assets/fonts/exo-v10-latin-700.woff2": "/packs/media/assets/fonts/exo-v10-latin-700-bd3b5750f9e549b44a46bdbccd2e3df6.woff2",
   "media/assets/fonts/exo-v10-latin-regular.woff": "/packs/media/assets/fonts/exo-v10-latin-regular-3b1008fe8c4dabbf1bc0dba333cfc548.woff",

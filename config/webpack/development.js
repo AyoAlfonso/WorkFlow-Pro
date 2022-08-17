@@ -1,17 +1,18 @@
 const path = require("path");
 const webpack = require("webpack");
-require("dotenv").config({ path: "./.env" }); 
+require("dotenv").config({ path: "./.env" });
 
 process.env.NODE_ENV = process.env.NODE_ENV || "development";
 const environment = require("./environment");
 
-environment.config.set("resolve.extensions", [".tsx", ".ts"]);
+environment.config.set("resolve.extensions", [".ts", ".tsx"]);
 
 environment.loaders.append("tsx", {
   test: /\.(ts|tsx|)$/,
   exclude: /node_modules/,
-  use: ["ts-loader"],
+  use: ["babel-loader"],
 });
+
 environment.plugins.prepend(
   "env",
   new webpack.DefinePlugin({

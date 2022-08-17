@@ -71,7 +71,7 @@ export const MobileKeyActivitiesList = observer(
                 <KeyActivityRecord
                   key={keyActivity["id"]}
                   keyActivity={keyActivity}
-                  dragHandleProps={...provided.dragHandleProps}
+                  dragHandleProps={Array.from(provided.dragHandleProps)}
                 />
                 {provided.placeholder}
               </KeyActivityContainer>

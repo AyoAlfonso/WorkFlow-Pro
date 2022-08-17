@@ -125,7 +125,6 @@ ActiveRecord::Schema.define(version: 2022_08_12_142948) do
     t.bigint "owned_by_id"
     t.bigint "check_in_template_id"
     t.boolean "skip", default: false
-    t.boolean "boolean", default: false
     t.datetime "end_time"
     t.datetime "start_time"
     t.datetime "deleted_at"

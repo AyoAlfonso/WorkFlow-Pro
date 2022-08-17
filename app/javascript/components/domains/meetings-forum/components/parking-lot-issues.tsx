@@ -97,7 +97,7 @@ export const ParkingLotIssues = observer(
               <IssueEntry
                 issue={teamIssue.issue}
                 meetingId={upcomingForumMeeting.id}
-                dragHandleProps={...provided.dragHandleProps}
+                dragHandleProps={Array.from(provided.dragHandleProps)}
                 pageEnd={true}
               />
             </IssueContainer>

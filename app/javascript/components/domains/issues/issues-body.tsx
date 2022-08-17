@@ -95,7 +95,7 @@ export const IssuesBody = observer(
               <IssueContainer ref={provided.innerRef} {...provided.draggableProps}>
                 <IssueEntry
                   issue={issue}
-                  dragHandleProps={...provided.dragHandleProps}
+                  // dragHandleProps={...provided?.dragHandleProps}
                   leftShareContainer={true}
                 />
               </IssueContainer>
