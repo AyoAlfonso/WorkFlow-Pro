@@ -27,6 +27,6 @@ environment.plugins.prepend(
   }),
 );
 
-environment.config.set("entry", "./app/javascript");
+environment.config.set("entry", "./app/javascript/index.js");
 environment.config.set("resolve.alias", { "~": path.resolve(__dirname, "../../app/javascript") });
 module.exports = environment.toWebpackConfig();
