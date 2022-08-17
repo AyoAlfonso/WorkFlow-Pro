@@ -142,8 +142,9 @@ const AccordionDetailsContainer = styled(AccordionDetails)`
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 8px;
+  padding: 8px !important;
   margin-bottom: 8px;
+  overflow-x: auto;
 
   @media only screen and (max-width: 768px) {
     box-shadow: none;
