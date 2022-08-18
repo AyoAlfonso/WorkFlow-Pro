@@ -35,13 +35,6 @@ class CheckInArtifact < ApplicationRecord
      })
   
   end
-
-  # def streaks
-  # use the new field you're adding to the artifact from the time the last artficat was closed. compare with expected date on the 
-  # cadence. Take that former date get the next occurence, if it is not equal to the start time of the current artifact the streak is broken
-  # move up like that and count + 1  backwards from most recent to older until you reach a break
-  #   return 1
-  # end
   
   scope :with_name, ->(name) { where(name: name) }
 end
