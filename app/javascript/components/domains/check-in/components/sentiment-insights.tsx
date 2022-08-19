@@ -149,6 +149,7 @@ export const Tag = styled.span`
   background-color: ${props => props.theme.colors.backgroundGrey};
   font-size: 0.75em;
   border-radius: 4px;
+  white-space: nowrap;
 `;
 
 export const ColumnsContainer = styled.div`
@@ -156,6 +157,7 @@ export const ColumnsContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 2em;
+  gap: 0 0.5em;
 `;
 
 export const ColumnContainer = styled.div`

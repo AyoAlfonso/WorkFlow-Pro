@@ -442,32 +442,36 @@ export const IssueEntry = observer(
                       />
                       <OptionText>{issue.personal ? "Unlock" : "Lock"}</OptionText>
                     </OptionContainer>
-                    <Divider />
-                    <OptionWrapper>
-                      <OptionContainer onClick={() => setShowPriorities(true)}>
-                        {renderPriorityIcon(issue.priority, 16, 16)}
-                        <OptionText>{getPriorityText(issue.priority)}</OptionText>
-                      </OptionContainer>
-                      {showPriorities && (
-                        <PriorityDropdownContainer ref={prioritiesRef}>
-                          <PriorityTopSection></PriorityTopSection>
-                          {priorityOptions.map((priority, index) => (
-                            <OptionContainer
-                              key={`${priority}-${index}`}
-                              onClick={() => {
-                                issueStore.updateIssueState(issue.id, "priority", priority);
-                                issueStore
-                                  .updateIssue(issue.id, meetingId || teamId ? true : false)
-                                  .then(() => setShowPriorities(false));
-                              }}
-                            >
-                              {renderPriorityIcon(priority, 14, 16)}
-                              <OptionText>{getPriorityText(priority)}</OptionText>
-                            </OptionContainer>
-                          ))}
-                        </PriorityDropdownContainer>
-                      )}
-                    </OptionWrapper>
+                    {!isForum && (
+                      <>
+                        <Divider />
+                        <OptionWrapper>
+                          <OptionContainer onClick={() => setShowPriorities(true)}>
+                            {renderPriorityIcon(issue.priority, 16, 16)}
+                            <OptionText>{getPriorityText(issue.priority)}</OptionText>
+                          </OptionContainer>
+                          {showPriorities && (
+                            <PriorityDropdownContainer ref={prioritiesRef}>
+                              <PriorityTopSection></PriorityTopSection>
+                              {priorityOptions.map((priority, index) => (
+                                <OptionContainer
+                                  key={`${priority}-${index}`}
+                                  onClick={() => {
+                                    issueStore.updateIssueState(issue.id, "priority", priority);
+                                    issueStore
+                                      .updateIssue(issue.id, meetingId || teamId ? true : false)
+                                      .then(() => setShowPriorities(false));
+                                  }}
+                                >
+                                  {renderPriorityIcon(priority, 14, 16)}
+                                  <OptionText>{getPriorityText(priority)}</OptionText>
+                                </OptionContainer>
+                              ))}
+                            </PriorityDropdownContainer>
+                          )}
+                        </OptionWrapper>
+                      </>
+                    )}
                     <Divider />
                     <OptionContainer
                       onClick={() =>
@@ -500,9 +504,11 @@ export const IssueEntry = observer(
           </TopSection>
 
           <BottomRowContainer>
-            <IssuePriorityContainer onClick={() => updatePriority()}>
-              {renderPriorityIcon(issue.priority, 16)}
-            </IssuePriorityContainer>
+            {!isForum && (
+              <IssuePriorityContainer onClick={() => updatePriority()}>
+                {renderPriorityIcon(issue.priority, 16)}
+              </IssuePriorityContainer>
+            )}
             {(meetingId || teamId) && (
               <AvatarContainer>
                 <Avatar

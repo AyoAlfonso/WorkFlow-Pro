@@ -83,7 +83,7 @@ export const YesNoInsights = ({ insightsToShow, steps }: YesNoInsightsProps): JS
             <RowsContainer>
               <RowContainer>
                 <Percentage>{`${value("true")?.percentage || 0}%`}</Percentage>
-                <RowBar average={value("false")?.percentage || 0} text="Yes" />
+                <RowBar average={value("true")?.percentage || 0} text="Yes" />
               </RowContainer>
               <RowContainer>
                 <Percentage>{`${value("false")?.percentage || 0}%`}</Percentage>

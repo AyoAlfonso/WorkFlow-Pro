@@ -150,6 +150,7 @@ const Tag = styled.span`
   background-color: ${props => props.theme.colors.backgroundGrey};
   font-size: 0.75em;
   border-radius: 4px;
+  white-space: nowrap;
 `;
 
 const ColumnsContainer = styled.div`
