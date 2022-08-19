@@ -51,6 +51,7 @@ coverage/
 yarn-debug.log*
 .yarn-integrity
 
+/public
 /public/packs-test
 /node_modules
 /yarn-error.log
