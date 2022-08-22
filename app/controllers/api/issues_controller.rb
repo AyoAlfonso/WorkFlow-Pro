@@ -136,12 +136,9 @@ class Api::IssuesController < Api::ApplicationController
     when "by_priority"
       @issues = @issues&.sort_by_priority.sort_by_due_date
       @team_issues = @team_issues&.sort_by_issue_priority&.sort_by_issue_due_date
-  
     when "by_upvotes"
       @issues = @issues&.sort_by_upvotes.sort_by_priority
-  
       @team_issues = @team_issues&.sort_by_issue_upvotes&.sort_by_issue_due_date&.sort_by_issue_priority
-  
     when "by_due_date"
       @issues = @issues&.sort_by_due_date.sort_by_priority
       @team_issues = @team_issues&.sort_by_issue_due_date&.sort_by_issue_priority
