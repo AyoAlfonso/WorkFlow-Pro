@@ -229,7 +229,6 @@ const MobileStepTitle = styled("div")`
   color: ${props => props.theme.colors.grey100};
   position: absolute;
   left: 16px;
-  z-index: 10;
 `;
 
 const MobileButtonContainer = styled.div`
@@ -245,6 +244,10 @@ const DescriptionWrapper = styled.div`
   position: relative;
   min-width: 320px;
   width: 25%;
+
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const DescriptionContainer = styled.div`
@@ -287,15 +290,16 @@ const BodyContainer = styled.div<BodyContainerProps>`
   position: relative;
   display: flex;
   flex-direction: column;
+  overflow-x: auto;
   @media only screen and (max-width: 768px) {
     width: 100%;
     padding: 0;
   }
   @media only screen and (min-width: 1600px) {
-    max-width: 1024px;
+    max-width: 1200px;
     margin: 0 auto;
   }
-  @media only screen and (min-width: 2048px) {
+  @media only screen and (min-width: 2400px) {
     max-width: 50%;
     margin: 0 auto;
   }

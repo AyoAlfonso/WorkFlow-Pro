@@ -52,9 +52,9 @@ export const CheckInTemplateStoreModel = types
         // caught by Api Monitor
       }
     }),
-    getCheckIns: flow(function*() {
+    getCheckIns: flow(function*(status = "published") {
       try {
-        const response: ApiResponse<any> = yield self.environment.api.getCheckins();
+        const response: ApiResponse<any> = yield self.environment.api.getCheckins(status);
         self.checkIns = response.data.checkInArtifacts;
         return response.data.checkInArtifacts;
       } catch {
@@ -128,7 +128,7 @@ export const CheckInTemplateStoreModel = types
         value,
       );
       if (response.ok) {
-        showToast("Template updated successfully", ToastMessageConstants.SUCCESS);
+        showToast("Saved", ToastMessageConstants.SUCCESS);
         self.currentCheckIn = response.data.template;
         return response.data.checkInTemplate.id;
       } else {

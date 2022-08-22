@@ -20,6 +20,9 @@ import { DueDateSelector } from "~/components/shared/issues-and-key-activities/d
 import ReactQuill from "react-quill";
 import { DndItems } from "~/components/shared/dnd-editor";
 import { ScheduledGroupSelector } from "~/components/shared/issues-and-key-activities/scheduled-group-selector";
+import { DateButton } from "~/components/shared/date-selection/date-button";
+import moment from "moment";
+import { DueDatePickerModal } from "~/components/shared/issues-and-key-activities/date-picker-modal";
 
 interface ICreateKeyActivityModalProps {
   createKeyActivityModalOpen: boolean;
@@ -46,6 +49,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
   const [selectedGroupId, setSelectedGroupId] = useState<number>(null);
   const [selectedTeamId, setSelectedTeamId] = useState<number>(null);
   const [description, setDescription] = useState<string>("");
+  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
 
   const initializeGroupAndTeam = () => {
     if (props.todayModalClicked) {
@@ -139,15 +143,20 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
             }}
           />
         </TrixEditorContainer>
-        <FlexContainer>
+        <SelectorsContainer>
           <PrioritySelector
             itemPriority={selectedPriority}
             setSelectedPriority={setSelectedPriority}
           />
-          <DueDateSelector
-            selectedDueDate={selectedDueDate}
-            setSelectedDueDate={setSelectedDueDate}
-          />
+          <DateButtonDiv>
+            <DateButton
+              onClick={() => {
+                setShowDatePicker(true);
+              }}
+              text={selectedDueDate ? moment(selectedDueDate).format("MMM Do, YYYY") : "Due Date"}
+              displayColor={baseTheme.colors.greyActive}
+            />
+          </DateButtonDiv>
 
           <OptionsContainer>
             <IssuePynModalContainer>
@@ -182,7 +191,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
               </AvatarContainer>
             )}
           </OptionsContainer>
-        </FlexContainer>
+        </SelectorsContainer>
 
         <FlexContainer>
           <StyledButton
@@ -220,6 +229,12 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
           </StyledButton>
         </FlexContainer>
       </Container>
+      <DueDatePickerModal
+        selectedDueDate={selectedDueDate}
+        setSelectedDueDate={setSelectedDueDate}
+        showDatePicker={showDatePicker}
+        setShowDatePicker={setShowDatePicker}
+      />
     </ModalWithHeader>
   );
 };
@@ -245,6 +260,10 @@ const AvatarContainer = styled.div`
   }
 `;
 
+const SelectorsContainer = styled(FlexContainer)`
+  align-items: center;
+`
+
 const TextInputFlexContainer = styled(FlexContainer)`
   margin-bottom: 10px;
 `;
@@ -263,4 +282,13 @@ const OptionsContainer = styled.div`
 const TrixEditorContainer = styled.div`
   width: 100%;
   margin-bottom: 10px;
+`;
+
+const DateButtonDiv = styled.div`
+  border: 1px solid ${baseTheme.colors.borderGrey};
+  display: flex;
+  align-items: center;
+  border-radius: 3px;
+  height: 0.5em;
+  padding: 8px;
 `;

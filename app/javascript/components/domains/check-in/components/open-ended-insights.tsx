@@ -64,12 +64,12 @@ export const OpenEndedInsights = observer(
               </HeaderContainer>
               <ResponsesContainer>
                 {checkInArtifactLogs.length ? (
-                  checkInArtifactLogs.map(log => {
+                  checkInArtifactLogs.map((log, index) => {
                     const response = getResponse(question, log);
                     const user = getUser(log.ownedBy);
                     if (response) {
                       return (
-                        <ResponseContainer key={log.ownedBy}>
+                        <ResponseContainer key={`${log.ownedBy}-${index}`}>
                           <Avatar
                             size={32}
                             marginLeft={"0px"}

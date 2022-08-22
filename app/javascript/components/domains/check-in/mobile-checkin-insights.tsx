@@ -420,7 +420,7 @@ export default MobileCheckinInsights;
 const Container = styled.div`
   padding: 1em;
   display: none;
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 1000px) {
     display: block;
   }
 `;
@@ -460,7 +460,7 @@ const SideBar = styled.div<SideBarProps>`
   box-sizing: border-box;
   overflow-y: auto;
 
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 1000px) {
     display: block;
   }
 `;

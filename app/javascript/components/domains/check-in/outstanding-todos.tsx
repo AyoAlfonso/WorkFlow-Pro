@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { observer } from "mobx-react";
@@ -10,6 +10,7 @@ import {
   KeyActivitiesWrapperContainer,
   KeyActivityListSubHeaderContainer,
 } from "~/components/domains/key-activities/key-activities-list";
+import { Button } from "~/components/shared";
 
 interface OutstandingTodosProps {
   disabled?: boolean;
@@ -17,6 +18,7 @@ interface OutstandingTodosProps {
 
 export const OutstandingTodos = observer(
   ({ disabled }: OutstandingTodosProps): JSX.Element => {
+    const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
     const { keyActivityStore } = useMst();
     const { t } = useTranslation();
 
@@ -31,6 +33,21 @@ export const OutstandingTodos = observer(
           {remainingPyns.map(ka => (
             <KeyActivityRecord keyActivity={ka} />
           ))}
+          <ButtonContainer>
+            <MarkDoneButton
+              small
+              variant={"primary"}
+              disabled={buttonDisabled}
+              onClick={() => {
+                setButtonDisabled(true);
+                keyActivityStore.markAllYesterdayDone().then(() => {
+                  setButtonDisabled(false);
+                });
+              }}
+            >
+              {t<string>("keyActivities.markAllYesterdayDone")}
+            </MarkDoneButton>
+          </ButtonContainer>
         </Container>
       </KeyActivitiesWrapperContainer>
     );
@@ -39,4 +56,14 @@ export const OutstandingTodos = observer(
 
 export const Container = styled.div`
   width: 100%;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  width: 100%;
+`;
+
+const MarkDoneButton = styled(Button)`
+  width: 100%;
+  margin-left: 4px;
 `;
