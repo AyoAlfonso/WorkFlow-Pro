@@ -167,7 +167,7 @@ export const CheckinReflection = (props: ICheckinReflection): JSX.Element => {
     );
     const journalLogIdArray = toJS(currentCheckInArtifact).checkInArtifactLogs[0]?.journalLogs;
     const item = {
-      journalLogs:
+      journalLogIds:
         !isCheckInArtifactLogsEmpty && !isJournalLogsEmpty ? [...journalLogIdArray, id] : [id],
     };
     updateCheckinArtifact(currentCheckInArtifact.id, item);
