@@ -73,7 +73,7 @@ export const KeyActivitiesList = observer(
                 <KeyActivityRecord
                   key={keyActivity["id"]}
                   keyActivity={keyActivity}
-                  dragHandleProps={...provided.dragHandleProps}
+                  dragHandleProps={Array.from(provided.dragHandleProps)}
                 />
                 {provided.placeholder}
               </KeyActivityContainer>
@@ -82,7 +82,7 @@ export const KeyActivitiesList = observer(
         );
       });
     };
-if (loading) return <></>
+    if (loading) return <></>;
     return (
       <KeyActivitiesListStyleContainer>
         <Droppable droppableId={droppableId} key={droppableId}>

@@ -36,11 +36,11 @@ export const CheckinReflection = (props: ICheckinReflection): JSX.Element => {
     checkInTemplateStore,
   } = useMst();
 
-    const { currentCheckInArtifact, updateCheckinArtifact } = checkInTemplateStore;
+  const { currentCheckInArtifact, updateCheckinArtifact } = checkInTemplateStore;
 
   useEffect(() => {
     async function setUp() {
-      setLoading(true)
+      setLoading(true);
       await questionnaireStore.load();
       const questionnaireVariant = questionnaireStore.getQuestionnaireByVariant(props.variant);
       await questionnaireStore.getQuestionnaireAttemptsSummaryForReflections(
@@ -68,13 +68,13 @@ export const CheckinReflection = (props: ICheckinReflection): JSX.Element => {
   const formatSteps = steps => {
     const formattedSteps = steps.map(step => {
       if (!step.metadata || !step.message) {
-        return {...step, message: "", metadata: {}}
+        return { ...step, message: "", metadata: {} };
       } else {
-        return step
+        return step;
       }
-    })
+    });
     return formattedSteps;
-  }
+  };
 
   // Customized Steps
   const steps = R.pipe(
@@ -210,9 +210,9 @@ export const CheckinReflection = (props: ICheckinReflection): JSX.Element => {
             optionalParams,
           );
           if (res === true) {
-            return 
+            return;
           } else {
-            submitCheckinResponse(res.id)
+            submitCheckinResponse(res.id);
           }
           // if (typeof props.endFn === "function") {
           //   setTimeout(() => {

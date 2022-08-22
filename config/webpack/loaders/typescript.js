@@ -1,11 +1,12 @@
 const PnpWebpackPlugin = require('pnp-webpack-plugin')
 
 module.exports = {
-  test: /\.tsx?(\.erb)?$/,
+  test: /.(ts|tsx)$/,
   use: [
     {
-      loader: 'ts-loader',
-      options: PnpWebpackPlugin.tsLoaderOptions()
-    }
-  ]
-}
+      loader: "ts-loader",
+      exclude: /node_modules/,
+      // options: PnpWebpackPlugin.tsLoaderOptions(),
+    },
+  ],
+};

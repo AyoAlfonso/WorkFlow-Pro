@@ -81,7 +81,7 @@ export const KeyActivitiesBody = observer(
                 >
                   <KeyActivityEntry
                     keyActivity={keyActivity}
-                    dragHandleProps={...provided.dragHandleProps}
+                    dragHandleProps={Array.from(provided.dragHandleProps)}
                   />
                 </KeyActivityContainer>
               )}
@@ -109,7 +109,7 @@ export const KeyActivitiesBody = observer(
               >
                 <KeyActivityEntry
                   keyActivity={keyActivity}
-                  dragHandleProps={...provided.dragHandleProps}
+                  dragHandleProps={Array.from(provided.dragHandleProps)}
                 />
               </KeyActivityContainer>
             )}

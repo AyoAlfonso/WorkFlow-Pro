@@ -36,7 +36,6 @@ default: &default
   extensions:
     - .tsx
     - .ts
-    - .jsx
     - .mjs
     - .js
     - .sass
@@ -56,7 +55,7 @@ development:
   compile: true
 
   # Verifies that correct packages and versions are installed by inspecting package.json, yarn.lock, and node_modules
-  check_yarn_integrity: false
+  check_yarn_integrity: false 
 
   # Reference: https://webpack.js.org/configuration/dev-server/
   dev_server:
@@ -93,7 +92,7 @@ production:
   compile: true
 
   # Extract and emit a css file
-  extract_css: true
+  extract_css: false
 
   # Cache manifest.json for performance
-  cache_manifest: true
+  cache_manifest: false
