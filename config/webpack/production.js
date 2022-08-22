@@ -26,7 +26,13 @@ environment.plugins.prepend(
     MICROSOFT_LOGOUT_REDIRECT_URI: process.env.MICROSOFT_LOGOUT_REDIRECT_URI,
   }),
 );
-
+const custom = {
+  resolve: {
+    alias: {
+      jquery: "jquery/src/jquery",
+    },
+  },
+};
 environment.config.set("entry", "./app/javascript/index.js");
 environment.config.set("resolve.alias", { "~": path.resolve(__dirname, "../../app/javascript") });
 module.exports = environment.toWebpackConfig();

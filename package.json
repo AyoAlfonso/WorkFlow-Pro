@@ -132,6 +132,8 @@
     "identity-obj-proxy": "^3.0.0",
     "immutable": "^4.0.0-rc.12",
     "jest": "^27.4.7",
+    "jquery": "^3.6.0",
+    "jquery-ui-bundle": "^1.12.1-migrate",
     "js-cookie": "^3.0.1",
     "lodash": "^4.17.21",
     "material-ui-dropzone": "^3.5.0",
