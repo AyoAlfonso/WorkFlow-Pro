@@ -378,6 +378,8 @@ export const ScorecardTableView = observer(
 
     const columns = useMemo(
       () => [
+        // 0,6,32,40,46
+        // 0,4,20,27,34
         {
           Header: "",
           accessor: "updateKPI",
