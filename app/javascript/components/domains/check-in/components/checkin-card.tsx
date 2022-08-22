@@ -404,7 +404,7 @@ const StreakCount = styled.div<StreakCountProps>`
   font-size: 14px;
   color: ${props => (props.streak > 1 ? props.theme.colors.white : props.theme.colors.greyActive)};
   background-color: ${props =>
-    props.streak > 1 ? props.theme.colors.cavier : props.theme.colors.white};
+    props.streak > 1 ? props.theme.colors.cavier : "transparent"};
   font-weight: ${props => (props.streak > 1 ? "bold" : "normal")};
 `;
 

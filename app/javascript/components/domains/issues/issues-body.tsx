@@ -74,8 +74,8 @@ export const IssuesBody = observer(
         value: "by_due_date",
       },
       {
-        label: "Sort by Priority",
-        value: "by_priority",
+        label: "Sort by Topic Type",
+        value: "by_topic_type",
       },
     ];
 
