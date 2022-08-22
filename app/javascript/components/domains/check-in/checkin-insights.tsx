@@ -122,11 +122,10 @@ export const CheckinInsights = observer(
       const timezone = `${getTimezone[data.timeZone]} time zone`;
       const cadence = getCadence(dateTimeConfig.cadence);
       const time = moment(dateTimeConfig.time, ["HH:mm"]).format("hh:mm A");
+      const date = new Date(dateTimeConfig.date).toDateString();
 
       const deliveryStatement = `${cadence} at ${time} ${
-        dateTimeConfig.day || dateTimeConfig.date
-          ? `on ${dateTimeConfig.day || dateTimeConfig.date}`
-          : ""
+        dateTimeConfig.day || dateTimeConfig.date ? `on ${dateTimeConfig.day || date}` : ""
       } in the ${timezone}`;
 
       return deliveryStatement;
@@ -231,7 +230,14 @@ export const CheckinInsights = observer(
           }
         })
         .filter(Boolean);
-      return logs.length;
+
+      if (!logs.length) return;
+
+      const key = "ownedBy";
+        
+      const filteredLogs = logs.filter((e, i) => logs.findIndex(a => a[key] === e[key]) === i);
+
+      return filteredLogs.length;
     };
 
     if (loading) {
@@ -245,7 +251,7 @@ export const CheckinInsights = observer(
     const responseNumber = getNumberOfResponses();
     const totalParticipants = getUsers(data.participants);
     const { createdAt, updatedAt } = data;
-
+    
     const isDataEmpty = () => {
       const responses = [];
 
@@ -260,6 +266,7 @@ export const CheckinInsights = observer(
 
     return (
       <Container>
+        <SideBarWrapper />
         <SideBar>
           <SectionContainer>
             <IconContainer onClick={() => history.push(`/check-in/template/edit/${data.id}`)}>
@@ -351,48 +358,46 @@ export const CheckinInsights = observer(
               />
             </IconContainer>
           </FlexContainer>
-          <ContentContainer>
-            {isDataEmpty() ? (
-              <EmptyContainer>
-                <Icon icon={"Empty-Pockets"} size={"100px"} iconColor={"greyInactive"} />
-                <Header>{t<string>("insights.emptyState")}</Header>
-                <EmptyText>{t<string>("insights.emptyDescription")}</EmptyText>
-              </EmptyContainer>
-            ) : (
-              <>
-                <LeftContainer>
-                  {getSteps.includes("Open-ended") && (
-                    <OpenEndedInsights insightsToShow={insightsToShow} steps={steps} />
-                  )}
-                  {getSteps.includes("Numeric") && (
-                    <NumericalStepInsights insightsToShow={insightsToShow} steps={steps} />
-                  )}
-                  {getSteps.includes("Sentiment") && (
-                    <SentimentInsights insightsToShow={insightsToShow} steps={steps} />
-                  )}
-                  {getSteps.includes("Agreement Scale") && (
-                    <AgreementInsights insightsToShow={insightsToShow} steps={steps} />
-                  )}
-                  {getSteps.includes("Yes/No") && (
-                    <YesNoInsights insightsToShow={insightsToShow} steps={steps} />
-                  )}
-                  {getSteps.includes("KPIs") && <KpiInsights insightsToShow={insightsToShow} />}
-                  {getSteps.includes("Initiatives") && (
-                    <InitiativeInsights insightsToShow={insightsToShow} />
-                  )}
-                  {getSteps.includes("Evening Reflection") ||
-                    getSteps.includes("Weekly Reflection") ||
-                    (getSteps.includes("Monthly Reflection") && (
-                      <JournalInsights insightsToShow={insightsToShow} />
-                    ))}
-                </LeftContainer>
-                <ParticipationInsights
-                  responseNumber={responseNumber || 0}
-                  totalNumberOfParticipants={totalParticipants || 0}
-                />
-              </>
-            )}
-          </ContentContainer>
+          {isDataEmpty() ? (
+            <EmptyContainer>
+              <Icon icon={"Empty-Pockets"} size={"100px"} iconColor={"greyInactive"} />
+              <Header>{t<string>("insights.emptyState")}</Header>
+              <EmptyText>{t<string>("insights.emptyDescription")}</EmptyText>
+            </EmptyContainer>
+          ) : (
+            <ContentContainer>
+              <LeftContainer>
+                {getSteps.includes("Open-ended") && (
+                  <OpenEndedInsights insightsToShow={insightsToShow} steps={steps} />
+                )}
+                {getSteps.includes("Numeric") && (
+                  <NumericalStepInsights insightsToShow={insightsToShow} steps={steps} />
+                )}
+                {getSteps.includes("Sentiment") && (
+                  <SentimentInsights insightsToShow={insightsToShow} steps={steps} />
+                )}
+                {getSteps.includes("Agreement Scale") && (
+                  <AgreementInsights insightsToShow={insightsToShow} steps={steps} />
+                )}
+                {getSteps.includes("Yes/No") && (
+                  <YesNoInsights insightsToShow={insightsToShow} steps={steps} />
+                )}
+                {getSteps.includes("KPIs") && <KpiInsights insightsToShow={insightsToShow} />}
+                {getSteps.includes("Initiatives") && (
+                  <InitiativeInsights insightsToShow={insightsToShow} />
+                )}
+                {getSteps.includes("Evening Reflection") ||
+                  getSteps.includes("Weekly Reflection") ||
+                  (getSteps.includes("Monthly Reflection") && (
+                    <JournalInsights insightsToShow={insightsToShow} />
+                  ))}
+              </LeftContainer>
+              <ParticipationInsights
+                responseNumber={responseNumber || 0}
+                totalNumberOfParticipants={totalParticipants || 0}
+              />
+            </ContentContainer>
+          )}
         </InsightsContainer>
       </Container>
     );
@@ -416,7 +421,7 @@ const Container = styled.div`
   margin-right: -40px;
   height: calc(100vh - 130px);
   display: flex;
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 1000px) {
     display: none;
   }
 `;
@@ -424,6 +429,8 @@ const Container = styled.div`
 const SideBarWrapper = styled.div`
   width: 18%;
   max-width: 240px;
+  padding: 32px;
+  margin-right: 1em;
   @media only screen and (min-width: 1600px) {
     left: 96px;
   }
@@ -456,17 +463,18 @@ const InsightsContainer = styled.div`
   padding: 32px;
   width: 82%;
   max-width: 1280px;
+  margin-left: 1em;
   // overflow-y: auto;
   height: 100%;
   overscroll-behavior: contain;
-  padding-left: 330px;
+  // padding-left: 330px;
   @media only screen and (min-width: 1600px) {
     margin: 0 auto;
-    padding-left: 200px;
+    // padding-left: 200px;
   }
-  @media only screen and (min-width: 1800px) {
-    padding-left: 32px;
-  }
+  // @media only screen and (min-width: 1800px) {
+  //   padding-left: 32px;
+  // }
 `;
 
 const CheckinName = styled(Text)`

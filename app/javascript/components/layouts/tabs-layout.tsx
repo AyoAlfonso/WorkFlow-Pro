@@ -92,6 +92,7 @@ export const TabsLayout = ({ headerText, tabOptions }: ITabsLayoutInterface): JS
 
   return (
     <Container>
+      <SideBarWrapper />
       <SideBar>
         {navigation.map(nav => (
           <Section>
@@ -168,6 +169,16 @@ const DisplayBoxContainer = styled(HomeContainerBorders)<DisplayBoxContainerType
   min-width: ${props => (props.selectedTab == "company" ? "1200px" : "950px")};
 `;
 
+const SideBarWrapper = styled.div`
+  width: 18%;
+  max-width: 240px;
+  padding: 32px;
+  margin-right: 1em;
+  @media only screen and (min-width: 1600px) {
+    left: 96px;
+  }
+`;
+
 const SideBar = styled.div`
   width: 18%;
   max-width: 240px;
@@ -216,15 +227,10 @@ const ContentContainer = styled.div`
   padding: 32px;
   width: 82%;
   max-width: 1280px;
-  // overflow-y: auto;
+  margin-left: 1em;
   height: 100%;
   overscroll-behavior: contain;
-  padding-left: 330px;
   @media only screen and (min-width: 1600px) {
     margin: 0 auto;
-    padding-left: 200px;
-  }
-  @media only screen and (min-width: 1800px) {
-    padding-left: 32px;
   }
 `;

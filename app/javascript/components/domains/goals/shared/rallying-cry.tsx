@@ -51,7 +51,7 @@ type ContentEditableType = {
 };
 
 const VisionContainer = styled(HomeContainerBorders)`
-  height: 60px;
+  min-height: 60px;
   display: flex;
   position: relative;
   align-items: center;
@@ -90,10 +90,12 @@ const StyledContentEditable = styled(ContentEditable)<ContentEditableType>`
   font-weight: 700;
   text-overflow: ellipsis;
   overflow: hidden;
-  white-space: nowrap;
+  text-align: center;
 
   @media (max-width: 768px) {
     font-size: 16px;
+    text-align: center;
+    white-space: pre-wrap;
   }
 `;
 

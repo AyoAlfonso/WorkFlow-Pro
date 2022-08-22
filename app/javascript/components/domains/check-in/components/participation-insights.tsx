@@ -83,8 +83,10 @@ const Container = styled.div`
   min-width: 200px;
   width: 30%;
 
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 1000px) {
     position: static;
+    max-width: 400px;
+    margin: 0 auto;
     margin-bottom: 1em;
     width: auto;
   }

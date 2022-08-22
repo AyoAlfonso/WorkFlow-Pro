@@ -24,7 +24,7 @@ const CheckInWizard = observer(
     const history = useHistory();
 
     useEffect(() => {
-      checkInTemplateStore.getCheckIns().then(() => {
+      checkInTemplateStore.getCheckIns("").then(() => {
         checkInTemplateStore.findCheckinTemplate(id);
         setLoading(false);
       });

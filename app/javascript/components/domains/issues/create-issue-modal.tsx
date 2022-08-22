@@ -18,6 +18,9 @@ import { DndItems } from "~/components/shared/dnd-editor";
 import { UserSelectionDropdownList, Loading, LabelSelection, Icon } from "~/components/shared";
 import { PrioritySelector } from "~/components/shared/issues-and-key-activities/priority-selector";
 import { DueDateSelector } from "~/components/shared/issues-and-key-activities/due-date-selector";
+import { DueDatePickerModal } from "~/components/shared/issues-and-key-activities/date-picker-modal";
+import { DateButton } from "~/components/shared/date-selection/date-button";
+import moment from "moment";
 
 interface ICreateIssueModalProps {
   createIssueModalOpen: boolean;
@@ -46,6 +49,7 @@ export const CreateIssueModal = ({
   const [personal, setPersonal] = useState<boolean>(teamId ? false : true);
   const [description, setDescription] = useState<string>("");
   const [selectedDueDate, setSelectedDueDate] = useState<Date>(null);
+  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const [topicType, setTopicType] = useState<string>("");
   const [showOptions, setShowOptions] = useState<boolean>(false);
 
@@ -161,15 +165,22 @@ export const CreateIssueModal = ({
           />
         </TrixEditorContainer>
         <FlexContainer>
-          <PrioritySelector
-            itemPriority={selectedPriority}
-            setSelectedPriority={setSelectedPriority}
-          />
-          {isForum && (
-            <DueDateSelector
-              selectedDueDate={selectedDueDate}
-              setSelectedDueDate={setSelectedDueDate}
+          {!isForum && (
+            <PrioritySelector
+              itemPriority={selectedPriority}
+              setSelectedPriority={setSelectedPriority}
             />
+          )}
+          {isForum && (
+            <DateButtonDiv>
+              <DateButton
+                onClick={() => {
+                  setShowDatePicker(true);
+                }}
+                text={selectedDueDate ? moment(selectedDueDate).format("MMM Do, YYYY") : "Due Date"}
+                displayColor={baseTheme.colors.greyActive}
+              />
+            </DateButtonDiv>
           )}
 
           <OptionsContainer>
@@ -234,6 +245,13 @@ export const CreateIssueModal = ({
           </StyledButton>
         </FlexContainer>
       </Container>
+      <DueDatePickerModal
+        selectedDueDate={selectedDueDate}
+        setSelectedDueDate={setSelectedDueDate}
+        showDatePicker={showDatePicker}
+        setShowDatePicker={setShowDatePicker}
+        showDateOptions
+      />
     </ModalWithHeader>
   );
 };
@@ -333,4 +351,13 @@ const DropdownMenuItem = styled.span`
 const DropdownHeaderText = styled.span`
   font-size: 14px;
   color: ${baseTheme.colors.grey200};
+`;
+
+const DateButtonDiv = styled.div`
+  border: 1px solid ${baseTheme.colors.grey40};
+  display: flex;
+  align-items: center;
+  border-radius: 3px;
+  height: 0.5em;
+  padding: 8px;
 `;

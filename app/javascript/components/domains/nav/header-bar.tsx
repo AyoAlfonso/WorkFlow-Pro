@@ -349,6 +349,7 @@ const MobileProfileNav = styled.div<MobileProfileNavProps>`
   background: ${props => props.theme.colors.white};
   z-index: 2;
   width: ${props => (props.showProfileNav ? "85vw" : "0")};
+  max-width: 300px;
   position: fixed;
   padding-top: 40px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);

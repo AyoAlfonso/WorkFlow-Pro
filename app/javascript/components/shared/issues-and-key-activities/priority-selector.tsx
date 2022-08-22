@@ -99,6 +99,7 @@ export const PrioritySelector = ({
 const Container = styled.div`
   margin-top: auto;
   margin-bottom: auto;
+  margin-right: 1em;
 `;
 
 const PriorityDisplayButton = styled.div`

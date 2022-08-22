@@ -114,6 +114,7 @@ const MobileNavMenu = styled.div<MobileNavMenuProps>`
   background: ${props => props.theme.colors.white};
   z-index: 2;
   width: ${props => (props.showSideNav ? "85vw" : "0")};
+  max-width: 300px;
   position: fixed;
   padding-top: 40px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -137,7 +138,6 @@ const MobileMenuOption = styled.div<MobileNavMenuProps>`
   right: ${props => (props.showSideNav ? "0" : "800px")};
   display: flex;
   // display: ${props => (props.showSideNav ? "flex" : "none")};
-  width: 70vw;
   transition: 0.2s;
   height: 48px;
   border-bottom: 1px solid ${props => props.theme.colors.grey20};
