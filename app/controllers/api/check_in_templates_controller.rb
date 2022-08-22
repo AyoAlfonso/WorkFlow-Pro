@@ -340,9 +340,9 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     }
   end
 
-  if params[:journal_logs_ids].present?
+  if params[:journal_log_ids].present?
      check_in_artifact_log.attributes = {
-     journal_logs: params[:journal_logs_ids]
+     journal_logs: params[:journal_log_ids]
     }
   end
 
