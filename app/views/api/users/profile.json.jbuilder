@@ -9,6 +9,8 @@ json.session_company_profile_id @session_company_id
 json.first_access_to_forum @user_first_access_to_forum
 json.scheduled_groups @scheduled_groups
 json.provider @user.provider
+json.stats_for_month = @stats_for_month
+json.stats_for_week = @stats_for_week
 
 json.current_company_user_teams @user.user_teams_for_company_or_full_access(current_company).includes([:team_user_enablements]) do |team|
   json.partial! team, partial: "api/teams/team", as: :team

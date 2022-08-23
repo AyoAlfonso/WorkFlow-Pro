@@ -1,6 +1,7 @@
 class Api::UsersController < Api::ApplicationController
   helper ApplicationHelper
   include UserActivityLogHelper
+  include StatsHelper
   before_action :set_user, only: [:show, :update, :destroy, :resend_invitation]
   skip_before_action :authenticate_user!, only: [:reset_password]
   after_action :record_activities, only: [:update, :destroy, :reset_password, :resend_invitation, :update_avatar, :delete_avatar, :update_user_team_lead_role,:update_user_team_manager, :update_company_first_time_access]
@@ -97,6 +98,8 @@ class Api::UsersController < Api::ApplicationController
     @session_company_id = current_company.id
     @static_data = view_context.static_data
     @scheduled_groups = ScheduledGroup.all
+    @stats_for_week = calculate_stats_for_week(current_user)
+    @stats_for_month = calculate_stats_for_month(current_user)
     @user_first_access_to_forum = current_company.display_format == "Forum" && current_user.user_company_enablements.find_by_company_id(current_company.id)&.first_time_access
     render "/api/users/profile"
   end

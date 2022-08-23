@@ -52,7 +52,6 @@ ActiveAdmin.register Company do
       @description_templates = params[:company][:description_templates_attributes]
       if @description_templates.present?
           @company.description_templates.each_with_index do |description_template, index|
-            puts index
              params[:company][:description_templates_attributes][index.to_s]["body"] = @description_templates[index.to_s][:body_content]
           end
       end
