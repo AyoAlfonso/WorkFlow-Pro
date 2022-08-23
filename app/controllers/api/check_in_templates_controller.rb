@@ -66,19 +66,19 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   @check_in_template.save!
 
     if (params[:check_in_template]["participants"].present? || params[:child_check_in_template_params].try(["participants"]).present?)
-      @check_in_template.participants.each do |participant|
+      @check_in_template&.participants&.each do |participant|
           if(participant["type"] == "user")
             destroy_notifications(participant["id"])
           end
 
           if(participant["type"] == "team")
-            Team.find(participant["id"]).team_user_enablements.pluck(:user_id).each do |user|
+            Team.find(participant["id"]).team_user_enablements.pluck(:user_id)&.each do |user|
               destroy_notifications(user)
             end
           end
           
           if(participant["type"] == "company")
-              Company.find(participant["id"]).user_company_enablements.pluck(:user_id).each do |user|
+              Company.find(participant["id"]).user_company_enablements.pluck(:user_id)&.each do |user|
                   destroy_notifications(user)
               end
           end
@@ -86,19 +86,19 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     end
 
    if (params[:check_in_template]["viewers"].present? || params[:child_check_in_template_params].try(["viewers"]).present?)
-          @check_in_template.viewers.each do |viewer|
+          @check_in_template.viewers&.each do |viewer|
             if(viewer["type"] == "user")
               destroy_notifications(viewer["id"])
             end
 
             if(viewer["type"] == "team")
-              Team.find(viewer["id"]).team_user_enablements.pluck(:user_id).each do |user|
+              Team.find(viewer["id"]).team_user_enablements.pluck(:user_id)&.each do |user|
                 destroy_notifications(user)
               end
             end
 
             if(viewer["type"] == "company")
-                Company.find(viewer["id"]).user_company_enablements.pluck(:user_id).each do |user|
+                Company.find(viewer["id"]).user_company_enablements.pluck(:user_id)&.each do |user|
                   destroy_notifications(user)
                 end
             end
@@ -183,9 +183,9 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     end
     
     next_start = date_time_config["cadence"] == "once" ? Time.now : Time.new(schedule.first.year, schedule.first.month, schedule.first.day, schedule.first.hour)
-        if(next_start.present?)
+          if(next_start.present?)
             if(@check_in_template.participants.present?)
-              @check_in_template.participants.each do |participant|
+              @check_in_template.participants&.each do |participant|
                 if(participant["type"] == "user")
                   check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: participant["id"])
                   check_in_artifact.update!(start_time: next_start )
@@ -194,7 +194,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
                 end
 
                 if(participant["type"] == "team")
-                  Team.find(participant["id"]).team_user_enablements.pluck(:user_id).each do |user|
+                  Team.find(participant["id"]).team_user_enablements.pluck(:user_id)&.each do |user|
                       check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
                       check_in_artifact.update!(start_time: next_start)
                       check_in_artifacts << check_in_artifact
@@ -203,7 +203,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
                 end
 
                 if(participant["type"] == "company")
-                  Company.find(participant["id"]).user_company_enablements.pluck(:user_id).each do |user|
+                  Company.find(participant["id"]).user_company_enablements.pluck(:user_id)&.each do |user|
                     check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
                     check_in_artifact.update!(start_time: next_start)
                     check_in_artifacts << check_in_artifact
@@ -213,7 +213,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
               end
             end
           if(@check_in_template.viewers.present?)
-            @check_in_template&.viewers.each do |viewer|
+            @check_in_template.viewers&.each do |viewer|
               if(viewer["type"] == "user")
                 check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: viewer["id"])
                 check_in_artifact.update!(start_time: next_start )
@@ -222,7 +222,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
               end
 
               if(viewer["type"] == "team")
-                Team.find(viewer["id"]).team_user_enablements.pluck(:user_id).each do |user|
+                Team.find(viewer["id"]).team_user_enablements.pluck(:user_id)&.each do |user|
                     check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
                     check_in_artifact.update!(start_time: next_start)
                     check_in_artifacts << check_in_artifact
@@ -231,7 +231,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
               end
 
               if(viewer["type"] == "company")
-                  Company.find(viewer["id"]).user_company_enablements.pluck(:user_id).each do |user|
+                  Company.find(viewer["id"]).user_company_enablements.pluck(:user_id)&.each do |user|
                     check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
                     check_in_artifact.update!(start_time: next_start)
                     check_in_artifacts << check_in_artifact
