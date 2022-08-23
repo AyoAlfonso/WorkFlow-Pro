@@ -1,5 +1,6 @@
 import moment from "moment";
 import { getIconName } from "~/components/domains/check-in/data/step-data";
+import { ICheckInTemplateModelData } from "~/models/check-in-templates";
 import { ICheckInTemplateStore } from "~/stores/check-in-template-store";
 
 export const getCadence = cad => {
@@ -125,7 +126,7 @@ const getEntityArray = (entityArray, userStore, teamStore, companyStore) => {
 };
 
 export const createTemplate = (
-  template,
+  template: ICheckInTemplateModelData,
   checkInTemplateStore: ICheckInTemplateStore,
   history,
 ): void => {
@@ -155,7 +156,6 @@ export const createTemplate = (
     runOnce: "",
     dateTimeConfig: null,
     reminder: null,
-    parent: template.id,
     tag: ["custom"],
   };
 

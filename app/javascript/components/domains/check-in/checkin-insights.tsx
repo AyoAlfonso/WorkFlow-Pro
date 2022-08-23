@@ -234,7 +234,7 @@ export const CheckinInsights = observer(
       if (!logs.length) return;
 
       const key = "ownedBy";
-        
+
       const filteredLogs = logs.filter((e, i) => logs.findIndex(a => a[key] === e[key]) === i);
 
       return filteredLogs.length;
@@ -251,7 +251,7 @@ export const CheckinInsights = observer(
     const responseNumber = getNumberOfResponses();
     const totalParticipants = getUsers(data.participants);
     const { createdAt, updatedAt } = data;
-    
+
     const isDataEmpty = () => {
       const responses = [];
 
@@ -264,6 +264,11 @@ export const CheckinInsights = observer(
       return responses.length === 0;
     };
 
+    const showJournalInsights =
+      getSteps.includes("Evening Reflection") ||
+      getSteps.includes("Weekly Reflection") ||
+      getSteps.includes("Monthly Reflection");
+    
     return (
       <Container>
         <SideBarWrapper />
@@ -386,11 +391,7 @@ export const CheckinInsights = observer(
                 {getSteps.includes("Initiatives") && (
                   <InitiativeInsights insightsToShow={insightsToShow} />
                 )}
-                {getSteps.includes("Evening Reflection") ||
-                  getSteps.includes("Weekly Reflection") ||
-                  (getSteps.includes("Monthly Reflection") && (
-                    <JournalInsights insightsToShow={insightsToShow} />
-                  ))}
+                {showJournalInsights && <JournalInsights insightsToShow={insightsToShow} />}
               </LeftContainer>
               <ParticipationInsights
                 responseNumber={responseNumber || 0}

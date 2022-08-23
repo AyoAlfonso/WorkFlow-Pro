@@ -6,6 +6,7 @@ import { useMst } from "~/setup/root";
 import { useHistory } from "react-router-dom";
 import { Label, Input, Select } from "~/components/shared/input";
 import { createTemplate } from "~/utils/check-in-functions";
+import { RoleNormalUser } from "~/lib/constants";
 
 interface BasicStepProps {
   checkinName: string;
@@ -27,11 +28,18 @@ export const BasicStep = observer(
     setDescription,
     disabled,
   }: BasicStepProps): JSX.Element => {
-    const { checkInTemplateStore } = useMst();
+    const { checkInTemplateStore, sessionStore } = useMst();
 
     const { currentCheckIn } = checkInTemplateStore;
 
+    const currentUserRole = sessionStore.profile?.role;
+
+    const checkinTypesForEmployee = ["Personal"]
+
     const checkinTypes = ["Team", "Personal", "Company"];
+
+    const checkinTypesToShow =
+      currentUserRole === RoleNormalUser ? checkinTypesForEmployee : checkinTypes;
 
     const history = useHistory();
 
@@ -64,7 +72,7 @@ export const BasicStep = observer(
             value={checkinType}
             disabled={disabled}
           >
-            {checkinTypes.map((type, index) => (
+            {checkinTypesToShow.map((type, index) => (
               <option key={`option-${index}`} value={type}>
                 {type}
               </option>

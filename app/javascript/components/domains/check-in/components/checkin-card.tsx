@@ -267,7 +267,9 @@ export const CheckInCard = observer(
                       mr="0.5em"
                       iconColor={isColored ? "cavier" : "greyActive"}
                     />
-                    <StreakCount streak={streak}>{streak}</StreakCount>
+                    <StreakCount streak={streak}>
+                      <span>{streak}</span>
+                    </StreakCount>
                   </StreakContainer>
                 </ButtonsStreakContainer>
               )}
@@ -382,6 +384,7 @@ const ButtonsContainer = styled.div`
 
 const StreakContainer = styled.div`
   display: flex;
+  align-items: center;
 `;
 
 const ButtonsStreakContainer = styled.div`
@@ -398,13 +401,13 @@ const StreakCount = styled.div<StreakCountProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0.4em 0.7em;
+  height: 24px;
+  width: 24px;
   border: 1px solid
     ${props => (props.streak > 1 ? props.theme.colors.cavier : props.theme.colors.greyActive)};
   font-size: 14px;
   color: ${props => (props.streak > 1 ? props.theme.colors.white : props.theme.colors.greyActive)};
-  background-color: ${props =>
-    props.streak > 1 ? props.theme.colors.cavier : props.theme.colors.white};
+  background-color: ${props => (props.streak > 1 ? props.theme.colors.cavier : "transparent")};
   font-weight: ${props => (props.streak > 1 ? "bold" : "normal")};
 `;
 

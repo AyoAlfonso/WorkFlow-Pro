@@ -136,17 +136,16 @@ export const CheckInTemplateCard = observer(
             {showOptions && (
               <OptionsContainer>
                 <Option onClick={makeACopy}>Make a copy</Option>
-                {checkInTemplate.status == "draft" ? (
+                {checkInTemplate.status == "draft" && (
                   <Option onClick={handlePublish}>Publish</Option>
-                ) : (
-                  <Option
-                    onClick={() => {
-                      history.push(`/check-in/template/edit/${checkInTemplate.id}`);
-                    }}
-                  >
-                    Edit
-                  </Option>
                 )}
+                <Option
+                  onClick={() => {
+                    history.push(`/check-in/template/edit/${checkInTemplate.id}`);
+                  }}
+                >
+                  Edit
+                </Option>
               </OptionsContainer>
             )}
           </OptionsIconContainer>
