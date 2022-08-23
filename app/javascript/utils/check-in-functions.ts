@@ -155,7 +155,6 @@ export const createTemplate = (
     runOnce: "",
     dateTimeConfig: null,
     reminder: null,
-    parent: template.id,
     tag: ["custom"],
   };
 

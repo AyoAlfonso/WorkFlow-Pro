@@ -133,7 +133,7 @@ export const SetupPage = ({
       lastName: currentUser?.lastName,
     };
 
-    if (currentUser?.role === "Employee") {
+    if (currentUser?.role === RoleNormalUser) {
       return setCompanyUsers([user]);
     } else {
       setCompanyUsers(users);
@@ -151,7 +151,7 @@ export const SetupPage = ({
   };
 
   const userList =
-    currentUser?.role === "Employee" ? [...companyUsers] : [...companyUsers, ...teams, company];
+    currentUser?.role === RoleNormalUser ? [...companyUsers] : [...companyUsers, ...teams, company];
 
   return (
     <Container>
