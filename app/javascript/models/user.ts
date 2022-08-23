@@ -36,6 +36,8 @@ export const UserModel = types
     questionnaireTypeForPlanning: types.maybeNull(types.string),
     productFeatures: types.maybeNull(ProductFeaturesModel),
     provider: types.maybeNull(types.string),
+    statsForWeek: types.maybeNull(types.array(types.frozen())),
+    statsForMonth: types.maybeNull(types.array(types.frozen())),
     //add avatarurl2x
   })
   .views(self => ({
