@@ -59,7 +59,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   def update
 
   @step_atrributes = params[:check_in_templates_steps_attributes]
-  @check_in_template.status = params[:status]
+  @check_in_template.status = params[:status] if params[:status].present? 
   if(params[:status] == 2)
      @check_in_template.archived_date = Time.now 
   end
