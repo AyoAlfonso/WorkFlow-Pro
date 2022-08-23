@@ -183,7 +183,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     end
     
     next_start = date_time_config["cadence"] == "once" ? Time.now : Time.new(schedule.first.year, schedule.first.month, schedule.first.day, schedule.first.hour)
-          if(next_start.present?)
+        if(next_start.present?)
             if(@check_in_template.participants.present?)
               @check_in_template.participants.each do |participant|
                 if(participant["type"] == "user")
