@@ -184,7 +184,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     
     next_start = date_time_config["cadence"] == "once" ? Time.now : Time.new(schedule.first.year, schedule.first.month, schedule.first.day, schedule.first.hour)
           if(next_start.present?)
-              @check_in_template.participants.each do |participant|
+              @check_in_template&.participants.each do |participant|
                 if(participant["type"] == "user")
                   check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: participant["id"])
                   check_in_artifact.update!(start_time: next_start )
@@ -212,7 +212,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
               end
           end
 
-            @check_in_template.viewers.each do |viewer|
+            @check_in_template&.viewers.each do |viewer|
               if(viewer["type"] == "user")
                 check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: viewer["id"])
                 check_in_artifact.update!(start_time: next_start )
