@@ -216,13 +216,13 @@ ActiveRecord::Schema.define(version: 2022_08_22_192232) do
     t.integer "onboarding_status", default: 0
     t.string "customer_subscription_profile_id"
     t.integer "forum_type", default: 0
+    t.datetime "deleted_at"
     t.integer "objectives_key_type", default: 1
     t.jsonb "preferences", default: {}, null: false
-    t.datetime "deleted_at"
     t.integer "organisational_forum_type"
     t.text "sso_emails_embed"
     t.index ["deleted_at"], name: "index_companies_on_deleted_at"
-    t.index ["preferences"], name: "index_companies_on_preferences", where: "(deleted_at IS NULL)"
+    t.index ["preferences"], name: "index_companies_on_preferences", using: :gin
   end
 
   create_table "company_static_data", force: :cascade do |t|
@@ -407,8 +407,8 @@ ActiveRecord::Schema.define(version: 2022_08_22_192232) do
     t.integer "target_value", default: 0
     t.boolean "is_deleted", default: false
     t.boolean "greater_than", default: true
-    t.jsonb "viewers"
     t.bigint "owned_by_id"
+    t.jsonb "viewers"
     t.float "needs_attention_threshold"
     t.string "title"
     t.integer "parent_type"
@@ -711,8 +711,8 @@ ActiveRecord::Schema.define(version: 2022_08_22_192232) do
     t.json "settings", default: {}
     t.integer "executive", default: 0
     t.boolean "custom_scorecard", default: false
-    t.boolean "deleted", default: false
     t.datetime "deleted_at"
+    t.boolean "deleted", default: false
     t.index ["company_id"], name: "index_teams_on_company_id", where: "(deleted_at IS NULL)"
     t.index ["deleted_at"], name: "index_teams_on_deleted_at"
   end
