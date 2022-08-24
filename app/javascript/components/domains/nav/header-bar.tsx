@@ -425,6 +425,10 @@ const Container = styled.div`
 
 const ContentWrapper = styled.div`
   padding-top: 0.5em;
+
+  @media only scrren and (max-width: 768px) {
+    padding-top: 0.15em;
+  }
 `;
 
 const Wrapper = styled.div`

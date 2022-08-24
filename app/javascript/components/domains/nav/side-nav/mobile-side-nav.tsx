@@ -121,7 +121,7 @@ const MobileNavMenu = styled.div<MobileNavMenuProps>`
   transition: 0.2s;
   left: 0;
   display: none;
-  margin-top: 5px;
+  margin-top: 11px;
 
   @media only screen and (max-width: 768px) {
     display: block;

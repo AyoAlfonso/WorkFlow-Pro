@@ -122,7 +122,7 @@ export const App = observer(
       };
       window.addEventListener("resize", redirectHome);
       return () => window.removeEventListener("resize", redirectHome);
-    }, [profile]);
+    }, []);
 
     // useEffect(() => {
     //   setTimeout(() => {

@@ -228,8 +228,11 @@ export const CheckInTemplateStoreModel = types
         self.checkIns = sortedCheckins;
       } else if (sortBy === "name") {
         sortedCheckins = checkIns.slice().sort(sortByName);
-        const archivedCheckIns = self.archivedCheckIns.slice().sort(sortByName);
         self.checkIns = sortedCheckins;
+
+        const archivedCheckIns = self.archivedCheckIns && self.archivedCheckIns
+          .slice()
+          .sort(sortByName);
         self.archivedCheckIns = archivedCheckIns as any;
       } else if (sortBy === "archivedDate") {
         const archivedCheckIns = self.archivedCheckIns.slice().sort(sortByArchivedDate);

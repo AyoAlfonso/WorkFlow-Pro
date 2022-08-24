@@ -268,7 +268,7 @@ export const CheckInCard = observer(
                       iconColor={isColored ? "cavier" : "greyActive"}
                     />
                     <StreakCount streak={streak}>
-                      <span>{streak}</span>
+                      <span>{streak || 0}</span>
                     </StreakCount>
                   </StreakContainer>
                 </ButtonsStreakContainer>
