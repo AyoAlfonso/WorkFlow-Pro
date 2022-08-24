@@ -114,7 +114,7 @@ export const CheckInTemplateStoreModel = types
         value,
       );
       if (response.ok) {
-        showToast("Check-in updated successfully", ToastMessageConstants.SUCCESS);
+        showToast("Saved", ToastMessageConstants.SUCCESS);
         self.currentCheckInArtifact = response.data.checkInArtifact;
         return true;
       } else {
@@ -128,7 +128,7 @@ export const CheckInTemplateStoreModel = types
         value,
       );
       if (response.ok) {
-        showToast("Saved", ToastMessageConstants.SUCCESS);
+        showToast("Template updated successfully", ToastMessageConstants.SUCCESS);
         self.currentCheckIn = response.data.template;
         return response.data.checkInTemplate.id;
       } else {
