@@ -274,7 +274,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def general_check_in
-    check_in_artifacts = CheckInArtifact.owned_by_user(current_user).not_skipped.incomplete.with_parents
+    check_in_artifacts = CheckInArtifact.owned_by_user(current_user).not_skipped.incomplete.with_parents.current_company(current_company.id)
     if params[:status].present?
      check_in_artifacts = check_in_artifacts.with_status(params[:status])
     end
