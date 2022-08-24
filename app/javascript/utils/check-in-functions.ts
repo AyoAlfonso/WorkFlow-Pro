@@ -144,7 +144,7 @@ export const createTemplate = (
   });
 
   const checkIn = {
-    name: template.name,
+    name: `${template.name} (Copy)`,
     checkInTemplatesStepsAttributes: steps,
     participants: null,
     anonymous: false,
