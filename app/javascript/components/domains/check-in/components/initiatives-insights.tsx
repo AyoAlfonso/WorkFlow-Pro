@@ -65,7 +65,7 @@ const InitiativeInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
           );
 
           return (
-            <>
+            <div key={`log-${i}`}>
               {filteredArtifactLogs.length > 0 ? (
                 <AvatarContainer>
                   <br />
@@ -140,7 +140,7 @@ const InitiativeInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
                   </InitiativeContainer>
                 );
               })}
-            </>
+            </div>
           );
         })}
       </InitiativesContainer>

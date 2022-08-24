@@ -277,6 +277,33 @@ const MobileCheckinInsights = (): JSX.Element => {
     );
   }
 
+  const renderStep = (stepName: string): JSX.Element => {
+    switch (stepName) {
+      case "Open-ended":
+        return <OpenEndedInsights insightsToShow={insightsToShow} steps={steps} />;
+      case "Numeric":
+        return <NumericalStepInsights insightsToShow={insightsToShow} steps={steps} />;
+      case "Sentiment":
+        return <SentimentInsights insightsToShow={insightsToShow} steps={steps} />;
+      case "Agreement Scale":
+        return <AgreementInsights insightsToShow={insightsToShow} steps={steps} />;
+      case "Yes/No":
+        return <YesNoInsights insightsToShow={insightsToShow} steps={steps} />;
+      case "KPIs":
+        return <KpiInsights insightsToShow={insightsToShow} />;
+      case "Initiatives":
+        return <InitiativeInsights insightsToShow={insightsToShow} />;
+      case "Evening Reflection":
+        return <JournalInsights insightsToShow={insightsToShow} />;
+      case "Weekly Reflection":
+        return <JournalInsights insightsToShow={insightsToShow} />;
+      case "Monthly Reflection":
+        return <JournalInsights insightsToShow={insightsToShow} />;
+      default:
+        return <></>;
+    }
+  };
+
   return (
     <Container>
       <HeaderContainer>
@@ -387,28 +414,9 @@ const MobileCheckinInsights = (): JSX.Element => {
             responseNumber={responseNumber}
             totalNumberOfParticipants={totalParticipants}
           />
-          {getSteps.includes("Open-ended") && (
-            <OpenEndedInsights insightsToShow={insightsToShow} steps={steps} />
-          )}
-          {getSteps.includes("Numeric") && (
-            <NumericalStepInsights insightsToShow={insightsToShow} steps={steps} />
-          )}
-          {getSteps.includes("Sentiment") && (
-            <SentimentInsights insightsToShow={insightsToShow} steps={steps} />
-          )}
-          {getSteps.includes("Agreement Scale") && (
-            <AgreementInsights insightsToShow={insightsToShow} steps={steps} />
-          )}
-          {getSteps.includes("Yes/No") && (
-            <YesNoInsights insightsToShow={insightsToShow} steps={steps} />
-          )}
-          <KpiInsights insightsToShow={insightsToShow} />
-          {getSteps.includes("KPIs") && <KpiInsights insightsToShow={insightsToShow} />}
-          {getSteps.includes("Evening Reflection") ||
-            getSteps.includes("Weekly Reflection") ||
-            (getSteps.includes("Monthly Reflection") && (
-              <JournalInsights insightsToShow={insightsToShow} />
-            ))}
+          {getSteps.map((stepName, index) => (
+            <div key={`step-${index}`}>{renderStep(stepName)}</div>
+          ))}
         </>
       )}
     </Container>
