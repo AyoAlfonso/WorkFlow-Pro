@@ -341,7 +341,7 @@ export const KeyActivityStoreModel = types
         kaIdsToUpdate,
       );
       if (response.ok) {
-        self.incompleteKeyActivities = response.data as any;
+        self.incompleteKeyActivities = response.data.keyActivities as any;
         return true;
       } else {
         return false;

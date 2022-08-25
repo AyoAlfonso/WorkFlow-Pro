@@ -33,21 +33,25 @@ export const OutstandingTodos = observer(
           {remainingPyns.map(ka => (
             <KeyActivityRecord keyActivity={ka} />
           ))}
-          <ButtonContainer>
-            <MarkDoneButton
-              small
-              variant={"primary"}
-              disabled={buttonDisabled}
-              onClick={() => {
-                setButtonDisabled(true);
-                keyActivityStore.markAllYesterdayDone().then(() => {
-                  setButtonDisabled(false);
-                });
-              }}
-            >
-              {t<string>("keyActivities.markAllYesterdayDone")}
-            </MarkDoneButton>
-          </ButtonContainer>
+          {remainingPyns.length ? (
+            <ButtonContainer>
+              <MarkDoneButton
+                small
+                variant={"primary"}
+                disabled={buttonDisabled}
+                onClick={() => {
+                  setButtonDisabled(true);
+                  keyActivityStore.markAllYesterdayDone().then(() => {
+                    setButtonDisabled(false);
+                  });
+                }}
+              >
+                {t<string>("keyActivities.markAllYesterdayDone")}
+              </MarkDoneButton>
+            </ButtonContainer>
+          ) : (
+            <></>
+          )}
         </Container>
       </KeyActivitiesWrapperContainer>
     );
