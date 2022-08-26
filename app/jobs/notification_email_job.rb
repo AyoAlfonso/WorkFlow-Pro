@@ -27,7 +27,7 @@ class NotificationEmailJob
             send_weekly_checkin_email(@user, notification_type)
           elsif notification_type ==  "Dynamic Checkin"
             if(notification.parent_id == "CheckInArtifact")
-              check_in_artifact = CheckInArtifact.where(id: notification.parent_id, created_by_id: @user.id)&.last
+              check_in_artifact = CheckInArtifact.where(id: notification.parent_id, owned_by_id: @user.id)&.last
               send_dynamic_checkin_email(@user, notification_type, check_in_artifact.id)
             end
           elsif notification_type == "Weekly Checkin Report"

@@ -12,7 +12,7 @@ class CheckInArtifact < ApplicationRecord
   scope :not_skipped, ->  { where(skip: false) }
   scope :with_parents, ->() { joins(:check_in_template).where.not(check_in_templates: { parent: nil, tag: ['global']}) }
   scope :with_status, ->(status) { joins(:check_in_template).where(check_in_templates: { status: status}) }
-  scope :current_company, ->(company_id) { joins(:check_in_template).where(check_in_templates: { id: company_id}) }
+  scope :current_company, ->(company_id) { joins(:check_in_template).where(check_in_templates: { company_id: company_id}) }
   
   belongs_to :check_in_template
   has_many :check_in_artifact_logs, dependent: :destroy
