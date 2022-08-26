@@ -29,7 +29,7 @@ class Api::MeetingsController < Api::ApplicationController
     @meetings = MeetingSearch.new(policy_scope(Meeting), search_meeting_params).search.where(original_creation: true)
     render "api/meetings/index"
   end
-
+  
   def create
     if current_company.display_format === "Company"
       #scope differs if team (assume you can only have one incomplete meeting, allow you to create another one for week if required)
@@ -229,7 +229,7 @@ class Api::MeetingsController < Api::ApplicationController
   end
 
   def search_meeting_params
-    params.permit(:team_id, :meeting_type, :fiscal_year)
+    params.permit(:team_id, :meeting_type, :fiscal_year, :meeting_day)
   end
 
   def record_activities

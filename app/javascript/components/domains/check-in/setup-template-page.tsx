@@ -145,10 +145,10 @@ export const SetupTemplatePage = observer(
       setParticipants(participantsArray);
       setResponseViewers("Custom");
       setCadence(getCadence(template.dateTimeConfig?.cadence));
-      setCheckinTime(moment(template.dateTimeConfig?.time, ["HH:mm"]).format("hh:mm A"));
+      setCheckinTime(moment(template.dateTimeConfig?.time, ["HH:mm"]).format("hh:mm A") || "09:00 AM");
       setCheckinDay(template.dateTimeConfig?.day);
       setSelectedDate(date);
-      setTimeZone(getTimezone[template.timeZone]);
+      setTimeZone(getTimezone[template.timeZone] || "user");
       setSelectedResponseViewers(viewersArray);
       setReminderUnit(template.reminder?.unit || "Hour(s)");
       setReminderValue(template.reminder?.value || "1");

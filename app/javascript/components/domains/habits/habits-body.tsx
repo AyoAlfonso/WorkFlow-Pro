@@ -139,7 +139,6 @@ const AccordionDetailsContainer = styled(AccordionDetails)`
   margin-top: 5px;
   margin-bottom: 5px;
   min-width: 224px;
-  width: 100%;
   display: flex;
   flex-direction: column;
   padding: 8px !important;
