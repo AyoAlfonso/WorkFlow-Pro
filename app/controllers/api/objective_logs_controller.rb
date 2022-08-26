@@ -9,23 +9,23 @@ class Api::ObjectiveLogsController < Api::ApplicationController
   end 
 
   def create
-    params
+    # params
     @objective_log = ObjectiveLog.create!(objective_log_params)
     authorize @objective_log
     @objective_log.save!
 
-    if params[:fiscal_quarter] = 1 
-      week = params[:week]
-    elsif  params[:fiscal_quarter] = 2
-      week = 13 - params[:week]
-    elsif  params[:fiscal_quarter] = 3
-      week = 26 -  params[:week]
-    elsif params[:fiscal_quarter] = 4
-      week = 39 - params[:week] 
-    end
+    # if params[:fiscal_quarter] == 1 
+    #   week = params[:week]
+    # elsif  params[:fiscal_quarter] == 2
+    #   week =  params[:week] - 13 
+    # elsif  params[:fiscal_quarter] == 3
+    #   week = 26 -  params[:week]
+    # elsif params[:fiscal_quarter] == 4
+    #   week = 39 - params[:week] 
+    # end
     #We want to save same values onto the Milestones that have expected week element 
-
-  existing_milestone = Milestone.where(week: week, milestoneable_type: params[:objecteable_type], milestoneable_id: params[:objecteable_id],
+  # //test params[:week]
+  existing_milestone = Milestone.where(milestoneable_type: params[:objecteable_type], milestoneable_id: params[:objecteable_id],
     week_of: params[:week_of])
 
   existing_milestone.update(status: params[:status]) if existing_milestone.present?
@@ -53,7 +53,7 @@ class Api::ObjectiveLogsController < Api::ApplicationController
 
   def objective_log_params
     #Having changed our model mid way we have to implement checks as so
-    params[:objecteable_type]  = "QuarterlyGoal"  if  params[:objecteable_type] == "QuarterlyInitiative"
+    params[:objecteable_type] = "QuarterlyGoal"  if  params[:objecteable_type] == "QuarterlyInitiative"
     params.permit(:owned_by_id, :score, :note, :objecteable_id, :objecteable_type, :child_id, :child_type, :fiscal_quarter, :fiscal_year, :week, :status, :created_at, :adjusted_date)
   end
 
