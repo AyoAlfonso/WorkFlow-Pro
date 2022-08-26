@@ -143,6 +143,7 @@ class Api::IssuesController < Api::ApplicationController
       @issues = @issues&.sort_by_due_date.sort_by_priority
       @team_issues = @team_issues&.sort_by_issue_due_date&.sort_by_issue_priority
     end
+    
     authorize @issues
     render "api/issues/resort"
   end

@@ -284,6 +284,9 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     render json: {check_in_artifacts: @check_in_artifacts_for_day, status: :ok }
   end
 
+  def delete
+
+  end
   def artifact
   check_in_artifact = CheckInArtifact.find(params[:id])
   @check_in_template = CheckInTemplate.find(check_in_artifact.check_in_template_id)
@@ -380,9 +383,9 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     render json: { template: @check_in_template, status: :ok }
   end
 
-
   def destroy
     @check_in_template.destroy!
+
     render json: { template: @check_in_template.id, status: :ok }
   end
 
