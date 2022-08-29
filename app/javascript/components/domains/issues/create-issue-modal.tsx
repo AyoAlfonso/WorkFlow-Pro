@@ -46,7 +46,7 @@ export const CreateIssueModal = ({
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
   const [selectedLabel, setSelectedLabel] = useState<any>(null);
-  const [personal, setPersonal] = useState<boolean>(teamId ? false : true);
+  const [personal, setPersonal] = useState<boolean>(true);
   const [description, setDescription] = useState<string>("");
   const [selectedDueDate, setSelectedDueDate] = useState<Date>(null);
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
@@ -55,6 +55,9 @@ export const CreateIssueModal = ({
 
   useEffect(() => {
     setSelectedUser(sessionStore.profile);
+    if (teamId) {
+      setPersonal(false)
+    }
   }, []);
 
   if (!companyStore.company) {
@@ -237,6 +240,10 @@ export const CreateIssueModal = ({
                     setSelectedLabel(null);
                     setPersonal(false);
                     setDescription("");
+                    setTopicType("");
+                    setSelectedDueDate(null);
+                    setSelectedUser(sessionStore.profile);
+                    setPersonal(true);
                   }
                 })
             }

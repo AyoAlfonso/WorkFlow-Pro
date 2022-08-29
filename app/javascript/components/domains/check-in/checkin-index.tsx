@@ -38,7 +38,9 @@ export const CheckIn = observer(
     };
 
     const getArchivedCheckIns = () => {
-      if (archivedCheckIns) return;
+      if (archivedCheckIns) {
+        return handleSort("archivedDate");
+      }
       setLoading(true);
       checkInTemplateStore.getArchivedCheckIns().then(() => {
         setLoading(false);

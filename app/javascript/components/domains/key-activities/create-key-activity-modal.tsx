@@ -220,7 +220,8 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                     setSelectedLabel(null);
                     setPersonal(false);
                     setDescription("");
-                    setSelectedUser(sessionStore.profile);
+                    setSelectedDueDate(null)
+                    setSelectedUser(sessionStore.profile)
                   }
                 })
             }

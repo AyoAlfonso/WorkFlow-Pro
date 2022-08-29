@@ -109,12 +109,11 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
         <HeaderText>KPIs</HeaderText>
       </HeaderContainer>
       <KpisContainer>
-        {checkInArtifactLogs.map(artifactLog => {
+        {checkInArtifactLogs.map((artifactLog, index) => {
           const user = findUser(artifactLog.ownedBy);
 
           return (
-            <>
-              <KpiComponent>
+              <KpiComponent key={`log-${index}`}>
                 {artifactLog.scorecardLogsFull.length > 0 ? (
                   <AvatarContainer>
                     <Avatar
@@ -309,7 +308,6 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
                   </Table>
                 </DataContainer>
               </KpiComponent>
-            </>
           );
           // });
         })}
