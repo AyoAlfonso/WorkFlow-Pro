@@ -51,9 +51,10 @@ class Api::CheckInTemplatesController < Api::ApplicationController
           })
          end
       end
-      authorize @check_in_template
-      render json: { template: @check_in_template, status: :ok }
+        authorize @check_in_template
+        render json: { template: @check_in_template, status: :ok }
     end
+  end
 
   def update
   @step_atrributes = params[:check_in_templates_steps_attributes]
@@ -185,7 +186,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
             if(@check_in_template.participants.present?)
               @check_in_template.participants&.each do |participant|
                 if(participant["type"] == "user")
-                  check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: participant["id"])
+                  check_in_artifact = CheckInArtifact.find_or_create_by(check_in_template_id: @check_in_template.id, owned_by_id: participant["id"])
                   check_in_artifact.update!(start_time: next_start )
                   check_in_artifacts << check_in_artifact
                   create_notifications(participant["id"], schedule, check_in_artifact)
@@ -193,7 +194,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
 
                 if(participant["type"] == "team")
                   Team.find(participant["id"]).team_user_enablements.pluck(:user_id)&.each do |user|
-                      check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
+                      check_in_artifact = CheckInArtifact.find_or_create_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
                       check_in_artifact.update!(start_time: next_start)
                       check_in_artifacts << check_in_artifact
                       create_notifications(user, schedule, check_in_artifact)
@@ -202,7 +203,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
 
                 if(participant["type"] == "company")
                   Company.find(participant["id"]).user_company_enablements.pluck(:user_id)&.each do |user|
-                    check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
+                    check_in_artifact = CheckInArtifact.find_or_create_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
                     check_in_artifact.update!(start_time: next_start)
                     check_in_artifacts << check_in_artifact
                     create_notifications(user, schedule, check_in_artifact)
@@ -213,7 +214,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
           if(@check_in_template.viewers.present?)
             @check_in_template.viewers&.each do |viewer|
               if(viewer["type"] == "user")
-                check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: viewer["id"])
+                check_in_artifact = CheckInArtifact.find_or_create_by(check_in_template_id: @check_in_template.id, owned_by_id: viewer["id"])
                 check_in_artifact.update!(start_time: next_start )
                 check_in_artifacts << check_in_artifact
                 create_notifications(viewer["id"], schedule, check_in_artifact)
@@ -221,7 +222,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
 
               if(viewer["type"] == "team")
                 Team.find(viewer["id"]).team_user_enablements.pluck(:user_id)&.each do |user|
-                    check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
+                    check_in_artifact = CheckInArtifact.find_or_create_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
                     check_in_artifact.update!(start_time: next_start)
                     check_in_artifacts << check_in_artifact
                     create_notifications(user, schedule, check_in_artifact)
@@ -230,7 +231,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
 
               if(viewer["type"] == "company")
                   Company.find(viewer["id"]).user_company_enablements.pluck(:user_id)&.each do |user|
-                    check_in_artifact = CheckInArtifact.find_or_initialize_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
+                    check_in_artifact = CheckInArtifact.find_or_create_by(check_in_template_id: @check_in_template.id, owned_by_id: user)
                     check_in_artifact.update!(start_time: next_start)
                     check_in_artifacts << check_in_artifact
                     create_notifications(user, schedule, check_in_artifact)
@@ -244,7 +245,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def create_notifications(user_id, schedule, check_in_artifact) 
-    notification = Notification.find_or_initialize_by(
+    notification = Notification.find_or_create_by(
                 user_id: user_id,
                 notification_type: Notification.notification_types["dynamic_check_in"],
                 parent_id: check_in_artifact.id,
@@ -258,7 +259,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
    def destroy_notifications(user_id) 
-    notification = Notification.find_or_initialize_by(
+    notification = Notification.find_or_create_by(
                 user_id: user_id,
                 notification_type: Notification.notification_types["dynamic_check_in"],
             )
@@ -322,7 +323,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   previous_occurence = schedule&.first(2)[0]
   next_start = date_time_config["cadence"] == "once" ? Time.now : Time.new(next_occurence.year, next_occurence.month,next_occurence.day, next_occurence.hour)
 
-  check_in_artifact_log = CheckInArtifactLog.find_or_initialize_by(check_in_artifact_id: check_in_artifact.id, created_by_id: current_user.id)
+  check_in_artifact_log = CheckInArtifactLog.find_or_create_by(check_in_artifact_id: check_in_artifact.id, created_by_id: current_user.id)
 
   if params[:scorecard_log_ids].present?
      check_in_artifact_log.attributes = {
@@ -379,7 +380,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def destroy
-   is_custom_and_draft = @check_in_template.status == "draft" &&  @check_in_template.tag.include?('custom') 
+   is_custom_and_draft = @check_in_template.status == "draft" &&  @check_in_template.tag.include?('custom')
     if @check_in_template.check_in_artifacts.incomplete.blank? || is_custom_and_draft
       @check_in_template.destroy!
     end
@@ -403,4 +404,5 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   def record_activities
     record_activity(params[:note], nil, params[:id])
   end 
+  
 end
