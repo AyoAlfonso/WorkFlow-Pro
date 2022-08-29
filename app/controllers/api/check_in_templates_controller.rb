@@ -8,8 +8,6 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   after_action :record_activities, only: [:create, :update, :show]
   before_action :set_check_in_template, only: [:show, :update, :run_now, :publish_now, :report]
 
-  skip_after_action :verify_authorized, only: [:get_onboarding_company, :create_or_update_onboarding_goals, :get_onboarding_goals, :create_or_update_onboarding_key_activities, :get_onboarding_key_activities, :create_or_update_onboarding_team]
-
   def index
     @check_in_templates = policy_scope(CheckInTemplate).is_parent
     render json: @check_in_templates.as_json(only: [:id, :name, :check_in_type, :owner_type, :description, :participants, :anonymous, :run_once, :date_time_config, :time_zone, :tag, :reminder], include: {
@@ -36,28 +34,29 @@ class Api::CheckInTemplatesController < Api::ApplicationController
        })
 
       @step_atrributes = params[:check_in_template][:check_in_templates_steps_attributes]
-      if @step_atrributes.present?
+    if @step_atrributes.present?
         @step_atrributes.each do |step|
+        component_to_render_is_valid = [*Step::STEP_COMPONENTS, *CheckInTemplatesStep::QUESTION_STEP_COMPONENTS].include? step[:component_to_render]
+         if component_to_render_is_valid
           CheckInTemplatesStep.create!({
             step_type: step[:step_type],
             order_index: step[:order_index],
             name: step[:name],
             instructions: step[:instructions],
             duration: step[:duration],
-            component_to_render: step[:component_to_render],
+            component_to_render:  step[:component_to_render],
             check_in_template_id: @check_in_template.id,
             variant: step[:variant],
             question:step[:question]
           })
-        end
+         end
       end
-
-    authorize @check_in_template
-    render json: { template: @check_in_template, status: :ok }
-  end
+      authorize @check_in_template
+      render json: { template: @check_in_template, status: :ok }
+    end
 
   def update
-
+  binding.pry
   @step_atrributes = params[:check_in_templates_steps_attributes]
   @check_in_template.status = params[:status] if params[:status].present? 
   if(params[:status] == 2)
@@ -284,9 +283,6 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     render json: {check_in_artifacts: @check_in_artifacts_for_day, status: :ok }
   end
 
-  def delete
-
-  end
   def artifact
   check_in_artifact = CheckInArtifact.find(params[:id])
   @check_in_template = CheckInTemplate.find(check_in_artifact.check_in_template_id)
@@ -384,8 +380,10 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def destroy
-    @check_in_template.destroy!
-
+   is_custom_and_draft = true if @check_in_template.status == "draft" &&  @check_in_template.tag.include?('custom')
+    if @check_in_template.check_in_artifacts.incomplete.blank? || is_custom_and_draft
+      @check_in_template.destroy!
+    end
     render json: { template: @check_in_template.id, status: :ok }
   end
 
