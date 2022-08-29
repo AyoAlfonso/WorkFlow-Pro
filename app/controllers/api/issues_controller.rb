@@ -16,7 +16,6 @@ class Api::IssuesController < Api::ApplicationController
     authorize @issue
     @issue.insert_at(1)
     @issue.save!
-
     @issue.upvote_by current_user
 
     if params[:team_id]
@@ -108,10 +107,10 @@ class Api::IssuesController < Api::ApplicationController
     else
       @issue.upvote_by current_user
     end
-
     authorize @issue
    render "api/issues/show"
   end
+
   def resort_index
     if params[:meeting_id].present?
       meeting = Meeting.find(params[:meeting_id])
@@ -143,6 +142,7 @@ class Api::IssuesController < Api::ApplicationController
       @issues = @issues&.sort_by_due_date.sort_by_priority
       @team_issues = @team_issues&.sort_by_issue_due_date&.sort_by_issue_priority
     end
+    
     authorize @issues
     render "api/issues/resort"
   end
@@ -160,9 +160,9 @@ class Api::IssuesController < Api::ApplicationController
 
   def team_meeting_issues(team_id)
     if params[:sort].present?
-          policy_scope(Issue).where(team_id: team_id)
+      policy_scope(Issue).where(team_id: team_id)
     else
-       policy_scope(Issue).where(team_id: team_id).sort_by_position_and_priority_and_created_at_and_completed_at
+      policy_scope(Issue).where(team_id: team_id).sort_by_position_and_priority_and_created_at_and_completed_at
     end
   end
   def record_activities

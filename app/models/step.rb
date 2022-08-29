@@ -39,6 +39,16 @@ class Step < ApplicationRecord
     "KPI",
     "WeeklyMilestones",
     "WeeklyKeyResults",
+    "ToDos",
+    "Initiatives",
+    "Objectives",
+    "Habits",
+    "Conversation Starter",
+    "Weekly Review",
+    "Weekly Reflection",
+    "Monthly Reflection",
+    "Evening Reflection",
+    "Morning Reflection"
   ]
  
 end

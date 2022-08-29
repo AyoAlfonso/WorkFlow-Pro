@@ -1,5 +1,7 @@
 ActiveAdmin.register CheckInTemplate do
-  permit_params :name, :check_in_type, :owner_type, :description, check_in_templates_steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :question,:check_in_template_id, :image, :link_embed, :override_key, :_destroy]
+  permit_params :name, :check_in_type, :owner_type, :description, check_in_templates_steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :question,:check_in_template_id, :image, :link_embed, 
+    # :override_key,
+     :_destroy]
 
   scope :all
   scope :sort_by_global_only,  default: true
@@ -43,7 +45,7 @@ ActiveAdmin.register CheckInTemplate do
             component_to_render: step[:component_to_render],
             check_in_template_id: @check_in_template.id,
             image: step[:image],
-            override_key: step[:override_key]
+            # override_key: step[:override_key]
           })
         end
       end
@@ -128,11 +130,6 @@ ActiveAdmin.register CheckInTemplate do
       step.input :duration, label: "Duration (in minutes)"
       step.input :instructions, input_html: { rows: 3 }
       
-      # if step.object.persisted? && step.object.try(:step_type) == "questions"
-      #  step.input :component_to_render, as: :select, collection: CheckInTemplatesStep::QUESTION_STEP_COMPONENTS
-      # else
-      #  step.input :component_to_render, as: :select, collection: CheckInTemplatesStep::STEP_COMPONENTS
-      # end
       step.input :component_to_render, as: :select, collection: [*Step::STEP_COMPONENTS, *CheckInTemplatesStep::QUESTION_STEP_COMPONENTS]
       step.input :image, as: :file, hint: (step.object.try(:image_url) ? image_tag(step.object.image_url, style: "max-height: 150px;") : "No Image Selected")
     end

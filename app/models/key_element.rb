@@ -23,7 +23,7 @@ class KeyElement < ApplicationRecord
   enum completion_type: { binary: 0, numerical: 1, percentage: 2, currency: 3 }
 
   scope :current_user_and_elementable_type, ->(user, elementable_type) {
-        elementable_type == "QuarterlyInitiative" ?
+        elementable_type == "QuarterlyGoal" ?
           includes(:quarterly_goal).where(quarterly_goals: { closed_at: nil })
           .where(
           { owned_by_id: user, elementable_type:  elementable_type  }
