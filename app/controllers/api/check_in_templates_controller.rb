@@ -56,7 +56,6 @@ class Api::CheckInTemplatesController < Api::ApplicationController
     end
 
   def update
-  binding.pry
   @step_atrributes = params[:check_in_templates_steps_attributes]
   @check_in_template.status = params[:status] if params[:status].present? 
   if(params[:status] == 2)
