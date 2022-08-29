@@ -111,205 +111,203 @@ export const KpiInsights = ({ insightsToShow }: InitiativeInsightsProps): JSX.El
       <KpisContainer>
         {checkInArtifactLogs.map((artifactLog, index) => {
           const user = findUser(artifactLog.ownedBy);
-
+    
           return (
-              <KpiComponent key={`log-${index}`}>
-                {artifactLog.scorecardLogsFull.length > 0 ? (
-                  <AvatarContainer>
-                    <Avatar
-                      size={32}
-                      marginLeft={"0px"}
-                      marginTop={"0px"}
-                      marginRight={"16px"}
-                      firstName={user.firstName}
-                      lastName={user.lastName}
-                      defaultAvatarColor={user.defaultAvatarColor}
-                      avatarUrl={user.avatarUrl}
-                    />
-                    <StyledText>{`${user.firstName} ${user.lastName}`}</StyledText>
-                  </AvatarContainer>
-                ) : (
-                  <></>
-                )}
-                <Divider />
+            <KpiComponent key={`log-${index}`}>
+              {artifactLog.scorecardLogsFull.length > 0 ? (
+                <AvatarContainer>
+                  <Avatar
+                    size={32}
+                    marginLeft={"0px"}
+                    marginTop={"0px"}
+                    marginRight={"16px"}
+                    firstName={user.firstName}
+                    lastName={user.lastName}
+                    defaultAvatarColor={user.defaultAvatarColor}
+                    avatarUrl={user.avatarUrl}
+                  />
+                  <StyledText>{`${user.firstName} ${user.lastName}`}</StyledText>
+                </AvatarContainer>
+              ) : (
+                <></>
+              )}
+              {artifactLog.scorecardLogsFull.length > 0 ? <Divider /> : <></>}
 
-                <DataContainer>
-                  <Table>
-                    {artifactLog.scorecardLogsFull.length > 0 ? (
-                      <TableHead>
-                        <TableRow>
-                          <TableHeadText pb="2em" left={true} scope="col">
-                            KPIs
-                          </TableHeadText>
-                          <TableHeadText pb="2em" scope="col">
-                            Status
-                          </TableHeadText>
-                          <TableHeadText pb="2em" scope="col">
-                            Score
-                          </TableHeadText>
-                          <TableHeadText pb="2em" scope="col">
-                            Week {artifactLog?.scorecardLogsFull[0]?.week}
-                          </TableHeadText>
-                        </TableRow>
-                      </TableHead>
-                    ) : (
-                      <></>
-                    )}
-                    <TableBody>
-                      {artifactLog.scorecardLogsFull
-                        ?.sort(sortByDate)
-                        .filter(
-                          (s => o => (k => !s.has(k) && s.add(k))(keys.map(k => o[k]).join("|")))(
-                            new Set(),
-                          ),
-                        )
-                        .map(log => {
-                          participants.add(log.ownedBy);
-                          const kpi = log.keyPerformanceIndicator;
-                          const getStatusValue = (percentScore, needsAttentionThreshold) => {
-                            const percent = Math.round(percentScore);
-                            if (percentScore === null) {
-                              return {
-                                color: greyActive,
-                                background: backgroundGrey,
-                                percent,
-                                text: "No Update",
-                              };
-                            } else if (percentScore >= 100) {
-                              return {
-                                color: successGreen,
-                                background: fadedGreen,
-                                percent,
-                                text: "On Track",
-                              };
-                            } else if (percentScore >= needsAttentionThreshold) {
-                              return {
-                                color: poppySunrise,
-                                background: fadedYellow,
-                                percent,
-                                text: "Needs Attention",
-                              };
-                            } else {
-                              return {
-                                color: warningRed,
-                                background: fadedRed,
-                                percent,
-                                text: "Behind",
-                              };
+              <DataContainer>
+                <Table>
+                  {artifactLog.scorecardLogsFull.length > 0 ? (
+                    <TableHead>
+                      <TableRow>
+                        <TableHeadText pb="2em" left={true} scope="col">
+                          KPIs
+                        </TableHeadText>
+                        <TableHeadText pb="2em" scope="col">
+                          Status
+                        </TableHeadText>
+                        <TableHeadText pb="2em" scope="col">
+                          Score
+                        </TableHeadText>
+                        <TableHeadText pb="2em" scope="col">
+                          Week {artifactLog?.scorecardLogsFull[0]?.week}
+                        </TableHeadText>
+                      </TableRow>
+                    </TableHead>
+                  ) : (
+                    <></>
+                  )}
+                  <TableBody>
+                    {artifactLog.scorecardLogsFull
+                      ?.sort(sortByDate)
+                      .filter(
+                        (s => o => (k => !s.has(k) && s.add(k))(keys.map(k => o[k]).join("|")))(
+                          new Set(),
+                        ),
+                      )
+                      .map(log => {
+                        participants.add(log.ownedBy);
+                        const kpi = log.keyPerformanceIndicator;
+                        const getStatusValue = (percentScore, needsAttentionThreshold) => {
+                          const percent = Math.round(percentScore);
+                          if (percentScore === null) {
+                            return {
+                              color: greyActive,
+                              background: backgroundGrey,
+                              percent,
+                              text: "No Update",
+                            };
+                          } else if (percentScore >= 100) {
+                            return {
+                              color: successGreen,
+                              background: fadedGreen,
+                              percent,
+                              text: "On Track",
+                            };
+                          } else if (percentScore >= needsAttentionThreshold) {
+                            return {
+                              color: poppySunrise,
+                              background: fadedYellow,
+                              percent,
+                              text: "Needs Attention",
+                            };
+                          } else {
+                            return {
+                              color: warningRed,
+                              background: fadedRed,
+                              percent,
+                              text: "Behind",
+                            };
+                          }
+                        };
+
+                        const findKPI = kpi => {
+                          return toJS(allKPIs).find(e => kpi.id == e.id);
+                        };
+
+                        const foundKpi = findKPI(kpi);
+                        const weeks = Object.values(foundKpi?.period?.[year] || {});
+
+                        const calcQuarterAverageScores = (
+                          weeks: any,
+                          target: number,
+                          greaterThan: boolean,
+                          parentType: string,
+                        ) => {
+                          const quarterScores = [
+                            [null, 0],
+                            [null, 0],
+                            [null, 0],
+                            [null, 0],
+                          ];
+                          weeks.forEach(({ week, score }) => {
+                            const q = Math.floor((week - 1) / 13);
+                            if (target == 0) {
+                              quarterScores[q][0] -= score;
+                              quarterScores[q][1]++;
+                            } else if (quarterScores[q]) {
+                              quarterScores[q][0] += score;
+                              quarterScores[q][1]++;
                             }
-                          };
-
-                          const findKPI = kpi => {
-                            return toJS(allKPIs).find(e => kpi.id == e.id);
-                          };
-
-                          const foundKpi = findKPI(kpi);
-                          const weeks = Object.values(foundKpi?.period?.[year] || {});
-
-                          const calcQuarterAverageScores = (
-                            weeks: any,
-                            target: number,
-                            greaterThan: boolean,
-                            parentType: string,
-                          ) => {
-                            const quarterScores = [
-                              [null, 0],
-                              [null, 0],
-                              [null, 0],
-                              [null, 0],
-                            ];
-                            weeks.forEach(({ week, score }) => {
-                              const q = Math.floor((week - 1) / 13);
-                              if (target == 0) {
-                                quarterScores[q][0] -= score;
-                                quarterScores[q][1]++;
-                              } else if (quarterScores[q]) {
-                                quarterScores[q][0] += score;
-                                quarterScores[q][1]++;
-                              }
-                            });
-                            return quarterScores.map(tuple =>
-                              tuple[0] === null
-                                ? null
-                                : target == 0 && tuple[0] == 0
-                                ? 100
-                                : target == 0 && tuple[0] != 0
-                                ? tuple[0]
-                                : getScorePercent(tuple[0] / tuple[1], target, greaterThan),
-                            );
-                          };
-                          const percentScores = calcQuarterAverageScores(
-                            weeks,
-                            kpi.targetValue,
-                            kpi.greaterThan,
-                            kpi.parentType,
-                          ).map(score => getStatusValue(score, kpi.needsAttentionThreshold));
-
-                          const quarterValue = percentScores[quarter - 1];
-
-                          const currrentScore =
-                            foundKpi?.scorecardLogs[foundKpi?.scorecardLogs.length - 1]?.score;
-
-                          return (
-                            <TableRow>
-                              <TableData left>
-                                <KpiNameContainer>
-                                  <KpiName>
-                                    {kpi.title}{" "}
-                                    {kpi.parentType && `[${formatKpiType(kpi.parentType)}]`}
-                                  </KpiName>
-                                  <KpiDescription>
-                                    {" "}
-                                    {kpi.greaterThan
-                                      ? `Greater than or equal
-                                  to  ${formatValue(kpi.unitType, kpi.targetValue)}`
-                                      : `Less than or equal to ${formatValue(
-                                          kpi.unitType,
-                                          kpi.targetValue,
-                                        )}`}
-                                  </KpiDescription>
-                                </KpiNameContainer>
-                              </TableData>
-                              <TableData>
-                                <StatusBadge
-                                  background={quarterValue?.background}
-                                  color={quarterValue?.color}
-                                >
-                                  {quarterValue?.text}
-                                </StatusBadge>
-                              </TableData>
-                              <TableData>
-                                <StatusBadge
-                                  fontSize={"12px"}
-                                  background={quarterValue?.background}
-                                  color={quarterValue?.color}
-                                >
-                                  {/* {quarterValue?.percent} */}
-                                  {kpi.parentKpi.length > foundKpi?.relatedParentKpis.length
-                                    ? "—"
-                                    : quarterValue?.percent
-                                    ? `${largeNumToText(quarterValue?.percent)}%`
-                                    : kpi.greaterThan
-                                    ? "0%"
-                                    : "—"}
-                                </StatusBadge>
-                              </TableData>
-                              <TableData>
-                                <WeekContainer>
-                                  <WeekText color={quarterValue?.color}>
-                                    {"" + currrentScore}
-                                  </WeekText>
-                                </WeekContainer>
-                              </TableData>
-                            </TableRow>
+                          });
+                          return quarterScores.map(tuple =>
+                            tuple[0] === null
+                              ? null
+                              : target == 0 && tuple[0] == 0
+                              ? 100
+                              : target == 0 && tuple[0] != 0
+                              ? tuple[0]
+                              : getScorePercent(tuple[0] / tuple[1], target, greaterThan),
                           );
-                        })}
-                    </TableBody>
-                  </Table>
-                </DataContainer>
-              </KpiComponent>
+                        };
+                        const percentScores = calcQuarterAverageScores(
+                          weeks,
+                          kpi.targetValue,
+                          kpi.greaterThan,
+                          kpi.parentType,
+                        ).map(score => getStatusValue(score, kpi.needsAttentionThreshold));
+
+                        const quarterValue = percentScores[quarter - 1];
+
+                        const currrentScore =
+                          foundKpi?.scorecardLogs[foundKpi?.scorecardLogs.length - 1]?.score;
+                    
+                        return (
+                          <TableRow>
+                            <TableData left>
+                              <KpiNameContainer>
+                                <KpiName>
+                                  {kpi.title}{" "}
+                                  {kpi.parentType && `[${formatKpiType(kpi.parentType)}]`}
+                                </KpiName>
+                                <KpiDescription>
+                                  {" "}
+                                  {kpi.greaterThan
+                                    ? `Greater than or equal
+                                  to  ${formatValue(kpi.unitType, kpi.targetValue)}`
+                                    : `Less than or equal to ${formatValue(
+                                        kpi.unitType,
+                                        kpi.targetValue,
+                                      )}`}
+                                </KpiDescription>
+                              </KpiNameContainer>
+                            </TableData>
+                            <TableData>
+                              <StatusBadge
+                                background={quarterValue?.background}
+                                color={quarterValue?.color}
+                              >
+                                {quarterValue?.text}
+                              </StatusBadge>
+                            </TableData>
+                            <TableData>
+                              <StatusBadge
+                                fontSize={"12px"}
+                                background={quarterValue?.background}
+                                color={quarterValue?.color}
+                              >
+                                {kpi.parentKpi.length > foundKpi?.relatedParentKpis.length
+                                  ? "—"
+                                  : quarterValue?.percent
+                                  ? `${largeNumToText(quarterValue?.percent)}%`
+                                  : kpi.greaterThan
+                                  ? "0%"
+                                  : "—"}
+                              </StatusBadge>
+                            </TableData>
+                            <TableData>
+                              <WeekContainer>
+                                <WeekText color={quarterValue?.color}>
+                                  {"" + currrentScore}
+                                </WeekText>
+                              </WeekContainer>
+                            </TableData>
+                          </TableRow>
+                        );
+                      })}
+                  </TableBody>
+                </Table>
+              </DataContainer>
+            </KpiComponent>
           );
-          // });
         })}
       </KpisContainer>
       <Divider />
