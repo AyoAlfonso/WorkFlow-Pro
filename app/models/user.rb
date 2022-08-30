@@ -75,6 +75,14 @@ class User < ApplicationRecord
     confirmed_at.present? ? "active" : "pending"
   end
 
+  def self.current=(user)
+    Thread.current[:current_user] = user
+  end
+
+  def self.current
+    Thread.current[:current_user]
+  end
+
   def full_name
     ([first_name, last_name] - [""]).compact.join(" ")
   end

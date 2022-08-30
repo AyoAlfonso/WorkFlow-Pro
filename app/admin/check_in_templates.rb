@@ -118,7 +118,7 @@ ActiveAdmin.register CheckInTemplate do
     f.input :owner_type, as: :select, collection: CheckInTemplate.owner_types.map { |ci| [ci[0].humanize.titleize, ci[0]] }
     f.input :check_in_type, as: :select, collection: CheckInTemplate.check_in_types.map { |ci| [ci[0].humanize.titleize, ci[0]] }
     f.input :description, input_html: { rows: 5 }
-
+    # f.input :tag, array: true
     f.has_many :check_in_templates_steps, heading: "Steps", allow_destroy: true do |step|
       step.input :name
       step.input :step_type, as: :select, collection: CheckInTemplatesStep.step_types.map { |st| [st[0].humanize.titleize, st[0]] } 
