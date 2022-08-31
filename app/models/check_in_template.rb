@@ -41,7 +41,7 @@ class CheckInTemplate < ApplicationRecord
            }
          ],
         })
-        .merge({:period => self.period})
+        .merge({:period => self.period, :related_parent => self.related_parent})
   end
 
    def period
@@ -54,7 +54,7 @@ class CheckInTemplate < ApplicationRecord
     if !self.parent.present?
       return nil
     elsif self.parent.present?
-      return CheckInTemplate.find(id: self.parent)
+      return CheckInTemplate.find(self.parent)
     end
   end
   #run the notifications migrations the right people for global, you have done it for custom and children templates
