@@ -378,8 +378,6 @@ export const ScorecardTableView = observer(
 
     const columns = useMemo(
       () => [
-        // 0,6,32,40,46
-        // 0,4,20,27,34
         {
           Header: "",
           accessor: "updateKPI",
@@ -433,7 +431,7 @@ export const ScorecardTableView = observer(
         },
         {
           sitcky: "left",
-          leftWidth: "4%",
+          leftWidth: "5%",
           Header: () => (
             <div
               style={{
@@ -471,7 +469,7 @@ export const ScorecardTableView = observer(
           width: "8%",
           minWidth: "86px",
           sticky: "left",
-          leftWidth: "20%",
+          leftWidth: "26%",
           Cell: ({ value, row }) => {
             const quarterValue = value[quarter - 1];
             const { relatedParentKpis, parentKpi, id } = row.original.updateKPI;
@@ -512,7 +510,7 @@ export const ScorecardTableView = observer(
           Header: () => <div style={{ fontSize: "14px" }}>Status</div>,
           sticky: "left",
           accessor: "status",
-          leftWidth: "27%",
+          leftWidth: "35%",
           Cell: ({ value, row }) => {
             const quarterValue = value[quarter - 1];
             const { relatedParentKpis, parentKpi } = row.original.updateKPI;
@@ -546,7 +544,7 @@ export const ScorecardTableView = observer(
           Header: () => <div style={{ fontSize: "14px" }}>Owner</div>,
           sticky: "left",
           accessor: "owner",
-          leftWidth: "34%",
+          leftWidth: "44%",
           Cell: ({ value }) => {
             return (
               <OwnerContainer>
@@ -876,10 +874,6 @@ const Container = styled.div`
   }
 `;
 
-// const TableContainer = styled.div`
-//   width: 100%;
-//   font-family: Lato;
-// `;
 const Styles = styled.div`
   .table {
     border: 1px solid #ddd;
