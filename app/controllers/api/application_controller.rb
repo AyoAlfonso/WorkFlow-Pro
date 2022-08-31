@@ -2,7 +2,7 @@ class Api::ApplicationController < ActionController::API
   include Pundit
 
   before_action :authenticate_user!, except: [:load_static_data]
-  before_action :set_current_company, :set_current_user
+  before_action :set_current_company
   after_action :verify_authorized, except: [:index, :load_static_data], unless: :skip_pundit?
   after_action :verify_policy_scoped, only: :index, unless: :skip_pundit?
 
@@ -47,11 +47,6 @@ class Api::ApplicationController < ActionController::API
 
   def set_current_company
     @current_company ||= request.headers["HTTP_CURRENT_COMPANY_ID"].present? ? Company.find(request.headers["HTTP_CURRENT_COMPANY_ID"]) : current_user.default_selected_company if current_user.present?
-  end
-
-
-  def set_current_user
-    User.current = current_user
   end
 
   def policy_scoping_not_performed_error

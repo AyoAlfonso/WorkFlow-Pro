@@ -5,8 +5,8 @@ class Api::CheckInTemplatesController < Api::ApplicationController
 
   include UserActivityLogHelper
   respond_to :json
-  after_action :record_activities, only: [:create, :update, :show]
-  before_action :set_check_in_template, only: [:show, :update, :run_now, :publish_now, :report]
+  after_action :record_activities, only: [:create, :update, :show, :destroy]
+  before_action :set_check_in_template, only: [:show, :destroy, :update, :run_now, :publish_now, :report]
 
   def index
     @check_in_templates = policy_scope(CheckInTemplate).is_parent.created_by_user(current_user)
@@ -380,6 +380,7 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def destroy
+    binding.pry
    is_custom_and_draft = @check_in_template.status == "draft" &&  @check_in_template.tag.include?('custom')
     if @check_in_template.check_in_artifacts.incomplete.blank? || is_custom_and_draft
       @check_in_template.destroy!

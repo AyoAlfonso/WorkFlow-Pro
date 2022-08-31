@@ -1,8 +1,5 @@
 class CheckInTemplate < ApplicationRecord
-  acts_as_paranoid column: :deleted_at
-  before_save :add_created_by_and_updated_by
-  
-  include HasCreator
+  acts_as_paranoid column: :deleted_at 
 
   enum check_in_type: {
     weekly_check_in: 0,
@@ -19,7 +16,7 @@ class CheckInTemplate < ApplicationRecord
     personal:2
   }
 
-  # validates :check_in_type, presence: true
+  validates :check_in_type, presence: true
   scope :sort_by_company, ->(company) { where(company_id: [nil, company.id]) }
   scope :sort_by_global_only, ->  { where(tag: ['global']) }
   scope :sort_by_custom_only, ->  { where(tag: ['custom']) }
@@ -27,9 +24,11 @@ class CheckInTemplate < ApplicationRecord
   scope :not_skipped, ->  { where(skip: false) }
   scope :is_parent, ->  { where(parent: nil) }
   scope :created_by_user, ->(user) { where(created_by: [user, nil]) }
+  scope :with_name, ->(name) { where(name: name) }
 
   has_many :check_in_templates_steps, dependent: :destroy
   has_many :check_in_artifacts, dependent: :destroy
+  belongs_to :created_by, class_name: "User"
 
   accepts_nested_attributes_for :check_in_templates_steps, allow_destroy: true
 
@@ -58,16 +57,8 @@ class CheckInTemplate < ApplicationRecord
       return CheckInTemplate.find(id: self.parent)
     end
   end
-
-  def add_created_by_and_updated_by
-    # binding.pry
-    if self.created_by_id.blank?
-      # self.created_by_id ||= User.current.id if User.current
-    end
-  end
   #run the notifications migrations the right people for global, you have done it for custom and children templates
 
   accepts_nested_attributes_for :check_in_templates_steps, allow_destroy: true
 
-  scope :with_name, ->(name) { where(name: name) }
 end
