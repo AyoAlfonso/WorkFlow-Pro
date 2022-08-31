@@ -380,7 +380,6 @@ class Api::CheckInTemplatesController < Api::ApplicationController
   end
 
   def destroy
-    binding.pry
    is_custom_and_draft = @check_in_template.status == "draft" &&  @check_in_template.tag.include?('custom')
     if @check_in_template.check_in_artifacts.incomplete.blank? || is_custom_and_draft
       @check_in_template.destroy!
