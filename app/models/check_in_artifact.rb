@@ -21,6 +21,7 @@ class CheckInArtifact < ApplicationRecord
     super({
        include: [
         check_in_template: {
+          methods: [:related_parent],
           except: [:created_at, :updated_at],
           include: {
           check_in_templates_steps: {
